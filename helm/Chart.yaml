@@ -1,0 +1,17 @@
+apiVersion: v2
+name: onecx-bookmark-ui
+version: 0.0.0
+description: onecx-bookmark-ui UI
+home: https://github.com/onecx/onecx-bookmark-ui
+keywords:
+  - onecx-bookmark-ui
+sources:
+  - https://github.com/onecx/onecx-bookmark-ui
+maintainers:
+  - name: OneCX Developer Team
+    email: tkit_dev@1000kit.org
+dependencies:
+  - name: helm-angular-app
+    version: ^0
+    repository: oci://ghcr.io/onecx/charts
+    alias: app

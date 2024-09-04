@@ -1,0 +1,38 @@
+app:
+  name: onecx-bookmark-ui
+  image:
+    repository: onecx/onecx-bookmark-ui
+  routing:
+    enabled: true
+    path: /mfe/onecxBookmarkUi/
+  operator:
+    microfrontend:
+      enabled: true
+      specs:
+        main:
+          exposedModule: ./OnecxBookmarkUiModule
+          description: OneCX OnecxBookmarkUi Module
+          note: OneCX OnecxBookmarkUi UI module auto import via MF operator
+          type: MODULE
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-bookmark-ui
+          tagName: onecx-bookmark-ui-webcomponent
+    permission:
+      enabled: true
+      spec:
+        permissions:
+          BOOKMARKS:
+            CREATE: Create bookmarks
+            EDIT: Edit bookmarks
+            DELETE: Delete bookmarks
+            SAVE: Update and save bookmarks
+            IMPORT: Import bookmarks
+            EXPORT: Export bookmarks
+            VIEW: View mode for bookmarks
+            SEARCH: Search bookmarks
+    keycloak:
+      client:
+        enabled: true
+        spec:
+          kcConfig:
+            clientId: onecx-bookmark-ui

@@ -1,0 +1,19 @@
+<form [formGroup]="formGroup">
+  <div class="flex flex-wrap flex-column gap-4 justify-content-between mt-2">
+    <div [title]="'BOOKMARKS_CREATE_UPDATE.FORM.DISPLAY_NAME' | translate">
+      <span class="p-float-label" controlErrorAnchor>
+        <input
+          pInputText
+          type="text"
+          id="bookmarks_detail_form_displayName"
+          class="w-full pt-3 pb-2"
+          formControlName="displayName"
+        />
+        <label class="ocx-required-label" for="bookmarks_detail_form_displayName">
+          {{ 'BOOKMARKS_CREATE_UPDATE.FORM.DISPLAY_NAME' | translate }}</label
+        >
+      </span>
+    </div>
+    <!-- ACTION C2: Extend form fields -->
+  </div>
+</form>

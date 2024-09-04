@@ -1,0 +1,332 @@
+openapi: 3.0.0
+info:
+  title: onecx-bookmark-bff
+  description: Backend-For-Frontend (BFF) service for onecx bookmark. With this API you can manage bookmarks in your portal.
+  version: 1.0.0
+  contact:
+    email: "tkit_dev@1000kit.org"
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: "http://onecx-bookmark-bff:8080"
+tags:
+  - name: bookmarksInternal
+  - name: imagesInternal
+paths:
+  /bookmarks:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - write
+      tags:
+        - bookmarksInternal
+      description: create bookmark item
+      operationId: createNewBookmark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBookmark'
+      responses:
+        '201':
+          description: Bookmark created
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+  /bookmarks/search:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - read
+      tags:
+        - bookmarksInternal
+      description: search bookmarks by criteria
+      operationId: searchBookmarksByCriteria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookmarkSearchCriteria'
+      responses:
+        '200':
+          description: A list of bookmarks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookmarkPageResult'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+  /bookmarks/{id}:
+    put:
+      x-onecx:
+        permissions:
+          bookmark:
+            - write
+      tags:
+        - bookmarksInternal
+      description: Update a bookmark's displayName
+      operationId: updateBookmark
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookmark'
+      responses:
+        "204":
+          description: Bookmark updated
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+        "404":
+          description: Bookmark not found
+    delete:
+      x-onecx:
+        permissions:
+          bookmark:
+            - delete
+      tags:
+        - bookmarksInternal
+      description: Delete a bookmark by id
+      operationId: deleteBookmarkById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+  /images/product/{productName}:
+    get:
+      x-onecx:
+        permissions:
+          bookmark:
+            - read
+      tags:
+        - imagesInternal
+      description: Get product logo by name
+      operationId: getProductLogo
+      parameters:
+        - name: productName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+components:
+  schemas:
+    BookmarkSearchCriteria:
+      required:
+        - workspaceName
+      type: object
+      properties:
+        workspaceName:
+          type: string
+        productName:
+          type: string
+        appId:
+          type: string
+        scope:
+          type: string
+        pageNumber:
+          format: int32
+          description: The number of page.
+          default: 0
+          type: integer
+        pageSize:
+          format: int32
+          description: The size of page
+          default: 100
+          maximum: 1000
+          type: integer
+    Bookmark:
+      required:
+        - id
+        - displayName
+        - productName
+        - appId
+        - scope
+        - workspaceName
+      type: object
+      properties:
+        id:
+          type: string
+        modificationCount:
+          format: int32
+          type: integer
+        creationDate:
+          $ref: '#/components/schemas/OffsetDateTime'
+        creationUser:
+          type: string
+        modificationDate:
+          $ref: '#/components/schemas/OffsetDateTime'
+        modificationUser:
+          type: string
+        displayName:
+          type: string
+        endpointName:
+          type: string
+        endpointParameters:
+          type: object
+          additionalProperties:
+            type: string
+        query:
+          type: string
+        hash:
+          type: string
+        userId:
+          type: string
+        workspaceName:
+          type: string
+        productName:
+          type: string
+        appId:
+          type: string
+        scope:
+          type: string
+          enum:
+            - PRIVATE
+            - PUBLIC
+    BookmarkPageResult:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+          description: The total elements in the resource.
+        number:
+          type: integer
+          format: int32
+          default: 0
+        size:
+          type: integer
+          format: int32
+          default: 100
+          maximum: 1000
+        totalPages:
+          type: integer
+          format: int64
+        stream:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bookmark'
+    CreateBookmark:
+      required:
+        - displayName
+        - endpointName
+        - workspaceName
+        - productName
+        - scope
+      type: object
+      properties:
+        displayName:
+          type: string
+        endpointName:
+          type: string
+        endpointParameters:
+          type: object
+          additionalProperties:
+            type: string
+        query:
+          type: string
+        hash:
+          type: string
+        userId:
+          type: string
+        workspaceName:
+          type: string
+        productName:
+          type: string
+        appId:
+          type: string
+        scope:
+          type: string
+          enum:
+            - PRIVATE
+            - PUBLIC
+    UpdateBookmark:
+      required:
+        - displayName
+        - modificationCount
+      type: object
+      properties:
+        modificationCount:
+          format: int32
+          type: integer
+        displayName:
+          type: string
+    ProblemDetailResponse:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        detail:
+          type: string
+        params:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemDetailParam'
+        invalidParams:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProblemDetailInvalidParam'
+    ProblemDetailParam:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    ProblemDetailInvalidParam:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+    OffsetDateTime:
+      format: date-time
+      type: string
+      example: 2022-03-10T12:15:50-04:00
