@@ -25,11 +25,9 @@ app:
             CREATE: Create bookmarks
             EDIT: Edit bookmarks
             DELETE: Delete bookmarks
-            SAVE: Update and save bookmarks
             IMPORT: Import bookmarks
             EXPORT: Export bookmarks
             VIEW: View mode for bookmarks
-            SEARCH: Search bookmarks
     keycloak:
       client:
         enabled: true
