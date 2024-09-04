@@ -10,7 +10,7 @@
     "lint": "nx lint",
     "lint:fix": "nx lint --fix",
     "test": "nx test",
-    "test:ci": "ng test --watch=false --browsers=ChromeHeadless --code-coverage"
+    "test:ci": "nx test --watch=false --browsers=ChromeHeadless --code-coverage"
   },
   "private": true,
   "dependencies": {
