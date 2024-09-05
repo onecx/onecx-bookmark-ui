@@ -6,6 +6,7 @@ app:
     enabled: true
     path: /mfe/bookmark/
   operator:
+    # Microfrontend
     microfrontend:
       enabled: true
       specs:
@@ -15,8 +16,9 @@ app:
           note: OneCX Bookmark UI auto import via MF operator
           type: MODULE
           technology: WEBCOMPONENTMODULE
-          remoteName: onecx-bookmark-ui
-          tagName: onecx-bookmark-ui-webcomponent
+          remoteName: onecx-bookmark
+          tagName: ocx-bookmark-component
+    # Permission
     permission:
       enabled: true
       spec:
@@ -28,9 +30,4 @@ app:
             IMPORT: Import bookmarks
             EXPORT: Export bookmarks
             VIEW: View mode for bookmarks
-    keycloak:
-      client:
-        enabled: true
-        spec:
-          kcConfig:
-            clientId: onecx-bookmark-ui
+    
