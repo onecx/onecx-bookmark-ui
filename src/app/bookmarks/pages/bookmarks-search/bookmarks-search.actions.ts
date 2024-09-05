@@ -1,5 +1,5 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
-import { Bookmark } from '../../../shared/generated';
+import { Bookmark } from 'src/app/shared/generated';
 
 export const BookmarksSearchActions = createActionGroup({
   source: 'BookmarksSearch',

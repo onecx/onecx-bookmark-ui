@@ -10,7 +10,6 @@ import { StoreModule } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 import { addInitializeModuleGuard } from '@onecx/angular-integration-interface';
 import { PortalCoreModule } from '@onecx/portal-integration-angular';
-import { CalendarModule } from 'primeng/calendar';
 import { SharedModule } from '../shared/shared.module';
 import { bookmarksFeature } from './bookmarks.reducers';
 import { routes } from './bookmarks.routes';
@@ -29,7 +28,6 @@ import { BookmarksSearchEffects } from './pages/bookmarks-search/bookmarks-searc
     RouterModule.forChild(addInitializeModuleGuard(routes)),
     FormsModule,
     ReactiveFormsModule,
-    CalendarModule,
     StoreModule.forFeature(bookmarksFeature),
     EffectsModule.forFeature([BookmarksSearchEffects]),
     TranslateModule,

@@ -9,7 +9,7 @@ const config = withModuleFederationPlugin({
   name: 'onecx-bookmark-ui-app',
   filename: 'remoteEntry.js',
   exposes: {
-    './OnecxBookmarkUiModule': './src/bootstrap.ts',
+    './OneCXBookmarkModule': './src/bootstrap.ts',
   },
   shared: share({
     '@angular/core': {

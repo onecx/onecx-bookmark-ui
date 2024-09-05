@@ -17,7 +17,7 @@ import {
   Bookmark,
   BookmarksInternal,
   UpdateBookmark
-} from '../../../shared/generated';
+} from 'src/app/shared/generated';
 import { BookmarksSearchActions } from './bookmarks-search.actions';
 import {
   bookmarksSearchSelectors,
@@ -49,8 +49,6 @@ export class BookmarksSearchEffects {
   });
 
   performSearch(workspaceName: string) {
-    console.log('Perform search');
-
     return this.bookmarksService
       .searchBookmarksByCriteria({
         workspaceName: workspaceName

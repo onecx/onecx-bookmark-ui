@@ -90,7 +90,7 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null));
     },
   ],
 })
-export class OnecxBookmarkUiModule implements DoBootstrap {
+export class OneCXBookmarkModule implements DoBootstrap {
   constructor(private injector: Injector) {}
 
   ngDoBootstrap(): void {

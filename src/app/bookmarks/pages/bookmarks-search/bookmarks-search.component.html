@@ -1,5 +1,6 @@
 <ocx-portal-page
-  [helpArticleId]="'BOOKMARKS_SEARCH.HELP_ARTICLE_ID' | translate"
+  permission="BOOKMARKS#VIEW"
+  helpArticleId="PAGE_BOOKMARK_SEARCH"
   *ngrxLet="viewModel$; let vm"
 >
   <ocx-page-header
@@ -107,6 +108,7 @@
                     $event.stopPropagation(); editBookmark($event, item)
                   "
                   id="edit-bookmark-button"
+                  *ocxIfPermission="'BOOKMARKS#EDIT'"
                 ></p-button>
                 <p-button
                   pTooltip="{{
@@ -120,6 +122,7 @@
                     $event.stopPropagation(); deleteBookmark($event, item)
                   "
                   id="delete-bookmark-button"
+                  *ocxIfPermission="'BOOKMARKS#DELETE'"
                 ></p-button>
               </div>
             </div>

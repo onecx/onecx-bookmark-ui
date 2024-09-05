@@ -52,6 +52,7 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
       titleKey: 'BOOKMARKS_SEARCH.HEADER_ACTIONS.EXPORT_ALL',
       show: 'always',
       actionCallback: () => this.exportItems(),
+      permission: 'BOOKMARKS#EXPORT'
     },
   ];
 

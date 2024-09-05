@@ -4,15 +4,15 @@ app:
     repository: onecx/onecx-bookmark-ui
   routing:
     enabled: true
-    path: /mfe/onecxBookmarkUi/
+    path: /mfe/bookmark/
   operator:
     microfrontend:
       enabled: true
       specs:
         main:
-          exposedModule: ./OnecxBookmarkUiModule
-          description: OneCX OnecxBookmarkUi Module
-          note: OneCX OnecxBookmarkUi UI module auto import via MF operator
+          exposedModule: ./OneCXBookmarkModule
+          description: OneCX Bookmark UI
+          note: OneCX Bookmark UI auto import via MF operator
           type: MODULE
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark-ui

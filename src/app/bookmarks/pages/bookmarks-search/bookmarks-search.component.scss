@@ -1,16 +1,13 @@
-:host ::ng-deep .p-calendar-clear-icon {
-  right: 1rem;
-}
-
 .image-object {
   object-fit: contain;
   vertical-align: middle;
 }
 
-:host ::ng-deep ocx-data-layout-selection  {
-  display: none;
-}
-
-:host ::ng-deep div:has(> #top-center-container) {
-  flex: 1;
+:host ::ng-deep {
+  ocx-data-layout-selection  {
+    display: none;
+  }
+  div:has(> #top-center-container) {
+    flex: 1;
+  }
 }

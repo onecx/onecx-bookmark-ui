@@ -1,7 +1,7 @@
 apiVersion: v2
 name: onecx-bookmark-ui
 version: 0.0.0
-description: onecx-bookmark-ui UI
+description: OneCX Bookmark UI
 home: https://github.com/onecx/onecx-bookmark-ui
 keywords:
   - onecx-bookmark-ui
