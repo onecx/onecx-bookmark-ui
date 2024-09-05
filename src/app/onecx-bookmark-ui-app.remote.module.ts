@@ -80,6 +80,6 @@ export class OneCXBookmarkModule implements DoBootstrap {
   constructor(private injector: Injector) {}
 
   ngDoBootstrap(): void {
-    createAppEntrypoint(AppEntrypointComponent, 'onecx-bookmark-ui-webcomponent', this.injector)
+    createAppEntrypoint(AppEntrypointComponent, 'ocx-bookmark-component', this.injector)
   }
 }
