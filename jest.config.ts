@@ -3,7 +3,8 @@ export default {
   displayName: 'onecx-bookmark-ui',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: './coverage/onecx-bookmark-ui',
+  coverageDirectory: './reports/coverage/',
+  coveragePathIgnorePatterns: ['src/app/shared/generated'],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -19,5 +20,16 @@ export default {
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment'
   ],
-  testMatch: ['<rootDir>/src/**/__tests__/**/*.[jt]s?(x)', '<rootDir>/src/**/*(*.)@(spec|test).[jt]s?(x)']
+  testMatch: ['<rootDir>/src/**/__tests__/**/*.[jt]s?(x)', '<rootDir>/src/**/*(*.)@(spec|test).[jt]s?(x)'],
+  reporters: [
+    'default',
+    [
+      'jest-sonar',
+      {
+        outputDirectory: './reports/',
+        outputName: 'sonarqube_report.xml',
+        reportedFilePath: 'absolute'
+      }
+    ]
+  ]
 }
