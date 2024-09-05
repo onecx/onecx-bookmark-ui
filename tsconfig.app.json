@@ -4,11 +4,7 @@
     "outDir": "./dist/out-tsc",
     "types": []
   },
-  "files": [
-    "src/app/onecx-bookmark-ui-app.remote.module.ts",
-    "src/polyfills.ts",
-    "src/main.ts"
-  ],
+  "files": ["src/app/onecx-bookmark-ui-app.remote.module.ts", "src/polyfills.ts", "src/main.ts"],
   "include": ["src/**/*.d.ts"],
   "exclude": ["jest.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts"]
 }

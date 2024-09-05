@@ -13,12 +13,12 @@ const PROXY_CONFIG = {
     target: 'http://onecx-bookmark-bff',
     secure: false,
     pathRewrite: {
-      '^.*/bff': '',
+      '^.*/bff': ''
     },
     changeOrigin: true,
     logLevel: 'debug',
     onProxyRes
-  },
-};
+  }
+}
 
-module.exports = PROXY_CONFIG;
+module.exports = PROXY_CONFIG

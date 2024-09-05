@@ -1,19 +1,15 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER, isDevMode, NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LetModule } from '@ngrx/component';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import { KeycloakAuthModule } from '@onecx/keycloak-auth';
+import { CommonModule } from '@angular/common'
+import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { APP_INITIALIZER, isDevMode, NgModule } from '@angular/core'
+import { BrowserModule } from '@angular/platform-browser'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { LetModule } from '@ngrx/component'
+import { EffectsModule } from '@ngrx/effects'
+import { StoreRouterConnectingModule } from '@ngrx/router-store'
+import { StoreModule } from '@ngrx/store'
+import { StoreDevtoolsModule } from '@ngrx/store-devtools'
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { KeycloakAuthModule } from '@onecx/keycloak-auth'
 import {
   AppStateService,
   APP_CONFIG,
@@ -22,17 +18,17 @@ import {
   PortalCoreModule,
   providePortalDialogService,
   translateServiceInitializer,
-  UserService,
-} from '@onecx/portal-integration-angular';
-import { environment } from 'src/environments/environment';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { metaReducers, reducers } from './app.reducers';
+  UserService
+} from '@onecx/portal-integration-angular'
+import { environment } from 'src/environments/environment'
+import { AppRoutingModule } from './app-routing.module'
+import { AppComponent } from './app.component'
+import { metaReducers, reducers } from './app.reducers'
 
-import { Configuration } from './shared/generated';
-import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils';
+import { Configuration } from './shared/generated'
+import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
 
-export const commonImports = [CommonModule];
+export const commonImports = [CommonModule]
 
 @NgModule({
   declarations: [AppComponent],
@@ -50,7 +46,7 @@ export const commonImports = [CommonModule];
       logOnly: !isDevMode(),
       autoPause: true,
       trace: false,
-      traceLimit: 75,
+      traceLimit: 75
     }),
     EffectsModule.forRoot([]),
     HttpClientModule,
@@ -60,9 +56,9 @@ export const commonImports = [CommonModule];
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient, AppStateService],
-      },
-    }),
+        deps: [HttpClient, AppStateService]
+      }
+    })
   ],
   providers: [
     providePortalDialogService(),
@@ -70,15 +66,15 @@ export const commonImports = [CommonModule];
     {
       provide: Configuration,
       useFactory: apiConfigProvider,
-      deps: [ConfigurationService, AppStateService],
+      deps: [ConfigurationService, AppStateService]
     },
     {
       provide: APP_INITIALIZER,
       useFactory: translateServiceInitializer,
       multi: true,
-      deps: [UserService, TranslateService],
-    },
+      deps: [UserService, TranslateService]
+    }
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

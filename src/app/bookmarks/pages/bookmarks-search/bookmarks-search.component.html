@@ -1,8 +1,4 @@
-<ocx-portal-page
-  permission="BOOKMARKS#VIEW"
-  helpArticleId="PAGE_BOOKMARK_SEARCH"
-  *ngrxLet="viewModel$; let vm"
->
+<ocx-portal-page permission="BOOKMARKS#VIEW" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$; let vm">
   <ocx-page-header
     header="{{ 'BOOKMARKS_SEARCH.HEADER' | translate }}"
     subheader="{{ 'BOOKMARKS_SEARCH.SUB_HEADER' | translate }}"
@@ -26,11 +22,8 @@
               [(ngModel)]="defaultQuickFilterOption"
             >
               <ng-template let-item pTemplate>
-                <span>
-                  {{ item.value | translate }}
-                </span>
-              </ng-template
-              >
+                <span> {{ item.value | translate }} </span>
+              </ng-template>
             </p-selectButton>
             <div class="p-inputgroup w-auto">
               <span class="p-inputgroup-addon">
@@ -44,11 +37,7 @@
                   'BOOKMARKS_SEARCH.INPUT_PLACEHOLDER' | translate
                 }}"
               />
-              <button
-                pButton
-                class="p-inputgroup-addon p-button-icon-only"
-                (click)="resetFilter()"
-              >
+              <button pButton class="p-inputgroup-addon p-button-icon-only" (click)="resetFilter()">
                 <i class="pi pi-filter-slash"></i>
               </button>
             </div>
@@ -59,16 +48,11 @@
         </ng-template>
 
         <ng-template #gridItem let-item>
-          <a
-            class="col-12 lg:col-6 xl:col-4 flex py-1 sm:py-2 md:py-3"
-            [routerLink]="getUrl(item) | async"
-          >
+          <a class="col-12 lg:col-6 xl:col-4 flex py-1 sm:py-2 md:py-3" [routerLink]="getUrl(item) | async">
             <div
               class="data-grid-item card w-12 lg:w-11 align-self-stretch cursor-pointer text-center hover:bg-gray-200 relative"
             >
-              <div
-                class="flex flex-column justify-content-center align-items-center gap-2 w-full h-full"
-              >
+              <div class="flex flex-column justify-content-center align-items-center gap-2 w-full h-full">
                 <div class="flex justify-content-center w-full">
                   <img
                     [alt]="item.displayName"
@@ -82,14 +66,8 @@
                   />
                 </div>
                 <div class="flex flex-column gap-1">
-                  <p
-                    class="font-bold sm:text-lg md:text-xl text-responsive m-0"
-                  >
-                    {{ item.displayName }}
-                  </p>
-                  <p class="text-xs md:text-sm text-responsive">
-                    {{ item.scope | translate }}
-                  </p>
+                  <p class="font-bold sm:text-lg md:text-xl text-responsive m-0">{{ item.displayName }}</p>
+                  <p class="text-xs md:text-sm text-responsive">{{ item.scope | translate }}</p>
                 </div>
               </div>
               <div
