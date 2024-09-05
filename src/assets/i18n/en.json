@@ -1,0 +1,50 @@
+{
+  "BOOKMARKS_CREATE_UPDATE": {
+    "UPDATE": {
+      "SUCCESS": "Update successful",
+      "FAILED": "Update failed",
+      "ERROR": "Update failed",
+      "FORM": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
+      },
+      "HEADER": "Update Bookmark"
+    },
+    "FORM": {
+      "DISPLAY_NAME": "Display Name"
+    }
+  },
+  "BOOKMARKS_DELETE": {
+    "HEADER": "Delete Bookmark",
+    "MESSAGE": "Please confirm that you want to delete this Bookmark.",
+    "CONFIRM": "Confirm",
+    "CANCEL": "Cancel",
+    "SUCCESS": "Bookmark deleted successfully",
+    "ERROR": "Could not delete Bookmark"
+  },
+  "BOOKMARKS_SEARCH": {
+    "HEADER": "My Bookmarks",
+    "SORTING_OPTIONS": {
+      "DISPLAY_NAME": "Display Name"
+    },
+    "SUB_HEADER": "View and manage my bookmarks.",
+    "EMPTY_RESULTS": "No results.",
+    "BREADCRUMB": "Search",
+    "HEADER_ACTIONS": {
+      "EXPORT_ALL": "Export all bookmarks"
+    },
+    "CARD_ACTIONS": {
+      "EDIT": "Edit",
+      "DELETE": "Delete"
+    },
+    "ERROR_MESSAGES": {
+      "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed."
+    },
+    "INPUT_PLACEHOLDER": "Filter bookmarks"
+  },
+  "BOOKMARK_TYPES": {
+    "ALL": "All",
+    "PRIVATE": "Private",
+    "PUBLIC": "Public"
+  }
+}

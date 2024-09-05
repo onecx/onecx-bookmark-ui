@@ -1,0 +1,50 @@
+{
+  "BOOKMARKS_CREATE_UPDATE": {
+    "UPDATE": {
+      "SUCCESS": "Aktualisierung erfolgreich",
+      "FAILED": "Aktualisierung fehlgeschlagen",
+      "ERROR": "Aktualisierung fehlgeschlagen",
+      "FORM": {
+        "SAVE": "Save",
+        "CANCEL": "Cancel"
+      },
+      "HEADER": "Lesezeichen bearbeiten"
+    },
+    "FORM": {
+      "DISPLAY_NAME": "Anzeigename"
+    }
+  },
+  "BOOKMARKS_DELETE": {
+    "HEADER": "Lesezeichen löschen",
+    "MESSAGE": "Bitte bestätigen, dass dieses Lesezeichen gelöscht werden soll.",
+    "CONFIRM": "Bestätigen",
+    "CANCEL": "Abbrechen",
+    "SUCCESS": "Lesezeichen erfolgreich gelöscht",
+    "ERROR": "Konnte Lesezeichen nicht löschen"
+  },
+  "BOOKMARKS_SEARCH": {
+    "HEADER": "Meine Lesezeichen",
+    "SORTING_OPTIONS": {
+      "DISPLAY_NAME": "Anzeigename"
+    },
+    "SUB_HEADER": "Anzeigen und verwalten meiner Lesezeichen.",
+    "EMPTY_RESULTS": "Keine Ergebnisse.",
+    "BREADCRUMB": "Suche",
+    "HEADER_ACTIONS": {
+      "EXPORT_ALL": "Alle Lesezeichen exportieren"
+    },
+    "CARD_ACTIONS": {
+      "EDIT": "Bearbeiten",
+      "DELETE": "Löschen"
+    },
+    "ERROR_MESSAGES": {
+      "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden."
+    },
+    "INPUT_PLACEHOLDER": "Lesezeichen filtern"
+  },
+  "BOOKMARK_TYPES": {
+    "ALL": "Alle",
+    "PRIVATE": "Privat",
+    "PUBLIC": "Öffentlich"
+  }
+}
