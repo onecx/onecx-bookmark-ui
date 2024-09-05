@@ -4,7 +4,7 @@ version: 0.0.0
 description: OneCX Bookmark UI
 home: https://github.com/onecx/onecx-bookmark-ui
 keywords:
-  - onecx-bookmark-ui
+  - bookmark
 sources:
   - https://github.com/onecx/onecx-bookmark-ui
 maintainers:
