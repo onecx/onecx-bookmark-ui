@@ -1,10 +1,10 @@
 const { ModifyEntryPlugin } = require('@angular-architects/module-federation/src/utils/modify-entry-plugin')
 const { share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack')
 const config = withModuleFederationPlugin({
-  name: 'onecx-bookmark-ui-app',
+  name: 'onecx-bookmark-ui',
   filename: 'remoteEntry.js',
   exposes: {
-    './OneCXBookmarkModule': './src/bootstrap.ts'
+    './OneCXBookmarkModule': './src/main.ts'
   },
   shared: share({
     '@angular/core': {
