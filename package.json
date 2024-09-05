@@ -6,7 +6,7 @@
     "OneCX Development Team <onecx_dev@1000kit.org>"
   ],
   "scripts": {
-    "apigen": "openapi-generator-cli generate -i src/assets/swagger/onecx-bookmark-bff.yaml -c apigen.yaml -o src/app/shared/generated -g typescript-angular --type-mappings AnyType=object",
+    "apigen": "openapi-generator-cli generate -i src/assets/api/onecx-bookmark-bff.yaml -c apigen.yaml -o src/app/shared/generated -g typescript-angular --type-mappings AnyType=object",
     "start": "nx serve",
     "build": "nx build",
     "format": "nx format:write --uncommitted",
