@@ -76,10 +76,10 @@
       "executor": "@nx/angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "onecx-bookmark-ui:build:production"
+          "buildTarget": "onecx-bookmark-ui:build:production"
         },
         "development": {
-          "browserTarget": "onecx-bookmark-ui:build:development"
+          "buildTarget": "onecx-bookmark-ui:build:development"
         }
       },
       "defaultConfiguration": "development",
@@ -92,7 +92,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "onecx-bookmark-ui:build"
+        "buildTarget": "onecx-bookmark-ui:build"
       }
     },
     "lint": {
