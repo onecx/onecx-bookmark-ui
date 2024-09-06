@@ -1,7 +1,7 @@
 app:
-  name: onecx-bookmark-ui
+  name: ui
   image:
-    repository: onecx/onecx-bookmark-ui
+    repository: 'onecx/onecx-bookmark-ui'
   routing:
     enabled: true
     path: /mfe/bookmark/
@@ -11,9 +11,9 @@ app:
       enabled: true
       specs:
         main:
-          exposedModule: ./OneCXBookmarkModule
-          description: OneCX Bookmark UI
-          note: OneCX Bookmark UI auto import via MF operator
+          exposedModule: './OneCXBookmarkModule'
+          description: 'OneCX Bookmark UI'
+          note: 'OneCX Bookmark UI auto import via MF operator'
           type: MODULE
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
@@ -24,10 +24,10 @@ app:
       spec:
         permissions:
           BOOKMARKS:
-            CREATE: Create bookmarks
-            EDIT: Edit bookmarks
-            DELETE: Delete bookmarks
-            IMPORT: Import bookmarks
-            EXPORT: Export bookmarks
-            VIEW: View mode for bookmarks
+            CREATE: 'Create bookmarks'
+            EDIT: 'Edit bookmarks'
+            DELETE: 'Delete bookmarks'
+            IMPORT: 'Import bookmarks'
+            EXPORT: 'Export bookmarks'
+            VIEW: 'View mode for bookmarks'
     
