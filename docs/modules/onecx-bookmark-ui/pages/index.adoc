@@ -1,0 +1,5 @@
+
+== onecx-bookmark-ui
+
+include::onecx-bookmark-ui-docs.adoc[opts=optional]
+
