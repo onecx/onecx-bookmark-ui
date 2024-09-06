@@ -1,4 +1,4 @@
-<ocx-portal-page permission="BOOKMARKS#VIEW" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$; let vm">
+<ocx-portal-page permission="BOOKMARK#VIEW" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$; let vm">
   <ocx-page-header
     header="{{ 'BOOKMARKS_SEARCH.HEADER' | translate }}"
     subheader="{{ 'BOOKMARKS_SEARCH.SUB_HEADER' | translate }}"
@@ -86,7 +86,7 @@
                     $event.stopPropagation(); editBookmark($event, item)
                   "
                   id="edit-bookmark-button"
-                  *ocxIfPermission="'BOOKMARKS#EDIT'"
+                  *ocxIfPermission="'BOOKMARK#EDIT'"
                 ></p-button>
                 <p-button
                   pTooltip="{{
@@ -100,7 +100,7 @@
                     $event.stopPropagation(); deleteBookmark($event, item)
                   "
                   id="delete-bookmark-button"
-                  *ocxIfPermission="'BOOKMARKS#DELETE'"
+                  *ocxIfPermission="'BOOKMARK#DELETE'"
                 ></p-button>
               </div>
             </div>
