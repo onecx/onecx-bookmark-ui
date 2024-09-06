@@ -23,7 +23,7 @@ app:
       enabled: true
       spec:
         permissions:
-          BOOKMARKS:
+          BOOKMARK:
             CREATE: 'Create bookmarks'
             EDIT: 'Edit bookmarks'
             DELETE: 'Delete bookmarks'
