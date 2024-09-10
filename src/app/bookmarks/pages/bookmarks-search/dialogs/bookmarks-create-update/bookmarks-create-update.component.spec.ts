@@ -3,7 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
-import { LetModule } from '@ngrx/component'
+import { LetDirective } from '@ngrx/component'
 import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BookmarksCreateUpdateComponent } from './bookmarks-create-update.component'
@@ -35,7 +35,7 @@ describe('BookmarksCreateUpdateComponent', () => {
         PortalCoreModule,
         FormsModule,
         ReactiveFormsModule,
-        LetModule,
+        LetDirective,
         TranslateTestingModule.withTranslations(
           'en',
           require('./../../../../../../assets/i18n/en.json')

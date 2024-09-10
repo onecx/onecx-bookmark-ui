@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { APP_INITIALIZER, DoBootstrap, Injector, isDevMode, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -15,7 +15,9 @@ import {
   AppStateService,
   ConfigurationService,
   createTranslateLoader,
-  PortalCoreModule
+  HAS_PERMISSION_CHECKER,
+  PortalCoreModule,
+  UserService
 } from '@onecx/portal-integration-angular'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
@@ -47,7 +49,6 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
     }),
     SharedModule,
     BrowserModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     AngularAuthModule,
     StoreModule.forRoot(reducers, { metaReducers }),
@@ -73,7 +74,12 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       useFactory: initializeRouter,
       multi: true,
       deps: [Router, AppStateService]
-    }
+    },
+    {
+      provide: HAS_PERMISSION_CHECKER,
+      useExisting: UserService
+    },
+    provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class OneCXBookmarkModule implements DoBootstrap {
