@@ -11,7 +11,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 import {
-  addInitializeModuleGuard,
   AppStateService,
   ConfigurationService,
   createTranslateLoader,
@@ -26,6 +25,7 @@ import { metaReducers, reducers } from './app.reducers'
 import { Configuration } from './shared/generated'
 import { SharedModule } from './shared/shared.module'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
+import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
 // Workaround for the following issue:
 // https://github.com/ngrx/platform/issues/3700
