@@ -80,10 +80,6 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       multi: true,
       deps: [Router, AppStateService]
     },
-    {
-      provide: HAS_PERMISSION_CHECKER,
-      useExisting: UserService
-    },
     provideHttpClient(withInterceptorsFromDi())
   ]
 })
