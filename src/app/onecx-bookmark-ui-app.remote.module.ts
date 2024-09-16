@@ -1,13 +1,13 @@
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { APP_INITIALIZER, DoBootstrap, Injector, isDevMode, NgModule } from '@angular/core'
-import { BrowserModule } from '@angular/platform-browser'
+import { BrowserModule, platformBrowser } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { Router, RouterModule } from '@angular/router'
 import { Actions, EffectsModule, EffectSources, EffectsRunner } from '@ngrx/effects'
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 import {
@@ -16,6 +16,7 @@ import {
   createTranslateLoader,
   HAS_PERMISSION_CHECKER,
   PortalCoreModule,
+  PortalMissingTranslationHandler,
   UserService
 } from '@onecx/portal-integration-angular'
 import { AppEntrypointComponent } from './app-entrypoint.component'
@@ -45,6 +46,10 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
         deps: [HttpClient, AppStateService]
+      },
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: PortalMissingTranslationHandler
       }
     }),
     SharedModule,

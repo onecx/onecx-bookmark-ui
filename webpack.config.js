@@ -33,9 +33,18 @@ const config = withModuleFederationPlugin({
       requiredVersion: 'auto',
       includeSecondaries: true
     },
-    '@ngx-translate/core': { requiredVersion: 'auto', strictVersion: false },
+    '@ngx-translate/core': { requiredVersion: 'auto' },
     '@onecx/accelerator': { requiredVersion: 'auto', includeSecondaries: true },
+    '@onecx/angular-accelerator': { requiredVersion: 'auto', includeSecondaries: true },
     '@onecx/angular-auth': {
+      requiredVersion: 'auto',
+      includeSecondaries: true
+    },
+    '@onecx/angular-integration-interface': {
+      requiredVersion: 'auto',
+      includeSecondaries: true
+    },
+    '@onecx/angular-remote-components': {
       requiredVersion: 'auto',
       includeSecondaries: true
     },
@@ -47,15 +56,10 @@ const config = withModuleFederationPlugin({
       requiredVersion: 'auto',
       includeSecondaries: true
     },
-    '@onecx/angular-integration-interface': {
-      requiredVersion: 'auto',
-      includeSecondaries: true
-    },
     '@onecx/keycloak-auth': {
       requiredVersion: 'auto',
       includeSecondaries: true
     },
-    '@onecx/nx-plugin': { requiredVersion: 'auto', includeSecondaries: true },
     '@onecx/portal-integration-angular': {
       requiredVersion: 'auto',
       includeSecondaries: true
@@ -65,7 +69,6 @@ const config = withModuleFederationPlugin({
       includeSecondaries: true
     }
   }),
-
   sharedMappings: []
 })
 
