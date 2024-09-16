@@ -8,12 +8,12 @@ import { BookmarksCreateUpdateComponent } from './pages/bookmarks-search/dialogs
 import {
   PortalMissingTranslationHandler,
   createTranslateLoader,
-  providePortalDialogService
+  providePortalDialogService,
+  PortalCoreModule
 } from '@onecx/portal-integration-angular'
 import { StoreModule } from '@ngrx/store'
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AppStateService, addInitializeModuleGuard } from '@onecx/angular-integration-interface'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
 import { SharedModule } from '../shared/shared.module'
 import { bookmarksFeature } from './bookmarks.reducers'
 import { routes } from './bookmarks.routes'

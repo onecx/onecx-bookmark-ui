@@ -1,6 +1,6 @@
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { APP_INITIALIZER, DoBootstrap, Injector, isDevMode, NgModule } from '@angular/core'
-import { BrowserModule, platformBrowser } from '@angular/platform-browser'
+import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { Router, RouterModule } from '@angular/router'
 import { Actions, EffectsModule, EffectSources, EffectsRunner } from '@ngrx/effects'
