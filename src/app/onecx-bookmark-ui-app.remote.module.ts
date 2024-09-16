@@ -14,10 +14,8 @@ import {
   AppStateService,
   ConfigurationService,
   createTranslateLoader,
-  HAS_PERMISSION_CHECKER,
   PortalCoreModule,
-  PortalMissingTranslationHandler,
-  UserService
+  PortalMissingTranslationHandler
 } from '@onecx/portal-integration-angular'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
