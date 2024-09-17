@@ -1,4 +1,4 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { APP_INITIALIZER, DoBootstrap, Injector, isDevMode, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -7,15 +7,15 @@ import { Actions, EffectsModule, EffectSources, EffectsRunner } from '@ngrx/effe
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 import {
-  addInitializeModuleGuard,
   AppStateService,
   ConfigurationService,
   createTranslateLoader,
-  PortalCoreModule
+  PortalCoreModule,
+  PortalMissingTranslationHandler
 } from '@onecx/portal-integration-angular'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
@@ -24,6 +24,7 @@ import { metaReducers, reducers } from './app.reducers'
 import { Configuration } from './shared/generated'
 import { SharedModule } from './shared/shared.module'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
+import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
 // Workaround for the following issue:
 // https://github.com/ngrx/platform/issues/3700
@@ -43,11 +44,14 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
         deps: [HttpClient, AppStateService]
+      },
+      missingTranslationHandler: {
+        provide: MissingTranslationHandler,
+        useClass: PortalMissingTranslationHandler
       }
     }),
     SharedModule,
     BrowserModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     AngularAuthModule,
     StoreModule.forRoot(reducers, { metaReducers }),
@@ -73,7 +77,8 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       useFactory: initializeRouter,
       multi: true,
       deps: [Router, AppStateService]
-    }
+    },
+    provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class OneCXBookmarkModule implements DoBootstrap {

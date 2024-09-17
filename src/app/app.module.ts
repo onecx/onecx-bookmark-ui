@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common'
-import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { APP_INITIALIZER, isDevMode, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { LetModule } from '@ngrx/component'
+import { LetDirective } from '@ngrx/component'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
 import { StoreModule } from '@ngrx/store'
@@ -38,7 +38,7 @@ export const commonImports = [CommonModule]
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    LetModule,
+    LetDirective,
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({
@@ -49,7 +49,6 @@ export const commonImports = [CommonModule]
       traceLimit: 75
     }),
     EffectsModule.forRoot([]),
-    HttpClientModule,
     PortalCoreModule.forRoot('onecx-bookmark-ui-app'),
     TranslateModule.forRoot({
       extend: true,
@@ -73,7 +72,8 @@ export const commonImports = [CommonModule]
       useFactory: translateServiceInitializer,
       multi: true,
       deps: [UserService, TranslateService]
-    }
+    },
+    provideHttpClient(withInterceptorsFromDi())
   ],
   bootstrap: [AppComponent]
 })

@@ -5,7 +5,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { ActivatedRoute } from '@angular/router'
-import { LetModule } from '@ngrx/component'
+import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
@@ -57,7 +57,7 @@ describe('BookmarksSearchComponent', () => {
       declarations: [BookmarksSearchComponent],
       imports: [
         PortalCoreModule,
-        LetModule,
+        LetDirective,
         ReactiveFormsModule,
         FormsModule,
         StoreModule.forRoot({}),
