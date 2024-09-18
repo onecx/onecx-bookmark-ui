@@ -5,10 +5,11 @@
       "FAILED": "Aktualisierung fehlgeschlagen",
       "ERROR": "Aktualisierung fehlgeschlagen",
       "FORM": {
-        "SAVE": "Save",
-        "CANCEL": "Cancel"
+        "SAVE": "Speichern",
+        "CANCEL": "Abbrechen"
       },
-      "HEADER": "Lesezeichen bearbeiten"
+      "HEADER": "Lesezeichen bearbeiten",
+      "HEADER_READONLY": "Lesezeichen anzeigen"
     },
     "FORM": {
       "DISPLAY_NAME": "Anzeigename"
@@ -34,8 +35,8 @@
       "EXPORT_ALL": "Alle Lesezeichen exportieren"
     },
     "CARD_ACTIONS": {
-      "EDIT": "Bearbeiten",
-      "DELETE": "Löschen"
+      "DELETE": "Lesezeichen löschen",
+      "VISIT": "Zu Lesezeichen navigieren"
     },
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden."

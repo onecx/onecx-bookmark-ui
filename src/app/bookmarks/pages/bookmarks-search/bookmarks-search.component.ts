@@ -104,8 +104,7 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     item.errorImage$ = this.defaultImageUrl$
   }
 
-  editBookmark(event: MouseEvent, { id }: RowListGridData) {
-    event.preventDefault()
+  editBookmark({ id }: RowListGridData) {
     this.store.dispatch(BookmarksSearchActions.editBookmarksButtonClicked({ id }))
   }
 

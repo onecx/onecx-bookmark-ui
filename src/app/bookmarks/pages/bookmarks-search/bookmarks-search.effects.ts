@@ -1,5 +1,4 @@
-import { Injectable, SkipSelf } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
@@ -8,11 +7,12 @@ import {
   DialogState,
   ExportDataService,
   PortalDialogService,
-  PortalMessageService
+  PortalMessageService,
+  UserService
 } from '@onecx/portal-integration-angular'
 import { PrimeIcons } from 'primeng/api'
 import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
-import { Bookmark, BookmarksInternal, UpdateBookmark } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScopeEnum, BookmarksInternal, UpdateBookmark } from 'src/app/shared/generated'
 import { BookmarksSearchActions } from './bookmarks-search.actions'
 import { bookmarksSearchSelectors, selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 import { BookmarksCreateUpdateComponent } from './dialogs/bookmarks-create-update/bookmarks-create-update.component'
@@ -21,13 +21,12 @@ export class BookmarksSearchEffects {
   constructor(
     private portalDialogService: PortalDialogService,
     private actions$: Actions,
-    @SkipSelf() private route: ActivatedRoute,
     private bookmarksService: BookmarksInternal,
-    private router: Router,
     private store: Store,
     private messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
-    private appStateService: AppStateService
+    private appStateService: AppStateService,
+    private userService: UserService
   ) {}
 
   searchTriggered$ = createEffect(() => {
@@ -86,6 +85,9 @@ export class BookmarksSearchEffects {
   })
 
   editButtonClicked$ = createEffect(() => {
+    const canEdit = (bookmark?: Bookmark) => {
+      return this.userService.hasPermission('BOOKMARK#EDIT') && bookmark?.scope !== BookmarkScopeEnum.Public
+    }
     return this.actions$.pipe(
       ofType(BookmarksSearchActions.editBookmarksButtonClicked),
       concatLatestFrom(() => this.store.select(bookmarksSearchSelectors.selectResults)),
@@ -94,7 +96,7 @@ export class BookmarksSearchEffects {
       }),
       mergeMap((itemToEdit) => {
         return this.portalDialogService.openDialog<Bookmark | undefined>(
-          'BOOKMARKS_CREATE_UPDATE.UPDATE.HEADER',
+          `BOOKMARKS_CREATE_UPDATE.UPDATE.HEADER${canEdit(itemToEdit) ? '' : '_READONLY'}`,
           {
             type: BookmarksCreateUpdateComponent,
             inputs: {
@@ -103,17 +105,22 @@ export class BookmarksSearchEffects {
               }
             }
           },
-          'BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.SAVE',
-          'BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.CANCEL',
+          `BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.${canEdit(itemToEdit) ? 'SAVE' : 'CANCEL'}`,
+          canEdit(itemToEdit) ? 'BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.CANCEL' : undefined,
           {
             baseZIndex: 100,
             draggable: true,
-            resizable: true
+            resizable: true,
+            width: '400px'
           }
         )
       }),
       switchMap((dialogResult) => {
-        if (!dialogResult || dialogResult.button == 'secondary') {
+        if (
+          !dialogResult ||
+          (dialogResult.button == 'secondary' && canEdit(dialogResult.result)) ||
+          (dialogResult.button == 'primary' && !canEdit(dialogResult.result))
+        ) {
           return of(BookmarksSearchActions.updateBookmarksCancelled())
         }
         if (!dialogResult?.result) {

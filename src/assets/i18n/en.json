@@ -8,7 +8,8 @@
         "SAVE": "Save",
         "CANCEL": "Cancel"
       },
-      "HEADER": "Update Bookmark"
+      "HEADER": "Update Bookmark",
+      "HEADER_READONLY": "View bookmark"
     },
     "FORM": {
       "DISPLAY_NAME": "Display Name"
@@ -34,8 +35,8 @@
       "EXPORT_ALL": "Export all bookmarks"
     },
     "CARD_ACTIONS": {
-      "EDIT": "Edit",
-      "DELETE": "Delete"
+      "DELETE": "Delete bookmark",
+      "VISIT": "Go to bookmark"
     },
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed."

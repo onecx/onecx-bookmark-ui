@@ -48,7 +48,12 @@
         </ng-template>
 
         <ng-template #gridItem let-item>
-          <a class="col-12 lg:col-6 xl:col-4 flex py-1 sm:py-2 md:py-3" [routerLink]="getUrl(item) | async">
+          <a
+            class="col-12 lg:col-6 xl:col-4 flex py-1 sm:py-2 md:py-3"
+            (click)="editBookmark(item)"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          >
             <div
               class="data-grid-item card w-12 lg:w-11 align-self-stretch cursor-pointer text-center hover:bg-gray-200 relative"
             >
@@ -70,24 +75,25 @@
                   <p class="text-xs md:text-sm text-responsive">{{ item.scope | translate }}</p>
                 </div>
               </div>
-              <div
-                class="flex flex-column gap-1 absolute right-0 top-0 mt-3 mr-3"
-                *ngIf="item.scope === 'BOOKMARK_TYPES.PRIVATE'"
-              >
-                <p-button
+              <div class="absolute left-0 top-0 mt-3 ml-3">
+                <a
+                  [routerLink]="getUrl(item) | async"
                   pTooltip="{{
-                    'BOOKMARKS_SEARCH.CARD_ACTIONS.EDIT' | translate
-                  }}"
+                'BOOKMARKS_SEARCH.CARD_ACTIONS.VISIT' | translate
+              }}"
                   tooltipPosition="top"
                   tooltipEvent="hover"
-                  icon="pi pi-pencil"
-                  styleClass="p-button-text"
-                  (onClick)="
-                    $event.stopPropagation(); editBookmark($event, item)
+                >
+                  <p-button
+                    icon="pi pi-link"
+                    styleClass="p-button-text"
+                    (onClick)="
+                    $event.stopPropagation();
                   "
-                  id="edit-bookmark-button"
-                  *ocxIfPermission="'BOOKMARK#EDIT'"
-                ></p-button>
+                  ></p-button>
+                </a>
+              </div>
+              <div class="absolute right-0 top-0 mt-3 mr-3" *ngIf="item.scope === 'BOOKMARK_TYPES.PRIVATE'">
                 <p-button
                   pTooltip="{{
                     'BOOKMARKS_SEARCH.CARD_ACTIONS.DELETE' | translate
