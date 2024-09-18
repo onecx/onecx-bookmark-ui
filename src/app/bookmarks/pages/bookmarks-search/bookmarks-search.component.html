@@ -75,7 +75,23 @@
                   <p class="text-xs md:text-sm text-responsive">{{ item.scope | translate }}</p>
                 </div>
               </div>
-              <div class="absolute left-0 top-0 mt-3 ml-3">
+              <div class="absolute left-0 top-0 mt-3 ml-3" *ngIf="item.scope === 'BOOKMARK_TYPES.PRIVATE'">
+                <p-button
+                  pTooltip="{{
+                    'BOOKMARKS_SEARCH.CARD_ACTIONS.DELETE' | translate
+                  }}"
+                  tooltipPosition="top"
+                  tooltipEvent="hover"
+                  icon="pi pi-trash"
+                  styleClass="p-button-text"
+                  (onClick)="
+                    $event.stopPropagation(); deleteBookmark($event, item)
+                  "
+                  id="delete-bookmark-button"
+                  *ocxIfPermission="'BOOKMARK#DELETE'"
+                ></p-button>
+              </div>
+              <div class="absolute right-0 top-0 mt-3 mr-3">
                 <a
                   [routerLink]="getUrl(item) | async"
                   pTooltip="{{
@@ -92,22 +108,6 @@
                   "
                   ></p-button>
                 </a>
-              </div>
-              <div class="absolute right-0 top-0 mt-3 mr-3" *ngIf="item.scope === 'BOOKMARK_TYPES.PRIVATE'">
-                <p-button
-                  pTooltip="{{
-                    'BOOKMARKS_SEARCH.CARD_ACTIONS.DELETE' | translate
-                  }}"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                  icon="pi pi-trash"
-                  styleClass="p-button-text"
-                  (onClick)="
-                    $event.stopPropagation(); deleteBookmark($event, item)
-                  "
-                  id="delete-bookmark-button"
-                  *ocxIfPermission="'BOOKMARK#DELETE'"
-                ></p-button>
               </div>
             </div>
           </a>
