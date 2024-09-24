@@ -17,9 +17,10 @@
   },
   "BOOKMARKS_DELETE": {
     "HEADER": "Lesezeichen löschen",
-    "MESSAGE": "Bitte bestätigen, dass dieses Lesezeichen gelöscht werden soll.",
-    "CONFIRM": "Bestätigen",
-    "CANCEL": "Abbrechen",
+    "MESSAGE": "Möchten Sie dieses Lesezeichen löschen?",
+    "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
+    "CONFIRM": "Ja",
+    "CANCEL": "Nein",
     "SUCCESS": "Lesezeichen erfolgreich gelöscht",
     "ERROR": "Konnte Lesezeichen nicht löschen"
   },
@@ -32,7 +33,7 @@
     "EMPTY_RESULTS": "Keine Ergebnisse.",
     "BREADCRUMB": "Suche",
     "HEADER_ACTIONS": {
-      "EXPORT_ALL": "Alle Lesezeichen exportieren"
+      "EXPORT_ALL": "Export"
     },
     "CARD_ACTIONS": {
       "DELETE": "Lesezeichen löschen",
@@ -41,7 +42,9 @@
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden."
     },
-    "INPUT_PLACEHOLDER": "Lesezeichen filtern"
+    "INPUT_PLACEHOLDER": "Filter",
+    "INPUT_TOOLTIP": "Filter nach Anzeigename",
+    "INPUT_RESET_TOOLTIP": "Filter zurücksetzen"
   },
   "BOOKMARK_TYPES": {
     "ALL": "Alle",

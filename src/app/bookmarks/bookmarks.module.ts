@@ -14,10 +14,17 @@ import { bookmarksFeature } from './bookmarks.reducers'
 import { routes } from './bookmarks.routes'
 import { BookmarksSearchComponent } from './pages/bookmarks-search/bookmarks-search.component'
 import { BookmarksSearchEffects } from './pages/bookmarks-search/bookmarks-search.effects'
+import { BookmarksDeleteComponent } from './pages/bookmarks-search/dialogs/bookmarks-delete/bookmarks-delete.component'
+import { BookmarkImageComponent } from './pages/bookmarks-search/product-image/bookmark-image.component'
 
 @NgModule({
   providers: [providePortalDialogService()],
-  declarations: [BookmarksCreateUpdateComponent, BookmarksSearchComponent],
+  declarations: [
+    BookmarksCreateUpdateComponent,
+    BookmarksDeleteComponent,
+    BookmarksSearchComponent,
+    BookmarkImageComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,

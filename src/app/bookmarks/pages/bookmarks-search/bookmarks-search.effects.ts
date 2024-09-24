@@ -16,6 +16,7 @@ import { Bookmark, BookmarkScopeEnum, BookmarksInternal, UpdateBookmark } from '
 import { BookmarksSearchActions } from './bookmarks-search.actions'
 import { bookmarksSearchSelectors, selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 import { BookmarksCreateUpdateComponent } from './dialogs/bookmarks-create-update/bookmarks-create-update.component'
+import { BookmarksDeleteComponent } from './dialogs/bookmarks-delete/bookmarks-delete.component'
 @Injectable()
 export class BookmarksSearchEffects {
   constructor(
@@ -164,7 +165,9 @@ export class BookmarksSearchEffects {
         return this.portalDialogService
           .openDialog<unknown>(
             'BOOKMARKS_DELETE.HEADER',
-            'BOOKMARKS_DELETE.MESSAGE',
+            {
+              type: BookmarksDeleteComponent
+            },
             {
               key: 'BOOKMARKS_DELETE.CONFIRM',
               icon: PrimeIcons.CHECK

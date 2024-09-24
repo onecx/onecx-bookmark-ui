@@ -1,0 +1,43 @@
+@mixin displaying-text-responsive {
+  :host ::ng-deep {
+    .text-responsive {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+@mixin danger-action {
+  :host ::ng-deep {
+    .danger-action-text {
+      color: var(--danger-button-bg);
+    }
+    .danger-action-bg {
+      color: white;
+      background-color: var(--danger-button-bg);
+    }
+  }
+}
+
+@mixin correct-select-button {
+  :host ::ng-deep {
+    .p-selectbutton.p-buttonset {
+      .p-button:first-of-type:not(:only-of-type) {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .p-button:not(:last-child),
+      .p-button:not(:last-child):hover {
+        border-right: 0 none;
+      }
+      .p-button:last-of-type:not(:only-of-type) {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+      .p-button:not(:first-of-type):not(:last-of-type) {
+        border-radius: 0;
+      }
+    }
+  }
+}
