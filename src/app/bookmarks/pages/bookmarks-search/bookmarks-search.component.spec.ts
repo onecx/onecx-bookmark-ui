@@ -20,6 +20,8 @@ import { BookmarksSearchHarness } from './bookmarks-search.harness'
 import { initialState } from './bookmarks-search.reducers'
 import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
+import { SharedModule } from 'src/app/shared/shared.module'
+import { BookmarkImageComponent } from './product-image/bookmark-image.component'
 
 describe('BookmarksSearchComponent', () => {
   HTMLCanvasElement.prototype.getContext = jest.fn()
@@ -54,8 +56,9 @@ describe('BookmarksSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarksSearchComponent],
+      declarations: [BookmarksSearchComponent, BookmarkImageComponent],
       imports: [
+        SharedModule,
         PortalCoreModule,
         LetDirective,
         ReactiveFormsModule,
@@ -130,7 +133,7 @@ describe('BookmarksSearchComponent', () => {
     store.refreshState()
 
     const pageHeader = await bookmarksSearch.getHeader()
-    const exportButton = await pageHeader.getInlineActionButtonByLabel('Export all bookmarks')
+    const exportButton = await pageHeader.getInlineActionButtonByLabel('Export')
     await exportButton?.click()
 
     expect(store.dispatch).toHaveBeenCalledWith(BookmarksSearchActions.exportButtonClicked())
