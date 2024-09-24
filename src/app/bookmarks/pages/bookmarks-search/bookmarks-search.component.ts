@@ -1,15 +1,14 @@
+import { Location } from '@angular/common'
 import { AfterViewInit, Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { Store } from '@ngrx/store'
-import { Action, BreadcrumbService, RowListGridData } from '@onecx/portal-integration-angular'
-import { Observable, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs'
+import { WorkspaceService } from '@onecx/angular-integration-interface'
+import { Action, BreadcrumbService, DataSortDirection, RowListGridData } from '@onecx/portal-integration-angular'
+import { PrimeIcons, SelectItem } from 'primeng/api'
+import { Observable, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
+import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 import { BookmarksSearchActions } from './bookmarks-search.actions'
 import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
-import { PrimeIcons, SelectItem } from 'primeng/api'
-import { AppStateService, WorkspaceService } from '@onecx/angular-integration-interface'
-import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
-import { Location } from '@angular/common'
-import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-bookmarks-search',
@@ -18,8 +17,6 @@ import { environment } from 'src/environments/environment'
 })
 export class BookmarksSearchComponent implements OnInit, AfterViewInit {
   viewModel$: Observable<BookmarksSearchViewModel> = this.store.select(selectBookmarksSearchViewModel)
-  defaultImageUrl$: Observable<string>
-  productLogoBaseURL$: Observable<string>
   privateBookmarkScope = BookmarkScopeEnum.Private
 
   headerActions: Action[] = [
@@ -47,24 +44,14 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
 
   defaultQuickFilterOption = 'BOOKMARK_TYPES.ALL'
 
+  defaultSortDirection = DataSortDirection.ASCENDING
+
   constructor(
     private readonly breadcrumbService: BreadcrumbService,
     private readonly store: Store,
     @Inject(LOCALE_ID) public readonly locale: string,
-    private readonly workspaceService: WorkspaceService,
-    private readonly appStateService: AppStateService
-  ) {
-    this.defaultImageUrl$ = appStateService.currentMfe$.pipe(
-      map((mfe) => {
-        return this.prepareUrlPath(mfe.remoteBaseUrl, environment.DEFAULT_LOGO_PATH)
-      })
-    )
-    this.productLogoBaseURL$ = appStateService.currentMfe$.pipe(
-      map((mfe) => {
-        return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/product/')
-      })
-    )
-  }
+    private readonly workspaceService: WorkspaceService
+  ) {}
 
   urls: Record<string, Observable<string>> = {}
 
@@ -100,12 +87,7 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     else return ''
   }
 
-  onImageError(item: Bookmark & { errorImage$: Observable<string> }): void {
-    item.errorImage$ = this.defaultImageUrl$
-  }
-
-  editBookmark(event: MouseEvent, { id }: RowListGridData) {
-    event.preventDefault()
+  editBookmark({ id }: RowListGridData) {
     this.store.dispatch(BookmarksSearchActions.editBookmarksButtonClicked({ id }))
   }
 
