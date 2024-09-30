@@ -10,6 +10,7 @@ git_push.sh
 index.ts
 model/bookmark.ts
 model/bookmarkPageResult.ts
+model/bookmarkReorderRequest.ts
 model/bookmarkSearchCriteria.ts
 model/createBookmark.ts
 model/models.ts

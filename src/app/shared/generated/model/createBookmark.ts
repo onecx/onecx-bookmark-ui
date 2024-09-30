@@ -21,6 +21,7 @@ export interface CreateBookmark {
     productName: string;
     appId?: string;
     scope: CreateBookmarkScopeEnum;
+    position: number;
 }
 export enum CreateBookmarkScopeEnum {
     Private = 'PRIVATE',

@@ -1,0 +1,22 @@
+:host ::ng-deep {
+  // fix button styles
+  .bookmark-manage-button {
+    color: var(--topbar-item-text-color);
+    padding: 0.6rem !important;
+    &:hover,
+    &:focus {
+      color: var(--topbar-item-text-hover-color) !important;
+      background-color: var(--topbar-item-text-hover-bg-color) !important;
+      transition: background-color var(--transition-duration);
+    }
+  }
+
+  .p-button-loading-icon {
+    height: 2rem;
+    width: 2rem;
+    color: var(--topbar-item-text-color);
+  }
+  .p-button-icon {
+    color: var(--topbar-item-text-color);
+  }
+}

@@ -1,0 +1,17 @@
+<p-messages severity="info">
+  <ng-template pTemplate>
+    <div class="flex gap-2 align-items-center">
+      <span class="p-message-icon">
+        <i class="pi pi-info-circle"></i>
+      </span>
+      <div class="flex gap-1 flex-column">
+        <span class="p-message-summary">
+          {{ 'REMOTES.MANAGE_BOOKMARK.DIALOG.NO_ENDPOINT_CONFIGURED_TITLE' | translate }}
+        </span>
+        <span class="p-message-detail m-0 max-w-30rem">
+          {{ 'REMOTES.MANAGE_BOOKMARK.DIALOG.NO_ENDPOINT_CONFIGURED_MESSAGE' | translate: {mfeBaseUrl} }}
+        </span>
+      </div>
+    </div>
+  </ng-template>
+</p-messages>

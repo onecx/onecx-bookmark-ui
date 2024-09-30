@@ -10,22 +10,22 @@ import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { map } from 'rxjs'
 import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 
-import { BookmarksCreateUpdateViewModel } from './bookmarks-create-update.viewmodel'
+import { CreateUpdateBookmarkDialogViewModel } from './create-update-bookmark-dialog.viewmodel'
 
 @Component({
-  selector: 'app-bookmarks-create-update',
-  templateUrl: './bookmarks-create-update.component.html',
-  styleUrls: ['./bookmarks-create-update.component.scss']
+  selector: 'app-create-update-bookmark-dialog',
+  templateUrl: './create-update-bookmark-dialog.component.html'
 })
-export class BookmarksCreateUpdateComponent
+export class CreateUpdateBookmarkDialogComponent
   implements
     DialogPrimaryButtonDisabled,
     DialogResult<Bookmark | undefined>,
-    DialogButtonClicked<BookmarksCreateUpdateComponent>,
+    DialogButtonClicked<CreateUpdateBookmarkDialogComponent>,
     OnInit
 {
-  @Input() public vm: BookmarksCreateUpdateViewModel = {
-    itemToEdit: undefined
+  @Input() public vm: CreateUpdateBookmarkDialogViewModel = {
+    initialBookmark: undefined,
+    permissions: undefined
   }
 
   public formGroup: FormGroup
@@ -55,17 +55,17 @@ export class BookmarksCreateUpdateComponent
 
   ocxDialogButtonClicked() {
     this.dialogResult = {
-      ...this.vm.itemToEdit,
+      ...this.vm.initialBookmark,
       ...this.formGroup.value
     }
   }
 
   ngOnInit() {
-    if (this.vm.itemToEdit) {
+    if (this.vm.initialBookmark) {
       this.formGroup.patchValue({
-        ...this.vm.itemToEdit
+        ...this.vm.initialBookmark
       })
-      if (this.vm.itemToEdit.scope === BookmarkScopeEnum.Public) {
+      if (this.vm.initialBookmark.scope === BookmarkScopeEnum.Public) {
         this.isPublicBookmark = true
       }
     }
@@ -75,6 +75,10 @@ export class BookmarksCreateUpdateComponent
   }
 
   hasEditPermission(): boolean {
-    return this.userService.hasPermission('BOOKMARK#EDIT')
+    const key = 'BOOKMARK#EDIT'
+    if (this.vm.permissions) {
+      return this.vm.permissions.includes(key)
+    }
+    return this.userService.hasPermission(key)
   }
 }

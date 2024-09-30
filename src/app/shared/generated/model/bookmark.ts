@@ -27,6 +27,7 @@ export interface Bookmark {
     productName: string;
     appId: string;
     scope: BookmarkScopeEnum;
+    position: number;
 }
 export enum BookmarkScopeEnum {
     Private = 'PRIVATE',
