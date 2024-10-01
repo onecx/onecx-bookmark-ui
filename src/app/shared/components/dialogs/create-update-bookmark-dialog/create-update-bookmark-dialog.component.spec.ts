@@ -36,10 +36,10 @@ describe('CreateUpdateBookmarkDialogComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LetDirective,
-        TranslateTestingModule.withTranslations(
-          'en',
-          require('./../../../../../../assets/i18n/en.json')
-        ).withTranslations('de', require('./../../../../../../assets/i18n/de.json')),
+        TranslateTestingModule.withTranslations('en', require('../../../../../assets/i18n/en.json')).withTranslations(
+          'de',
+          require('../../../../../assets/i18n/de.json')
+        ),
         HttpClientTestingModule
       ],
       providers: [BreadcrumbService, { provide: ActivatedRoute, useValue: mockActivatedRoute }]
