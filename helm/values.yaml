@@ -18,6 +18,13 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
           tagName: ocx-bookmark-component
+        manage-bookmark:
+          exposedModule: "./OneCXManageBookmarkComponent"
+          description: "Manage page bookmark component"
+          type: COMPONENT
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-bookmark
+          tagName: ocx-manage-bookmark-component
     # Permission
     permission:
       enabled: true
