@@ -3,7 +3,6 @@
 .husky
 .github
 .nx
-.husky
 .scannerwork
 .prettierignore
 .browserslistrc
@@ -15,6 +14,7 @@ coverage
 reports
 node_modules
 
+LICENSE
 CHANGELOG.md
 README.md
 Dockerfile
