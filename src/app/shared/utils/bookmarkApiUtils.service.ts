@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core'
 import { Location } from '@angular/common'
 import { BookmarkScopeEnum, BookmarksInternal, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
-import { catchError, map, of, tap } from 'rxjs'
+import { catchError, map, mergeMap, Observable, of, retry, tap } from 'rxjs'
 import { environment } from 'src/environments/environment'
+import { MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 
 @Injectable({ providedIn: 'any' })
 export class BookmarkAPIUtilsService {
@@ -18,13 +19,26 @@ export class BookmarkAPIUtilsService {
     })
   }
 
-  loadBookmarks(workspaceName: string) {
-    return this.bookmarkService
-      .searchBookmarksByCriteria({
-        workspaceName: workspaceName,
-        scope: BookmarkScopeEnum.Private
+  loadBookmarks(obs: Observable<[Workspace, MfeInfo, PageInfo | undefined]>, onError?: () => void) {
+    return obs.pipe(
+      mergeMap(([currentWorkspace, currentMfe]) => {
+        return this.bookmarkService.searchBookmarksByCriteria({
+          workspaceName: currentWorkspace.workspaceName,
+          productName: currentMfe.productName,
+          appId: currentMfe.appId,
+          scope: BookmarkScopeEnum.Private
+        })
+      }),
+      map((res) => res.stream ?? []),
+      retry({ delay: 500, count: 3 }),
+      catchError((err) => {
+        console.error('Unable to load bookmarks for current application or user.', err)
+        if (onError) {
+          onError()
+        }
+        return of(undefined)
       })
-      .pipe(map((res) => res.stream ?? []))
+    )
   }
 
   createNewBookmark(createBookmark: CreateBookmark) {
