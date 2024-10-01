@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { EffectsModule } from '@ngrx/effects'
-import { BookmarksCreateUpdateComponent } from './pages/bookmarks-search/dialogs/bookmarks-create-update/bookmarks-create-update.component'
 import { providePortalDialogService, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { StoreModule } from '@ngrx/store'
 import { TranslateModule } from '@ngx-translate/core'
@@ -19,12 +18,7 @@ import { BookmarkImageComponent } from './pages/bookmarks-search/product-image/b
 
 @NgModule({
   providers: [providePortalDialogService()],
-  declarations: [
-    BookmarksCreateUpdateComponent,
-    BookmarksDeleteComponent,
-    BookmarksSearchComponent,
-    BookmarkImageComponent
-  ],
+  declarations: [BookmarksDeleteComponent, BookmarksSearchComponent, BookmarkImageComponent],
   imports: [
     CommonModule,
     SharedModule,

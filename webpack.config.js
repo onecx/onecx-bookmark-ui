@@ -4,7 +4,8 @@ const config = withModuleFederationPlugin({
   name: 'onecx-bookmark',
   filename: 'remoteEntry.js',
   exposes: {
-    './OneCXBookmarkModule': './src/main.ts'
+    './OneCXBookmarkModule': 'src/main.ts',
+    './OneCXManageBookmarkComponent': 'src/app/remotes/manage-bookmark/manage-bookmark.component.main.ts'
   },
   shared: share({
     '@angular/core': {

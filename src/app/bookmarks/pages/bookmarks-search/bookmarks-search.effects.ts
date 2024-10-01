@@ -15,8 +15,8 @@ import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'r
 import { Bookmark, BookmarkScopeEnum, BookmarksInternal, UpdateBookmark } from 'src/app/shared/generated'
 import { BookmarksSearchActions } from './bookmarks-search.actions'
 import { bookmarksSearchSelectors, selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
-import { BookmarksCreateUpdateComponent } from './dialogs/bookmarks-create-update/bookmarks-create-update.component'
 import { BookmarksDeleteComponent } from './dialogs/bookmarks-delete/bookmarks-delete.component'
+import { CreateUpdateBookmarkDialogComponent } from 'src/app/shared/components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
 @Injectable()
 export class BookmarksSearchEffects {
   constructor(
@@ -95,19 +95,19 @@ export class BookmarksSearchEffects {
       map(([action, results]) => {
         return results.find((item) => item.id == action.id)
       }),
-      mergeMap((itemToEdit) => {
+      mergeMap((initialBookmark) => {
         return this.portalDialogService.openDialog<Bookmark | undefined>(
-          `BOOKMARKS_CREATE_UPDATE.UPDATE.HEADER${canEdit(itemToEdit) ? '' : '_READONLY'}`,
+          `BOOKMARKS_CREATE_UPDATE.UPDATE.HEADER${canEdit(initialBookmark) ? '' : '_READONLY'}`,
           {
-            type: BookmarksCreateUpdateComponent,
+            type: CreateUpdateBookmarkDialogComponent,
             inputs: {
               vm: {
-                itemToEdit
+                initialBookmark
               }
             }
           },
-          `BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.${canEdit(itemToEdit) ? 'SAVE' : 'CANCEL'}`,
-          canEdit(itemToEdit) ? 'BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.CANCEL' : undefined,
+          `BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.${canEdit(initialBookmark) ? 'SAVE' : 'CANCEL'}`,
+          canEdit(initialBookmark) ? 'BOOKMARKS_CREATE_UPDATE.UPDATE.FORM.CANCEL' : undefined,
           {
             baseZIndex: 100,
             draggable: true,
@@ -129,6 +129,8 @@ export class BookmarksSearchEffects {
         }
         const itemToEditId = dialogResult.result.id ?? ''
         const itemToEdit = {
+          id: dialogResult.result.id,
+          position: dialogResult.result.position ?? 0,
           displayName: dialogResult.result.displayName,
           modificationCount: dialogResult.result.modificationCount
         } as UpdateBookmark

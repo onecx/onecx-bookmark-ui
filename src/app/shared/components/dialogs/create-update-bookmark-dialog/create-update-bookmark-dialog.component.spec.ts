@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { BookmarksCreateUpdateComponent } from './bookmarks-create-update.component'
+import { CreateUpdateBookmarkDialogComponent } from './create-update-bookmark-dialog.component'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -22,30 +22,30 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
-describe('BookmarksCreateUpdateComponent', () => {
-  let component: BookmarksCreateUpdateComponent
-  let fixture: ComponentFixture<BookmarksCreateUpdateComponent>
+describe('CreateUpdateBookmarkDialogComponent', () => {
+  let component: CreateUpdateBookmarkDialogComponent
+  let fixture: ComponentFixture<CreateUpdateBookmarkDialogComponent>
 
   const mockActivatedRoute = {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarksCreateUpdateComponent],
+      declarations: [CreateUpdateBookmarkDialogComponent],
       imports: [
         PortalCoreModule,
         FormsModule,
         ReactiveFormsModule,
         LetDirective,
-        TranslateTestingModule.withTranslations(
-          'en',
-          require('./../../../../../../assets/i18n/en.json')
-        ).withTranslations('de', require('./../../../../../../assets/i18n/de.json')),
+        TranslateTestingModule.withTranslations('en', require('../../../../../assets/i18n/en.json')).withTranslations(
+          'de',
+          require('../../../../../assets/i18n/de.json')
+        ),
         HttpClientTestingModule
       ],
       providers: [BreadcrumbService, { provide: ActivatedRoute, useValue: mockActivatedRoute }]
     }).compileComponents()
 
-    fixture = TestBed.createComponent(BookmarksCreateUpdateComponent)
+    fixture = TestBed.createComponent(CreateUpdateBookmarkDialogComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

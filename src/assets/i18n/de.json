@@ -11,6 +11,10 @@
       "HEADER": "Lesezeichen bearbeiten",
       "HEADER_READONLY": "Lesezeichen anzeigen"
     },
+    "CREATE": {
+      "SUCCESS": "Lesezeichen wurde erfolgreich erstellt.",
+      "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
+    },
     "FORM": {
       "DISPLAY_NAME": "Anzeigename"
     }
@@ -50,5 +54,31 @@
     "ALL": "Alle",
     "PRIVATE": "Privat",
     "PUBLIC": "Öffentlich"
+  },
+  "REMOTES": {
+    "MANAGE_BOOKMARK": {
+      "BUTTON": {
+        "TOOLTIP": {
+          "ADD": "Lesezeichen hinzufügen",
+          "UPDATE": "Lesezeichen verwalten",
+          "LOADING": "Lesezeichen werden geladen"
+        }
+      },
+      "DIALOG": {
+        "HEADER_CREATE": "Lesezeichen hinzufügen",
+        "HEADER_UPDATE": "Lesezeichen verwalten",
+        "NO_ENDPOINT_CONFIGURED_TITLE": "Aktuell kann kein Lesezeichen für diese Seite erstellt werden.",
+        "NO_ENDPOINT_CONFIGURED_MESSAGE": "Wenden Sie sich an einen Administrator. Derzeit können Sie nur ein Lesezeichen für die Startseite ({{mfeBaseUrl}}) der Anwendung erstellen.",
+        "NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON": "Schließen",
+        "CREATE_ACTIONS": {
+          "CANCEL":  "Abbrechen",
+          "SAVE":  "Speichern"
+        },
+        "UPDATE_ACTIONS": {
+          "CANCEL": "Lesezeichen entfernen",
+          "SAVE":  "Speichern"
+        }
+      }
+    }
   }
 }

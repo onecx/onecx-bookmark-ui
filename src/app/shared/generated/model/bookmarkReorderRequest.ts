@@ -8,12 +8,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { UpdateBookmark } from './updateBookmark';
 
 
-export interface UpdateBookmark { 
-    modificationCount: number;
-    displayName: string;
-    position: number;
-    id: string;
+export interface BookmarkReorderRequest { 
+    bookmarks?: Array<UpdateBookmark>;
 }
 

@@ -125,11 +125,36 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
+  /bookmarks/reorder:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - write
+      tags:
+        - bookmarksInternal
+      description: update order of bookmarks
+      operationId: updateBookmarksOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookmarkReorderRequest'
+      responses:
+        "200":
+          description: UPDATED
+        "400":
+          description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /images/product/{productName}:
     get:
       x-onecx:
         permissions:
-          bookmark:
+          product:
             - read
       tags:
         - imagesInternal
@@ -157,6 +182,13 @@ paths:
                 $ref: '#/components/schemas/ProblemDetailResponse'
 components:
   schemas:
+    BookmarkReorderRequest:
+      type: object
+      properties:
+        bookmarks:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateBookmark'
     BookmarkSearchCriteria:
       required:
         - workspaceName
@@ -189,6 +221,7 @@ components:
         - appId
         - scope
         - workspaceName
+        - position
       type: object
       properties:
         id:
@@ -229,6 +262,9 @@ components:
           enum:
             - PRIVATE
             - PUBLIC
+        position:
+          type: integer
+          format: int32
     BookmarkPageResult:
       type: object
       properties:
@@ -259,6 +295,7 @@ components:
         - workspaceName
         - productName
         - scope
+        - position
       type: object
       properties:
         displayName:
@@ -286,16 +323,26 @@ components:
           enum:
             - PRIVATE
             - PUBLIC
+        position:
+          type: integer
+          format: int32
     UpdateBookmark:
       required:
         - displayName
         - modificationCount
+        - position
+        - id
       type: object
       properties:
         modificationCount:
           format: int32
           type: integer
         displayName:
+          type: string
+        position:
+          type: integer
+          format: int32
+        id:
           type: string
     ProblemDetailResponse:
       type: object
