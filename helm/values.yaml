@@ -18,6 +18,12 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
           tagName: ocx-bookmark-component
+        bookmark-manage:
+          exposedModule: "./OneCXManageBookmarkComponent"
+          description: "Create and Delete User Bookmarks"
+          type: COMPONENT
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-bookmark
     # Permission
     permission:
       enabled: true
