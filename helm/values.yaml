@@ -20,7 +20,7 @@ app:
           tagName: ocx-bookmark-component
         manage-bookmark:
           exposedModule: "./OneCXManageBookmarkComponent"
-          description: "Manage page bookmark component"
+          description: "Create and Delete User Bookmarks"
           type: COMPONENT
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
