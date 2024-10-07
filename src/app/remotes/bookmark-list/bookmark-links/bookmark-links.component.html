@@ -1,0 +1,5 @@
+@for (bookmark of bookmarks; track $index) {
+<div class="flex flex-column gap-1">
+  <a [routerLink]="getUrl(bookmark) | async" class="p-2 border-round bookmark-link"> {{ bookmark.displayName }} </a>
+</div>
+}

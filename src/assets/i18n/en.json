@@ -50,5 +50,43 @@
     "ALL": "All",
     "PRIVATE": "Private",
     "PUBLIC": "Public"
+  },
+  "REMOTES": {
+    "MANAGE_BOOKMARK": {
+      "BUTTON": {
+        "TOOLTIP": {
+          "ADD": "Add bookmark",
+          "UPDATE": "Edit bookmarks",
+          "LOADING": "Loading bookmarks"
+        }
+      },
+      "DIALOG": {
+        "HEADER_CREATE": "Add bookmark",
+        "HEADER_UPDATE": "Edit bookmark",
+        "NO_ENDPOINT_CONFIGURED_TITLE": "Bookmark creation is currently not enabled for this page.",
+        "NO_ENDPOINT_CONFIGURED_MESSAGE": "Please contact an administrator. At this time your can only create a bookmark for the applications homepage ({{mfeBaseUrl}}).",
+        "NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON": "Close",
+        "CREATE_ACTIONS": {
+          "CANCEL":  "Cancel",
+          "SAVE":  "Save"
+        },
+        "UPDATE_ACTIONS": {
+          "CANCEL": "Remove bookmark",
+          "SAVE":  "Save"
+        }
+      }
+    },
+    "BOOKMARK_LIST": {
+      "TITLE": "Bookmarks",
+      "TABS": {
+        "PRIVATE": "My bookmarks",
+        "PUBLIC": "Additional links",
+        "PUBLIC_TOOLTIP": "Links that have been provided by your organization."
+      },
+      "LOADING_ERROR": "Your bookmarks couldn't be loaded.",
+      "LOADING_ERROR_DETAIL": "Please try again later.",
+      "NO_PRIVATE_BOOKMARKS": "You don't have any private bookmarks.",
+      "NO_PRIVATE_BOOKMARKS_DETAIL": "Use the \"Star\" symbol in the topbar, to create a bookmark for the current page."
+    }
   }
 }

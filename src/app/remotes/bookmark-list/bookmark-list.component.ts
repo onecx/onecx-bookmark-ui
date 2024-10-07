@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 import { AppConfigService, createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import {
   AngularRemoteComponentsModule,
   BASE_URL,
@@ -18,10 +18,12 @@ import {
 } from '@onecx/angular-remote-components'
 import { PortalCoreModule } from '@onecx/portal-integration-angular'
 import { RippleModule } from 'primeng/ripple'
-import { BehaviorSubject, combineLatest, ReplaySubject } from 'rxjs'
-import { Bookmark } from 'src/app/shared/generated'
+import { TabViewModule } from 'primeng/tabview'
+import { BehaviorSubject, ReplaySubject } from 'rxjs'
+import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 import { SharedModule } from 'src/app/shared/shared.module'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+import { BookmarkLinksComponent } from './bookmark-links/bookmark-links.component'
 
 export function slotInitializer(slotService: SlotService) {
   return () => slotService.init()
@@ -32,12 +34,14 @@ export function slotInitializer(slotService: SlotService) {
   imports: [
     AngularAuthModule,
     AngularRemoteComponentsModule,
+    BookmarkLinksComponent,
     CommonModule,
     FormsModule,
     SharedModule,
     RippleModule,
     PortalCoreModule,
-    TranslateModule
+    TranslateModule,
+    TabViewModule
   ],
   providers: [
     {
@@ -70,15 +74,12 @@ export function slotInitializer(slotService: SlotService) {
   styleUrls: ['./bookmark-list.component.scss']
 })
 export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
-  bookmarks$ = new BehaviorSubject<Bookmark[] | undefined>(undefined)
-  commonObs$ = combineLatest([
-    this.appStateService.currentWorkspace$.asObservable(),
-    this.appStateService.currentMfe$.asObservable(),
-    this.appStateService.currentPage$.asObservable()
-  ])
+  publicBookmarks$ = new BehaviorSubject<Bookmark[]>([])
+  privateBookmarks$ = new BehaviorSubject<Bookmark[]>([])
 
   permissions: string[] = []
   bookmarkLoadingError = false
+  loading = true
 
   @Input() set ocxRemoteComponentConfig(config: RemoteComponentConfig) {
     this.ocxInitRemoteComponent(config)
@@ -87,7 +88,6 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
   constructor(
     @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
     private appConfigService: AppConfigService,
-    private appStateService: AppStateService,
     private userService: UserService,
     private translateService: TranslateService,
     private bookmarkApiUtils: BookmarkAPIUtilsService
@@ -100,12 +100,16 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
     this.appConfigService.init(config.baseUrl)
-    this.bookmarkApiUtils.loadBookmarks(this.commonObs$, this.handleBookmarkLoadError).subscribe((result) => {
-      this.bookmarks$.next(result)
+    this.bookmarkApiUtils.loadBookmarks(this.handleBookmarkLoadError).subscribe((result) => {
+      const bookmarks = result ?? []
+      this.privateBookmarks$.next(bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Private))
+      this.publicBookmarks$.next(bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Public))
+      this.loading = false
     })
   }
 
   private handleBookmarkLoadError = () => {
     this.bookmarkLoadingError = true
+    this.loading = false
   }
 }

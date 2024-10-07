@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Location } from '@angular/common'
 import { BookmarkScopeEnum, BookmarksInternal, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
-import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 import { catchError, map, mergeMap, Observable, of, retry, tap } from 'rxjs'
 import { environment } from 'src/environments/environment'
 import { MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
@@ -10,7 +10,8 @@ import { MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 export class BookmarkAPIUtilsService {
   constructor(
     private bookmarkService: BookmarksInternal,
-    private messageService: PortalMessageService
+    private messageService: PortalMessageService,
+    private appStateService: AppStateService
   ) {}
 
   overwriteBaseURL(baseUrl: string) {
@@ -19,7 +20,7 @@ export class BookmarkAPIUtilsService {
     })
   }
 
-  loadBookmarks(obs: Observable<[Workspace, MfeInfo, PageInfo | undefined]>, onError?: () => void) {
+  loadBookmarksForApp(obs: Observable<[Workspace, MfeInfo, PageInfo | undefined]>, onError?: () => void) {
     return obs.pipe(
       mergeMap(([currentWorkspace, currentMfe]) => {
         return this.bookmarkService.searchBookmarksByCriteria({
@@ -33,6 +34,25 @@ export class BookmarkAPIUtilsService {
       retry({ delay: 500, count: 3 }),
       catchError((err) => {
         console.error('Unable to load bookmarks for current application or user.', err)
+        if (onError) {
+          onError()
+        }
+        return of(undefined)
+      })
+    )
+  }
+
+  loadBookmarks(onError?: () => void) {
+    return this.appStateService.currentWorkspace$.pipe(
+      mergeMap((workspace) => {
+        return this.bookmarkService.searchBookmarksByCriteria({
+          workspaceName: workspace.workspaceName
+        })
+      }),
+      map((res) => res.stream ?? []),
+      retry({ delay: 500, count: 3 }),
+      catchError((err) => {
+        console.error('Unable to load bookmarks for current user.', err)
         if (onError) {
           onError()
         }

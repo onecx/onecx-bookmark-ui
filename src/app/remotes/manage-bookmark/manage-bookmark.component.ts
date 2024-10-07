@@ -175,7 +175,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
     this.appConfigService.init(config.baseUrl)
-    this.bookmarkApiUtils.loadBookmarks(this.commonObs$, this.handleBookmarkLoadError).subscribe((result) => {
+    this.bookmarkApiUtils.loadBookmarksForApp(this.commonObs$, this.handleBookmarkLoadError).subscribe((result) => {
       this.bookmarks$.next(result)
     })
   }
@@ -230,7 +230,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
           if (result === undefined) {
             return of(undefined)
           }
-          return this.bookmarkApiUtils.loadBookmarks(this.commonObs$, this.handleBookmarkLoadError)
+          return this.bookmarkApiUtils.loadBookmarksForApp(this.commonObs$, this.handleBookmarkLoadError)
         }),
         filter((result) => result !== undefined)
       )

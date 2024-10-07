@@ -79,6 +79,18 @@
           "SAVE":  "Speichern"
         }
       }
+    },
+    "BOOKMARK_LIST": {
+      "TITLE": "Lesezeichen",
+      "TABS": {
+        "PRIVATE": "Meine Lesezeichen",
+        "PUBLIC": "Weitere Links",
+        "PUBLIC_TOOLTIP": "Links die durch Ihre Organisation bereitgestellt wurden."
+      },
+      "LOADING_ERROR": "Ihre Lesezeichen konnten nicht geladen werden.",
+      "LOADING_ERROR_DETAIL": "Bitte versuchen Sie es in Kürze erneut.",
+      "NO_PRIVATE_BOOKMARKS": "Sie haben keine privaten Lesezeichen.",
+      "NO_PRIVATE_BOOKMARKS_DETAIL": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die aktuelle Seite zu erstellen."
     }
   }
 }
