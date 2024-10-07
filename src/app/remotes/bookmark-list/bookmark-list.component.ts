@@ -92,7 +92,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     private translateService: TranslateService,
     private bookmarkApiUtils: BookmarkAPIUtilsService
   ) {
-    this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
+    this.translateService.use(this.userService.lang$.getValue())
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {

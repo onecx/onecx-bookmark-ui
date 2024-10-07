@@ -3,3 +3,7 @@
   border-color: var(--tabview-header-hover-border-color);
   color: var(--text-secondary-color);
 }
+
+#bookmark-link-container {
+  overflow: auto;
+}

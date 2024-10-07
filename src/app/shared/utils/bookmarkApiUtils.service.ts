@@ -23,11 +23,10 @@ export class BookmarkAPIUtilsService {
   loadBookmarksForApp(obs: Observable<[Workspace, MfeInfo, PageInfo | undefined]>, onError?: () => void) {
     return obs.pipe(
       mergeMap(([currentWorkspace, currentMfe]) => {
-        return this.bookmarkService.searchBookmarksByCriteria({
+        return this.bookmarkService.searchUserBookmarksByCriteria({
           workspaceName: currentWorkspace.workspaceName,
           productName: currentMfe.productName,
-          appId: currentMfe.appId,
-          scope: BookmarkScopeEnum.Private
+          appId: currentMfe.appId
         })
       }),
       map((res) => res.stream ?? []),
