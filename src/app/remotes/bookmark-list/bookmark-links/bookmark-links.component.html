@@ -1,4 +1,4 @@
-<div class="flex flex-column gap-1 max-h-7rem sm:max-h-9rem" id="bookmark-link-container">
+<div class="flex flex-column gap-1 max-h-7rem sm:max-h-15rem" id="bookmark-link-container">
   @for (bookmark of bookmarks; track $index) {
   <a [routerLink]="getUrl(bookmark) | async" class="p-2 border-round bookmark-link"> {{ bookmark.displayName }} </a>
   }
