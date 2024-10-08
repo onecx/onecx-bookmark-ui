@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Location } from '@angular/common'
-import { BookmarkScopeEnum, BookmarksInternal, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
+import { BookmarksInternal, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
 import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 import { catchError, map, mergeMap, Observable, of, retry, tap } from 'rxjs'
 import { environment } from 'src/environments/environment'
@@ -11,7 +11,7 @@ export class BookmarkAPIUtilsService {
   constructor(
     private bookmarkService: BookmarksInternal,
     private messageService: PortalMessageService,
-    private appStateService: AppStateService
+    private readonly appStateService: AppStateService
   ) {}
 
   overwriteBaseURL(baseUrl: string) {

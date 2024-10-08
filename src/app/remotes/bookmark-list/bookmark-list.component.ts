@@ -70,8 +70,7 @@ export function slotInitializer(slotService: SlotService) {
     BookmarkAPIUtilsService
   ],
   selector: 'app-bookmark-list',
-  templateUrl: './bookmark-list.component.html',
-  styleUrls: ['./bookmark-list.component.scss']
+  templateUrl: './bookmark-list.component.html'
 })
 export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
   publicBookmarks$ = new BehaviorSubject<Bookmark[]>([])
@@ -86,11 +85,11 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
   }
 
   constructor(
-    @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
-    private appConfigService: AppConfigService,
-    private userService: UserService,
-    private translateService: TranslateService,
-    private bookmarkApiUtils: BookmarkAPIUtilsService
+    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    private readonly appConfigService: AppConfigService,
+    private readonly userService: UserService,
+    private readonly translateService: TranslateService,
+    private readonly bookmarkApiUtils: BookmarkAPIUtilsService
   ) {
     this.translateService.use(this.userService.lang$.getValue())
   }
@@ -108,7 +107,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     })
   }
 
-  private handleBookmarkLoadError = () => {
+  private readonly handleBookmarkLoadError = () => {
     this.bookmarkLoadingError = true
     this.loading = false
   }

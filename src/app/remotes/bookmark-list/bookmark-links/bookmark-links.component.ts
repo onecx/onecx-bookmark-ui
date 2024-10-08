@@ -17,7 +17,7 @@ export class BookmarkLinksComponent {
   urls: Record<string, Observable<string>> = {}
   @Input() public bookmarks: Bookmark[] | undefined
 
-  constructor(private workspaceService: WorkspaceService) {}
+  constructor(private readonly workspaceService: WorkspaceService) {}
 
   getUrl(bookmark: Bookmark) {
     if (bookmark.id && bookmark.productName && bookmark.appId) {
