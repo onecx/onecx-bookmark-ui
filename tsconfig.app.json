@@ -9,7 +9,9 @@
     "src/polyfills.ts",
     "src/main.ts",
     "src/app/remotes/manage-bookmark/manage-bookmark.component.ts",
-    "src/app/remotes/manage-bookmark/manage-bookmark.component.main.ts"
+    "src/app/remotes/manage-bookmark/manage-bookmark.component.main.ts",
+    "src/app/remotes/bookmark-list/bookmark-list.component.ts",
+    "src/app/remotes/bookmark-list/bookmark-list.component.main.ts"
   ],
   "include": ["src/**/*.d.ts"],
   "exclude": ["jest.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts"]

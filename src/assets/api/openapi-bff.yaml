@@ -68,6 +68,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
+  /bookmarks/user:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - read
+      tags:
+        - bookmarksInternal
+      description: search user bookmarks by criteria
+      operationId: searchUserBookmarksByCriteria
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookmarkSearchCriteria'
+      responses:
+        '200':
+          description: A list of bookmarks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookmarkPageResult'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /bookmarks/{id}:
     put:
       x-onecx:
@@ -125,6 +154,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
+  /bookmarks/convert:
+    post:
+      x-onecx:
+        permissions:
+          scope:
+            - write
+      tags:
+        - bookmarksInternal
+      description: Update a bookmark's scope to public
+      operationId: convertBookmark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBookmark'
+      responses:
+        "204":
+          description: Bookmark updated
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+        "404":
+          description: Bookmark not found
   /bookmarks/reorder:
     post:
       x-onecx:
