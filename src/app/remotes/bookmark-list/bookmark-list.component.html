@@ -10,21 +10,25 @@
         *ngIf="privateBookmarks.length > 0; else noPrivateBookmarks"
       ></app-bookmark-links>
       <ng-template #noPrivateBookmarks>
-        <p-messages severity="info">
-          <ng-template pTemplate>
-            <div class="flex gap-2 align-items-center">
-              <span class="p-message-icon">
-                <i class="pi pi-star"></i>
-              </span>
-              <div class="flex gap-1 flex-column">
-                <span class="p-message-summary"> {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS' | translate }} </span>
-                <span class="p-message-detail m-0 max-w-30rem">
-                  {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS_DETAIL' | translate }}
+        <div class="max-h-7rem sm:max-h-15rem overflow-auto">
+          <p-messages severity="info">
+            <ng-template pTemplate>
+              <div class="flex gap-2 align-items-center">
+                <span class="p-message-icon">
+                  <i class="pi pi-star"></i>
                 </span>
+                <div class="flex gap-1 flex-column">
+                  <span class="p-message-summary">
+                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS' | translate }}
+                  </span>
+                  <span class="p-message-detail m-0 max-w-30rem">
+                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS_DETAIL' | translate }}
+                  </span>
+                </div>
               </div>
-            </div>
-          </ng-template>
-        </p-messages>
+            </ng-template>
+          </p-messages>
+        </div>
       </ng-template>
     </p-tabPanel>
     <p-tabPanel
@@ -44,20 +48,22 @@
     </div>
   </ng-template>
   <ng-template #loadingError>
-    <p-messages severity="error">
-      <ng-template pTemplate>
-        <div class="flex gap-2 align-items-center">
-          <span class="p-message-icon">
-            <i class="pi pi-times-circle"></i>
-          </span>
-          <div class="flex gap-1 flex-column">
-            <span class="p-message-summary"> {{ 'REMOTES.BOOKMARK_LIST.LOADING_ERROR' | translate }} </span>
-            <span class="p-message-detail m-0 max-w-30rem">
-              {{ 'REMOTES.BOOKMARK_LIST.LOADING_ERROR_DETAIL' | translate }}
+    <div class="max-h-7rem sm:max-h-15rem overflow-auto">
+      <p-messages severity="error">
+        <ng-template pTemplate>
+          <div class="flex gap-2 align-items-center">
+            <span class="p-message-icon">
+              <i class="pi pi-times-circle"></i>
             </span>
+            <div class="flex gap-1 flex-column">
+              <span class="p-message-summary"> {{ 'REMOTES.BOOKMARK_LIST.LOADING_ERROR' | translate }} </span>
+              <span class="p-message-detail m-0 max-w-30rem">
+                {{ 'REMOTES.BOOKMARK_LIST.LOADING_ERROR_DETAIL' | translate }}
+              </span>
+            </div>
           </div>
-        </div>
-      </ng-template>
-    </p-messages>
+        </ng-template>
+      </p-messages>
+    </div>
   </ng-template>
 </div>
