@@ -11,6 +11,10 @@
       "HEADER": "Update Bookmark",
       "HEADER_READONLY": "View bookmark"
     },
+    "CREATE": {
+      "SUCCESS": "Bookmark was created successfully.",
+      "ERROR": "Bookmark couldn't be created."
+    },
     "FORM": {
       "DISPLAY_NAME": "Display Name"
     }
@@ -56,8 +60,8 @@
       "BUTTON": {
         "TOOLTIP": {
           "ADD": "Add bookmark",
-          "UPDATE": "Edit bookmarks",
-          "LOADING": "Loading bookmarks"
+          "UPDATE": "Edit bookmark",
+          "LOADING": "Loading bookmark"
         }
       },
       "DIALOG": {
