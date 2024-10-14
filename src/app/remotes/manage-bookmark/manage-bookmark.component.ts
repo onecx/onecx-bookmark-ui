@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common'
 import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { AppConfigService, createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
+import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import {
   AngularRemoteComponentsModule,
@@ -20,7 +20,8 @@ import {
   PortalCoreModule,
   PortalDialogConfig,
   PortalDialogService,
-  providePortalDialogService
+  providePortalDialogService,
+  AppConfigService
 } from '@onecx/portal-integration-angular'
 import { PrimeIcons } from 'primeng/api'
 import { RippleModule } from 'primeng/ripple'
