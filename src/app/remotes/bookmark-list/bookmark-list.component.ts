@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http'
 import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { AppConfigService, createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
+import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import {
@@ -16,7 +16,7 @@ import {
   SLOT_SERVICE,
   SlotService
 } from '@onecx/angular-remote-components'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { PortalCoreModule, AppConfigService } from '@onecx/portal-integration-angular'
 import { RippleModule } from 'primeng/ripple'
 import { TabViewModule } from 'primeng/tabview'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
