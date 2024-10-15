@@ -9,7 +9,7 @@ import { OneCXManageBookmarkComponent } from './manage-bookmark.component'
 import { providePortalDialogService } from '@onecx/portal-integration-angular'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
-bootstrapRemoteComponent(OneCXManageBookmarkComponent, 'ocx-manage-bookmark-component', environment.production, [
+bootstrapRemoteComponent(OneCXManageBookmarkComponent, 'ocx-bookmark-manage-component', environment.production, [
   provideHttpClient(withInterceptorsFromDi()),
   providePortalDialogService(),
   importProvidersFrom(AngularAuthModule, BrowserModule, BrowserAnimationsModule),

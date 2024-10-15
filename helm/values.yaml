@@ -24,7 +24,7 @@ app:
           type: COMPONENT
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
-          tagName: ocx-manage-bookmark-component
+          tagName: ocx-bookmark-manage-component
         bookmark-list:
           exposedModule: "./OneCXBookmarkListComponent"
           description: "Display public and private bookmarks"
