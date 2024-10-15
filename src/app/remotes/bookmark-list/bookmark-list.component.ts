@@ -70,7 +70,8 @@ export function slotInitializer(slotService: SlotService) {
     BookmarkAPIUtilsService
   ],
   selector: 'app-bookmark-list',
-  templateUrl: './bookmark-list.component.html'
+  templateUrl: './bookmark-list.component.html',
+  styleUrl: './bookmark-list.component.scss'
 })
 export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
   publicBookmarks$ = new BehaviorSubject<Bookmark[]>([])
