@@ -10,7 +10,7 @@
         *ngIf="privateBookmarks.length > 0; else noPrivateBookmarks"
       ></app-bookmark-links>
       <ng-template #noPrivateBookmarks>
-        <div class="max-h-7rem sm:max-h-15rem overflow-auto">
+        <div class="max-h-15rem overflow-auto">
           <p-messages severity="info">
             <ng-template pTemplate>
               <div class="flex gap-2 align-items-center">
@@ -48,7 +48,7 @@
     </div>
   </ng-template>
   <ng-template #loadingError>
-    <div class="max-h-7rem sm:max-h-15rem overflow-auto">
+    <div class="max-h-15rem overflow-auto">
       <p-messages severity="error">
         <ng-template pTemplate>
           <div class="flex gap-2 align-items-center">

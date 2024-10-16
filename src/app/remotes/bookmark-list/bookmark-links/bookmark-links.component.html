@@ -1,5 +1,7 @@
-<div class="flex flex-column gap-1 max-h-7rem sm:max-h-15rem overflow-auto">
+<div class="flex flex-column gap-1 max-h-15rem overflow-auto">
   @for (bookmark of bookmarks; track $index) {
-  <a [routerLink]="getUrl(bookmark) | async" class="p-2 border-round bookmark-link"> {{ bookmark.displayName }} </a>
+  <a [routerLink]="getUrl(bookmark) | async" class="p-2 border-round bookmark-link font-italic text-primary">
+    {{ bookmark.displayName }}
+  </a>
   }
 </div>
