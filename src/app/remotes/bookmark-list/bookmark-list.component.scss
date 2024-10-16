@@ -1,0 +1,11 @@
+@import '/src/app/_bm-mixins.scss';
+
+@include tabview-fix-color-selected-tab;
+
+:host ::ng-deep {
+  .p-tabview-nav-container,
+  .p-tabview-nav-link,
+  .p-tabview-panels {
+    background-color: var(--surface-200) !important;
+  }
+}
