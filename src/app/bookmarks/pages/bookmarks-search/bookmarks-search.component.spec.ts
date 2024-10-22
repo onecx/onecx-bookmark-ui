@@ -1,27 +1,31 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { ActivatedRoute } from '@angular/router'
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
-import { ActivatedRoute } from '@angular/router'
+
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
+
 import { TranslateService } from '@ngx-translate/core'
-import { ColumnType, PortalCoreModule, UserService } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { DialogService } from 'primeng/dynamicdialog'
+
+import { ColumnType, PortalCoreModule, UserService } from '@onecx/portal-integration-angular'
+import { SharedModule } from 'src/app/shared/shared.module'
+
+import { initialState } from './bookmarks-search.reducers'
+import { BookmarkImageComponent } from './product-image/bookmark-image.component'
 import { BookmarksSearchActions } from './bookmarks-search.actions'
 import { bookmarksSearchColumns } from './bookmarks-search.columns'
 import { BookmarksSearchComponent } from './bookmarks-search.component'
 import { BookmarksSearchHarness } from './bookmarks-search.harness'
-import { initialState } from './bookmarks-search.reducers'
-import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
-import { SharedModule } from 'src/app/shared/shared.module'
-import { BookmarkImageComponent } from './product-image/bookmark-image.component'
+import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 
 describe('BookmarksSearchComponent', () => {
   HTMLCanvasElement.prototype.getContext = jest.fn()
@@ -35,7 +39,7 @@ describe('BookmarksSearchComponent', () => {
     columns: bookmarksSearchColumns,
     results: [],
     bookmarkFilter: '',
-    scopeQuickFilter: 'BOOKMARK_TYPES.ALL'
+    scopeQuickFilter: 'BOOKMARK.SCOPES.ALL'
   }
 
   beforeAll(() => {
@@ -64,18 +68,16 @@ describe('BookmarksSearchComponent', () => {
         ReactiveFormsModule,
         FormsModule,
         StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations('en', require('./../../../../assets/i18n/en.json')).withTranslations(
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
           'de',
-          require('./../../../../assets/i18n/de.json')
+          require('./src/assets/i18n/de.json')
         ),
         HttpClientTestingModule,
         NoopAnimationsModule
       ],
       providers: [
         DialogService,
-        provideMockStore({
-          initialState: { bookmarks: { search: initialState } }
-        }),
+        provideMockStore({ initialState: { bookmarks: { search: initialState } } }),
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
       ]
     }).compileComponents()

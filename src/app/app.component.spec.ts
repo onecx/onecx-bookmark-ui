@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { RouterTestingModule } from '@angular/router/testing'
-import { AUTH_SERVICE, MockAuthModule, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+
+import { AUTH_SERVICE, MockAuthModule, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { AppComponent } from './app.component'
 
 describe('AppComponent', () => {
@@ -14,9 +15,9 @@ describe('AppComponent', () => {
         RouterTestingModule,
         PortalCoreModule.forRoot('test'),
         HttpClientTestingModule,
-        TranslateTestingModule.withTranslations('en', require('./../assets/i18n/en.json')).withTranslations(
+        TranslateTestingModule.withTranslations('en', require('./src/assets/i18n/en.json')).withTranslations(
           'de',
-          require('./../assets/i18n/de.json')
+          require('./src/assets/i18n/de.json')
         )
       ],
       providers: [{ provide: AUTH_SERVICE, useClass: MockAuthModule }]

@@ -1,4 +1,25 @@
 {
+  "ACTIONS": {
+    "CONFIRMATION": {
+      "NO": "No",
+      "YES": "Yes",
+      "NO.TOOLTIP": "Cancel the action",
+      "YES.TOOLTIP": "Proceed with the action"
+    }
+  },
+  "BOOKMARK": {
+    "DISPLAY_NAME": "Display Name",
+    "POSITION": "Position",
+    "WORKSPACE": "Workspace",
+    "PRODUCT_NAME": "Application",
+    "APP_ID": "App ID",
+    "SCOPE": "Scope",
+    "SCOPES": {
+      "ALL": "All",
+      "PRIVATE": "Private",
+      "PUBLIC": "Public"
+    }
+  },
   "BOOKMARKS_CREATE_UPDATE": {
     "UPDATE": {
       "SUCCESS": "Update successful",
@@ -28,8 +49,13 @@
     "SUCCESS": "Bookmark deleted successfully",
     "ERROR": "Could not delete bookmark"
   },
-  "BOOKMARKS_SEARCH": {
+  "BOOKMARK_SEARCH": {
     "HEADER": "My Bookmarks",
+    "FILTER": {
+      "LABEL": "Filter",
+      "TOOLTIP": "Filter by Display name",
+      "RESET.TOOLTIP": "Reset Filter"
+    },
     "SORTING_OPTIONS": {
       "DISPLAY_NAME": "Display Name"
     },
@@ -50,11 +76,6 @@
     "INPUT_TOOLTIP": "Filter by display name",
     "INPUT_RESET_TOOLTIP": "Reset filter"
   },
-  "BOOKMARK_TYPES": {
-    "ALL": "All",
-    "PRIVATE": "Private",
-    "PUBLIC": "Public"
-  },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
       "BUTTON": {
@@ -71,12 +92,12 @@
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Please contact an administrator. At this time your can only create a bookmark for the applications homepage ({{mfeBaseUrl}}).",
         "NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON": "Close",
         "CREATE_ACTIONS": {
-          "CANCEL":  "Cancel",
-          "SAVE":  "Save"
+          "CANCEL": "Cancel",
+          "SAVE": "Save"
         },
         "UPDATE_ACTIONS": {
           "CANCEL": "Remove bookmark",
-          "SAVE":  "Save"
+          "SAVE": "Save"
         }
       }
     },

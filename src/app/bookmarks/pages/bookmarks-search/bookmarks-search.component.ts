@@ -1,14 +1,17 @@
-import { Location } from '@angular/common'
 import { AfterViewInit, Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { Location } from '@angular/common'
+import { Observable, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
 import { Store } from '@ngrx/store'
+import { PrimeIcons } from 'primeng/api'
+
 import { WorkspaceService } from '@onecx/angular-integration-interface'
 import { Action, BreadcrumbService, DataSortDirection, RowListGridData } from '@onecx/portal-integration-angular'
-import { PrimeIcons, SelectItem } from 'primeng/api'
-import { Observable, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
+
 import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
+
 import { BookmarksSearchActions } from './bookmarks-search.actions'
-import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
+import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
 
 @Component({
   selector: 'app-bookmarks-search',
@@ -16,52 +19,36 @@ import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
   styleUrls: ['./bookmarks-search.component.scss']
 })
 export class BookmarksSearchComponent implements OnInit, AfterViewInit {
-  viewModel$: Observable<BookmarksSearchViewModel> = this.store.select(selectBookmarksSearchViewModel)
-  privateBookmarkScope = BookmarkScopeEnum.Private
+  public viewModel$: Observable<BookmarksSearchViewModel> = this.store.select(selectBookmarksSearchViewModel)
+  public privateBookmarkScope = BookmarkScopeEnum.Private
+  public urls: Record<string, Observable<string>> = {}
 
-  headerActions: Action[] = [
+  @ViewChild('bookmarkFilter') bookmarkFilter: ElementRef | undefined
+
+  public headerActions: Action[] = [
     {
-      labelKey: 'BOOKMARKS_SEARCH.HEADER_ACTIONS.EXPORT_ALL',
+      labelKey: 'BOOKMARK_SEARCH.HEADER_ACTIONS.EXPORT_ALL',
       icon: PrimeIcons.DOWNLOAD,
-      titleKey: 'BOOKMARKS_SEARCH.HEADER_ACTIONS.EXPORT_ALL',
+      titleKey: 'BOOKMARK_SEARCH.HEADER_ACTIONS.EXPORT_ALL',
       show: 'always',
       actionCallback: () => this.exportItems(),
       permission: 'BOOKMARK#EXPORT'
     }
   ]
-
-  quickFilterOptions: SelectItem[] = [
-    {
-      value: 'BOOKMARK_TYPES.ALL'
-    },
-    {
-      value: 'BOOKMARK_TYPES.PRIVATE'
-    },
-    {
-      value: 'BOOKMARK_TYPES.PUBLIC'
-    }
-  ]
-
-  defaultQuickFilterOption = 'BOOKMARK_TYPES.ALL'
-
   defaultSortDirection = DataSortDirection.ASCENDING
 
   constructor(
-    private readonly breadcrumbService: BreadcrumbService,
-    private readonly store: Store,
     @Inject(LOCALE_ID) public readonly locale: string,
+    private readonly store: Store,
+    private readonly breadcrumbService: BreadcrumbService,
     private readonly workspaceService: WorkspaceService
   ) {}
-
-  urls: Record<string, Observable<string>> = {}
-
-  @ViewChild('bookmarkFilter') bookmarkFilter: ElementRef | undefined
 
   ngOnInit() {
     this.breadcrumbService.setItems([
       {
-        titleKey: 'BOOKMARKS_SEARCH.BREADCRUMB',
-        labelKey: 'BOOKMARKS_SEARCH.BREADCRUMB',
+        titleKey: 'BOOKMARK_SEARCH.BREADCRUMB',
+        labelKey: 'BOOKMARK_SEARCH.BREADCRUMB',
         routerLink: '/bookmarks'
       }
     ])
@@ -74,7 +61,7 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
       .subscribe((event: KeyboardEvent) => this.filterBookmarks(event))
   }
 
-  resetFilter() {
+  public onResetFilter(): void {
     if (this.bookmarkFilter) {
       this.bookmarkFilter.nativeElement.value = ''
       this.store.dispatch(BookmarksSearchActions.bookmarkFilterChanged({ bookmarkFilter: '' }))
@@ -109,10 +96,6 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     this.store.dispatch(BookmarksSearchActions.bookmarkFilterChanged({ bookmarkFilter }))
   }
 
-  handleQuickFilterChange(scopeQuickFilter: string) {
-    this.store.dispatch(BookmarksSearchActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
-  }
-
   getUrl(bookmark: Bookmark) {
     if (bookmark.id && bookmark.productName && bookmark.appId) {
       if (!this.urls[bookmark.id]) {
@@ -126,5 +109,8 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
       return this.urls[bookmark.id]
     }
     return undefined
+  }
+  public onEditAction() {
+    console.log('onEditAction')
   }
 }

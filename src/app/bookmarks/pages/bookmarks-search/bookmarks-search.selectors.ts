@@ -16,10 +16,10 @@ export const selectResults = createSelector(
       .map((item) => ({
         imagePath: '',
         ...item,
-        scope: item.scope === BookmarkScopeEnum.Private ? 'BOOKMARK_TYPES.PRIVATE' : 'BOOKMARK_TYPES.PUBLIC'
+        scope: item.scope === BookmarkScopeEnum.Private ? 'BOOKMARK.SCOPES.PRIVATE' : 'BOOKMARK.SCOPES.PUBLIC'
       }))
       .filter((item) => {
-        if (scopeQuickFilter && scopeQuickFilter != 'BOOKMARK_TYPES.ALL') {
+        if (scopeQuickFilter && scopeQuickFilter != 'BOOKMARK.SCOPES.ALL') {
           return (
             item.displayName?.toLowerCase().includes(bookmarkFilter.toLowerCase()) && item.scope === scopeQuickFilter
           )
