@@ -10,11 +10,11 @@ const config = withModuleFederationPlugin({
   },
   shared: share({
     '@angular/core': { requiredVersion: 'auto', includeSecondaries: true },
+    '@angular/forms': { requiredVersion: 'auto', includeSecondaries: true },
     '@angular/common': { requiredVersion: 'auto', includeSecondaries: { skip: ['@angular/common/http/testing'] } },
     '@angular/common/http': { requiredVersion: 'auto', includeSecondaries: true },
-    '@angular/forms': { requiredVersion: 'auto', includeSecondaries: true },
-    '@angular/platform-browser': { requiredVersion: 'auto', includeSecondaries: true },
     '@angular/router': { requiredVersion: 'auto', includeSecondaries: true },
+    rxjs: { requiredVersion: 'auto', includeSecondaries: true },
     '@ngx-translate/core': { requiredVersion: 'auto' },
     primeng: { requiredVersion: 'auto', includeSecondaries: true },
     rxjs: { requiredVersion: 'auto', includeSecondaries: true },

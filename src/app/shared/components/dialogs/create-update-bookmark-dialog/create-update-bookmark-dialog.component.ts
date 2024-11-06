@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { map } from 'rxjs'
+
 import {
   DialogButtonClicked,
   DialogPrimaryButtonDisabled,
@@ -6,8 +9,6 @@ import {
   UserService
 } from '@onecx/portal-integration-angular'
 
-import { FormControl, FormGroup, Validators } from '@angular/forms'
-import { map } from 'rxjs'
 import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 
 import { CreateUpdateBookmarkDialogViewModel } from './create-update-bookmark-dialog.viewmodel'
@@ -27,12 +28,11 @@ export class CreateUpdateBookmarkDialogComponent
     initialBookmark: undefined,
     permissions: undefined
   }
+  @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public formGroup: FormGroup
-
-  @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
-  dialogResult: Bookmark | undefined = undefined
-  isPublicBookmark = false
+  public dialogResult: Bookmark | undefined = undefined
+  public isPublicBookmark = false
 
   constructor(private userService: UserService) {
     this.formGroup = new FormGroup({

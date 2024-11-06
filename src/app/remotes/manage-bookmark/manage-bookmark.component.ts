@@ -181,7 +181,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     })
   }
 
-  openBookmarkDialog() {
+  onOpenBookmarkDialog(): void {
     combineLatest([this.isBookmarkable$, this.isBookmarked$, this.currentBookmark$, this.commonObs$])
       .pipe(
         first(),
@@ -244,9 +244,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   private getBookmarkDialogConfig(isBookmarkable: boolean): PortalDialogConfig {
     return {
       position: 'top-right',
-      style: {
-        top: '4rem'
-      },
+      style: { top: '4rem' },
       modal: false,
       draggable: true,
       resizable: true,

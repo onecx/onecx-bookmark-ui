@@ -3,6 +3,8 @@
 .husky
 .github
 .nx
+.eslintcache
+.sass-cache
 .scannerwork
 .prettierignore
 .browserslistrc
@@ -22,4 +24,4 @@ Dockerfile
 *.sh
 
 src/app/shared/generated
-src/assets
+src/assets/api

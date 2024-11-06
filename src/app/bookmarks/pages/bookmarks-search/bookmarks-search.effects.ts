@@ -218,7 +218,7 @@ export class BookmarksSearchEffects {
   errorMessages: { action: Action; key: string }[] = [
     {
       action: BookmarksSearchActions.bookmarksSearchResultsLoadingFailed,
-      key: 'BOOKMARKS_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
+      key: 'BOOKMARK_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
     }
   ]
 

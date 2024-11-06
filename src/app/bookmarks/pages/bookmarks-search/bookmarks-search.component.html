@@ -1,131 +1,119 @@
 <ocx-portal-page permission="BOOKMARK#VIEW" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$; let vm">
   <ocx-page-header
-    header="{{ 'BOOKMARKS_SEARCH.HEADER' | translate }}"
-    subheader="{{ 'BOOKMARKS_SEARCH.SUB_HEADER' | translate }}"
+    [header]="'BOOKMARK_SEARCH.HEADER' | translate"
+    [subheader]="'BOOKMARK_SEARCH.SUB_HEADER' | translate"
     [actions]="headerActions"
   />
-  <ocx-content-container layout="horizontal">
-    <ocx-content class="w-full">
-      <ocx-interactive-data-view
-        [data]="vm.results"
-        [columns]="vm.columns"
-        [pageSizes]="[20, 40, 100]"
-        [emptyResultsMessage]="'BOOKMARKS_SEARCH.EMPTY_RESULTS' | translate"
-        [supportedViewLayouts]="['grid']"
-        layout="grid"
-        [sortDirection]="defaultSortDirection"
-        sortField="displayName"
-      >
-        <ng-template #topCenter>
+  <div class="card pt-2 correct-ocx-interactive-data-view">
+    <ocx-interactive-data-view
+      [data]="vm.results"
+      [columns]="vm.columns"
+      [pageSizes]="[20, 40, 100]"
+      [emptyResultsMessage]="'BOOKMARK_SEARCH.EMPTY_RESULTS' | translate"
+      [supportedViewLayouts]="['table']"
+      layout="table"
+      [sortDirection]="defaultSortDirection"
+      sortField="displayName"
+      editPermission="BOOKMARK#EDIT"
+      (editItem)="onEditAction()"
+      actionColumnPosition="left"
+    >
+      <ng-template #topCenter>
+        <div class="flex justify-content-between gap-2 align-items-center flex-wrap md:flex-nowrap w-full h-full">
+          <p-inputGroup class="w-auto">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-filter"></i>
+            </span>
+            <p-floatLabel>
+              <input
+                #bookmarkFilter
+                pInputText
+                type="text"
+                id="bm_bookmarkFilter"
+                class="border-noround"
+                [attr.aria-label]="'BOOKMARK_SEARCH.FILTER.TOOLTIP' | translate"
+                [pTooltip]="'BOOKMARK_SEARCH.FILTER.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="bookmarkFilter">{{ 'BOOKMARK_SEARCH.FILTER.LABEL' | translate }}</label>
+            </p-floatLabel>
+            <button
+              pButton
+              class="p-inputgroup-addon p-button-icon-only"
+              icon="pi pi-filter-slash"
+              (click)="onResetFilter()"
+              [attr.aria-label]="'BOOKMARK_SEARCH.FILTER.RESET.TOOLTIP' | translate"
+              [pTooltip]="'BOOKMARK_SEARCH.FILTER.RESET.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            ></button>
+          </p-inputGroup>
+          <div>
+            <!-- This is necessary to ensure a correct flex layout -->
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #gridItem let-item> pTemplate="column id + IdTableCell" </ng-template>
+
+      <!--
+      <ng-template #gridItem let-item>
+        <a
+          class="col-12 lg:col-6 xl:col-4 flex py-1 sm:py-2 md:py-3"
+          (click)="editBookmark(item)"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
           <div
-            class="flex justify-content-between gap-2 align-items-center flex-wrap md:flex-nowrap w-full h-full"
-            id="top-center-container"
+            class="data-grid-item card w-12 lg:w-11 align-self-stretch cursor-pointer text-center hover:bg-gray-200 relative"
           >
-            <p-selectButton
-              class="mr-2"
-              (onChange)="handleQuickFilterChange($event.value)"
-              [options]="quickFilterOptions"
-              [(ngModel)]="defaultQuickFilterOption"
-            >
-              <ng-template let-item pTemplate>
-                <span> {{ item.value | translate }} </span>
-              </ng-template>
-            </p-selectButton>
-            <p-inputGroup class="w-auto">
-              <span class="p-inputgroup-addon">
-                <i class="pi pi-filter"></i>
-              </span>
-              <p-floatLabel>
-                <input
-                  pTooltip="{{
-                    'BOOKMARKS_SEARCH.INPUT_TOOLTIP' | translate
-                  }}"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                  #bookmarkFilter
-                  pInputText
-                  type="text"
-                  id="bookmarkFilter"
-                  class="border-noround"
-                />
-                <label for="bookmarkFilter">{{ 'BOOKMARKS_SEARCH.INPUT_PLACEHOLDER' | translate }}</label>
-              </p-floatLabel>
-              <button
+            <div class="flex flex-column justify-content-center align-items-center gap-2 w-full h-full">
+              <div class="flex justify-content-center w-full">
+                <app-bookmark-image [bookmark]="item"></app-bookmark-image>
+              </div>
+              <div class="flex flex-column gap-1 w-full">
+                <p class="font-bold sm:text-lg md:text-xl text-responsive m-0 max-w-full">{{ item.displayName }}</p>
+                <p class="text-xs md:text-sm text-responsive">{{ item.scope | translate }}</p>
+              </div>
+            </div>
+            <div class="absolute left-0 top-0 mt-3 ml-3" *ngIf="item.scope === 'BOOKMARK.SCOPES.PRIVATE'">
+              <p-button
                 pTooltip="{{
-                'BOOKMARKS_SEARCH.INPUT_RESET_TOOLTIP' | translate
+                    'BOOKMARK_SEARCH.CARD_ACTIONS.DELETE' | translate
+                  }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+                icon="pi pi-trash"
+                styleClass="p-button-text danger-action-text"
+                (onClick)="
+                    $event.stopPropagation(); deleteBookmark($event, item)
+                  "
+                id="delete-bookmark-button"
+                *ocxIfPermission="'BOOKMARK#DELETE'"
+              ></p-button>
+            </div>
+            <div class="absolute right-0 top-0 mt-3 mr-3">
+              <a
+                [routerLink]="getUrl(item) | async"
+                pTooltip="{{
+                'BOOKMARK_SEARCH.CARD_ACTIONS.VISIT' | translate
               }}"
                 tooltipPosition="top"
                 tooltipEvent="hover"
-                pButton
-                class="p-inputgroup-addon p-button-icon-only"
-                (click)="resetFilter()"
               >
-                <i class="pi pi-filter-slash"></i>
-              </button>
-            </p-inputGroup>
-            <div>
-              <!-- This is necessary to ensure a correct flex layout -->
-            </div>
-          </div>
-        </ng-template>
-
-        <ng-template #gridItem let-item>
-          <a
-            class="col-12 lg:col-6 xl:col-4 flex py-1 sm:py-2 md:py-3"
-            (click)="editBookmark(item)"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          >
-            <div
-              class="data-grid-item card w-12 lg:w-11 align-self-stretch cursor-pointer text-center hover:bg-gray-200 relative"
-            >
-              <div class="flex flex-column justify-content-center align-items-center gap-2 w-full h-full">
-                <div class="flex justify-content-center w-full">
-                  <app-bookmark-image [bookmark]="item"></app-bookmark-image>
-                </div>
-                <div class="flex flex-column gap-1 w-full">
-                  <p class="font-bold sm:text-lg md:text-xl text-responsive m-0 max-w-full">{{ item.displayName }}</p>
-                  <p class="text-xs md:text-sm text-responsive">{{ item.scope | translate }}</p>
-                </div>
-              </div>
-              <div class="absolute left-0 top-0 mt-3 ml-3" *ngIf="item.scope === 'BOOKMARK_TYPES.PRIVATE'">
                 <p-button
-                  pTooltip="{{
-                    'BOOKMARKS_SEARCH.CARD_ACTIONS.DELETE' | translate
-                  }}"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                  icon="pi pi-trash"
-                  styleClass="p-button-text danger-action-text"
+                  icon="pi pi-link"
+                  styleClass="p-button-text"
                   (onClick)="
-                    $event.stopPropagation(); deleteBookmark($event, item)
-                  "
-                  id="delete-bookmark-button"
-                  *ocxIfPermission="'BOOKMARK#DELETE'"
-                ></p-button>
-              </div>
-              <div class="absolute right-0 top-0 mt-3 mr-3">
-                <a
-                  [routerLink]="getUrl(item) | async"
-                  pTooltip="{{
-                'BOOKMARKS_SEARCH.CARD_ACTIONS.VISIT' | translate
-              }}"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                >
-                  <p-button
-                    icon="pi pi-link"
-                    styleClass="p-button-text"
-                    (onClick)="
                     $event.stopPropagation();
                   "
-                  ></p-button>
-                </a>
-              </div>
+                ></p-button>
+              </a>
             </div>
-          </a>
-        </ng-template>
-      </ocx-interactive-data-view>
-    </ocx-content>
-  </ocx-content-container>
+          </div>
+        </a>
+      </ng-template -->
+    </ocx-interactive-data-view>
+  </div>
 </ocx-portal-page>

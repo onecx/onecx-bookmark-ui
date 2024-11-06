@@ -1,30 +1,32 @@
-<div class="layout-topbar-item" *ngIf="!bookmarkLoadingError">
-  <p-button
-    styleClass="min-w-0 justify-content-center"
-    tooltipPosition="bottom"
-    [attr.aria-label]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.ADD' | translate"
-    [pTooltip]="('REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.' + ((isBookmarked$ | async) ? 'UPDATE' : 'ADD')) | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-    [rounded]="true"
-    [text]="true"
-    (onClick)="openBookmarkDialog()"
-    *ngIf="bookmarks$.getValue() && (isBookmarked$ | async) !== undefined; else loadingButton"
-  >
-    <i class="pi pi-star-fill fs-xlarge p-button-icon" *ngIf="isBookmarked$ | async; else notBookmarkedIcon"></i>
-    <ng-template #notBookmarkedIcon>
-      <i class="pi pi-star fs-xlarge p-button-icon"></i>
-    </ng-template>
-  </p-button>
-  <ng-template #loadingButton>
+<ng-container *ngIf="permissions.includes('BOOKMARK#CREATE')">
+  <div class="layout-topbar-item" *ngIf="!bookmarkLoadingError">
     <p-button
+      *ngIf="bookmarks$.getValue() && (isBookmarked$ | async) !== undefined; else loadingButton"
       styleClass="min-w-0 justify-content-center"
-      [attr.aria-label]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.LOADING' | translate"
-      tooltipPosition="top"
-      tooltipEvent="hover"
+      (onClick)="onOpenBookmarkDialog()"
       [rounded]="true"
       [text]="true"
-      [loading]="true"
-    ></p-button>
-  </ng-template>
-</div>
+      [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.ADD' | translate"
+      [pTooltip]="('REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.' + ((isBookmarked$ | async) ? 'UPDATE' : 'ADD')) | translate"
+      tooltipPosition="top"
+      tooltipEvent="hover"
+    >
+      <i class="pi pi-star-fill fs-xlarge p-button-icon" *ngIf="isBookmarked$ | async; else notBookmarkedIcon"></i>
+      <ng-template #notBookmarkedIcon>
+        <i class="pi pi-star fs-xlarge p-button-icon"></i>
+      </ng-template>
+    </p-button>
+    <ng-template #loadingButton>
+      <p-button
+        styleClass="min-w-0 justify-content-center"
+        [rounded]="true"
+        [text]="true"
+        [loading]="true"
+        [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.LOADING' | translate"
+        [pTooltip]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.LOADING' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+    </ng-template>
+  </div>
+</ng-container>
