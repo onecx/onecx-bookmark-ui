@@ -22,7 +22,7 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
-describe('CreateUpdateBookmarkDialogComponent', () => {
+fdescribe('CreateUpdateBookmarkDialogComponent', () => {
   let component: CreateUpdateBookmarkDialogComponent
   let fixture: ComponentFixture<CreateUpdateBookmarkDialogComponent>
 
