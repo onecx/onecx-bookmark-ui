@@ -21,7 +21,7 @@
                   <span class="p-message-summary">
                     {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS' | translate }}
                   </span>
-                  <span class="p-message-detail m-0 max-w-30rem">
+                  <span *ngIf="permissions.includes('BOOKMARK#CREATE')" class="p-message-detail m-0 max-w-30rem">
                     {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS_DETAIL' | translate }}
                   </span>
                 </div>
@@ -40,6 +40,7 @@
       <app-bookmark-links [bookmarks]="publicBookmarks$.getValue()"></app-bookmark-links>
     </p-tabPanel>
   </p-tabView>
+
   <ng-template #loadingSpinner>
     <div *ngIf="loading && !bookmarkLoadingError; else loadingError" class="flex flex-column gap-2">
       <p-skeleton height="2rem"></p-skeleton>
@@ -47,6 +48,7 @@
       <p-skeleton height="2rem"></p-skeleton>
     </div>
   </ng-template>
+
   <ng-template #loadingError>
     <div class="max-h-16rem overflow-auto">
       <p-messages severity="error">

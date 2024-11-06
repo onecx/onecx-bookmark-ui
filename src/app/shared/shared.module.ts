@@ -1,24 +1,28 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { FloatLabelModule } from 'primeng/floatlabel'
-import { InputGroupModule } from 'primeng/inputgroup'
-import { CreateUpdateBookmarkDialogComponent } from './components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
+import { CommonModule } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
+
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputGroupModule } from 'primeng/inputgroup'
 import { InputTextModule } from 'primeng/inputtext'
+import { TooltipModule } from 'primeng/tooltip'
+
+import { CreateUpdateBookmarkDialogComponent } from './components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
 
 @NgModule({
   declarations: [CreateUpdateBookmarkDialogComponent],
   imports: [
     CommonModule,
     FloatLabelModule,
+    FormsModule,
     InputGroupModule,
     InputTextModule,
     ReactiveFormsModule,
-    FormsModule,
+    TooltipModule,
     TranslateModule
   ],
-  exports: [FloatLabelModule, InputGroupModule, CreateUpdateBookmarkDialogComponent],
+  exports: [CreateUpdateBookmarkDialogComponent, FloatLabelModule, InputGroupModule],
   providers: []
 })
 export class SharedModule {}

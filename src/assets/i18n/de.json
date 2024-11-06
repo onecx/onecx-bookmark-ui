@@ -37,15 +37,14 @@
       "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
     },
     "FORM": {
-      "DISPLAY_NAME": "Anzeigename"
+      "DISPLAY_NAME": "Anzeigename",
+      "DISPLAY_NAME.TOOLTIP": "Anzeigename, wird in der Listenansicht und zum Sortieren verwendet"
     }
   },
   "BOOKMARKS_DELETE": {
     "HEADER": "Lesezeichen löschen",
     "MESSAGE": "Möchten Sie dieses Lesezeichen löschen?",
     "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
-    "CONFIRM": "Ja",
-    "CANCEL": "Nein",
     "SUCCESS": "Lesezeichen erfolgreich gelöscht",
     "ERROR": "Konnte Lesezeichen nicht löschen"
   },
@@ -110,7 +109,7 @@
       },
       "LOADING_ERROR": "Ihre Lesezeichen konnten nicht geladen werden.",
       "LOADING_ERROR_DETAIL": "Bitte versuchen Sie es in Kürze erneut.",
-      "NO_PRIVATE_BOOKMARKS": "Sie haben keine privaten Lesezeichen.",
+      "NO_PRIVATE_BOOKMARKS": "Keine Lesezeichen angelegt.",
       "NO_PRIVATE_BOOKMARKS_DETAIL": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die aktuelle Seite zu erstellen."
     }
   }

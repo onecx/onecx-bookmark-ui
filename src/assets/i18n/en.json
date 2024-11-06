@@ -30,24 +30,23 @@
         "CANCEL": "Cancel"
       },
       "HEADER": "Update Bookmark",
-      "HEADER_READONLY": "View bookmark"
+      "HEADER_READONLY": "View Bookmark"
     },
     "CREATE": {
       "SUCCESS": "Bookmark was created successfully.",
       "ERROR": "Bookmark couldn't be created."
     },
     "FORM": {
-      "DISPLAY_NAME": "Display Name"
+      "DISPLAY_NAME": "Display Name",
+      "DISPLAY_NAME.TOOLTIP": "Display Name, used in list view and for sorting"
     }
   },
   "BOOKMARKS_DELETE": {
     "HEADER": "Delete Bookmark",
-    "MESSAGE": "Do you want to delete this bookmark?",
+    "MESSAGE": "Do you want to delete this Bookmark?",
     "MESSAGE_INFO": "This action cannot be undone!",
-    "CONFIRM": "Yes",
-    "CANCEL": "No",
     "SUCCESS": "Bookmark deleted successfully",
-    "ERROR": "Could not delete bookmark"
+    "ERROR": "Could not delete Bookmark"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "My Bookmarks",
@@ -66,8 +65,8 @@
       "EXPORT_ALL": "Export"
     },
     "CARD_ACTIONS": {
-      "DELETE": "Delete bookmark",
-      "VISIT": "Go to bookmark"
+      "DELETE": "Delete Bookmark",
+      "VISIT": "Go to Bookmark"
     },
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed."
@@ -80,23 +79,23 @@
     "MANAGE_BOOKMARK": {
       "BUTTON": {
         "TOOLTIP": {
-          "ADD": "Add bookmark",
-          "UPDATE": "Edit bookmark",
-          "LOADING": "Loading bookmark"
+          "ADD": "Add Bookmark",
+          "UPDATE": "Edit Bookmark",
+          "LOADING": "Loading Bookmark"
         }
       },
       "DIALOG": {
-        "HEADER_CREATE": "Add bookmark",
-        "HEADER_UPDATE": "Edit bookmark",
+        "HEADER_CREATE": "Add Bookmark",
+        "HEADER_UPDATE": "Edit Bookmark",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Bookmark creation is currently not enabled for this page.",
-        "NO_ENDPOINT_CONFIGURED_MESSAGE": "Please contact an administrator. At this time your can only create a bookmark for the applications homepage ({{mfeBaseUrl}}).",
+        "NO_ENDPOINT_CONFIGURED_MESSAGE": "Please contact an administrator. At this time your can only create a Bookmark for the applications homepage ({{mfeBaseUrl}}).",
         "NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON": "Close",
         "CREATE_ACTIONS": {
           "CANCEL": "Cancel",
           "SAVE": "Save"
         },
         "UPDATE_ACTIONS": {
-          "CANCEL": "Remove bookmark",
+          "CANCEL": "Remove Bookmark",
           "SAVE": "Save"
         }
       }
@@ -104,14 +103,14 @@
     "BOOKMARK_LIST": {
       "TITLE": "Bookmarks",
       "TABS": {
-        "PRIVATE": "My bookmarks",
+        "PRIVATE": "My Bookmarks",
         "PUBLIC": "Additional links",
         "PUBLIC_TOOLTIP": "Links that have been provided by your organization."
       },
-      "LOADING_ERROR": "Your bookmarks couldn't be loaded.",
+      "LOADING_ERROR": "Your Bookmarks couldn't be loaded.",
       "LOADING_ERROR_DETAIL": "Please try again later.",
-      "NO_PRIVATE_BOOKMARKS": "You don't have any private bookmarks.",
-      "NO_PRIVATE_BOOKMARKS_DETAIL": "Use the \"Star\" symbol in the topbar, to create a bookmark for the current page."
+      "NO_PRIVATE_BOOKMARKS": "You don't have bookmarks.",
+      "NO_PRIVATE_BOOKMARKS_DETAIL": "Use the \"Star\" symbol in the topbar, to create a Bookmark for the current page."
     }
   }
 }
