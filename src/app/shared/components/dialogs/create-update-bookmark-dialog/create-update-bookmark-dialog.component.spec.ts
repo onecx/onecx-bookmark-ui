@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
@@ -22,7 +22,7 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
-fdescribe('CreateUpdateBookmarkDialogComponent', () => {
+describe('CreateUpdateBookmarkDialogComponent', () => {
   let component: CreateUpdateBookmarkDialogComponent
   let fixture: ComponentFixture<CreateUpdateBookmarkDialogComponent>
 
@@ -36,13 +36,16 @@ fdescribe('CreateUpdateBookmarkDialogComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LetDirective,
-        TranslateTestingModule.withTranslations('en', require('src/assets/i18n/en.json')).withTranslations(
-          'de',
-          require('src/assets/i18n/de.json')
-        ),
-        HttpClientTestingModule
+        TranslateTestingModule.withTranslations({
+          de: require('./src/assets/i18n/de.json'),
+          en: require('./src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
       ],
-      providers: [BreadcrumbService, { provide: ActivatedRoute, useValue: mockActivatedRoute }]
+      providers: [
+        BreadcrumbService,
+        provideHttpClientTesting(),
+        { provide: ActivatedRoute, useValue: mockActivatedRoute }
+      ]
     }).compileComponents()
 
     fixture = TestBed.createComponent(CreateUpdateBookmarkDialogComponent)
