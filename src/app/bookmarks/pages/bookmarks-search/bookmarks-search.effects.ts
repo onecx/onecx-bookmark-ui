@@ -167,17 +167,9 @@ export class BookmarksSearchEffects {
         return this.portalDialogService
           .openDialog<unknown>(
             'BOOKMARKS_DELETE.HEADER',
-            {
-              type: BookmarksDeleteComponent
-            },
-            {
-              key: 'BOOKMARKS_DELETE.CONFIRM',
-              icon: PrimeIcons.CHECK
-            },
-            {
-              key: 'BOOKMARKS_DELETE.CANCEL',
-              icon: PrimeIcons.TIMES
-            }
+            { type: BookmarksDeleteComponent, inputs: { bookmark: itemToDelete } },
+            { key: 'ACTIONS.CONFIRMATION.YES', icon: PrimeIcons.CHECK },
+            { key: 'ACTIONS.CONFIRMATION.NO', icon: PrimeIcons.TIMES }
           )
           .pipe(
             map((state): [DialogState<unknown>, Bookmark | undefined] => {
@@ -195,33 +187,31 @@ export class BookmarksSearchEffects {
 
         return this.bookmarksService.deleteBookmarkById(itemToDelete.id ?? '').pipe(
           map(() => {
-            this.messageService.success({
-              summaryKey: 'BOOKMARKS_DELETE.SUCCESS'
-            })
+            this.messageService.success({ summaryKey: 'BOOKMARKS_DELETE.SUCCESS' })
             return BookmarksSearchActions.deleteBookmarksSucceeded()
           })
         )
       }),
       catchError((error) => {
-        this.messageService.error({
-          summaryKey: 'BOOKMARKS_DELETE.ERROR'
-        })
-        return of(
-          BookmarksSearchActions.deleteBookmarksFailed({
-            error
-          })
-        )
+        this.messageService.error({ summaryKey: 'BOOKMARKS_DELETE.ERROR' })
+        return of(BookmarksSearchActions.deleteBookmarksFailed({ error }))
       })
     )
   })
 
+  // for each error build the message
   errorMessages: { action: Action; key: string }[] = [
     {
       action: BookmarksSearchActions.bookmarksSearchResultsLoadingFailed,
       key: 'BOOKMARK_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
+    },
+    {
+      action: BookmarksSearchActions.deleteBookmarksFailed,
+      key: 'BOOKMARK_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
     }
   ]
 
+  // listen on all errors
   displayError$ = createEffect(
     () => {
       return this.actions$.pipe(

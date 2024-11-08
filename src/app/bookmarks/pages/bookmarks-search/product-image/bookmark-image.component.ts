@@ -1,9 +1,11 @@
 import { Component, Input } from '@angular/core'
-import { AppStateService } from '@onecx/angular-integration-interface'
+import { Location } from '@angular/common'
 import { map, Observable } from 'rxjs'
+
+import { AppStateService } from '@onecx/angular-integration-interface'
+
 import { Bookmark } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
-import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-bookmark-image',

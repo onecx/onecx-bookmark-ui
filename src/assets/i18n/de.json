@@ -5,6 +5,63 @@
       "YES": "Ja",
       "NO.TOOLTIP": "Abbruch der Aktion",
       "YES.TOOLTIP": "Fortfahren mit der Aktion"
+    },
+    "COPY": {
+      "LABEL": "Kopieren",
+      "TOOLTIP": "Einen neues Lesezeichen mit den Daten der Zeile erstellen"
+    },
+    "DELETE": {
+      "LABEL": "Löschen",
+      "TOOLTIP": "Das Lesezeichen löschen",
+      "MESSAGE": {
+        "TEXT": "Möchten Sie dieses Lesezeichen löschen?",
+        "OK": "Das Lesezeichen wurde gelöscht",
+        "NOK": "Ein Fehler ist aufgetreten. Das Lesezeichen wurde nicht gelöscht."
+      }
+    },
+    "EDIT": {
+      "LABEL": "Ändern",
+      "TOOLTIP": "Die Eigenschaften ändern",
+      "UP": "Das Leezeichen nach oben verschieben",
+      "DOWN": "Das Leezeichen nach unten verschieben",
+      "MESSAGE": {
+        "OK": "Das Lesezeichen wurde geändert",
+        "NOK": "Ein Fehler ist aufgetreten. Das Lesezeichen wurde nicht verändert."
+      }
+    },
+    "NAVIGATION": {
+      "CLOSE": "Schließen",
+      "CLOSE.TOOLTIP": "Dialog schließen",
+      "CLOSE_WITHOUT_SAVE": "Dialog ohne Speichern schließen",
+      "BACK": "Zurück",
+      "BACK.TOOLTIP": "Vorherige Seite",
+      "GOTO": "Zu Lesezeichen navigieren"
+    },
+    "SEARCH": {
+      "ERROR": "Daten nicht abrufbar",
+      "NO_DATA": "Keine Daten",
+      "RELOAD": "Daten neu laden",
+      "FILTER": {
+        "LABEL": "Filter",
+        "TOOLTIP": "Filtern nach Anzeigename",
+        "RESET": "Filter entfernen"
+      }
+    },
+    "VIEW": {
+      "LABEL": "Details",
+      "TOOLTIP": "Die Details des Lesezeichens anzeigen"
+    },
+    "CANCEL": "Abbrechen",
+    "LOADING": "...wid geladen",
+    "SAVE": "Speichern",
+    "EXPORT": "Export",
+    "IMPORT": "Import",
+    "TOOLTIPS": {
+      "CANCEL": "Aktion abbrechen",
+      "SAVE": "Änderungen speichern",
+      "SAVE_AND_CLOSE": "Änderungen speichern und Dialog schließen",
+      "EXPORT": "Export und Speichern der Lesezeichen als CSV Datei",
+      "IMPORT": "Hochladen einer CSV Datei mit Lesezeichen und ersetzen aller Lesezeichen"
     }
   },
   "BOOKMARK": {
@@ -49,31 +106,16 @@
     "ERROR": "Konnte Lesezeichen nicht löschen"
   },
   "BOOKMARK_SEARCH": {
-    "HEADER": "Meine Lesezeichen",
-    "FILTER": {
-      "LABEL": "Filter",
-      "TOOLTIP": "Filter nach Anzeigename",
-      "RESET.TOOLTIP": "Filter zurücksetzen"
-    },
-    "SORTING_OPTIONS": {
-      "DISPLAY_NAME": "Anzeigename"
-    },
+    "HEADER": "Lesezeichen",
     "SUB_HEADER": "Anzeigen und verwalten meiner Lesezeichen.",
-    "EMPTY_RESULTS": "Keine Ergebnisse.",
     "BREADCRUMB": "Suche",
-    "HEADER_ACTIONS": {
-      "EXPORT_ALL": "Export"
-    },
     "CARD_ACTIONS": {
       "DELETE": "Lesezeichen löschen",
       "VISIT": "Zu Lesezeichen navigieren"
     },
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden."
-    },
-    "INPUT_PLACEHOLDER": "Filter",
-    "INPUT_TOOLTIP": "Filter nach Anzeigename",
-    "INPUT_RESET_TOOLTIP": "Filter zurücksetzen"
+    }
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
