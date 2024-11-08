@@ -2,21 +2,19 @@
   <ocx-page-header
     [header]="'BOOKMARK_SEARCH.HEADER' | translate"
     [subheader]="'BOOKMARK_SEARCH.SUB_HEADER' | translate"
-    [actions]="headerActions"
   />
   <div class="card pt-2 correct-ocx-interactive-data-view">
     <ocx-interactive-data-view
       [data]="vm.results"
       [columns]="vm.columns"
       [pageSizes]="[20, 40, 100]"
-      [emptyResultsMessage]="'BOOKMARK_SEARCH.EMPTY_RESULTS' | translate"
-      [supportedViewLayouts]="['table']"
+      [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
       layout="table"
-      [sortDirection]="defaultSortDirection"
+      [supportedViewLayouts]="['table']"
       sortField="displayName"
-      editPermission="BOOKMARK#EDIT"
-      (editItem)="onEditAction()"
+      [sortDirection]="defaultSortDirection"
       actionColumnPosition="left"
+      [additionalActions]="rowActions"
     >
       <ng-template #topCenter>
         <div class="flex justify-content-between gap-2 align-items-center flex-wrap md:flex-nowrap w-full h-full">
@@ -29,22 +27,23 @@
                 #bookmarkFilter
                 pInputText
                 type="text"
-                id="bm_bookmarkFilter"
+                id="bm_search_filter_input"
                 class="border-noround"
-                [attr.aria-label]="'BOOKMARK_SEARCH.FILTER.TOOLTIP' | translate"
-                [pTooltip]="'BOOKMARK_SEARCH.FILTER.TOOLTIP' | translate"
+                [attr.aria-label]="'ACTIONS.SEARCH.FILTER.LABEL' | translate"
+                [pTooltip]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="bookmarkFilter">{{ 'BOOKMARK_SEARCH.FILTER.LABEL' | translate }}</label>
+              <label for="bm_search_filter_input">{{ 'ACTIONS.SEARCH.FILTER.LABEL' | translate }}</label>
             </p-floatLabel>
             <button
               pButton
+              id="bm_search_filter_action"
               class="p-inputgroup-addon p-button-icon-only"
               icon="pi pi-filter-slash"
-              (click)="onResetFilter()"
-              [attr.aria-label]="'BOOKMARK_SEARCH.FILTER.RESET.TOOLTIP' | translate"
-              [pTooltip]="'BOOKMARK_SEARCH.FILTER.RESET.TOOLTIP' | translate"
+              (click)="onResetFilter($event)"
+              [attr.aria-label]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
+              [pTooltip]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             ></button>

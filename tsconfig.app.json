@@ -5,14 +5,14 @@
     "types": []
   },
   "files": [
-    "src/app/onecx-bookmark-ui-app.remote.module.ts",
-    "src/polyfills.ts",
     "src/main.ts",
+    "src/polyfills.ts",
+    "src/app/onecx-bookmark-ui-app.remote.module.ts",
     "src/app/remotes/manage-bookmark/manage-bookmark.component.ts",
     "src/app/remotes/manage-bookmark/manage-bookmark.component.main.ts",
     "src/app/remotes/bookmark-list/bookmark-list.component.ts",
     "src/app/remotes/bookmark-list/bookmark-list.component.main.ts"
   ],
-  "include": ["src/**/*.d.ts"],
-  "exclude": ["jest.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["jest.config.ts", "src/**/*.spec.ts"]
 }

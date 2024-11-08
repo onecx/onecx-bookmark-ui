@@ -5,6 +5,63 @@
       "YES": "Yes",
       "NO.TOOLTIP": "Cancel the action",
       "YES.TOOLTIP": "Proceed with the action"
+    },
+    "COPY": {
+      "LABEL": "Copy",
+      "TOOLTIP": "Create a new Bookmark with this data"
+    },
+    "DELETE": {
+      "LABEL": "Delete",
+      "TOOLTIP": "Delete the Bookmark",
+      "MESSAGE": {
+        "TEXT": "Do you want to delete the following Bookmark?",
+        "OK": "The Bookmark was deleted",
+        "NOK": "An error has occurred. The Bookmark was not deleted."
+      }
+    },
+    "EDIT": {
+      "LABEL": "Edit",
+      "TOOLTIP": "Edit the Bookmark properties",
+      "UP": "Move the Bookmark up",
+      "DOWN": "Move the Bookmark down",
+      "MESSAGE": {
+        "OK": "The Bookmark was changed successfully",
+        "NOK": "An error has occurred. The Bookmark was not changed."
+      }
+    },
+    "NAVIGATION": {
+      "CLOSE": "Close",
+      "CLOSE.TOOLTIP": "Close dialog",
+      "CLOSE_WITHOUT_SAVE": "Close dialog without saving",
+      "BACK": "Back",
+      "BACK.TOOLTIP": "Previous page",
+      "GOTO": "Navigate to Bookmark"
+    },
+    "SEARCH": {
+      "ERROR": "Data not available",
+      "NO_DATA": "No Data",
+      "RELOAD": "Reload data",
+      "FILTER": {
+        "LABEL": "Filter",
+        "TOOLTIP": "Filter by Display name",
+        "RESET": "Clear Filter"
+      }
+    },
+    "VIEW": {
+      "LABEL": "View",
+      "TOOLTIP": "View the Bookmark properties"
+    },
+    "CANCEL": "Cancel",
+    "LOADING": "...is loading",
+    "SAVE": "Save",
+    "EXPORT": "Export",
+    "IMPORT": "Import",
+    "TOOLTIPS": {
+      "CANCEL": "Cancel action",
+      "SAVE": "Save changes",
+      "SAVE_AND_CLOSE": "Save changes and close dialog",
+      "EXPORT": "Export and download the Bookmarks as CSV file",
+      "IMPORT": "Upload a CSV file and replacing all existing Bookmarks"
     }
   },
   "BOOKMARK": {
@@ -49,31 +106,16 @@
     "ERROR": "Could not delete Bookmark"
   },
   "BOOKMARK_SEARCH": {
-    "HEADER": "My Bookmarks",
-    "FILTER": {
-      "LABEL": "Filter",
-      "TOOLTIP": "Filter by Display name",
-      "RESET.TOOLTIP": "Reset Filter"
-    },
-    "SORTING_OPTIONS": {
-      "DISPLAY_NAME": "Display Name"
-    },
+    "HEADER": "Bookmarks",
     "SUB_HEADER": "View and manage my bookmarks.",
-    "EMPTY_RESULTS": "No results.",
     "BREADCRUMB": "Search",
-    "HEADER_ACTIONS": {
-      "EXPORT_ALL": "Export"
-    },
     "CARD_ACTIONS": {
       "DELETE": "Delete Bookmark",
       "VISIT": "Go to Bookmark"
     },
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed."
-    },
-    "INPUT_PLACEHOLDER": "Filter",
-    "INPUT_TOOLTIP": "Filter by display name",
-    "INPUT_RESET_TOOLTIP": "Reset filter"
+    }
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
