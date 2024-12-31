@@ -1,13 +1,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
     "types": []
   },
   "files": [
     "src/main.ts",
     "src/polyfills.ts",
-    "src/app/onecx-bookmark-ui-app.remote.module.ts",
+    "src/app/onecx-bookmark-ui.remote.module.ts",
     "src/app/remotes/manage-bookmark/manage-bookmark.component.ts",
     "src/app/remotes/manage-bookmark/manage-bookmark.component.main.ts",
     "src/app/remotes/bookmark-list/bookmark-list.component.ts",

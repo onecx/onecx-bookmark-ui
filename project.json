@@ -25,12 +25,7 @@
             "output": "/onecx-portal-lib/assets/"
           }
         ],
-        "styles": [
-          "src/styles.scss",
-          "node_modules/primeicons/primeicons.css",
-          "node_modules/primeng/resources/primeng.min.css",
-          "node_modules/@onecx/portal-integration-angular/assets/output.css"
-        ],
+        "styles": ["src/styles.scss"],
         "scripts": ["node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"],
         "customWebpackConfig": {
           "path": "webpack.config.js"

@@ -31,6 +31,7 @@ describe('BookmarksSearchComponent', () => {
   let component: BookmarksSearchComponent
   let fixture: ComponentFixture<BookmarksSearchComponent>
   let store: MockStore<Store>
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let bookmarksSearch: BookmarksSearchHarness
 
   const mockActivatedRoute = {}
