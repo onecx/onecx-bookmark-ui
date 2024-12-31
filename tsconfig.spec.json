@@ -5,10 +5,9 @@
     "declaration": false,
     "outDir": "./dist/test",
     "module": "commonjs",
-    "types": ["jasmine", "node"],
+    "types": ["jest", "node"],
     "target": "ES2022",
     "useDefineForClassFields": false
-    "types": ["jest", "node"]
   },
   "files": ["src/test-setup.ts"],
   "exclude": ["src/app/shared/generated/**/*", "node_modules"],
