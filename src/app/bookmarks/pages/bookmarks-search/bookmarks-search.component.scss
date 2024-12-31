@@ -3,6 +3,7 @@
 @include danger-action;
 @include displaying-text-responsive;
 @include table-inline-buttons;
+@include table-zebra-rows;
 @include correct-ocx-interactive-data-view;
 
 :host ::ng-deep {
@@ -11,7 +12,31 @@
   }
   .p-datatable-thead > tr > th,
   .p-datatable-tbody > tr > td {
-    text-align: center !important;
     padding: 0.5rem;
+    &:first-of-type {
+      text-align: center;
+      border-right-width: 1px !important;
+    }
+  }
+  // hide unusable stuff
+  ocx-column-group-selection,
+  ocx-data-view-controls div div button {
+    display: none;
+  }
+  ocx-data-view-controls div {
+    justify-content: center !important;
+  }
+  /* correct header layouting by lib */
+  .table-header-wrapper {
+    flex-direction: row !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+  }
+  .table-header-wrapper span:first-child {
+    margin-right: 10px !important;
+  }
+  // hide unusable stuff
+  ocx-column-group-selection {
+    display: none;
   }
 }

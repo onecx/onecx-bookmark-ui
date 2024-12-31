@@ -64,6 +64,23 @@
       "IMPORT": "Upload a CSV file and replacing all existing Bookmarks"
     }
   },
+  "INTERNAL": {
+    "CREATION_DATE": "Created on",
+    "CREATION_USER": "Created by",
+    "MODIFICATION_DATE": "Changed on",
+    "MODIFICATION_USER": "Changed by",
+    "MANDATORY": "Mandatory",
+    "OPERATOR": "Created by automation",
+    "OPERATOR_MESSAGE": "This Workspace was created by automation. All changes will be lost on the next deployment.",
+    "TOOLTIPS": {
+      "CREATION_DATE": "Timestamp of the creation",
+      "CREATION_USER": "ID of the user of the creation",
+      "MODIFICATION_DATE": "Timestamp of the last change",
+      "MODIFICATION_USER": "ID of the user of the last change",
+      "MANDATORY": "If set then this Workspace is necessary for operation. The Workspace cannot therefore be deleted.",
+      "OPERATOR": "If set, the Workspace cannot be deleted and all changes will be lost during the next deployment."
+    }
+  },
   "BOOKMARK": {
     "DISPLAY_NAME": "Display Name",
     "POSITION": "Position",
