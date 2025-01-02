@@ -20,14 +20,14 @@ import { CreateUpdateBookmarkDialogComponent } from 'src/app/shared/components/d
 @Injectable()
 export class BookmarksSearchEffects {
   constructor(
-    private portalDialogService: PortalDialogService,
-    private actions$: Actions,
-    private bookmarksService: BookmarksInternal,
-    private store: Store,
-    private messageService: PortalMessageService,
+    private readonly actions$: Actions,
+    private readonly store: Store,
+    private readonly portalDialogService: PortalDialogService,
+    private readonly bookmarksService: BookmarksInternal,
+    private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
-    private appStateService: AppStateService,
-    private userService: UserService
+    private readonly appStateService: AppStateService,
+    private readonly userService: UserService
   ) {}
 
   searchTriggered$ = createEffect(() => {

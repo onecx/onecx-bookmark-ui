@@ -9,8 +9,8 @@ import { MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 @Injectable({ providedIn: 'any' })
 export class BookmarkAPIUtilsService {
   constructor(
-    private bookmarkService: BookmarksInternal,
-    private messageService: PortalMessageService,
+    private readonly bookmarkService: BookmarksInternal,
+    private readonly messageService: PortalMessageService,
     private readonly appStateService: AppStateService
   ) {}
 
