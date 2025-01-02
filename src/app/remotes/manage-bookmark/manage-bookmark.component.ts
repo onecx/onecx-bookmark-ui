@@ -121,13 +121,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   constructor(
-    @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
-    private appConfigService: AppConfigService,
-    private appStateService: AppStateService,
-    private userService: UserService,
-    private translateService: TranslateService,
-    private portalDialogService: PortalDialogService,
-    private bookmarkApiUtils: BookmarkAPIUtilsService
+    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    private readonly appConfigService: AppConfigService,
+    private readonly appStateService: AppStateService,
+    private readonly userService: UserService,
+    private readonly translateService: TranslateService,
+    private readonly portalDialogService: PortalDialogService,
+    private readonly bookmarkApiUtils: BookmarkAPIUtilsService
   ) {
     this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
 

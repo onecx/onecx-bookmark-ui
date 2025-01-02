@@ -13,7 +13,7 @@
   "scripts": {
     "build": "nx build",
     "check": "nx lint --cache=true && npx prettier -c --cache .",
-    "clean": "npm cache clean --force && rm -rf dist reports .nx .angular .eslintcache ./node_modules/.cache/prettier/.prettier-cache",
+    "clean": "npm cache clean --force && rm -rf *.log dist reports .nx .angular .eslintcache ./node_modules/.cache/prettier/.prettier-cache",
     "lint": "nx lint --cache=true",
     "lint:fix": "nx lint --fix",
     "format": "nx format:write --uncommitted",
@@ -21,7 +21,7 @@
     "browser": "npx browserslist",
     "prepare": "husky || true",
     "start": "nx serve",
-    "test": "nx test",
+    "test": "nx test --no-color",
     "test:ci": "nx test --watch=false --browsers=ChromeHeadless --coverage",
     "sonar": "npx sonarqube-scanner -Dproject.settings=sonar-local-project.properties",
     "apigen-cleanup": "rm -rf $npm_package_config_openapiOutput",
@@ -33,6 +33,9 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "jestSonar": {
+    "reportPath": "reports"
   },
   "dependencies": {
     "@angular-architects/module-federation": "^18.0.6",

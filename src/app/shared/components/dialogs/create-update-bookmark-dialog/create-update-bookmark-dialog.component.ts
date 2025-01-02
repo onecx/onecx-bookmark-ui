@@ -34,7 +34,7 @@ export class CreateUpdateBookmarkDialogComponent
   public dialogResult: Bookmark | undefined = undefined
   public isPublicBookmark = false
 
-  constructor(private userService: UserService) {
+  constructor(private readonly userService: UserService) {
     this.formGroup = new FormGroup({
       displayName: new FormControl(null, [Validators.maxLength(255), Validators.required])
     })
