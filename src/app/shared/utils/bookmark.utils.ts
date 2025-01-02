@@ -49,7 +49,6 @@ export function findBookmarkForEndpoint(
     currentPageEndpointParameters = mapPathSegmentsToPathParemeters(endpoint.path, pagePath)
   }
   return bookmarks.find((bookmark) => {
-    // TODO: Add checks for query and hash
     return (
       bookmark.productName === currentMfe.productName &&
       bookmark.appId === currentMfe.appId &&
@@ -68,7 +67,6 @@ export function findBookmarkForMfeRoot(
     return undefined
   }
   return bookmarks.find((bookmark) => {
-    // TODO: Add checks for query and hash
     return (
       bookmark.productName === currentMfe.productName &&
       bookmark.appId === currentMfe.appId &&

@@ -1,8 +1,27 @@
-import { HttpClient } from '@angular/common/http'
-import { CommonModule } from '@angular/common'
 import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { HttpClient } from '@angular/common/http'
 import { FormsModule } from '@angular/forms'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { PrimeIcons } from 'primeng/api'
+import { RippleModule } from 'primeng/ripple'
+import { DynamicDialogModule } from 'primeng/dynamicdialog'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  filter,
+  first,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  ReplaySubject,
+  withLatestFrom
+} from 'rxjs'
+
+import { AngularAuthModule } from '@onecx/angular-auth'
 import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import {
@@ -23,33 +42,16 @@ import {
   providePortalDialogService,
   AppConfigService
 } from '@onecx/portal-integration-angular'
-import { PrimeIcons } from 'primeng/api'
-import { RippleModule } from 'primeng/ripple'
-import {
-  BehaviorSubject,
-  catchError,
-  combineLatest,
-  filter,
-  first,
-  map,
-  mergeMap,
-  Observable,
-  of,
-  ReplaySubject,
-  withLatestFrom
-} from 'rxjs'
-import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
-import { DynamicDialogModule } from 'primeng/dynamicdialog'
-import { ProgressSpinnerModule } from 'primeng/progressspinner'
-import { SharedModule } from 'src/app/shared/shared.module'
 import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
-import { CreateUpdateBookmarkDialogComponent } from 'src/app/shared/components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
-import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
-import { mapPathSegmentsToPathParemeters } from 'src/app/shared/utils/path.utils'
+
+import { SharedModule } from 'src/app/shared/shared.module'
+import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
+import { extractPathAfter, mapPathSegmentsToPathParemeters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
-import { extractPathAfter } from 'src/app/shared/utils/path.utils'
+import { CreateUpdateBookmarkDialogComponent } from 'src/app/shared/components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
-import { AngularAuthModule } from '@onecx/angular-auth'
+
+import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
 
 export function slotInitializer(slotService: SlotService) {
   return () => slotService.init()
@@ -67,8 +69,7 @@ export function slotInitializer(slotService: SlotService) {
     PortalCoreModule,
     ProgressSpinnerModule,
     TranslateModule,
-    DynamicDialogModule,
-    PageNotBookmarkableDialogComponent
+    DynamicDialogModule
   ],
   providers: [
     {
@@ -293,9 +294,10 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private getPrimaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails {
+    const mode = isBookmarked ? 'UPDATE' : 'CREATE'
     return {
       key: isBookmarkable
-        ? `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'UPDATE' : 'CREATE'}_ACTIONS.SAVE`
+        ? 'REMOTES.MANAGE_BOOKMARK.DIALOG.' + mode + '_ACTIONS.SAVE'
         : 'REMOTES.MANAGE_BOOKMARK.DIALOG.NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON',
       icon: isBookmarkable ? PrimeIcons.CHECK : PrimeIcons.TIMES
     }
