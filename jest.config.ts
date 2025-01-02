@@ -1,10 +1,10 @@
 /* eslint-disable */
-export default {
+import type { Config } from 'jest'
+
+const config: Config = {
   displayName: 'onecx-bookmark-ui',
   preset: './jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: './reports/coverage/',
-  coveragePathIgnorePatterns: ['src/app/shared/generated'],
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -21,6 +21,11 @@ export default {
     'jest-preset-angular/build/serializers/html-comment'
   ],
   testMatch: ['<rootDir>/src/**/__tests__/**/*.[jt]s?(x)', '<rootDir>/src/**/*(*.)@(spec|test).[jt]s?(x)'],
+  collectCoverage: true,
+  coverageDirectory: './reports/coverage/',
+  coveragePathIgnorePatterns: ['src/app/shared/generated'],
+  coverageReporters: ['clover', 'json', 'lcov', 'text', 'text-summary', 'html'],
+  testResultsProcessor: 'jest-sonar-reporter',
   reporters: [
     'default',
     [
@@ -33,3 +38,5 @@ export default {
     ]
   ]
 }
+
+export default config

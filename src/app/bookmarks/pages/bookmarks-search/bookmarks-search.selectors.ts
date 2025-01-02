@@ -1,9 +1,12 @@
 import { createSelector } from '@ngrx/store'
-import { createChildSelectors } from '@onecx/portal-integration-angular/ngrx'
+
+import { createChildSelectors } from '@onecx/ngrx-accelerator'
+
+import { BookmarkScopeEnum } from 'src/app/shared/generated'
+
 import { bookmarksFeature } from '../../bookmarks.reducers'
 import { initialState } from './bookmarks-search.reducers'
 import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
-import { BookmarkScopeEnum } from 'src/app/shared/generated'
 
 export const bookmarksSearchSelectors = createChildSelectors(bookmarksFeature.selectSearch, initialState)
 

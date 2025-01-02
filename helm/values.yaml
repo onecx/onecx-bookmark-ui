@@ -40,6 +40,8 @@ app:
           BOOKMARK:
             CREATE: 'Create bookmarks'
             EDIT: 'Edit bookmarks'
+            ADMIN_EDIT: 'Edit public bookmarks'
+            ADMIN_DELETE: 'Delete public bookmarks'
             DELETE: 'Delete bookmarks'
             IMPORT: 'Import bookmarks'
             EXPORT: 'Export bookmarks'

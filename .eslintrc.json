@@ -1,10 +1,10 @@
 {
   "root": true,
   "ignorePatterns": [
+    ".nx/**",
     ".angular/**",
     ".husky/**",
     ".github/**",
-    ".scannerwork/**",
     "reports/**",
     "dist/**",
     "helm/**",
