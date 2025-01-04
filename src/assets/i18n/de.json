@@ -96,8 +96,8 @@
       "PUBLIC": "Öffentlich"
     }
   },
-  "BOOKMARKS_CREATE_UPDATE": {
-    "UPDATE": {
+  "BOOKMARK_DETAIL": {
+    "EDIT": {
       "SUCCESS": "Aktualisierung erfolgreich",
       "FAILED": "Aktualisierung fehlgeschlagen",
       "ERROR": "Aktualisierung fehlgeschlagen",
@@ -114,10 +114,10 @@
     },
     "FORM": {
       "DISPLAY_NAME": "Anzeigename",
-      "DISPLAY_NAME.TOOLTIP": "Anzeigename, wird in der Listenansicht und zum Sortieren verwendet"
+      "DISPLAY_NAME.TOOLTIP": "Dieser Name wird in der Listenansicht und zum Sortieren verwendet"
     }
   },
-  "BOOKMARKS_DELETE": {
+  "BOOKMARK_DELETE": {
     "HEADER": "Lesezeichen löschen",
     "MESSAGE": "Möchten Sie dieses Lesezeichen löschen?",
     "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",

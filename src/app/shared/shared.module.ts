@@ -8,10 +8,10 @@ import { InputGroupModule } from 'primeng/inputgroup'
 import { InputTextModule } from 'primeng/inputtext'
 import { TooltipModule } from 'primeng/tooltip'
 
-import { CreateUpdateBookmarkDialogComponent } from './components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
+import { BookmarkCreateUpdateComponent } from './components/dialogs/bookmark-create-update/bookmark-create-update.component'
 
 @NgModule({
-  declarations: [CreateUpdateBookmarkDialogComponent],
+  declarations: [BookmarkCreateUpdateComponent],
   imports: [
     CommonModule,
     FloatLabelModule,
@@ -22,7 +22,7 @@ import { CreateUpdateBookmarkDialogComponent } from './components/dialogs/create
     TooltipModule,
     TranslateModule
   ],
-  exports: [CreateUpdateBookmarkDialogComponent, FloatLabelModule, InputGroupModule],
+  exports: [BookmarkCreateUpdateComponent, FloatLabelModule, InputGroupModule],
   providers: []
 })
 export class SharedModule {}

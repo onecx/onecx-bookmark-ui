@@ -11,17 +11,18 @@ import { providePortalDialogService, PortalCoreModule } from '@onecx/portal-inte
 import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
 import { SharedModule } from 'src/app/shared/shared.module'
-import { bookmarksFeature } from './bookmarks.reducers'
-import { routes } from './bookmarks.routes'
+import { bookmarkFeature } from './bookmark.reducers'
+import { routes } from './bookmark.routes'
 
-import { BookmarksSearchComponent } from './pages/bookmarks-search/bookmarks-search.component'
-import { BookmarksSearchEffects } from './pages/bookmarks-search/bookmarks-search.effects'
-import { BookmarksDeleteComponent } from './pages/bookmarks-search/dialogs/bookmarks-delete/bookmarks-delete.component'
-import { BookmarkImageComponent } from './pages/bookmarks-search/product-image/bookmark-image.component'
+import { BookmarkSearchEffects } from './pages/bookmark-search/bookmark-search.effects'
+import { BookmarkSearchComponent } from './pages/bookmark-search/bookmark-search.component'
+import { BookmarkDeleteComponent } from './pages/bookmark-search/dialogs/bookmark-delete/bookmark-delete.component'
+import { BookmarkDetailComponent } from './pages/bookmark-search/dialogs/bookmark-detail/bookmark-detail.component'
+import { BookmarkImageComponent } from './pages/bookmark-search/product-image/bookmark-image.component'
 
 @NgModule({
   providers: [providePortalDialogService()],
-  declarations: [BookmarksDeleteComponent, BookmarksSearchComponent, BookmarkImageComponent],
+  declarations: [BookmarkDetailComponent, BookmarkDeleteComponent, BookmarkSearchComponent, BookmarkImageComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -30,9 +31,9 @@ import { BookmarkImageComponent } from './pages/bookmarks-search/product-image/b
     RouterModule.forChild(addInitializeModuleGuard(routes)),
     FormsModule,
     ReactiveFormsModule,
-    StoreModule.forFeature(bookmarksFeature),
-    EffectsModule.forFeature([BookmarksSearchEffects]),
+    StoreModule.forFeature(bookmarkFeature),
+    EffectsModule.forFeature([BookmarkSearchEffects]),
     TranslateModule
   ]
 })
-export class BookmarksModule {}
+export class BookmarkModule {}

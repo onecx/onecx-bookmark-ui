@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core'
 import { Location } from '@angular/common'
-import { BookmarksInternal, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
-import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 import { catchError, map, mergeMap, Observable, of, retry, tap } from 'rxjs'
-import { environment } from 'src/environments/environment'
+
 import { MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
+import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
+
+import { BookmarksInternal, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
+import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'any' })
 export class BookmarkAPIUtilsService {
@@ -64,12 +66,12 @@ export class BookmarkAPIUtilsService {
     return this.bookmarkService.createNewBookmark(createBookmark).pipe(
       tap(() => {
         this.messageService.success({
-          summaryKey: 'BOOKMARKS_CREATE_UPDATE.CREATE.SUCCESS'
+          summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS'
         })
       }),
       catchError(() => {
         this.messageService.error({
-          summaryKey: 'BOOKMARKS_CREATE_UPDATE.CREATE.ERROR'
+          summaryKey: 'BOOKMARK_DETAIL.CREATE.ERROR'
         })
         return of(undefined)
       })
@@ -80,12 +82,12 @@ export class BookmarkAPIUtilsService {
     return this.bookmarkService.deleteBookmarkById(bookmarkId).pipe(
       tap(() => {
         this.messageService.success({
-          summaryKey: 'BOOKMARKS_DELETE.SUCCESS'
+          summaryKey: 'BOOKMARK_DELETE.SUCCESS'
         })
       }),
       catchError(() => {
         this.messageService.error({
-          summaryKey: 'BOOKMARKS_DELETE.ERROR'
+          summaryKey: 'BOOKMARK_DELETE.ERROR'
         })
         return of(undefined)
       })
@@ -96,12 +98,12 @@ export class BookmarkAPIUtilsService {
     return this.bookmarkService.updateBookmark(bookmarkId, updatedBookmark).pipe(
       tap(() => {
         this.messageService.success({
-          summaryKey: 'BOOKMARKS_CREATE_UPDATE.UPDATE.SUCCESS'
+          summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS'
         })
       }),
       catchError(() => {
         this.messageService.error({
-          summaryKey: 'BOOKMARKS_CREATE_UPDATE.UPDATE.ERROR'
+          summaryKey: 'BOOKMARK_DETAIL.EDIT.ERROR'
         })
         return of(undefined)
       })

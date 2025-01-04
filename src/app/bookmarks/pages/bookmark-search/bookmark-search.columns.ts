@@ -1,6 +1,6 @@
 import { ColumnType, DataTableColumn } from '@onecx/portal-integration-angular'
 
-export const bookmarksSearchColumns: DataTableColumn[] = [
+export const bookmarkSearchColumns: DataTableColumn[] = [
   //{ id: 'actions', columnType: ColumnType.STRING, nameKey: 'ACTIONS.LABEL', sortable: false },
   //{ id: 'scope', columnType: ColumnType.TRANSLATION_KEY, nameKey: 'BOOKMARK.SCOPE', sortable: true },
   { id: 'position', columnType: ColumnType.NUMBER, nameKey: 'BOOKMARK.POSITION', sortable: true },

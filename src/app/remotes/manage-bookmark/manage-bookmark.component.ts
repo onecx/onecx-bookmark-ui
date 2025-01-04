@@ -48,7 +48,7 @@ import { SharedModule } from 'src/app/shared/shared.module'
 import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
 import { extractPathAfter, mapPathSegmentsToPathParemeters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
-import { CreateUpdateBookmarkDialogComponent } from 'src/app/shared/components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
+import { BookmarkCreateUpdateComponent } from 'src/app/shared/components/dialogs/bookmark-create-update/bookmark-create-update.component'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
 
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
@@ -275,7 +275,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   ) {
     const dialogBody = isBookmarkable
       ? {
-          type: CreateUpdateBookmarkDialogComponent,
+          type: BookmarkCreateUpdateComponent,
           inputs: {
             vm: {
               initialBookmark: isBookmarked

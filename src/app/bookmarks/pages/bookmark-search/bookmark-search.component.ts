@@ -10,18 +10,18 @@ import { Action, DataAction, DataSortDirection } from '@onecx/portal-integration
 
 import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 
-import { BookmarksSearchActions } from './bookmarks-search.actions'
-import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
-import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
+import { BookmarkSearchActions } from './bookmark-search.actions'
+import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
+import { selectBookmarkSearchViewModel } from './bookmark-search.selectors'
 
 @Component({
-  selector: 'app-bookmarks-search',
-  templateUrl: './bookmarks-search.component.html',
-  styleUrls: ['./bookmarks-search.component.scss']
+  selector: 'app-bookmark-search',
+  templateUrl: './bookmark-search.component.html',
+  styleUrls: ['./bookmark-search.component.scss']
 })
-export class BookmarksSearchComponent implements OnInit, AfterViewInit {
+export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   @ViewChild('bookmarkFilter') bookmarkFilter: ElementRef | undefined
-  public viewModel$: Observable<BookmarksSearchViewModel> = this.store.select(selectBookmarksSearchViewModel)
+  public viewModel$: Observable<BookmarkSearchViewModel> = this.store.select(selectBookmarkSearchViewModel)
   public urls: Record<string, Observable<string>> = {}
   public urls2: Record<string, string> = {}
   public tableActions: Action[] = []
@@ -119,7 +119,7 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     ev.stopPropagation()
     if (this.bookmarkFilter) {
       this.bookmarkFilter.nativeElement.value = ''
-      this.store.dispatch(BookmarksSearchActions.bookmarkFilterChanged({ bookmarkFilter: '' }))
+      this.store.dispatch(BookmarkSearchActions.bookmarkFilterChanged({ bookmarkFilter: '' }))
     }
   }
 
@@ -131,13 +131,13 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     // this.router.navigate(['./', data., 'menu'], { relativeTo: this.route })
   }
   public onDetail(mode: string, data: Bookmark): void {
-    this.store.dispatch(BookmarksSearchActions.editBookmarksButtonClicked({ id: data.id }))
+    this.store.dispatch(BookmarkSearchActions.detailBookmarkButtonClicked({ id: data.id }))
   }
   public onCopy(data: Bookmark): void {
     console.log('onCopy', data)
   }
   public onDelete(data: Bookmark): void {
-    this.store.dispatch(BookmarksSearchActions.deleteBookmarksButtonClicked({ id: data.id }))
+    this.store.dispatch(BookmarkSearchActions.deleteBookmarksButtonClicked({ id: data.id }))
   }
 
   public prepareUrlPath(url?: string, path?: string): string {
@@ -147,21 +147,21 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
   }
 
   public search() {
-    this.store.dispatch(BookmarksSearchActions.searchTriggered())
+    this.store.dispatch(BookmarkSearchActions.searchTriggered())
   }
 
   public exportItems() {
-    this.store.dispatch(BookmarksSearchActions.exportButtonClicked())
+    this.store.dispatch(BookmarkSearchActions.exportButtonClicked())
   }
 
   public onFilterBookmarks(event: Event): void {
     const bookmarkFilter = (event.target as HTMLInputElement)?.value ?? ''
-    this.store.dispatch(BookmarksSearchActions.bookmarkFilterChanged({ bookmarkFilter }))
+    this.store.dispatch(BookmarkSearchActions.bookmarkFilterChanged({ bookmarkFilter }))
   }
 
   public handleQuickFilterChange(scopeQuickFilter: string): void {
     this.prepareActionButtons(scopeQuickFilter)
-    this.store.dispatch(BookmarksSearchActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
+    this.store.dispatch(BookmarkSearchActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
   }
 
   public getUrl(bookmark: Bookmark) {

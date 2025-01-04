@@ -17,26 +17,26 @@ import { DialogService } from 'primeng/dynamicdialog'
 import { PortalCoreModule, UserService } from '@onecx/portal-integration-angular'
 import { SharedModule } from 'src/app/shared/shared.module'
 
-import { initialState } from './bookmarks-search.reducers'
+import { initialState } from './bookmark-search.reducers'
 import { BookmarkImageComponent } from './product-image/bookmark-image.component'
-import { BookmarksSearchActions } from './bookmarks-search.actions'
-import { bookmarksSearchColumns } from './bookmarks-search.columns'
-import { BookmarksSearchComponent } from './bookmarks-search.component'
-import { BookmarksSearchHarness } from './bookmarks-search.harness'
-import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
-import { selectBookmarksSearchViewModel } from './bookmarks-search.selectors'
+import { BookmarkSearchActions } from './bookmark-search.actions'
+import { bookmarkSearchColumns } from './bookmark-search.columns'
+import { BookmarkSearchComponent } from './bookmark-search.component'
+import { BookmarkSearchHarness } from './bookmark-search.harness'
+import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
+import { selectBookmarkSearchViewModel } from './bookmark-search.selectors'
 
-describe('BookmarksSearchComponent', () => {
+describe('BookmarkSearchComponent', () => {
   HTMLCanvasElement.prototype.getContext = jest.fn()
-  let component: BookmarksSearchComponent
-  let fixture: ComponentFixture<BookmarksSearchComponent>
+  let component: BookmarkSearchComponent
+  let fixture: ComponentFixture<BookmarkSearchComponent>
   let store: MockStore<Store>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let bookmarksSearch: BookmarksSearchHarness
+  let bookmarkSearch: BookmarkSearchHarness
 
   const mockActivatedRoute = {}
-  const baseBookmarksSearchViewModel: BookmarksSearchViewModel = {
-    columns: bookmarksSearchColumns,
+  const baseBookmarkSearchViewModel: BookmarkSearchViewModel = {
+    columns: bookmarkSearchColumns,
     results: [],
     bookmarkFilter: '',
     scopeQuickFilter: 'BOOKMARK.SCOPES.ALL'
@@ -60,7 +60,7 @@ describe('BookmarksSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarksSearchComponent, BookmarkImageComponent],
+      declarations: [BookmarkSearchComponent, BookmarkImageComponent],
       imports: [
         SharedModule,
         PortalCoreModule,
@@ -90,13 +90,13 @@ describe('BookmarksSearchComponent', () => {
     translateService.use('en')
 
     store = TestBed.inject(MockStore)
-    store.overrideSelector(selectBookmarksSearchViewModel, baseBookmarksSearchViewModel)
+    store.overrideSelector(selectBookmarkSearchViewModel, baseBookmarkSearchViewModel)
     store.refreshState()
 
-    fixture = TestBed.createComponent(BookmarksSearchComponent)
+    fixture = TestBed.createComponent(BookmarkSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    bookmarksSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarksSearchHarness)
+    bookmarkSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarkSearchHarness)
   })
 
   it('should create the component', () => {
@@ -104,7 +104,7 @@ describe('BookmarksSearchComponent', () => {
   })
 
   it('should dispatch searchButtonClicked action on page init', (done) => {
-    store.scannedActions$.pipe(ofType(BookmarksSearchActions.searchTriggered)).subscribe(() => {
+    store.scannedActions$.pipe(ofType(BookmarkSearchActions.searchTriggered)).subscribe(() => {
       done()
     })
   })
@@ -127,19 +127,19 @@ describe('BookmarksSearchComponent', () => {
         id: 'column_1'
       }
     ]
-    store.overrideSelector(selectBookmarksSearchViewModel, {
-      ...baseBookmarksSearchViewModel,
+    store.overrideSelector(selectBookmarkSearchViewModel, {
+      ...baseBookmarkSearchViewModel,
       results: results,
       columns: columns,
       displayedColumns: columns
     })
     store.refreshState()
 
-    const pageHeader = await bookmarksSearch.getHeader()
+    const pageHeader = await bookmarkSearch.getHeader()
     const exportButton = await pageHeader.getInlineActionButtonByLabel('Export')
     await exportButton?.click()
 
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarksSearchActions.exportButtonClicked())
+    expect(store.dispatch).toHaveBeenCalledWith(BookmarkSearchActions.exportButtonClicked())
   })
     */
 })
