@@ -3,7 +3,7 @@
     [header]="'BOOKMARK_SEARCH.HEADER' | translate"
     [subheader]="'BOOKMARK_SEARCH.SUB_HEADER' | translate"
   />
-  <div class="card pt-2 correct-ocx-interactive-data-view">
+  <div class="card pt-2 pb-0 correct-ocx-interactive-data-view">
     <ocx-interactive-data-view
       [data]="vm.results"
       [columns]="vm.columns"
@@ -19,6 +19,32 @@
     >
       <ng-template #topCenter>
         <div class="flex justify-content-between gap-2 align-items-center flex-wrap md:flex-nowrap w-full h-full">
+          <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'">
+            <!-- This is necessary to ensure a correct flex layout -->
+          </div>
+          <div
+            *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
+            class="slim-selectbutton filter-selectbutton"
+            [attr.aria-label]="'BOOKMARK.SCOPE' | translate"
+            [pTooltip]="'BOOKMARK.SCOPE' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          >
+            <p-selectButton
+              class="mr-2"
+              (onChange)="handleQuickFilterChange($event.value)"
+              [options]="quickFilterOptions"
+              [(ngModel)]="quickFilterValue"
+            >
+              <ng-template let-item pTemplate>
+                <span> {{ item.value | translate }} </span>
+              </ng-template>
+            </p-selectButton>
+            <div class="p-selectbutton-subtitle flex flex-row flex-nowrap column-gap-3 opacity-90">
+              <span>{{ 'BOOKMARK.SCOPE' | translate }}</span>
+            </div>
+          </div>
+
           <p-inputGroup class="w-auto">
             <span class="p-inputgroup-addon">
               <i class="pi pi-filter"></i>
@@ -55,65 +81,55 @@
         </div>
       </ng-template>
 
-      <ng-template #gridItem let-item> pTemplate="column id + IdTableCell" </ng-template>
-
-      <!--
-      <ng-template #gridItem let-item>
+      <ng-template pTemplate="actionsIdTableCell" let-rowData="rowObject" let-i="rowIndex" let-column="column">
+        <ng-container *ocxIfNotPermission="'BOOKMARK#EDIT'">
+          <a
+            *ocxIfPermission="'BOOKMARK#VIEW'"
+            tabindex="0"
+            class="p-2 text-primary font-medium"
+            [id]="'bm_search_table_row_' + i + '_action_view'"
+            (click)="onDetail('VIEW', rowData)"
+            (keydown.enter)="onDetail('VIEW', rowData)"
+            (keydown.space)="onDetail('VIEW', rowData)"
+            [attr.aria-label]="'ACTIONS.VIEW.LABEL' | translate"
+            [pTooltip]="'ACTIONS.VIEW.LABEL' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          >
+            <span class="pi pi-eye" aria-hidden="true"></span>
+          </a>
+        </ng-container>
         <a
-          class="col-12 lg:col-6 xl:col-4 flex py-1 sm:py-2 md:py-3"
-          (click)="editBookmark(item)"
+          *ocxIfPermission="'BOOKMARK#EDIT'"
+          tabindex="0"
+          class="p-2 text-primary font-medium"
+          [id]="'bm_search_table_row_' + i + '_action_edit'"
+          (click)="onDetail('EDIT', rowData)"
+          (keydown.enter)="onDetail('EDIT', rowData)"
+          (keydown.space)="onDetail('EDIT', rowData)"
+          [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
+          [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         >
-          <div
-            class="data-grid-item card w-12 lg:w-11 align-self-stretch cursor-pointer text-center hover:bg-gray-200 relative"
-          >
-            <div class="flex flex-column justify-content-center align-items-center gap-2 w-full h-full">
-              <div class="flex justify-content-center w-full">
-                <app-bookmark-image [bookmark]="item"></app-bookmark-image>
-              </div>
-              <div class="flex flex-column gap-1 w-full">
-                <p class="font-bold sm:text-lg md:text-xl text-responsive m-0 max-w-full">{{ item.displayName }}</p>
-                <p class="text-xs md:text-sm text-responsive">{{ item.scope | translate }}</p>
-              </div>
-            </div>
-            <div class="absolute left-0 top-0 mt-3 ml-3" *ngIf="item.scope === 'BOOKMARK.SCOPES.PRIVATE'">
-              <p-button
-                pTooltip="{{
-                    'BOOKMARK_SEARCH.CARD_ACTIONS.DELETE' | translate
-                  }}"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-                icon="pi pi-trash"
-                styleClass="p-button-text danger-action-text"
-                (onClick)="
-                    $event.stopPropagation(); deleteBookmark($event, item)
-                  "
-                id="delete-bookmark-button"
-                *ocxIfPermission="'BOOKMARK#DELETE'"
-              ></p-button>
-            </div>
-            <div class="absolute right-0 top-0 mt-3 mr-3">
-              <a
-                [routerLink]="getUrl(item) | async"
-                pTooltip="{{
-                'BOOKMARK_SEARCH.CARD_ACTIONS.VISIT' | translate
-              }}"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              >
-                <p-button
-                  icon="pi pi-link"
-                  styleClass="p-button-text"
-                  (onClick)="
-                    $event.stopPropagation();
-                  "
-                ></p-button>
-              </a>
-            </div>
-          </div>
+          <span class="pi pi-pencil" aria-hidden="true"></span>
         </a>
-      </ng-template -->
+        <a
+          *ocxIfPermission="'BOOKMARK#DELETE'"
+          tabindex="0"
+          class="p-2 danger-action-text font-medium"
+          [id]="'bm_search_table_row_' + i + '_action_delete'"
+          (click)="onDelete(rowData)"
+          (keydown.enter)="onDelete(rowData)"
+          (keydown.space)="onDelete(rowData)"
+          [attr.aria-label]="'ACTIONS.DELETE.LABEL' | translate"
+          [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
+          <span class="pi pi-trash" aria-hidden="true"></span>
+        </a>
+      </ng-template>
     </ocx-interactive-data-view>
   </div>
 </ocx-portal-page>

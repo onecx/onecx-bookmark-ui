@@ -1,5 +1,7 @@
 {
   "ACTIONS": {
+    "LABEL": "Actions",
+    "TOOLTIP": "Actions for the data of the table row",
     "CONFIRMATION": {
       "NO": "No",
       "YES": "Yes",

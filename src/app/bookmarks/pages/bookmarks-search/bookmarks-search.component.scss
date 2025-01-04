@@ -5,6 +5,7 @@
 @include table-inline-buttons;
 @include table-zebra-rows;
 @include correct-ocx-interactive-data-view;
+@include search-criteria-select-button-slim;
 
 :host ::ng-deep {
   .p-datatable .p-datatable-thead > tr > th {
@@ -16,16 +17,26 @@
     &:first-of-type {
       text-align: center;
       border-right-width: 1px !important;
+      white-space: nowrap;
+      background: inherit;
+      position: sticky;
+      z-index: 1;
     }
   }
   // hide unusable stuff
+  ocx-interactive-data-view > div > div {
+    > div:first-of-type {
+      display: none !important; // hide view selector
+    }
+    > div:nth-of-type(2) {
+      width: 100%;
+    }
+  }
   ocx-column-group-selection,
-  ocx-data-view-controls div div button {
-    display: none;
+  ocx-custom-group-column-selector {
+    display: none; // hide column selector
   }
-  ocx-data-view-controls div {
-    justify-content: center !important;
-  }
+
   /* correct header layouting by lib */
   .table-header-wrapper {
     flex-direction: row !important;
@@ -34,9 +45,5 @@
   }
   .table-header-wrapper span:first-child {
     margin-right: 10px !important;
-  }
-  // hide unusable stuff
-  ocx-column-group-selection {
-    display: none;
   }
 }

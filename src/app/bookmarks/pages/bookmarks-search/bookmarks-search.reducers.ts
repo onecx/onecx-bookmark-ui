@@ -7,7 +7,7 @@ export const initialState: BookmarksSearchState = {
   columns: bookmarksSearchColumns,
   results: [],
   bookmarkFilter: '',
-  scopeQuickFilter: 'BOOKMARK.SCOPES.ALL'
+  scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE'
 }
 
 export const bookmarksSearchReducer = createReducer(

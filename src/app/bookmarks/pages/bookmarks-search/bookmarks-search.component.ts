@@ -3,7 +3,7 @@ import { Location } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { PrimeIcons } from 'primeng/api'
+import { PrimeIcons, SelectItem } from 'primeng/api'
 
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
 import { Action, DataAction, DataSortDirection } from '@onecx/portal-integration-angular'
@@ -24,11 +24,13 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
   public viewModel$: Observable<BookmarksSearchViewModel> = this.store.select(selectBookmarksSearchViewModel)
   public urls: Record<string, Observable<string>> = {}
   public urls2: Record<string, string> = {}
-  public editPermission = false
   public tableActions: Action[] = []
   public rowActions: DataAction[] = []
+  public quickFilterOptions: SelectItem[] = [{ value: 'BOOKMARK.SCOPES.PRIVATE' }, { value: 'BOOKMARK.SCOPES.PUBLIC' }]
+  public quickFilterValue = this.quickFilterOptions[0].value
   public defaultSortDirection = DataSortDirection.ASCENDING
   public privateBookmarkScope = BookmarkScopeEnum.Private
+  public myPermissions = new Array<string>() // permissions of the user
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
@@ -38,7 +40,11 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     private readonly user: UserService,
     private readonly workspaceService: WorkspaceService
   ) {
-    if (this.user.hasPermission('BOOKMARK#EDIT')) this.editPermission = true
+    // simplify permission checks
+    if (this.user.hasPermission('BOOKMARK#EDIT')) this.myPermissions.push('BOOKMARK#EDIT')
+    if (this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) this.myPermissions.push('BOOKMARK#ADMIN_EDIT')
+    if (this.user.hasPermission('BOOKMARK#ADMIN_DELETE')) this.myPermissions.push('BOOKMARK#ADMIN_DELETE')
+
     this.tableActions = [
       {
         labelKey: 'ACTIONS.EXPORT',
@@ -49,9 +55,16 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
         actionCallback: () => this.exportItems()
       }
     ]
-    /**
-     * Table row actions
-     */
+    this.prepareActionButtons(this.quickFilterValue)
+  }
+  /**
+   * Table row actions
+   * prepare row action buttons according to selected scope: PRIVATE, PUBLIC
+   * filter value: BOOKMARK.SCOPES.[ PUBLIC | PUBLIC ]
+   */
+  private prepareActionButtons(filter: string): void {
+    const prefix = filter.includes('PUBLIC') ? 'ADMIN_' : ''
+    const editPermission = this.user.hasPermission('BOOKMARK#' + prefix + 'EDIT')
     this.rowActions = [
       /*      {
         id: 'action_link',
@@ -61,49 +74,39 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
         callback: (event) => this.router.navigate([this.getUrl(event)])
       },*/
       {
-        id: 'action_view',
-        labelKey: this.editPermission ? 'ACTIONS.EDIT.TOOLTIP' : 'ACTIONS.VIEW.TOOLTIP',
-        icon: this.editPermission ? PrimeIcons.PENCIL : PrimeIcons.EYE,
-        permission: this.editPermission ? 'BOOKMARK#EDIT' : 'BOOKMARK#VIEW',
-        callback: (event) => this.onDetail(event)
+        id: 'action_detail',
+        labelKey: editPermission ? 'ACTIONS.EDIT.LABEL' : 'ACTIONS.VIEW.LABEL',
+        icon: editPermission ? PrimeIcons.PENCIL : PrimeIcons.EYE,
+        permission: editPermission ? 'BOOKMARK#' + prefix + 'EDIT' : 'BOOKMARK#VIEW',
+        callback: (data) => this.onDetail(editPermission ? 'EDIT' : 'VIEW', data)
       },
-      /*      {
-        id: 'action_copy',
-        labelKey: 'ACTIONS.COPY.TOOLTIP',
-        icon: PrimeIcons.COPY,
-        permission: 'BOOKMARK#CREATE',
-        callback: (event) => this.onCopy(event)
-      },*/
-      /*      {
-        id: 'action_up',
-        labelKey: 'ACTIONS.EDIT.UP',
-        icon: PrimeIcons.ARROW_UP,
-        permission: 'BOOKMARK#EDIT',
-        callback: (event) => this.onUp(event)
-      },
-      {
-        id: 'action_down',
-        labelKey: 'ACTIONS.EDIT.DOWN',
-        icon: PrimeIcons.ARROW_DOWN,
-        permission: 'BOOKMARK#EDIT',
-        callback: (event) => this.onDown(event)
-      },*/
       {
         id: 'action_delete',
-        labelKey: 'ACTIONS.DELETE.TOOLTIP',
+        labelKey: 'ACTIONS.DELETE.LABEL',
         icon: PrimeIcons.TRASH,
         classes: ['danger-action-text'],
-        permission: 'BOOKMARK#DELETE',
-        callback: (event) => this.onDelete(event)
+        permission: 'BOOKMARK#' + prefix + 'DELETE',
+        callback: (data) => this.onDelete(data)
       }
     ]
   }
 
-  ngOnInit() {
+  public ngOnInit() {
     this.search()
   }
 
-  ngAfterViewInit() {
+  public hasPermissions(scope: BookmarkScopeEnum, perm: string) {
+    let hasPerm = false
+    if (scope === BookmarkScopeEnum.Private) {
+      hasPerm = this.user.hasPermission(perm)
+    }
+    if (scope === BookmarkScopeEnum.Public) {
+      hasPerm = this.user.hasPermission('ADMIN_' + perm)
+    }
+    return hasPerm
+  }
+
+  public ngAfterViewInit() {
     fromEvent<KeyboardEvent>(this.bookmarkFilter?.nativeElement, 'keyup')
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((event: KeyboardEvent) => this.onFilterBookmarks(event))
@@ -120,12 +123,6 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public onUp(data: Bookmark): void {
-    console.log('onUp', data)
-  }
-  public onDown(data: Bookmark): void {
-    console.log('onUp', data)
-  }
   public onNavigate(data: Bookmark): void {
     console.log('onNavigate', data)
     this.router.navigate([''])
@@ -133,7 +130,7 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     // [routerLink]="getUrl(item) | async"
     // this.router.navigate(['./', data., 'menu'], { relativeTo: this.route })
   }
-  public onDetail(data: Bookmark): void {
+  public onDetail(mode: string, data: Bookmark): void {
     this.store.dispatch(BookmarksSearchActions.editBookmarksButtonClicked({ id: data.id }))
   }
   public onCopy(data: Bookmark): void {
@@ -149,17 +146,22 @@ export class BookmarksSearchComponent implements OnInit, AfterViewInit {
     else return ''
   }
 
-  search() {
+  public search() {
     this.store.dispatch(BookmarksSearchActions.searchTriggered())
   }
 
-  exportItems() {
+  public exportItems() {
     this.store.dispatch(BookmarksSearchActions.exportButtonClicked())
   }
 
   public onFilterBookmarks(event: Event): void {
     const bookmarkFilter = (event.target as HTMLInputElement)?.value ?? ''
     this.store.dispatch(BookmarksSearchActions.bookmarkFilterChanged({ bookmarkFilter }))
+  }
+
+  public handleQuickFilterChange(scopeQuickFilter: string): void {
+    this.prepareActionButtons(scopeQuickFilter)
+    this.store.dispatch(BookmarksSearchActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
   }
 
   public getUrl(bookmark: Bookmark) {

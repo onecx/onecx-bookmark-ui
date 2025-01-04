@@ -273,7 +273,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     currentMfe: MfeInfo,
     currentWorkspace: Workspace
   ) {
-    return isBookmarkable
+    const dialogBody = isBookmarkable
       ? {
           type: CreateUpdateBookmarkDialogComponent,
           inputs: {
@@ -291,6 +291,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
             mfeBaseUrl: currentMfe.baseHref
           }
         }
+    return dialogBody
   }
 
   private getPrimaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails {
@@ -304,12 +305,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private getSecondaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails | undefined {
-    return isBookmarkable
-      ? {
+    const secondaryButton = isBookmarkable
+      ? ({
           key: `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'UPDATE' : 'CREATE'}_ACTIONS.CANCEL`,
           icon: isBookmarked ? PrimeIcons.TRASH : PrimeIcons.TIMES
-        }
+        } as ButtonDialogButtonDetails)
       : undefined
+    return secondaryButton
   }
 
   private createBookmark(
@@ -347,7 +349,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     return this.bookmarkApiUtils.deleteBookmarkById(bookmarkId)
   }
 
-  private handleBookmarkLoadError = () => {
+  private readonly handleBookmarkLoadError = () => {
     this.bookmarkLoadingError = true
   }
 }
