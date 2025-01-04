@@ -120,7 +120,7 @@
     "jest-sonar-reporter": "^2.0.0",
     "js-yaml": "^4.1.0",
     "ngx-translate-testing": "^7.0.0",
-    "nx": "19.8.2",
+    "nx": "20.3.0",
     "prettier": "^3.3.3",
     "sonar-scanner": "^3.1.0",
     "sonarqube-scanner": "4.2.2",
