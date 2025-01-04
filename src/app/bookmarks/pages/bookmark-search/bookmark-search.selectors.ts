@@ -4,16 +4,16 @@ import { createChildSelectors } from '@onecx/ngrx-accelerator'
 
 import { BookmarkScopeEnum } from 'src/app/shared/generated'
 
-import { bookmarksFeature } from '../../bookmarks.reducers'
-import { initialState } from './bookmarks-search.reducers'
-import { BookmarksSearchViewModel } from './bookmarks-search.viewmodel'
+import { bookmarkFeature } from '../../bookmark.reducers'
+import { initialState } from './bookmark-search.reducers'
+import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
 
-export const bookmarksSearchSelectors = createChildSelectors(bookmarksFeature.selectSearch, initialState)
+export const bookmarkSearchSelectors = createChildSelectors(bookmarkFeature.selectSearch, initialState)
 
 export const selectResults = createSelector(
-  bookmarksSearchSelectors.selectResults,
-  bookmarksSearchSelectors.selectBookmarkFilter,
-  bookmarksSearchSelectors.selectScopeQuickFilter,
+  bookmarkSearchSelectors.selectResults,
+  bookmarkSearchSelectors.selectBookmarkFilter,
+  bookmarkSearchSelectors.selectScopeQuickFilter,
   (results, bookmarkFilter, scopeQuickFilter) => {
     return results
       .map((item) => ({
@@ -32,12 +32,12 @@ export const selectResults = createSelector(
   }
 )
 
-export const selectBookmarksSearchViewModel = createSelector(
-  bookmarksSearchSelectors.selectColumns,
+export const selectBookmarkSearchViewModel = createSelector(
+  bookmarkSearchSelectors.selectColumns,
   selectResults,
-  bookmarksSearchSelectors.selectBookmarkFilter,
-  bookmarksSearchSelectors.selectScopeQuickFilter,
-  (columns, results, bookmarkFilter, scopeQuickFilter): BookmarksSearchViewModel => ({
+  bookmarkSearchSelectors.selectBookmarkFilter,
+  bookmarkSearchSelectors.selectScopeQuickFilter,
+  (columns, results, bookmarkFilter, scopeQuickFilter): BookmarkSearchViewModel => ({
     columns,
     results,
     bookmarkFilter,

@@ -1,6 +1,6 @@
 import { Bookmark } from 'src/app/shared/generated'
 
-export interface CreateUpdateBookmarkDialogViewModel {
+export interface BookmarkCreateUpdateViewModel {
   initialBookmark: Bookmark | undefined
   permissions: string[] | undefined
 }

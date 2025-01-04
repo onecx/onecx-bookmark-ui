@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
-import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { CreateUpdateBookmarkDialogComponent } from './create-update-bookmark-dialog.component'
+
+import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
+
+import { BookmarkDetailComponent } from './bookmark-detail.component'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -22,15 +24,15 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
-describe('CreateUpdateBookmarkDialogComponent', () => {
-  let component: CreateUpdateBookmarkDialogComponent
-  let fixture: ComponentFixture<CreateUpdateBookmarkDialogComponent>
+describe('BookmarkDetailComponent', () => {
+  let component: BookmarkDetailComponent
+  let fixture: ComponentFixture<BookmarkDetailComponent>
 
   const mockActivatedRoute = {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CreateUpdateBookmarkDialogComponent],
+      declarations: [BookmarkDetailComponent],
       imports: [
         PortalCoreModule,
         FormsModule,
@@ -48,7 +50,7 @@ describe('CreateUpdateBookmarkDialogComponent', () => {
       ]
     }).compileComponents()
 
-    fixture = TestBed.createComponent(CreateUpdateBookmarkDialogComponent)
+    fixture = TestBed.createComponent(BookmarkDetailComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

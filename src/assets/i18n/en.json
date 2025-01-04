@@ -1,5 +1,7 @@
 {
   "ACTIONS": {
+    "LABEL": "Actions",
+    "TOOLTIP": "Actions for the data of the table row",
     "CONFIRMATION": {
       "NO": "No",
       "YES": "Yes",
@@ -94,8 +96,8 @@
       "PUBLIC": "Public"
     }
   },
-  "BOOKMARKS_CREATE_UPDATE": {
-    "UPDATE": {
+  "BOOKMARK_DETAIL": {
+    "EDIT": {
       "SUCCESS": "Update successful",
       "FAILED": "Update failed",
       "ERROR": "Update failed",
@@ -112,10 +114,10 @@
     },
     "FORM": {
       "DISPLAY_NAME": "Display Name",
-      "DISPLAY_NAME.TOOLTIP": "Display Name, used in list view and for sorting"
+      "DISPLAY_NAME.TOOLTIP": "This name is used in list view and for sorting"
     }
   },
-  "BOOKMARKS_DELETE": {
+  "BOOKMARK_DELETE": {
     "HEADER": "Delete Bookmark",
     "MESSAGE": "Do you want to delete this Bookmark?",
     "MESSAGE_INFO": "This action cannot be undone!",

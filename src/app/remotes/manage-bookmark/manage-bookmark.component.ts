@@ -48,7 +48,7 @@ import { SharedModule } from 'src/app/shared/shared.module'
 import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
 import { extractPathAfter, mapPathSegmentsToPathParemeters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
-import { CreateUpdateBookmarkDialogComponent } from 'src/app/shared/components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
+import { BookmarkCreateUpdateComponent } from 'src/app/shared/components/dialogs/bookmark-create-update/bookmark-create-update.component'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
 
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
@@ -273,9 +273,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     currentMfe: MfeInfo,
     currentWorkspace: Workspace
   ) {
-    return isBookmarkable
+    const dialogBody = isBookmarkable
       ? {
-          type: CreateUpdateBookmarkDialogComponent,
+          type: BookmarkCreateUpdateComponent,
           inputs: {
             vm: {
               initialBookmark: isBookmarked
@@ -291,6 +291,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
             mfeBaseUrl: currentMfe.baseHref
           }
         }
+    return dialogBody
   }
 
   private getPrimaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails {
@@ -304,12 +305,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private getSecondaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails | undefined {
-    return isBookmarkable
-      ? {
+    const secondaryButton = isBookmarkable
+      ? ({
           key: `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'UPDATE' : 'CREATE'}_ACTIONS.CANCEL`,
           icon: isBookmarked ? PrimeIcons.TRASH : PrimeIcons.TIMES
-        }
+        } as ButtonDialogButtonDetails)
       : undefined
+    return secondaryButton
   }
 
   private createBookmark(
@@ -347,7 +349,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     return this.bookmarkApiUtils.deleteBookmarkById(bookmarkId)
   }
 
-  private handleBookmarkLoadError = () => {
+  private readonly handleBookmarkLoadError = () => {
     this.bookmarkLoadingError = true
   }
 }

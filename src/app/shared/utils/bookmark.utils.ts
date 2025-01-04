@@ -1,5 +1,7 @@
 import equal from 'fast-deep-equal'
+
 import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
+
 import { Bookmark } from '../generated'
 import { extractPathAfter, mapPathSegmentsToPathParemeters } from './path.utils'
 

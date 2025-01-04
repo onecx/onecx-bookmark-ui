@@ -11,20 +11,20 @@ import {
 
 import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 
-import { CreateUpdateBookmarkDialogViewModel } from './create-update-bookmark-dialog.viewmodel'
+import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 @Component({
-  selector: 'app-create-update-bookmark-dialog',
-  templateUrl: './create-update-bookmark-dialog.component.html'
+  selector: 'app-bookmark-detail',
+  templateUrl: './bookmark-detail.component.html'
 })
-export class CreateUpdateBookmarkDialogComponent
+export class BookmarkDetailComponent
   implements
     DialogPrimaryButtonDisabled,
     DialogResult<Bookmark | undefined>,
-    DialogButtonClicked<CreateUpdateBookmarkDialogComponent>,
+    DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
-  @Input() public vm: CreateUpdateBookmarkDialogViewModel = {
+  @Input() public vm: BookmarkDetailViewModel = {
     initialBookmark: undefined,
     permissions: undefined
   }
