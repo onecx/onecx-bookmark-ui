@@ -1,4 +1,5 @@
 import { AppStateService, ConfigurationService, PortalApiConfiguration } from '@onecx/portal-integration-angular'
+
 import { environment } from 'src/environments/environment'
 import { Configuration } from '../generated'
 

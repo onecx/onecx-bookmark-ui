@@ -36,7 +36,7 @@ export class BookmarkDetailComponent
 
   constructor(private readonly userService: UserService) {
     this.formGroup = new FormGroup({
-      displayName: new FormControl(null, [Validators.maxLength(255), Validators.required])
+      displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
     })
     this.formGroup.statusChanges
       .pipe(

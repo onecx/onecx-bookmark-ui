@@ -18,8 +18,8 @@ import { Bookmark, BookmarkScopeEnum, BookmarksInternal, UpdateBookmark } from '
 
 import { BookmarkSearchActions } from './bookmark-search.actions'
 import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
-import { BookmarkDetailComponent } from './dialogs/bookmark-detail/bookmark-detail.component'
-import { BookmarkDeleteComponent } from './dialogs/bookmark-delete/bookmark-delete.component'
+import { BookmarkDetailComponent } from './bookmark-detail/bookmark-detail.component'
+import { BookmarkDeleteComponent } from './bookmark-delete/bookmark-delete.component'
 
 @Injectable()
 export class BookmarkSearchEffects {

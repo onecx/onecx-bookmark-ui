@@ -1,7 +1,6 @@
 import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { FormsModule } from '@angular/forms'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 import { RippleModule } from 'primeng/ripple'
@@ -44,13 +43,12 @@ import {
 } from '@onecx/portal-integration-angular'
 import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
 import { extractPathAfter, mapPathSegmentsToPathParemeters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
-import { BookmarkCreateUpdateComponent } from 'src/app/shared/components/dialogs/bookmark-create-update/bookmark-create-update.component'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
 
+import { BookmarkCreateUpdateComponent } from './bookmark-create-update/bookmark-create-update.component'
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
 
 export function slotInitializer(slotService: SlotService) {
@@ -63,8 +61,6 @@ export function slotInitializer(slotService: SlotService) {
     AngularAuthModule,
     AngularRemoteComponentsModule,
     CommonModule,
-    FormsModule,
-    SharedModule,
     RippleModule,
     PortalCoreModule,
     ProgressSpinnerModule,
@@ -299,7 +295,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     return {
       key: isBookmarkable
         ? 'REMOTES.MANAGE_BOOKMARK.DIALOG.' + mode + '_ACTIONS.SAVE'
-        : 'REMOTES.MANAGE_BOOKMARK.DIALOG.NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON',
+        : 'REMOTES.MANAGE_BOOKMARK.DIALOG.NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION',
       icon: isBookmarkable ? PrimeIcons.CHECK : PrimeIcons.TIMES
     }
   }
