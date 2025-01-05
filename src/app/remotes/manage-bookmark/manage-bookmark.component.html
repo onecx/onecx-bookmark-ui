@@ -1,29 +1,29 @@
 <ng-container *ngIf="permissions.includes('BOOKMARK#CREATE')">
   <div class="layout-topbar-item" *ngIf="!bookmarkLoadingError">
     <p-button
-      *ngIf="bookmarks$.getValue() && (isBookmarked$ | async) !== undefined; else loadingButton"
+      *ngIf="bookmarks$.getValue() && (isBookmarked$ | async) !== undefined; else loading"
       styleClass="min-w-0 justify-content-center"
       (onClick)="onOpenBookmarkDialog()"
       [rounded]="true"
       [text]="true"
-      [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.ADD' | translate"
-      [pTooltip]="('REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.' + ((isBookmarked$ | async) ? 'UPDATE' : 'ADD')) | translate"
+      [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.ADD' | translate"
+      [pTooltip]="('REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.' + ((isBookmarked$ | async) ? 'UPDATE' : 'ADD')) | translate"
       tooltipPosition="top"
       tooltipEvent="hover"
     >
-      <i class="pi pi-star-fill fs-xlarge p-button-icon" *ngIf="isBookmarked$ | async; else notBookmarkedIcon"></i>
-      <ng-template #notBookmarkedIcon>
+      <i class="pi pi-star-fill fs-xlarge p-button-icon" *ngIf="isBookmarked$ | async; else notBookmarked"></i>
+      <ng-template #notBookmarked>
         <i class="pi pi-star fs-xlarge p-button-icon"></i>
       </ng-template>
     </p-button>
-    <ng-template #loadingButton>
+    <ng-template #loading>
       <p-button
         styleClass="min-w-0 justify-content-center"
         [rounded]="true"
         [text]="true"
         [loading]="true"
-        [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.LOADING' | translate"
-        [pTooltip]="'REMOTES.MANAGE_BOOKMARK.BUTTON.TOOLTIP.LOADING' | translate"
+        [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.LOADING' | translate"
+        [pTooltip]="'REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.LOADING' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-button>

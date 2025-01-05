@@ -71,16 +71,11 @@
     "CREATION_USER": "Erstellt von",
     "MODIFICATION_DATE": "Geändert am",
     "MODIFICATION_USER": "Geändert von",
-    "MANDATORY": "Notwendig",
-    "OPERATOR": "Automatisiert erstellt",
-    "OPERATOR_MESSAGE": "Dieser Workspace wurde automatisiert erstellt. Alle Änderungen gehen beim nächsten Deployment verloren.",
     "TOOLTIPS": {
       "CREATION_DATE": "Zeitpunkt der Erstellung",
       "CREATION_USER": "ID des Benutzers der Erstellung",
       "MODIFICATION_DATE": "Zeitpunkt der letzten Änderung",
-      "MODIFICATION_USER": "ID des Benutzers der letzten Änderung",
-      "MANDATORY": "Wenn gesetzt, dann ist dieser Workspace notwendig für den Betrieb. Der Workspace kann nicht somit nicht gelöscht werden.",
-      "OPERATOR": "Wenn gesetzt, dann kann der Workspace nicht gelöscht werden und alle Änderungen gehen beim beim nächsten Deployment verloren."
+      "MODIFICATION_USER": "ID des Benutzers der letzten Änderung"
     }
   },
   "BOOKMARK": {
@@ -109,7 +104,7 @@
       "HEADER_READONLY": "Lesezeichen anzeigen"
     },
     "CREATE": {
-      "SUCCESS": "Lesezeichen wurde erfolgreich erstellt.",
+      "SUCCESS": "Lesezeichen erfolgreich erstellt.",
       "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
     },
     "FORM": {
@@ -126,8 +121,8 @@
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Lesezeichen",
-    "SUB_HEADER": "Anzeigen und verwalten meiner Lesezeichen.",
-    "BREADCRUMB": "Suche",
+    "SUB_HEADER": "Anzeigen und verwalten von Lesezeichen",
+    "BREADCRUMB": "Lesezeichen",
     "CARD_ACTIONS": {
       "DELETE": "Lesezeichen löschen",
       "VISIT": "Zu Lesezeichen navigieren"
@@ -138,7 +133,7 @@
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
-      "BUTTON": {
+      "ACTION": {
         "TOOLTIP": {
           "ADD": "Lesezeichen hinzufügen",
           "UPDATE": "Lesezeichen verwalten",
@@ -150,13 +145,13 @@
         "HEADER_UPDATE": "Lesezeichen verwalten",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Aktuell kann kein Lesezeichen für diese Seite erstellt werden.",
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Wenden Sie sich an einen Administrator. Derzeit können Sie nur ein Lesezeichen für die Startseite ({{mfeBaseUrl}}) der Anwendung erstellen.",
-        "NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON": "Schließen",
+        "NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION": "Schließen",
         "CREATE_ACTIONS": {
           "CANCEL": "Abbrechen",
           "SAVE": "Speichern"
         },
         "UPDATE_ACTIONS": {
-          "CANCEL": "Lesezeichen entfernen",
+          "CANCEL": "Löschen",
           "SAVE": "Speichern"
         }
       }
@@ -172,6 +167,21 @@
       "LOADING_ERROR_DETAIL": "Bitte versuchen Sie es in Kürze erneut.",
       "NO_PRIVATE_BOOKMARKS": "Keine Lesezeichen angelegt.",
       "NO_PRIVATE_BOOKMARKS_DETAIL": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die aktuelle Seite zu erstellen."
+    }
+  },
+  "VALIDATION": {
+    "FORM_INVALID": "Das Formular enthält ungültige Werte.",
+    "HINTS": {
+      "FORMAT_URL": "Format: "
+    },
+    "ERRORS": {
+      "PARSE_ERROR": "Parserfehler: Die enthaltene Struktur entspricht nicht dem erwarteten Format.",
+      "INTERNAL_ERROR": "Interner Fehler",
+      "EMPTY_REQUIRED_FIELD": "Dieses Feld ist ein Pflichtfeld.",
+      "MAXIMUM_LENGTH": "Es sind nur {{chars}} Zeichen erlaubt.",
+      "MINIMUM_LENGTH": "Es sind mindestens {{chars}} Zeichen erforderlich.",
+      "PATTERN_ERROR": "Die Eingabe entspricht nicht dem benötigten Format.",
+      "FILETYPE_PATTERN_ERROR": "Die Datei entspricht nicht den erlaubten Formaten: .png, .jpg, .jpeg"
     }
   }
 }
