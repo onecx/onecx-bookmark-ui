@@ -32,7 +32,7 @@ describe('BookmarkCreateUpdateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkCreateUpdateComponent],
+      declarations: [],
       imports: [
         PortalCoreModule,
         FormsModule,
