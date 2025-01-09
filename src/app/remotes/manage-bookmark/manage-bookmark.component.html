@@ -6,8 +6,8 @@
       (onClick)="onOpenBookmarkDialog()"
       [rounded]="true"
       [text]="true"
-      [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.ADD' | translate"
-      [pTooltip]="('REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.' + ((isBookmarked$ | async) ? 'UPDATE' : 'ADD')) | translate"
+      [ariaLabel]="('REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE')) | translate"
+      [pTooltip]="('REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE')) | translate"
       tooltipPosition="top"
       tooltipEvent="hover"
     >
@@ -22,8 +22,8 @@
         [rounded]="true"
         [text]="true"
         [loading]="true"
-        [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.LOADING' | translate"
-        [pTooltip]="'REMOTES.MANAGE_BOOKMARK.ACTION.TOOLTIP.LOADING' | translate"
+        [ariaLabel]="'REMOTES.MANAGE_BOOKMARK.ACTION.LOADING' | translate"
+        [pTooltip]="'REMOTES.MANAGE_BOOKMARK.ACTION.LOADING' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-button>

@@ -87,6 +87,7 @@
     "WORKSPACE": "Workspace",
     "PRODUCT": "Application",
     "ENDPOINT": "Endpoint",
+    "ENDPOINT_PARAMETER": "Parameter",
     "APP_ID": "App ID",
     "SCOPE": "Scope",
     "SCOPES": {
@@ -97,7 +98,7 @@
   },
   "BOOKMARK_DETAIL": {
     "DISPLAY_NAME": "Display Name",
-    "DISPLAY_NAME.TOOLTIP": "This name is used in list view and for sorting",
+    "DISPLAY_NAME.TOOLTIP": "This name is used in list view.",
     "CREATE": {
       "SUCCESS": "Bookmark was created successfully.",
       "ERROR": "Bookmark couldn't be created."
@@ -141,23 +142,20 @@
   "REMOTES": {
     "MANAGE_BOOKMARK": {
       "ACTION": {
-        "TOOLTIP": {
-          "ADD": "Add Bookmark",
-          "UPDATE": "Edit Bookmark",
-          "LOADING": "Loading Bookmark"
-        }
+        "ADD": "Add Bookmark",
+        "UPDATE": "Edit Bookmark",
+        "LOADING": "Loading Bookmark"
       },
       "DIALOG": {
         "HEADER_CREATE": "Add Bookmark",
-        "HEADER_UPDATE": "Edit Bookmark",
+        "HEADER_EDIT": "Edit Bookmark",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Bookmark creation is currently not enabled for this page.",
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Please contact an administrator. At this time your can only create a Bookmark for the applications homepage ({{mfeBaseUrl}}).",
-        "NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION": "Close",
         "CREATE_ACTIONS": {
           "CANCEL": "Cancel",
           "SAVE": "Save"
         },
-        "UPDATE_ACTIONS": {
+        "EDIT_ACTIONS": {
           "CANCEL": "Delete",
           "SAVE": "Save"
         }

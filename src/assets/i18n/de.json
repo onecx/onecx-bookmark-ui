@@ -87,6 +87,7 @@
     "WORKSPACE": "Workspace",
     "PRODUCT": "Applikation",
     "ENDPOINT": "Endpunkt",
+    "ENDPOINT_PARAMETER": "Parameter",
     "APP_ID": "App ID",
     "SCOPE": "Bereich",
     "SCOPES": {
@@ -97,7 +98,7 @@
   },
   "BOOKMARK_DETAIL": {
     "DISPLAY_NAME": "Anzeigename",
-    "DISPLAY_NAME.TOOLTIP": "Dieser Name wird in der Listenansicht und zum Sortieren verwendet",
+    "DISPLAY_NAME.TOOLTIP": "Dieser Name wird in der Listenansicht verwendet.",
     "CREATE": {
       "SUCCESS": "Lesezeichen erfolgreich erstellt.",
       "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
@@ -141,15 +142,13 @@
   "REMOTES": {
     "MANAGE_BOOKMARK": {
       "ACTION": {
-        "TOOLTIP": {
-          "ADD": "Lesezeichen hinzufügen",
-          "UPDATE": "Lesezeichen verwalten",
-          "LOADING": "Lesezeichen werden geladen"
-        }
+        "CREATE": "Lesezeichen hinzufügen",
+        "EDIT": "Lesezeichen verwalten",
+        "LOADING": "Lesezeichen werden geladen"
       },
       "DIALOG": {
         "HEADER_CREATE": "Lesezeichen hinzufügen",
-        "HEADER_UPDATE": "Lesezeichen verwalten",
+        "HEADER_EDIT": "Lesezeichen verwalten",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Aktuell kann kein Lesezeichen für diese Seite erstellt werden.",
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Wenden Sie sich an einen Administrator. Derzeit können Sie nur ein Lesezeichen für die Startseite ({{mfeBaseUrl}}) der Anwendung erstellen.",
         "NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION": "Schließen",
@@ -157,7 +156,7 @@
           "CANCEL": "Abbrechen",
           "SAVE": "Speichern"
         },
-        "UPDATE_ACTIONS": {
+        "EDIT_ACTIONS": {
           "CANCEL": "Löschen",
           "SAVE": "Speichern"
         }

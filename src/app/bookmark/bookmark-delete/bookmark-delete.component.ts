@@ -11,4 +11,5 @@ export class BookmarkDeleteComponent {
   @Input() public bookmark: Bookmark | undefined
 
   public BookmarkScopeEnum = BookmarkScopeEnum
+  public Object = Object
 }

@@ -27,24 +27,12 @@ export class BookmarkDetailComponent
   public dialogResult: Bookmark | undefined = undefined
   public isPublicBookmark = false
   private permissionKey = 'BOOKMARK#EDIT'
+  private hasPermission = false
 
   constructor(private readonly userService: UserService) {
     this.formGroup = new FormGroup({
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
     })
-    this.formGroup.statusChanges
-      .pipe(
-        map((status) => {
-          return status === 'VALID'
-        })
-      )
-      .subscribe((val) => {
-        if (this.hasEditPermission()) {
-          this.primaryButtonEnabled.emit(val)
-        } else {
-          this.primaryButtonEnabled.emit(false)
-        }
-      })
   }
 
   ocxDialogButtonClicked() {
@@ -59,9 +47,23 @@ export class BookmarkDetailComponent
         this.isPublicBookmark = true
       }
     }
-    if (!this.hasEditPermission()) {
+    this.hasPermission = this.hasEditPermission()
+    if (!this.hasPermission) {
       this.formGroup.disable()
     }
+    this.formGroup.statusChanges
+      .pipe(
+        map((status) => {
+          return status === 'VALID'
+        })
+      )
+      .subscribe((val) => {
+        if (this.hasPermission) {
+          this.primaryButtonEnabled.emit(val)
+        } else {
+          this.primaryButtonEnabled.emit(false)
+        }
+      })
   }
 
   private hasEditPermission(): boolean {

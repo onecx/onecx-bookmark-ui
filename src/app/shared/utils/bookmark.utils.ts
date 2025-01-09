@@ -3,7 +3,7 @@ import equal from 'fast-deep-equal'
 import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 
 import { Bookmark } from '../generated'
-import { extractPathAfter, mapPathSegmentsToPathParemeters } from './path.utils'
+import { extractPathAfter, mapPathSegmentsToPathParameters } from './path.utils'
 
 export function isPageBookmarkable(currentWorkspace: Workspace, currentMfe: MfeInfo, currentPage?: PageInfo) {
   if (currentPage) {
@@ -48,7 +48,7 @@ export function findBookmarkForEndpoint(
   let currentPageEndpointParameters = {}
   if (currentPage && endpoint.path) {
     const pagePath = extractPathAfter(currentPage.path, currentMfe.baseHref)
-    currentPageEndpointParameters = mapPathSegmentsToPathParemeters(endpoint.path, pagePath)
+    currentPageEndpointParameters = mapPathSegmentsToPathParameters(endpoint.path, pagePath)
   }
   return bookmarks.find((bookmark) => {
     return (
