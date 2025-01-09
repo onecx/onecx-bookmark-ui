@@ -5,13 +5,12 @@ import { Action, Store } from '@ngrx/store'
 import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import { PrimeIcons } from 'primeng/api'
 
+import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import {
-  AppStateService,
   DialogState,
   ExportDataService,
   PortalDialogService,
-  PortalMessageService,
-  UserService
+  PortalMessageService
 } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScopeEnum, BookmarksInternal, UpdateBookmark } from 'src/app/shared/generated'
@@ -34,9 +33,18 @@ export class BookmarkSearchEffects {
     private readonly userService: UserService
   ) {}
 
-  searchTriggered$ = createEffect(() => {
+  search$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.searchTriggered),
+      ofType(BookmarkSearchActions.search),
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
+      mergeMap(([, workspace]) => {
+        return this.performSearch(workspace.workspaceName)
+      })
+    )
+  })
+  refreshSearch$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(BookmarkSearchActions.updateBookmarksSucceeded, BookmarkSearchActions.deleteBookmarksSucceeded),
       withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
       mergeMap(([, workspace]) => {
         return this.performSearch(workspace.workspaceName)
@@ -44,26 +52,19 @@ export class BookmarkSearchEffects {
     )
   })
 
-  performSearch(workspaceName: string) {
-    return this.bookmarksService
-      .searchBookmarksByCriteria({
-        workspaceName: workspaceName
-      })
-      .pipe(
-        map(({ stream, totalElements }) =>
-          BookmarkSearchActions.bookmarkSearchResultsReceived({
-            results: stream ?? [],
-            totalNumberOfResults: totalElements ?? 0
-          })
-        ),
-        catchError((error) =>
-          of(
-            BookmarkSearchActions.bookmarkSearchResultsLoadingFailed({
-              error
-            })
-          )
-        )
-      )
+  /**
+   * Bookmark Search in context of current workspace
+   */
+  private performSearch(workspaceName: string) {
+    return this.bookmarksService.searchBookmarksByCriteria({ workspaceName: workspaceName }).pipe(
+      map(({ stream, totalElements }) =>
+        BookmarkSearchActions.bookmarkSearchResultsReceived({
+          results: stream ?? [],
+          totalNumberOfResults: totalElements ?? 0
+        })
+      ),
+      catchError((error) => of(BookmarkSearchActions.bookmarkSearchResultsLoadingFailed({ error })))
+    )
   }
 
   exportData$ = createEffect(
@@ -79,16 +80,6 @@ export class BookmarkSearchEffects {
     { dispatch: false }
   )
 
-  refreshSearch$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(BookmarkSearchActions.updateBookmarksSucceeded, BookmarkSearchActions.deleteBookmarksSucceeded),
-      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
-      mergeMap(([, workspace]) => {
-        return this.performSearch(workspace.workspaceName)
-      })
-    )
-  })
-
   detailButtonClicked$ = createEffect(() => {
     const canEdit = (bookmark?: Bookmark) => {
       return (
@@ -97,26 +88,22 @@ export class BookmarkSearchEffects {
       )
     }
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.detailBookmarkButtonClicked),
+      ofType(BookmarkSearchActions.openDetailDialog),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
       map(([action, results]) => {
         return results.find((item) => item.id === action.id)
       }),
-      mergeMap((initialBookmark) => {
+      mergeMap((bookmark) => {
         return this.portalDialogService.openDialog<Bookmark | undefined>(
-          `BOOKMARK_DETAIL.EDIT.HEADER${canEdit(initialBookmark) ? '' : '_READONLY'}`,
+          `BOOKMARK_DETAIL.${canEdit(bookmark) ? 'EDIT' : 'VIEW'}.HEADER`,
           {
             type: BookmarkDetailComponent,
-            inputs: {
-              vm: {
-                initialBookmark
-              }
-            }
+            inputs: { vm: { initialBookmark: bookmark } }
           },
-          `BOOKMARK_DETAIL.EDIT.FORM.${canEdit(initialBookmark) ? 'SAVE' : 'CANCEL'}`,
-          canEdit(initialBookmark) ? 'BOOKMARK_DETAIL.EDIT.FORM.CANCEL' : undefined,
+          canEdit(bookmark) ? 'ACTIONS.SAVE' : 'ACTIONS.NAVIGATION.CLOSE',
+          canEdit(bookmark) ? 'ACTIONS.CANCEL' : undefined,
           {
-            baseZIndex: 100,
+            modal: true,
             draggable: true,
             resizable: true,
             width: '400px'
@@ -124,10 +111,11 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
+        console.log('dialogResult', dialogResult)
         if (
           !dialogResult ||
-          (dialogResult.button == 'secondary' && canEdit(dialogResult.result)) ||
-          (dialogResult.button == 'primary' && !canEdit(dialogResult.result))
+          (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
+          (dialogResult.button === 'primary' && !canEdit(dialogResult.result))
         ) {
           return of(BookmarkSearchActions.updateBookmarksCancelled())
         }
@@ -143,22 +131,14 @@ export class BookmarkSearchEffects {
         } as UpdateBookmark
         return this.bookmarksService.updateBookmark(itemToEditId, itemToEdit).pipe(
           map(() => {
-            this.messageService.success({
-              summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS'
-            })
+            this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
             return BookmarkSearchActions.updateBookmarksSucceeded()
           })
         )
       }),
       catchError((error) => {
-        this.messageService.error({
-          summaryKey: 'BOOKMARK_DETAIL.EDIT.ERROR'
-        })
-        return of(
-          BookmarkSearchActions.updateBookmarksFailed({
-            error
-          })
-        )
+        this.messageService.error({ summaryKey: 'BOOKMARK_DETAIL.EDIT.ERROR' })
+        return of(BookmarkSearchActions.updateBookmarksFailed({ error }))
       })
     )
   })
@@ -176,7 +156,12 @@ export class BookmarkSearchEffects {
             'BOOKMARK_DELETE.HEADER',
             { type: BookmarkDeleteComponent, inputs: { bookmark: itemToDelete } },
             { key: 'ACTIONS.CONFIRMATION.YES', icon: PrimeIcons.CHECK },
-            { key: 'ACTIONS.CONFIRMATION.NO', icon: PrimeIcons.TIMES }
+            { key: 'ACTIONS.CONFIRMATION.NO', icon: PrimeIcons.TIMES },
+            {
+              modal: true,
+              draggable: true,
+              resizable: true
+            }
           )
           .pipe(
             map((state): [DialogState<unknown>, Bookmark | undefined] => {

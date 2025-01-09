@@ -1,7 +1,5 @@
 import { APP_INITIALIZER, DoBootstrap, Injector, isDevMode, NgModule } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { Router, RouterModule } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { Actions, EffectsModule, EffectSources, EffectsRunner } from '@ngrx/effects'
@@ -48,8 +46,6 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       }
     }),
     SharedModule,
-    BrowserModule,
-    BrowserAnimationsModule,
     AngularAuthModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effectProvidersForWorkaround),

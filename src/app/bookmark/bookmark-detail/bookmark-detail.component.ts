@@ -20,20 +20,37 @@ export class BookmarkDetailComponent
     DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
-  @Input() public vm: BookmarkDetailViewModel = {
-    initialBookmark: undefined,
-    permissions: undefined
-  }
+  @Input() public vm: BookmarkDetailViewModel = { initialBookmark: undefined, permissions: undefined }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public formGroup: FormGroup
   public dialogResult: Bookmark | undefined = undefined
   public isPublicBookmark = false
+  private permissionKey = 'BOOKMARK#EDIT'
+  private hasPermission = false
 
   constructor(private readonly userService: UserService) {
     this.formGroup = new FormGroup({
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
     })
+  }
+
+  ocxDialogButtonClicked() {
+    this.dialogResult = { ...this.vm.initialBookmark, ...this.formGroup.value }
+  }
+
+  ngOnInit() {
+    if (this.vm.initialBookmark) {
+      this.formGroup.patchValue({ ...this.vm.initialBookmark })
+      if (this.vm.initialBookmark.scope === BookmarkScopeEnum.Public) {
+        this.permissionKey = 'BOOKMARK#ADMIN_EDIT'
+        this.isPublicBookmark = true
+      }
+    }
+    this.hasPermission = this.hasEditPermission()
+    if (!this.hasPermission) {
+      this.formGroup.disable()
+    }
     this.formGroup.statusChanges
       .pipe(
         map((status) => {
@@ -41,40 +58,18 @@ export class BookmarkDetailComponent
         })
       )
       .subscribe((val) => {
-        if (!this.hasEditPermission() || this.isPublicBookmark) {
-          this.primaryButtonEnabled.emit(true)
-        } else {
+        if (this.hasPermission) {
           this.primaryButtonEnabled.emit(val)
+        } else {
+          this.primaryButtonEnabled.emit(false)
         }
       })
   }
 
-  ocxDialogButtonClicked() {
-    this.dialogResult = {
-      ...this.vm.initialBookmark,
-      ...this.formGroup.value
-    }
-  }
-
-  ngOnInit() {
-    if (this.vm.initialBookmark) {
-      this.formGroup.patchValue({
-        ...this.vm.initialBookmark
-      })
-      if (this.vm.initialBookmark.scope === BookmarkScopeEnum.Public) {
-        this.isPublicBookmark = true
-      }
-    }
-    if (!this.hasEditPermission() || this.isPublicBookmark) {
-      this.formGroup.disable()
-    }
-  }
-
-  hasEditPermission(): boolean {
-    const key = 'BOOKMARK#EDIT'
+  private hasEditPermission(): boolean {
     if (this.vm.permissions) {
-      return this.vm.permissions.includes(key)
+      return this.vm.permissions.includes(this.permissionKey)
     }
-    return this.userService.hasPermission(key)
+    return this.userService.hasPermission(this.permissionKey)
   }
 }

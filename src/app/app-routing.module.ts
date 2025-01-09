@@ -8,7 +8,7 @@ import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 export const routes: Routes = [
   {
     matcher: startsWith(''),
-    loadChildren: () => import('./bookmarks/bookmark.module').then((mod) => mod.BookmarkModule)
+    loadChildren: () => import('./bookmark/bookmark.module').then((mod) => mod.BookmarkModule)
   }
 ]
 

@@ -1,18 +1,15 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { FormsModule, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { MessagesModule } from 'primeng/messages'
-import { SharedModule } from 'primeng/api'
-import { TooltipModule } from 'primeng/tooltip'
 import { map } from 'rxjs'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
+import { MessagesModule } from 'primeng/messages'
+import { InputTextModule } from 'primeng/inputtext'
+import { TooltipModule } from 'primeng/tooltip'
 
-import {
-  DialogButtonClicked,
-  DialogPrimaryButtonDisabled,
-  DialogResult,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { UserService } from '@onecx/angular-integration-interface'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 
@@ -25,9 +22,9 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
   imports: [
     errorTailorImports,
     FormsModule,
+    InputTextModule,
     MessagesModule,
     ReactiveFormsModule,
-    SharedModule,
     TooltipModule,
     TranslateModule
   ],
@@ -61,17 +58,20 @@ export class BookmarkCreateUpdateComponent
     DialogPrimaryButtonDisabled,
     DialogResult<Bookmark | undefined>,
     DialogButtonClicked<BookmarkCreateUpdateComponent>,
-    OnInit
+    OnChanges
 {
   @Input() public vm: BookmarkCreateUpdateViewModel = {
     initialBookmark: undefined,
-    permissions: undefined
+    permissions: undefined,
+    mode: 'CREATE'
   }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public formGroup: FormGroup
   public dialogResult: Bookmark | undefined = undefined
   public isPublicBookmark = false
+  private permissionKey = ''
+  private hasPermission = false
 
   constructor(
     private readonly userService: UserService,
@@ -80,19 +80,6 @@ export class BookmarkCreateUpdateComponent
     this.formGroup = new FormGroup({
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
     })
-    this.formGroup.statusChanges
-      .pipe(
-        map((status) => {
-          return status === 'VALID'
-        })
-      )
-      .subscribe((val) => {
-        if (!this.hasEditPermission() || this.isPublicBookmark) {
-          this.primaryButtonEnabled.emit(true)
-        } else {
-          this.primaryButtonEnabled.emit(val)
-        }
-      })
   }
 
   ocxDialogButtonClicked() {
@@ -102,7 +89,7 @@ export class BookmarkCreateUpdateComponent
     }
   }
 
-  ngOnInit() {
+  public ngOnChanges() {
     if (this.vm.initialBookmark) {
       this.formGroup.patchValue({
         ...this.vm.initialBookmark
@@ -111,16 +98,36 @@ export class BookmarkCreateUpdateComponent
         this.isPublicBookmark = true
       }
     }
-    if (!this.hasEditPermission() || this.isPublicBookmark) {
+    this.permissionKey = 'BOOKMARK#' + this.vm.mode
+    this.hasPermission = this.hasEditPermission()
+    if (!this.hasPermission || this.isPublicBookmark) {
       this.formGroup.disable()
     }
+
+    // align button status according to form validation
+    this.formGroup.statusChanges
+      .pipe(
+        map((status) => {
+          return status === 'VALID'
+        })
+      )
+      .subscribe((val) => {
+        if (!this.hasPermission || this.isPublicBookmark) {
+          this.primaryButtonEnabled.emit(false)
+        } else {
+          this.primaryButtonEnabled.emit(val)
+        }
+      })
+    // wait a moment for initialization to activate the primary button
+    setTimeout(() => {
+      this.primaryButtonEnabled.emit(true)
+    }, 500)
   }
 
-  hasEditPermission(): boolean {
-    const key = 'BOOKMARK#EDIT'
+  private hasEditPermission(): boolean {
     if (this.vm.permissions) {
-      return this.vm.permissions.includes(key)
+      return this.vm.permissions.includes(this.permissionKey)
     }
-    return this.userService.hasPermission(key)
+    return this.userService.hasPermission(this.permissionKey)
   }
 }

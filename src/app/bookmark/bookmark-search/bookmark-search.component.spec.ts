@@ -38,7 +38,7 @@ describe('BookmarkSearchComponent', () => {
     columns: bookmarkSearchColumns,
     results: [],
     bookmarkFilter: '',
-    scopeQuickFilter: 'BOOKMARK.SCOPES.ALL'
+    scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE'
   }
 
   beforeAll(() => {
@@ -101,7 +101,7 @@ describe('BookmarkSearchComponent', () => {
   })
 
   it('should dispatch searchButtonClicked action on page init', (done) => {
-    store.scannedActions$.pipe(ofType(BookmarkSearchActions.searchTriggered)).subscribe(() => {
+    store.scannedActions$.pipe(ofType(BookmarkSearchActions.search)).subscribe(() => {
       done()
     })
   })

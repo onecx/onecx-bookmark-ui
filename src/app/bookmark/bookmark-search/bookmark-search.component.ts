@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
-import { Location } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
 import { Store } from '@ngrx/store'
@@ -52,7 +51,7 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
         icon: PrimeIcons.DOWNLOAD,
         show: 'always',
         permission: 'BOOKMARK#EXPORT',
-        actionCallback: () => this.exportItems()
+        actionCallback: () => this.onExportItems()
       }
     ]
     this.prepareActionButtons(this.quickFilterValue)
@@ -92,7 +91,7 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   }
 
   public ngOnInit() {
-    this.search()
+    this.onSearch()
   }
 
   public hasPermissions(scope: BookmarkScopeEnum, perm: string) {
@@ -115,42 +114,10 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   /**
    * UI Events
    */
-  public onResetFilter(ev: MouseEvent): void {
-    ev.stopPropagation()
-    if (this.bookmarkFilter) {
-      this.bookmarkFilter.nativeElement.value = ''
-      this.store.dispatch(BookmarkSearchActions.bookmarkFilterChanged({ bookmarkFilter: '' }))
-    }
+  public onSearch() {
+    this.store.dispatch(BookmarkSearchActions.search())
   }
-
-  public onNavigate(data: Bookmark): void {
-    console.log('onNavigate', data)
-    this.router.navigate([''])
-
-    // [routerLink]="getUrl(item) | async"
-    // this.router.navigate(['./', data., 'menu'], { relativeTo: this.route })
-  }
-  public onDetail(mode: string, data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.detailBookmarkButtonClicked({ id: data.id }))
-  }
-  public onCopy(data: Bookmark): void {
-    console.log('onCopy', data)
-  }
-  public onDelete(data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.deleteBookmarksButtonClicked({ id: data.id }))
-  }
-
-  public prepareUrlPath(url?: string, path?: string): string {
-    if (url && path) return Location.joinWithSlash(url, path)
-    else if (url) return url
-    else return ''
-  }
-
-  public search() {
-    this.store.dispatch(BookmarkSearchActions.searchTriggered())
-  }
-
-  public exportItems() {
+  public onExportItems() {
     this.store.dispatch(BookmarkSearchActions.exportButtonClicked())
   }
 
@@ -158,10 +125,33 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
     const bookmarkFilter = (event.target as HTMLInputElement)?.value ?? ''
     this.store.dispatch(BookmarkSearchActions.bookmarkFilterChanged({ bookmarkFilter }))
   }
-
-  public handleQuickFilterChange(scopeQuickFilter: string): void {
+  public onResetFilter(ev: MouseEvent): void {
+    ev.stopPropagation()
+    if (this.bookmarkFilter) {
+      this.bookmarkFilter.nativeElement.value = ''
+      this.store.dispatch(BookmarkSearchActions.bookmarkFilterChanged({ bookmarkFilter: '' }))
+    }
+  }
+  public onQuickFilterChange(scopeQuickFilter: string): void {
     this.prepareActionButtons(scopeQuickFilter)
     this.store.dispatch(BookmarkSearchActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
+  }
+
+  public onNavigate(data: Bookmark): void {
+    console.log('onNavigate', data)
+    this.router.navigate([''])
+    // [routerLink]="getUrl(item) | async"
+    // this.router.navigate(['./', data., 'menu'], { relativeTo: this.route })
+  }
+
+  public onDetail(mode: string, data: Bookmark): void {
+    this.store.dispatch(BookmarkSearchActions.openDetailDialog({ id: data.id }))
+  }
+  public onCopy(data: Bookmark): void {
+    console.log('onCopy', data)
+  }
+  public onDelete(data: Bookmark): void {
+    this.store.dispatch(BookmarkSearchActions.deleteBookmarksButtonClicked({ id: data.id }))
   }
 
   public getUrl(bookmark: Bookmark) {

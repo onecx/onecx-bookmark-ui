@@ -23,6 +23,7 @@ import {
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 import {
   AngularRemoteComponentsModule,
   BASE_URL,
@@ -41,10 +42,9 @@ import {
   providePortalDialogService,
   AppConfigService
 } from '@onecx/portal-integration-angular'
-import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 
 import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
-import { extractPathAfter, mapPathSegmentsToPathParemeters } from 'src/app/shared/utils/path.utils'
+import { extractPathAfter, mapPathSegmentsToPathParameters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
 
@@ -185,7 +185,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
         mergeMap(([isBookmarkable, isBookmarked, currentBookmark, [currentWorkspace, currentMfe, currentPage]]) => {
           return this.portalDialogService
             .openDialog<unknown>(
-              `REMOTES.MANAGE_BOOKMARK.DIALOG.HEADER_${isBookmarked ? 'UPDATE' : 'CREATE'}`,
+              `REMOTES.MANAGE_BOOKMARK.DIALOG.HEADER_${isBookmarked ? 'EDIT' : 'CREATE'}`,
               this.getDialogBody(isBookmarkable, isBookmarked, currentBookmark, currentMfe, currentWorkspace),
               this.getPrimaryButton(isBookmarkable, isBookmarked),
               this.getSecondaryButton(isBookmarkable, isBookmarked),
@@ -277,7 +277,8 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
               initialBookmark: isBookmarked
                 ? currentBookmark
                 : this.generateInitialCreationBookmark(currentMfe, currentWorkspace),
-              permissions: this.permissions
+              permissions: this.permissions,
+              mode: isBookmarked ? 'EDIT' : 'CREATE'
             }
           }
         }
@@ -291,11 +292,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private getPrimaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails {
-    const mode = isBookmarked ? 'UPDATE' : 'CREATE'
+    const mode = isBookmarked ? 'EDIT' : 'CREATE'
     return {
-      key: isBookmarkable
-        ? 'REMOTES.MANAGE_BOOKMARK.DIALOG.' + mode + '_ACTIONS.SAVE'
-        : 'REMOTES.MANAGE_BOOKMARK.DIALOG.NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION',
+      key: isBookmarkable ? 'REMOTES.MANAGE_BOOKMARK.DIALOG.' + mode + '_ACTIONS.SAVE' : 'ACTIONS.NAVIGATION.CLOSE',
       icon: isBookmarkable ? PrimeIcons.CHECK : PrimeIcons.TIMES
     }
   }
@@ -303,7 +302,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   private getSecondaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails | undefined {
     const secondaryButton = isBookmarkable
       ? ({
-          key: `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'UPDATE' : 'CREATE'}_ACTIONS.CANCEL`,
+          key: `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'EDIT' : 'CREATE'}_ACTIONS.CANCEL`,
           icon: isBookmarked ? PrimeIcons.TRASH : PrimeIcons.TIMES
         } as ButtonDialogButtonDetails)
       : undefined
@@ -320,7 +319,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
       let endpointParameters = {}
       if (currentPage && endpointForCurrentPage.path) {
         const pagePath = extractPathAfter(currentPage.path, currentMfe.baseHref)
-        endpointParameters = mapPathSegmentsToPathParemeters(endpointForCurrentPage.path, pagePath)
+        endpointParameters = mapPathSegmentsToPathParameters(endpointForCurrentPage.path, pagePath)
       }
       createBookmark = {
         ...createBookmark,
