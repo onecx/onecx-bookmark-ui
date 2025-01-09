@@ -2,12 +2,8 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { map } from 'rxjs'
 
-import {
-  DialogButtonClicked,
-  DialogPrimaryButtonDisabled,
-  DialogResult,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { UserService } from '@onecx/angular-integration-interface'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 

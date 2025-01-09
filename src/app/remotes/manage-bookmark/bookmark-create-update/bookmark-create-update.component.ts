@@ -20,6 +20,8 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
 
 @Component({
   standalone: true,
+  selector: 'app-bookmark-create-update',
+  templateUrl: './bookmark-create-update.component.html',
   imports: [
     errorTailorImports,
     FormsModule,
@@ -29,8 +31,6 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
     TooltipModule,
     TranslateModule
   ],
-  selector: 'app-bookmark-create-update',
-  templateUrl: './bookmark-create-update.component.html',
   providers: [
     provideErrorTailorConfig({
       controlErrorsOn: { async: true, blur: true, change: true },

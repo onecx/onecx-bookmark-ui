@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { ActivatedRoute } from '@angular/router'
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { ActivatedRoute } from '@angular/router'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 
 import { LetDirective } from '@ngrx/component'
@@ -18,7 +17,7 @@ import { PortalCoreModule, UserService } from '@onecx/portal-integration-angular
 import { SharedModule } from 'src/app/shared/shared.module'
 
 import { initialState } from './bookmark-search.reducers'
-import { BookmarkImageComponent } from './product-image/bookmark-image.component'
+import { BookmarkImageComponent } from '../product-image/bookmark-image.component'
 import { BookmarkSearchActions } from './bookmark-search.actions'
 import { bookmarkSearchColumns } from './bookmark-search.columns'
 import { BookmarkSearchComponent } from './bookmark-search.component'
@@ -65,8 +64,6 @@ describe('BookmarkSearchComponent', () => {
         SharedModule,
         PortalCoreModule,
         LetDirective,
-        ReactiveFormsModule,
-        FormsModule,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),

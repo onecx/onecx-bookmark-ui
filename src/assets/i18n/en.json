@@ -66,6 +66,9 @@
       "IMPORT": "Upload a CSV file and replacing all existing Bookmarks"
     }
   },
+  "BREADCRUMBS": {
+    "SEARCH": "Bookmarks"
+  },
   "INTERNAL": {
     "CREATION_DATE": "Created on",
     "CREATION_USER": "Created by",
@@ -130,6 +133,9 @@
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed."
     }
+  },
+  "BOOKMARK_SORT": {
+    "HEADER": "Sort Bookmarks"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {

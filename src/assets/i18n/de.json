@@ -66,6 +66,9 @@
       "IMPORT": "Hochladen einer CSV Datei mit Lesezeichen und ersetzen aller Lesezeichen"
     }
   },
+  "BREADCRUMBS": {
+    "SEARCH": "Lesezeichen"
+  },
   "INTERNAL": {
     "CREATION_DATE": "Erstellt am",
     "CREATION_USER": "Erstellt von",
@@ -130,6 +133,9 @@
     "ERROR_MESSAGES": {
       "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden."
     }
+  },
+  "BOOKMARK_SORT": {
+    "HEADER": "Lesezeichen sortieren"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
