@@ -7,6 +7,7 @@ import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tail
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputGroupModule } from 'primeng/inputgroup'
 import { InputTextModule } from 'primeng/inputtext'
+import { OrderListModule } from 'primeng/orderlist'
 import { TooltipModule } from 'primeng/tooltip'
 
 @NgModule({
@@ -17,6 +18,7 @@ import { TooltipModule } from 'primeng/tooltip'
     FormsModule,
     InputGroupModule,
     InputTextModule,
+    OrderListModule,
     ReactiveFormsModule,
     TooltipModule,
     TranslateModule,
@@ -27,6 +29,7 @@ import { TooltipModule } from 'primeng/tooltip'
     FormsModule,
     InputGroupModule,
     ReactiveFormsModule,
+    OrderListModule,
     TooltipModule,
     TranslateModule,
     errorTailorImports

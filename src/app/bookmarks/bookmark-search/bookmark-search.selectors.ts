@@ -4,7 +4,7 @@ import { createChildSelectors } from '@onecx/ngrx-accelerator'
 
 import { BookmarkScopeEnum } from 'src/app/shared/generated'
 
-import { bookmarkFeature } from '../../bookmark.reducers'
+import { bookmarkFeature } from '../bookmark.reducers'
 import { initialState } from './bookmark-search.reducers'
 import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
 

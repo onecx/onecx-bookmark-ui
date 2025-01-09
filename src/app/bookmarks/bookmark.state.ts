@@ -1,4 +1,4 @@
-import { BookmarkSearchState } from './pages/bookmark-search/bookmark-search.state'
+import { BookmarkSearchState } from './bookmark-search/bookmark-search.state'
 
 export interface BookmarkState {
   search: BookmarkSearchState

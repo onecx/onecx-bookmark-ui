@@ -10,23 +10,23 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 import { KeycloakAuthModule } from '@onecx/keycloak-auth'
+import { OrderListModule } from 'primeng/orderlist'
+
+import { APP_CONFIG, AppStateService, ConfigurationService, UserService } from '@onecx/angular-integration-interface'
+import { createTranslateLoader } from '@onecx/angular-accelerator'
 import {
-  AppStateService,
-  APP_CONFIG,
-  ConfigurationService,
-  createTranslateLoader,
   PortalCoreModule,
   providePortalDialogService,
-  translateServiceInitializer,
-  UserService
+  translateServiceInitializer
 } from '@onecx/portal-integration-angular'
-import { environment } from 'src/environments/environment'
-import { AppRoutingModule } from './app-routing.module'
-import { AppComponent } from './app.component'
-import { metaReducers, reducers } from './app.reducers'
 
 import { Configuration } from './shared/generated'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
+
+import { environment } from 'src/environments/environment'
+import { AppComponent } from './app.component'
+import { AppRoutingModule } from './app-routing.module'
+import { metaReducers, reducers } from './app.reducers'
 
 export const commonImports = [CommonModule]
 
@@ -39,6 +39,7 @@ export const commonImports = [CommonModule]
     BrowserAnimationsModule,
     AppRoutingModule,
     LetDirective,
+    OrderListModule,
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({

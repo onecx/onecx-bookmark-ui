@@ -1,10 +1,12 @@
 import { createActionGroup, emptyProps, props } from '@ngrx/store'
+
 import { Bookmark } from 'src/app/shared/generated'
 
 export const BookmarkSearchActions = createActionGroup({
   source: 'BookmarkSearch',
   events: {
     'Detail bookmark button clicked': props<{ id: number | string }>(),
+
     'Update bookmarks cancelled': emptyProps(),
     'Update bookmarks succeeded': emptyProps(),
     'Update bookmarks failed': props<{ error: string | null }>(),

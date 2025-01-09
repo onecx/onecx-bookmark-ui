@@ -1,7 +1,7 @@
 import { combineReducers, createFeature } from '@ngrx/store'
 
 import { BookmarkState } from './bookmark.state'
-import { bookmarkSearchReducer } from './pages/bookmark-search/bookmark-search.reducers'
+import { bookmarkSearchReducer } from './bookmark-search/bookmark-search.reducers'
 
 export const bookmarkFeature = createFeature({
   name: 'bookmarks',
