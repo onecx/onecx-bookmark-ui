@@ -85,7 +85,8 @@
     "DISPLAY_NAME": "Anzeigename",
     "POSITION": "Position",
     "WORKSPACE": "Workspace",
-    "PRODUCT_NAME": "Applikation",
+    "PRODUCT": "Applikation",
+    "ENDPOINT": "Endpunkt",
     "APP_ID": "App ID",
     "SCOPE": "Bereich",
     "SCOPES": {
@@ -95,32 +96,32 @@
     }
   },
   "BOOKMARK_DETAIL": {
+    "DISPLAY_NAME": "Anzeigename",
+    "DISPLAY_NAME.TOOLTIP": "Dieser Name wird in der Listenansicht und zum Sortieren verwendet",
+    "CREATE": {
+      "SUCCESS": "Lesezeichen erfolgreich erstellt.",
+      "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
+    },
     "EDIT": {
+      "HEADER": "Lesezeichen bearbeiten",
       "SUCCESS": "Aktualisierung erfolgreich",
       "FAILED": "Aktualisierung fehlgeschlagen",
       "ERROR": "Aktualisierung fehlgeschlagen",
       "FORM": {
         "SAVE": "Speichern",
         "CANCEL": "Abbrechen"
-      },
-      "HEADER": "Lesezeichen bearbeiten",
-      "HEADER_READONLY": "Lesezeichen anzeigen"
+      }
     },
-    "CREATE": {
-      "SUCCESS": "Lesezeichen erfolgreich erstellt.",
-      "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
-    },
-    "FORM": {
-      "DISPLAY_NAME": "Anzeigename",
-      "DISPLAY_NAME.TOOLTIP": "Dieser Name wird in der Listenansicht und zum Sortieren verwendet"
+    "VIEW": {
+      "HEADER": "Lesezeichen Details"
     }
   },
   "BOOKMARK_DELETE": {
     "HEADER": "Lesezeichen löschen",
     "MESSAGE": "Möchten Sie dieses Lesezeichen löschen?",
-    "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
+    "INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
     "SUCCESS": "Lesezeichen erfolgreich gelöscht",
-    "ERROR": "Konnte Lesezeichen nicht löschen"
+    "ERROR": "Lesezeichen konnte nicht gelöscht werden."
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Lesezeichen",

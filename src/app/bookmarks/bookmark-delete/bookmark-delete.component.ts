@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 
-import { Bookmark } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-bookmark-delete',
@@ -9,4 +9,6 @@ import { Bookmark } from 'src/app/shared/generated'
 })
 export class BookmarkDeleteComponent {
   @Input() public bookmark: Bookmark | undefined
+
+  public BookmarkScopeEnum = BookmarkScopeEnum
 }

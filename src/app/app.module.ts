@@ -1,17 +1,17 @@
+import { APP_INITIALIZER, isDevMode, NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { APP_INITIALIZER, isDevMode, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+
 import { LetDirective } from '@ngrx/component'
 import { EffectsModule } from '@ngrx/effects'
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { KeycloakAuthModule } from '@onecx/keycloak-auth'
-import { OrderListModule } from 'primeng/orderlist'
 
+import { KeycloakAuthModule } from '@onecx/keycloak-auth'
 import { APP_CONFIG, AppStateService, ConfigurationService, UserService } from '@onecx/angular-integration-interface'
 import { createTranslateLoader } from '@onecx/angular-accelerator'
 import {
@@ -28,18 +28,15 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { metaReducers, reducers } from './app.reducers'
 
-export const commonImports = [CommonModule]
+export const commonImports = [CommonModule, BrowserModule, BrowserAnimationsModule]
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     ...commonImports,
     KeycloakAuthModule,
-    BrowserModule,
-    BrowserAnimationsModule,
     AppRoutingModule,
     LetDirective,
-    OrderListModule,
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({
@@ -50,7 +47,7 @@ export const commonImports = [CommonModule]
       traceLimit: 75
     }),
     EffectsModule.forRoot([]),
-    PortalCoreModule.forRoot('onecx-bookmark-ui-app'),
+    PortalCoreModule.forRoot('onecx-bookmark-ui'),
     TranslateModule.forRoot({
       extend: true,
       loader: {

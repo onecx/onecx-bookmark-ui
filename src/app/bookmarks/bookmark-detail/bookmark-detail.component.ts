@@ -20,15 +20,13 @@ export class BookmarkDetailComponent
     DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
-  @Input() public vm: BookmarkDetailViewModel = {
-    initialBookmark: undefined,
-    permissions: undefined
-  }
+  @Input() public vm: BookmarkDetailViewModel = { initialBookmark: undefined, permissions: undefined }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public formGroup: FormGroup
   public dialogResult: Bookmark | undefined = undefined
   public isPublicBookmark = false
+  private permissionKey = 'BOOKMARK#EDIT'
 
   constructor(private readonly userService: UserService) {
     this.formGroup = new FormGroup({
@@ -41,40 +39,35 @@ export class BookmarkDetailComponent
         })
       )
       .subscribe((val) => {
-        if (!this.hasEditPermission() || this.isPublicBookmark) {
-          this.primaryButtonEnabled.emit(true)
-        } else {
+        if (this.hasEditPermission()) {
           this.primaryButtonEnabled.emit(val)
+        } else {
+          this.primaryButtonEnabled.emit(false)
         }
       })
   }
 
   ocxDialogButtonClicked() {
-    this.dialogResult = {
-      ...this.vm.initialBookmark,
-      ...this.formGroup.value
-    }
+    this.dialogResult = { ...this.vm.initialBookmark, ...this.formGroup.value }
   }
 
   ngOnInit() {
     if (this.vm.initialBookmark) {
-      this.formGroup.patchValue({
-        ...this.vm.initialBookmark
-      })
+      this.formGroup.patchValue({ ...this.vm.initialBookmark })
       if (this.vm.initialBookmark.scope === BookmarkScopeEnum.Public) {
+        this.permissionKey = 'BOOKMARK#ADMIN_EDIT'
         this.isPublicBookmark = true
       }
     }
-    if (!this.hasEditPermission() || this.isPublicBookmark) {
+    if (!this.hasEditPermission()) {
       this.formGroup.disable()
     }
   }
 
-  hasEditPermission(): boolean {
-    const key = 'BOOKMARK#EDIT'
+  private hasEditPermission(): boolean {
     if (this.vm.permissions) {
-      return this.vm.permissions.includes(key)
+      return this.vm.permissions.includes(this.permissionKey)
     }
-    return this.userService.hasPermission(key)
+    return this.userService.hasPermission(this.permissionKey)
   }
 }

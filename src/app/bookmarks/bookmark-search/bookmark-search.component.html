@@ -32,7 +32,7 @@
           >
             <p-selectButton
               class="mr-2"
-              (onChange)="handleQuickFilterChange($event.value)"
+              (onChange)="onQuickFilterChange($event.value)"
               [options]="quickFilterOptions"
               [(ngModel)]="quickFilterValue"
             >

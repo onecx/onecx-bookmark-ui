@@ -2,8 +2,6 @@ import { createSelector } from '@ngrx/store'
 
 import { createChildSelectors } from '@onecx/ngrx-accelerator'
 
-import { BookmarkScopeEnum } from 'src/app/shared/generated'
-
 import { bookmarkFeature } from '../bookmark.reducers'
 import { initialState } from './bookmark-search.reducers'
 import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
@@ -19,15 +17,12 @@ export const selectResults = createSelector(
       .map((item) => ({
         imagePath: '',
         ...item,
-        scope: item.scope === BookmarkScopeEnum.Private ? 'BOOKMARK.SCOPES.PRIVATE' : 'BOOKMARK.SCOPES.PUBLIC'
+        scope_key: 'BOOKMARK.SCOPES.' + item.scope
       }))
       .filter((item) => {
-        if (scopeQuickFilter && scopeQuickFilter != 'BOOKMARK.SCOPES.ALL') {
-          return (
-            item.displayName?.toLowerCase().includes(bookmarkFilter.toLowerCase()) && item.scope === scopeQuickFilter
-          )
-        }
-        return item.displayName?.toLowerCase().includes(bookmarkFilter.toLowerCase())
+        return (
+          item.displayName?.toLowerCase().includes(bookmarkFilter.toLowerCase()) && item.scope_key === scopeQuickFilter
+        )
       })
   }
 )
