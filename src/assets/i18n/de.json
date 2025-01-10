@@ -109,9 +109,9 @@
     },
     "EDIT": {
       "HEADER": "Lesezeichen bearbeiten",
-      "SUCCESS": "Aktualisierung erfolgreich",
       "FAILED": "Aktualisierung fehlgeschlagen",
       "ERROR": "Aktualisierung fehlgeschlagen",
+      "SUCCESS": "Aktualisierung erfolgreich",
       "FORM": {
         "SAVE": "Speichern",
         "CANCEL": "Abbrechen"
@@ -125,8 +125,8 @@
     "HEADER": "Lesezeichen löschen",
     "MESSAGE": "Möchten Sie dieses Lesezeichen löschen?",
     "INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
-    "SUCCESS": "Lesezeichen erfolgreich gelöscht",
-    "ERROR": "Lesezeichen konnte nicht gelöscht werden."
+    "ERROR": "Lesezeichen konnte nicht gelöscht werden.",
+    "SUCCESS": "Lesezeichen erfolgreich gelöscht"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Lesezeichen",
@@ -142,7 +142,8 @@
   },
   "BOOKMARK_SORT": {
     "HEADER": "Lesezeichen sortieren",
-    "ERROR": "Sortierung fehlgeschlagen"
+    "ERROR": "Sortierung fehlgeschlagen",
+    "SUCCESS": "Sortierung erfolgreich geändert"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
@@ -186,6 +187,7 @@
       "FORMAT_URL": "Format: "
     },
     "ERRORS": {
+      "RESULT_WRONG": "DialogResult wurde nicht wie erwartet gesetzt.",
       "PARSE_ERROR": "Parserfehler: Die enthaltene Struktur entspricht nicht dem erwarteten Format.",
       "INTERNAL_ERROR": "Interner Fehler",
       "EMPTY_REQUIRED_FIELD": "Dieses Feld ist ein Pflichtfeld.",

@@ -2,8 +2,9 @@
   <p-orderList
     id="bm_sort_bookmark_list"
     datakey="id"
+    [metaKeySelection]="true"
     [value]="bookmarks"
-    [listStyle]="{ 'max-height': '300px' }"
+    [listStyle]="{ 'max-height': '400px' }"
     ariaLabel="Bookmark"
   >
     <ng-template let-bookmark pTemplate="item">{{ bookmark.displayName }}</ng-template>

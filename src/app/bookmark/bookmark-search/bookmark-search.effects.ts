@@ -90,7 +90,7 @@ export class BookmarkSearchEffects {
       }),
       mergeMap((bookmarks) => {
         console.log('bookmarks', bookmarks)
-        return this.portalDialogService.openDialog<Bookmark[] | undefined>(
+        return this.portalDialogService.openDialog<UpdateBookmark[] | undefined>(
           'BOOKMARK_SORT.HEADER',
           {
             type: BookmarkSortComponent,
@@ -109,10 +109,22 @@ export class BookmarkSearchEffects {
         console.log('sort dialog result:', dialogResult)
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkSearchActions.sortBookmarksCancelled())
-        else return of(BookmarkSearchActions.sortBookmarksSucceeded())
+        if (!dialogResult?.result || dialogResult?.result.length === 0) {
+          throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
+        }
+        return this.bookmarksService.updateBookmarksOrder({ bookmarks: dialogResult?.result }).pipe(
+          map(() => {
+            this.messageService.success({ summaryKey: 'BOOKMARK_SORT.SUCCESS' })
+            return BookmarkSearchActions.sortBookmarksSucceeded()
+          })
+        )
       }),
       catchError((error) => {
-        this.messageService.error({ summaryKey: 'BOOKMARK_SORT.ERROR' })
+        console.error(error)
+        this.messageService.error({
+          summaryKey: 'BOOKMARK_SORT.ERROR',
+          detailKey: error.message.includes('VALIDATION.ERRORS') ? 'VALIDATION.ERRORS.RESULT_WRONG' : undefined
+        })
         return of(BookmarkSearchActions.sortBookmarksFailed({ error }))
       })
     )
