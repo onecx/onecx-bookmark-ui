@@ -31,6 +31,12 @@ export class BookmarkSortComponent
   }
 
   ngOnInit() {
-    console.log('sort dialog: ngOnInit')
+    console.log('sort dialog: ngOnInit', this.vm)
+    this.dialogResult = this.vm.initialBookmarks?.slice()
+    this.dialogResult?.sort(this.sortByPosition)
+  }
+
+  private sortByPosition(a: Bookmark, b: Bookmark): number {
+    return a.position - b.position
   }
 }

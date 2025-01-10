@@ -1,10 +1,11 @@
-<div *ngIf="vm.initialBookmarks as bookmarks" class="flex flex-column row-gap-1">
+<div *ngIf="dialogResult as bookmarks">
   <p-orderList
     id="bm_sort_bookmark_list"
-    header="List of Bookmarks"
     datakey="id"
     [value]="bookmarks"
     [listStyle]="{ 'max-height': '300px' }"
     ariaLabel="Bookmark"
-  />
+  >
+    <ng-template let-bookmark pTemplate="item">{{ bookmark.displayName }}</ng-template>
+  </p-orderList>
 </div>

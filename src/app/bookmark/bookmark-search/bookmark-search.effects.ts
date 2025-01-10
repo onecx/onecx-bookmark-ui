@@ -84,9 +84,12 @@ export class BookmarkSearchEffects {
   openSortingDialog$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.openSortingDialog),
-      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
-      map(([, results]) => results),
+      concatLatestFrom(() => this.store.select(selectBookmarkSearchViewModel)),
+      map(([, viewModel]) => {
+        return viewModel.results
+      }),
       mergeMap((bookmarks) => {
+        console.log('bookmarks', bookmarks)
         return this.portalDialogService.openDialog<Bookmark[] | undefined>(
           'BOOKMARK_SORT.HEADER',
           {
