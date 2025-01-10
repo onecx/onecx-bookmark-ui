@@ -101,8 +101,7 @@ export class BookmarkSearchEffects {
           {
             modal: true,
             draggable: true,
-            resizable: true,
-            width: '400px'
+            resizable: true
           }
         )
       }),

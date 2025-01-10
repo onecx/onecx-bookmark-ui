@@ -2,3 +2,11 @@
 
 @include dialog-footer-buttons;
 @include listbox-zebra-rows;
+
+// if no filter is used
+:host ::ng-deep {
+  .p-orderlist .p-orderlist-list {
+    border-top-right-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+  }
+}
