@@ -23,17 +23,11 @@ export class BookmarkSortComponent
 
   public dialogResult: UpdateBookmark[] = []
 
-  constructor() {
-    console.log('sort dialog: constructor')
-  }
-
   ocxDialogButtonClicked() {
     this.dialogResult?.forEach((b, i) => (this.dialogResult[i] = { ...b, position: i + 1 }))
-    console.log('ocxDialogButtonClicked', this.dialogResult)
   }
 
   ngOnInit() {
-    console.log('sort dialog: ngOnInit', this.vm)
     this.dialogResult = this.cast2UpdateBookmark(this.vm.initialBookmarks)
     this.dialogResult?.sort(this.sortByPosition)
     // wait a moment for initialization to activate the primary button

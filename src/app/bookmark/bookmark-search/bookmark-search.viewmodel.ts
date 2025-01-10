@@ -5,4 +5,6 @@ export interface BookmarkSearchViewModel {
   results: RowListGridData[]
   bookmarkFilter: string
   scopeQuickFilter: string
+  loading: boolean
+  exceptionKey: string | null
 }

@@ -7,4 +7,6 @@ export interface BookmarkSearchState {
   results: Bookmark[]
   bookmarkFilter: string
   scopeQuickFilter: string
+  loading: boolean
+  exceptionKey: string | null
 }

@@ -45,7 +45,11 @@ export class BookmarkSearchEffects {
   })
   refreshSearch$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.updateBookmarksSucceeded, BookmarkSearchActions.deleteBookmarksSucceeded),
+      ofType(
+        BookmarkSearchActions.updateBookmarksSucceeded,
+        BookmarkSearchActions.deleteBookmarksSucceeded,
+        BookmarkSearchActions.sortBookmarksSucceeded
+      ),
       withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
       mergeMap(([, workspace]) => {
         return this.performSearch(workspace.workspaceName)
@@ -64,7 +68,14 @@ export class BookmarkSearchEffects {
           totalNumberOfResults: totalElements ?? 0
         })
       ),
-      catchError((error) => of(BookmarkSearchActions.bookmarkSearchResultsLoadingFailed({ error })))
+      catchError((error) => {
+        console.error(error)
+        return of(
+          BookmarkSearchActions.bookmarkSearchResultsLoadingFailed({
+            error: 'EXCEPTIONS.HTTP_STATUS_' + error.status + '.BOOKMARK'
+          })
+        )
+      })
     )
   }
 
@@ -89,7 +100,6 @@ export class BookmarkSearchEffects {
         return viewModel.results
       }),
       mergeMap((bookmarks) => {
-        console.log('bookmarks', bookmarks)
         return this.portalDialogService.openDialog<UpdateBookmark[] | undefined>(
           'BOOKMARK_SORT.HEADER',
           {
@@ -106,7 +116,6 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
-        console.log('sort dialog result:', dialogResult)
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkSearchActions.sortBookmarksCancelled())
         if (!dialogResult?.result || dialogResult?.result.length === 0) {
@@ -123,7 +132,7 @@ export class BookmarkSearchEffects {
         console.error(error)
         this.messageService.error({
           summaryKey: 'BOOKMARK_SORT.ERROR',
-          detailKey: error.message.includes('VALIDATION.ERRORS') ? 'VALIDATION.ERRORS.RESULT_WRONG' : undefined
+          detailKey: error.message.includes('VALIDATION.ERRORS') ? error.message : undefined
         })
         return of(BookmarkSearchActions.sortBookmarksFailed({ error }))
       })
@@ -161,7 +170,6 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
-        console.log('detail dialog result:', dialogResult)
         if (
           !dialogResult ||
           (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
@@ -170,9 +178,9 @@ export class BookmarkSearchEffects {
           return of(BookmarkSearchActions.updateBookmarksCancelled())
         }
         if (!dialogResult?.result) {
-          throw new Error('DialogResult was not set as expected!')
+          throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
         }
-        const itemToEditId = dialogResult.result.id ?? ''
+        const itemToEditId = dialogResult.result.id
         const itemToEdit = {
           id: dialogResult.result.id,
           position: dialogResult.result.position ?? 0,
@@ -187,18 +195,22 @@ export class BookmarkSearchEffects {
         )
       }),
       catchError((error) => {
-        this.messageService.error({ summaryKey: 'BOOKMARK_DETAIL.EDIT.ERROR' })
-        return of(BookmarkSearchActions.updateBookmarksFailed({ error }))
+        console.error(error)
+        this.messageService.error({
+          summaryKey: 'BOOKMARK_DETAIL.EDIT.ERROR',
+          detailKey: error.message.includes('VALIDATION.ERRORS') ? error.message : undefined
+        })
+        return of(BookmarkSearchActions.sortBookmarksFailed({ error }))
       })
     )
   })
 
-  deleteButtonClicked$ = createEffect(() => {
+  deleteBookmark$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.openDeleteDialog),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
       map(([action, results]) => {
-        return results.find((item) => item.id == action.id)
+        return results.find((item) => item.id === action.id)
       }),
       mergeMap((itemToDelete) => {
         return this.portalDialogService
@@ -220,14 +232,14 @@ export class BookmarkSearchEffects {
           )
       }),
       switchMap(([dialogResult, itemToDelete]) => {
-        if (!dialogResult || dialogResult.button == 'secondary') {
+        if (!dialogResult || dialogResult.button === 'secondary') {
           return of(BookmarkSearchActions.deleteBookmarksCancelled())
         }
         if (!itemToDelete) {
-          throw new Error('Item to delete not found!')
+          throw new Error('VALIDATION.ERRORS.NOT_FOUND')
         }
 
-        return this.bookmarksService.deleteBookmarkById(itemToDelete.id ?? '').pipe(
+        return this.bookmarksService.deleteBookmarkById(itemToDelete.id).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DELETE.SUCCESS' })
             return BookmarkSearchActions.deleteBookmarksSucceeded()
@@ -235,8 +247,12 @@ export class BookmarkSearchEffects {
         )
       }),
       catchError((error) => {
-        this.messageService.error({ summaryKey: 'BOOKMARK_DELETE.ERROR' })
-        return of(BookmarkSearchActions.deleteBookmarksFailed({ error }))
+        console.error(error)
+        this.messageService.error({
+          summaryKey: 'BOOKMARK_DELETE.ERROR',
+          detailKey: error.message.includes('VALIDATION.ERRORS') ? error.message : undefined
+        })
+        return of(BookmarkSearchActions.deleteBookmarksFailed({ error: 'hallo' }))
       })
     )
   })
@@ -260,6 +276,7 @@ export class BookmarkSearchEffects {
         tap((action) => {
           const e = this.errorMessages.find((e) => e.action.type === action.type)
           if (e) {
+            console.error('displayError', e)
             this.messageService.error({ summaryKey: e.key })
           }
         })

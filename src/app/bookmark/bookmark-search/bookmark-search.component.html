@@ -2,9 +2,26 @@
   <ocx-page-header
     [header]="'BOOKMARK_SEARCH.HEADER' | translate"
     [subheader]="'BOOKMARK_SEARCH.SUB_HEADER' | translate"
-    [actions]="actions" />
+    [actions]="actions"
+  />
+
   <ocx-page-content>
-    <div class="sm:px-3 correct-ocx-interactive-data-view">
+    <p-message
+      *ngIf="vm.loading"
+      id="bm_search_message_loading"
+      severity="info"
+      styleClass="m-3 p-2"
+      [text]="'ACTIONS.LOADING' | translate"
+    ></p-message>
+    <p-message
+      *ngIf="vm.exceptionKey"
+      id="bm_search_message_error"
+      severity="error"
+      styleClass="m-3 p-2"
+      [text]="vm.exceptionKey | translate"
+    ></p-message>
+
+    <div *ngIf="!(vm.loading || vm.exceptionKey)" class="sm:px-3 correct-ocx-interactive-data-view">
       <ocx-interactive-data-view
         [data]="vm.results"
         [columns]="vm.columns"
@@ -57,6 +74,7 @@
                   type="text"
                   id="bm_search_filter_input"
                   class="border-noround"
+                  (focus)="onFocusFilter()"
                   [attr.aria-label]="'ACTIONS.SEARCH.FILTER.LABEL' | translate"
                   [pTooltip]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
                   tooltipPosition="top"
@@ -132,5 +150,6 @@
           </a>
         </ng-template>
       </ocx-interactive-data-view>
-    </div> </ocx-page-content
-></ocx-portal-page>
+    </div>
+  </ocx-page-content>
+</ocx-portal-page>

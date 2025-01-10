@@ -8,18 +8,25 @@ export const initialState: BookmarkSearchState = {
   columns: bookmarkSearchColumns,
   results: [],
   bookmarkFilter: '',
-  scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE'
+  scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE',
+  loading: true,
+  exceptionKey: null
 }
 
 export const bookmarkSearchReducer = createReducer(
   initialState,
   on(
     BookmarkSearchActions.bookmarkSearchResultsReceived,
-    (state: BookmarkSearchState, { results }): BookmarkSearchState => ({ ...state, results })
+    (state: BookmarkSearchState, { results }): BookmarkSearchState => ({ ...state, results, loading: false })
   ),
   on(
     BookmarkSearchActions.bookmarkSearchResultsLoadingFailed,
-    (state: BookmarkSearchState): BookmarkSearchState => ({ ...state, results: [] })
+    (state: BookmarkSearchState, { error }): BookmarkSearchState => ({
+      ...state,
+      results: [],
+      loading: false,
+      exceptionKey: error
+    })
   ),
   on(
     BookmarkSearchActions.bookmarkFilterChanged,

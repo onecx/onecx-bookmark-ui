@@ -12,7 +12,7 @@
 
 export interface CreateBookmark { 
     displayName: string;
-    endpointName: string;
+    endpointName?: string;
     endpointParameters?: { [key: string]: string; };
     query?: string;
     hash?: string;

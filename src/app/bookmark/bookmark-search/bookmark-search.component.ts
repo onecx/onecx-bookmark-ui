@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs'
 import { Store } from '@ngrx/store'
@@ -18,7 +18,7 @@ import { selectBookmarkSearchViewModel } from './bookmark-search.selectors'
   templateUrl: './bookmark-search.component.html',
   styleUrls: ['./bookmark-search.component.scss']
 })
-export class BookmarkSearchComponent implements OnInit, AfterViewInit {
+export class BookmarkSearchComponent implements OnInit {
   @ViewChild('bookmarkFilter') bookmarkFilter: ElementRef | undefined
   public viewModel$: Observable<BookmarkSearchViewModel> = this.store.select(selectBookmarkSearchViewModel)
   public urls: Record<string, Observable<string>> = {}
@@ -26,11 +26,12 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   public actions: Action[] = []
   public tableActions: Action[] = []
   public rowActions: DataAction[] = []
+  private filterInit = false
   public quickFilterOptions: SelectItem[] = [{ value: 'BOOKMARK.SCOPES.PRIVATE' }, { value: 'BOOKMARK.SCOPES.PUBLIC' }]
   public quickFilterValue = this.quickFilterOptions[0].value
   public defaultSortDirection = DataSortDirection.ASCENDING
   public privateBookmarkScope = BookmarkScopeEnum.Private
-  public myPermissions = new Array<string>() // permissions of the user
+  private myPermissions = new Array<string>() // permissions of the user
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
@@ -67,6 +68,7 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
     ]
     this.prepareActionButtons(this.quickFilterValue)
   }
+
   /**
    * Table row actions
    * prepare row action buttons according to selected scope: PRIVATE, PUBLIC
@@ -116,12 +118,6 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
     return hasPerm
   }
 
-  public ngAfterViewInit() {
-    fromEvent<KeyboardEvent>(this.bookmarkFilter?.nativeElement, 'keyup')
-      .pipe(debounceTime(300), distinctUntilChanged())
-      .subscribe((event: KeyboardEvent) => this.onFilterBookmarks(event))
-  }
-
   /**
    * UI Events
    */
@@ -135,6 +131,13 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
     this.store.dispatch(BookmarkSearchActions.exportButtonClicked())
   }
 
+  public onFocusFilter() {
+    if (!this.filterInit) {
+      fromEvent<KeyboardEvent>(this.bookmarkFilter?.nativeElement, 'keyup')
+        .pipe(debounceTime(300), distinctUntilChanged())
+        .subscribe((event: KeyboardEvent) => this.onFilterBookmarks(event))
+    }
+  }
   public onFilterBookmarks(event: Event): void {
     const bookmarkFilter = (event.target as HTMLInputElement)?.value ?? ''
     this.store.dispatch(BookmarkSearchActions.bookmarkFilterChanged({ bookmarkFilter }))
