@@ -2,134 +2,154 @@
   <ocx-page-header
     [header]="'BOOKMARK_SEARCH.HEADER' | translate"
     [subheader]="'BOOKMARK_SEARCH.SUB_HEADER' | translate"
+    [actions]="actions"
   />
-  <div class="card pt-2 pb-0 correct-ocx-interactive-data-view">
-    <ocx-interactive-data-view
-      [data]="vm.results"
-      [columns]="vm.columns"
-      [pageSizes]="[20, 40, 100]"
-      [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
-      layout="table"
-      [supportedViewLayouts]="['table']"
-      sortField="displayName"
-      [sortDirection]="defaultSortDirection"
-      actionColumnPosition="left"
-      [frozenActionColumn]="true"
-      [additionalActions]="rowActions"
-    >
-      <ng-template #topCenter>
-        <div class="flex justify-content-between gap-2 align-items-center flex-wrap md:flex-nowrap w-full h-full">
-          <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'">
-            <!-- This is necessary to ensure a correct flex layout -->
-          </div>
-          <div
-            *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
-            class="slim-selectbutton filter-selectbutton"
-            [attr.aria-label]="'BOOKMARK.SCOPE' | translate"
-            [pTooltip]="'BOOKMARK.SCOPE' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          >
-            <p-selectButton
-              class="mr-2"
-              (onChange)="onQuickFilterChange($event.value)"
-              [options]="quickFilterOptions"
-              [(ngModel)]="quickFilterValue"
-            >
-              <ng-template let-item pTemplate>
-                <span> {{ item.value | translate }} </span>
-              </ng-template>
-            </p-selectButton>
-            <div class="p-selectbutton-subtitle flex flex-row flex-nowrap column-gap-3 opacity-90">
-              <span>{{ 'BOOKMARK.SCOPE' | translate }}</span>
-            </div>
-          </div>
 
-          <p-inputGroup class="w-auto">
-            <span class="p-inputgroup-addon">
-              <i class="pi pi-filter"></i>
-            </span>
-            <p-floatLabel>
-              <input
-                #bookmarkFilter
-                pInputText
-                type="text"
-                id="bm_search_filter_input"
-                class="border-noround"
-                [attr.aria-label]="'ACTIONS.SEARCH.FILTER.LABEL' | translate"
-                [pTooltip]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              />
-              <label for="bm_search_filter_input">{{ 'ACTIONS.SEARCH.FILTER.LABEL' | translate }}</label>
-            </p-floatLabel>
-            <button
-              pButton
-              id="bm_search_filter_action"
-              class="p-inputgroup-addon p-button-icon-only"
-              icon="pi pi-filter-slash"
-              (click)="onResetFilter($event)"
-              [attr.aria-label]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
-              [pTooltip]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
+  <ocx-page-content>
+    <p-message
+      *ngIf="vm.loading"
+      id="bm_search_message_loading"
+      severity="info"
+      styleClass="m-3 p-2"
+      [text]="'ACTIONS.LOADING' | translate"
+    ></p-message>
+    <p-message
+      *ngIf="vm.exceptionKey"
+      id="bm_search_message_error"
+      severity="error"
+      styleClass="m-3 p-2"
+      [text]="vm.exceptionKey | translate"
+    ></p-message>
+
+    <div *ngIf="!(vm.loading || vm.exceptionKey)" class="sm:px-3 correct-ocx-interactive-data-view">
+      <ocx-interactive-data-view
+        [data]="vm.results"
+        [columns]="vm.columns"
+        [pageSizes]="[20, 40, 100]"
+        [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
+        layout="table"
+        [supportedViewLayouts]="['table']"
+        sortField="position"
+        [sortDirection]="defaultSortDirection"
+        actionColumnPosition="left"
+        [frozenActionColumn]="true"
+        [additionalActions]="rowActions"
+      >
+        <ng-template #topCenter>
+          <div class="flex justify-content-between gap-2 align-items-center flex-wrap md:flex-nowrap w-full h-full">
+            <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'">
+              <!-- This is necessary to ensure a correct flex layout -->
+            </div>
+            <div
+              *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
+              class="slim-selectbutton filter-selectbutton"
+              [attr.aria-label]="'BOOKMARK.SCOPE' | translate"
+              [pTooltip]="'BOOKMARK.SCOPE' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
-            ></button>
-          </p-inputGroup>
-          <div>
-            <!-- This is necessary to ensure a correct flex layout -->
-          </div>
-        </div>
-      </ng-template>
+            >
+              <p-selectButton
+                class="mr-2"
+                (onChange)="onQuickFilterChange($event.value)"
+                [options]="quickFilterOptions"
+                [(ngModel)]="quickFilterValue"
+              >
+                <ng-template let-item pTemplate>
+                  <span> {{ item.value | translate }} </span>
+                </ng-template>
+              </p-selectButton>
+              <div class="p-selectbutton-subtitle flex flex-row flex-nowrap column-gap-3 opacity-90">
+                <span>{{ 'BOOKMARK.SCOPE' | translate }}</span>
+              </div>
+            </div>
 
-      <ng-template pTemplate="actionsIdTableCell" let-rowData="rowObject" let-i="rowIndex" let-column="column">
-        <ng-container *ocxIfNotPermission="'BOOKMARK#EDIT'">
+            <p-inputGroup class="w-auto">
+              <span class="p-inputgroup-addon">
+                <i class="pi pi-filter"></i>
+              </span>
+              <p-floatLabel>
+                <input
+                  #bookmarkFilter
+                  pInputText
+                  type="text"
+                  id="bm_search_filter_input"
+                  class="border-noround"
+                  (focus)="onFocusFilter()"
+                  [attr.aria-label]="'ACTIONS.SEARCH.FILTER.LABEL' | translate"
+                  [pTooltip]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
+                  tooltipPosition="top"
+                  tooltipEvent="hover"
+                />
+                <label for="bm_search_filter_input">{{ 'ACTIONS.SEARCH.FILTER.LABEL' | translate }}</label>
+              </p-floatLabel>
+              <button
+                pButton
+                id="bm_search_filter_action"
+                class="p-inputgroup-addon p-button-icon-only"
+                icon="pi pi-filter-slash"
+                (click)="onResetFilter($event)"
+                [attr.aria-label]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
+                [pTooltip]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></button>
+            </p-inputGroup>
+            <div>
+              <!-- This is necessary to ensure a correct flex layout -->
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="actionsIdTableCell" let-rowData="rowObject" let-i="rowIndex" let-column="column">
+          <ng-container *ocxIfNotPermission="'BOOKMARK#EDIT'">
+            <a
+              *ocxIfPermission="'BOOKMARK#VIEW'"
+              tabindex="0"
+              class="p-2 text-primary font-medium"
+              [id]="'bm_search_table_row_' + i + '_action_view'"
+              (click)="onDetail('VIEW', rowData)"
+              (keydown.enter)="onDetail('VIEW', rowData)"
+              (keydown.space)="onDetail('VIEW', rowData)"
+              [attr.aria-label]="'ACTIONS.VIEW.LABEL' | translate"
+              [pTooltip]="'ACTIONS.VIEW.LABEL' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+              <span class="pi pi-eye" aria-hidden="true"></span>
+            </a>
+          </ng-container>
           <a
-            *ocxIfPermission="'BOOKMARK#VIEW'"
+            *ocxIfPermission="'BOOKMARK#EDIT'"
             tabindex="0"
             class="p-2 text-primary font-medium"
-            [id]="'bm_search_table_row_' + i + '_action_view'"
-            (click)="onDetail('VIEW', rowData)"
-            (keydown.enter)="onDetail('VIEW', rowData)"
-            (keydown.space)="onDetail('VIEW', rowData)"
-            [attr.aria-label]="'ACTIONS.VIEW.LABEL' | translate"
-            [pTooltip]="'ACTIONS.VIEW.LABEL' | translate"
+            [id]="'bm_search_table_row_' + i + '_action_edit'"
+            (click)="onDetail('EDIT', rowData)"
+            (keydown.enter)="onDetail('EDIT', rowData)"
+            (keydown.space)="onDetail('EDIT', rowData)"
+            [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
+            [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
             tooltipPosition="top"
             tooltipEvent="hover"
           >
-            <span class="pi pi-eye" aria-hidden="true"></span>
+            <span class="pi pi-pencil" aria-hidden="true"></span>
           </a>
-        </ng-container>
-        <a
-          *ocxIfPermission="'BOOKMARK#EDIT'"
-          tabindex="0"
-          class="p-2 text-primary font-medium"
-          [id]="'bm_search_table_row_' + i + '_action_edit'"
-          (click)="onDetail('EDIT', rowData)"
-          (keydown.enter)="onDetail('EDIT', rowData)"
-          (keydown.space)="onDetail('EDIT', rowData)"
-          [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
-          [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        >
-          <span class="pi pi-pencil" aria-hidden="true"></span>
-        </a>
-        <a
-          *ocxIfPermission="'BOOKMARK#DELETE'"
-          tabindex="0"
-          class="p-2 danger-action-text font-medium"
-          [id]="'bm_search_table_row_' + i + '_action_delete'"
-          (click)="onDelete(rowData)"
-          (keydown.enter)="onDelete(rowData)"
-          (keydown.space)="onDelete(rowData)"
-          [attr.aria-label]="'ACTIONS.DELETE.LABEL' | translate"
-          [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        >
-          <span class="pi pi-trash" aria-hidden="true"></span>
-        </a>
-      </ng-template>
-    </ocx-interactive-data-view>
-  </div>
+          <a
+            *ocxIfPermission="'BOOKMARK#DELETE'"
+            tabindex="0"
+            class="p-2 danger-action-text font-medium"
+            [id]="'bm_search_table_row_' + i + '_action_delete'"
+            (click)="onDelete(rowData)"
+            (keydown.enter)="onDelete(rowData)"
+            (keydown.space)="onDelete(rowData)"
+            [attr.aria-label]="'ACTIONS.DELETE.LABEL' | translate"
+            [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          >
+            <span class="pi pi-trash" aria-hidden="true"></span>
+          </a>
+        </ng-template>
+      </ocx-interactive-data-view>
+    </div>
+  </ocx-page-content>
 </ocx-portal-page>

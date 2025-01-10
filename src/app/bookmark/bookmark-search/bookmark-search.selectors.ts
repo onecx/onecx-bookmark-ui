@@ -32,10 +32,14 @@ export const selectBookmarkSearchViewModel = createSelector(
   selectResults,
   bookmarkSearchSelectors.selectBookmarkFilter,
   bookmarkSearchSelectors.selectScopeQuickFilter,
-  (columns, results, bookmarkFilter, scopeQuickFilter): BookmarkSearchViewModel => ({
+  bookmarkSearchSelectors.selectLoading,
+  bookmarkSearchSelectors.selectExceptionKey,
+  (columns, results, bookmarkFilter, scopeQuickFilter, loading, exceptionKey): BookmarkSearchViewModel => ({
     columns,
     results,
     bookmarkFilter,
-    scopeQuickFilter
+    scopeQuickFilter,
+    loading,
+    exceptionKey
   })
 )

@@ -38,7 +38,9 @@ describe('BookmarkSearchComponent', () => {
     columns: bookmarkSearchColumns,
     results: [],
     bookmarkFilter: '',
-    scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE'
+    scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE',
+    loading: false,
+    exceptionKey: null
   }
 
   beforeAll(() => {

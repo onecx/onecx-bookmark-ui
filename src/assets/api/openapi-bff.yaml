@@ -347,7 +347,6 @@ components:
     CreateBookmark:
       required:
         - displayName
-        - endpointName
         - workspaceName
         - productName
         - scope

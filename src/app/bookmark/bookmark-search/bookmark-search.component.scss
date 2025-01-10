@@ -10,8 +10,13 @@
 
 :host ::ng-deep {
   .p-datatable {
-    .p-datatable-thead > tr > th {
-      border-bottom-width: 2px;
+    .p-datatable-thead {
+      > tr {
+        vertical-align: middle !important;
+        > th {
+          border-bottom-width: 2px;
+        }
+      }
     }
     .p-datatable-thead > tr > th,
     .p-datatable-tbody > tr > td {
@@ -24,6 +29,10 @@
       }
     }
   }
+  .correct-ocx-interactive-data-view {
+    padding: var(--table-header-padding);
+  }
+
   // hide unusable stuff
   ocx-interactive-data-view > div > div {
     > div:first-of-type {

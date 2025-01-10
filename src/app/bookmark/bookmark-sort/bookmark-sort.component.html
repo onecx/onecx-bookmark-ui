@@ -1,46 +1,12 @@
-<p-dialog
-  [header]="'BOOKMARK_SORT.HEADER' | translate"
-  [(visible)]="displaySortDialog"
-  [modal]="true"
-  [closable]="true"
-  [draggable]="true"
-  [resizable]="true"
-  [dismissableMask]="false"
-  [style]="{ 'max-width': '500px' }"
->
-  <div *ngIf="bookmarks" class="flex flex-column row-gap-1">
-    <p-orderList
-      id="bm_sort_bookmark_list"
-      header="List of Bookmarks"
-      datakey="id"
-      [value]="bookmarks"
-      [listStyle]="{ 'max-height': '300px' }"
-      ariaLabel="Bookmark"
-    />
-  </div>
-  <ng-template pTemplate="footer">
-    <div class="flex flex-wrap justify-content-end column-gap-2 row-gap-1">
-      <p-button
-        id="bm_sort_action_cancel"
-        icon="pi pi-times"
-        (onClick)="onCloseSortDialog()"
-        [label]="'ACTIONS.CANCEL' | translate"
-        [ariaLabel]="'ACTIONS.CANCEL' | translate"
-        [pTooltip]="'ACTIONS.TOOLTIPS.CANCEL' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></p-button>
-      <p-button
-        id="bm_sort_action_export"
-        icon="pi pi-download"
-        (onClick)="onSortConfirmation()"
-        [disabled]="false"
-        [label]="'ACTIONS.SAVE' | translate"
-        [ariaLabel]="'ACTIONS.SAVE' | translate"
-        [pTooltip]="'ACTIONS.SAVE.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></p-button>
-    </div>
-  </ng-template>
-</p-dialog>
+<div *ngIf="dialogResult as bookmarks">
+  <p-orderList
+    id="bm_sort_bookmark_list"
+    datakey="id"
+    [metaKeySelection]="true"
+    [value]="bookmarks"
+    [listStyle]="{ 'max-height': '400px' }"
+    [attr.aria-label]="'BOOKMARK_SORT.LIST' | translate"
+  >
+    <ng-template let-bookmark pTemplate="item">{{ bookmark.displayName }}</ng-template>
+  </p-orderList>
+</div>

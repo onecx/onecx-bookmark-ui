@@ -49,6 +49,10 @@
         "RESET": "Filter entfernen"
       }
     },
+    "SORT": {
+      "LABEL": "Sortieren",
+      "TOOLTIP": "Die Reihenfolge der Lesezeichen ändern"
+    },
     "VIEW": {
       "LABEL": "Details",
       "TOOLTIP": "Die Details des Lesezeichens anzeigen"
@@ -105,9 +109,9 @@
     },
     "EDIT": {
       "HEADER": "Lesezeichen bearbeiten",
-      "SUCCESS": "Aktualisierung erfolgreich",
       "FAILED": "Aktualisierung fehlgeschlagen",
       "ERROR": "Aktualisierung fehlgeschlagen",
+      "SUCCESS": "Aktualisierung erfolgreich",
       "FORM": {
         "SAVE": "Speichern",
         "CANCEL": "Abbrechen"
@@ -121,8 +125,8 @@
     "HEADER": "Lesezeichen löschen",
     "MESSAGE": "Möchten Sie dieses Lesezeichen löschen?",
     "INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
-    "SUCCESS": "Lesezeichen erfolgreich gelöscht",
-    "ERROR": "Lesezeichen konnte nicht gelöscht werden."
+    "ERROR": "Lesezeichen konnte nicht gelöscht werden.",
+    "SUCCESS": "Lesezeichen erfolgreich gelöscht"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Lesezeichen",
@@ -137,18 +141,21 @@
     }
   },
   "BOOKMARK_SORT": {
-    "HEADER": "Lesezeichen sortieren"
+    "HEADER": "Lesezeichen sortieren",
+    "LIST": "Lesezeichen",
+    "ERROR": "Sortierung fehlgeschlagen",
+    "SUCCESS": "Sortierung erfolgreich geändert"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
       "ACTION": {
         "CREATE": "Lesezeichen hinzufügen",
-        "EDIT": "Lesezeichen verwalten",
+        "EDIT": "Lesezeichen bearbeiten",
         "LOADING": "Lesezeichen werden geladen"
       },
       "DIALOG": {
         "HEADER_CREATE": "Lesezeichen hinzufügen",
-        "HEADER_EDIT": "Lesezeichen verwalten",
+        "HEADER_EDIT": "Lesezeichen bearbeiten",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Aktuell kann kein Lesezeichen für diese Seite erstellt werden.",
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Wenden Sie sich an einen Administrator. Derzeit können Sie nur ein Lesezeichen für die Startseite ({{mfeBaseUrl}}) der Anwendung erstellen.",
         "NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION": "Schließen",
@@ -181,6 +188,8 @@
       "FORMAT_URL": "Format: "
     },
     "ERRORS": {
+      "NOT_FOUND": "Lesezeichen konnte nicht gefunden werden.",
+      "RESULT_WRONG": "DialogResult wurde nicht wie erwartet gesetzt.",
       "PARSE_ERROR": "Parserfehler: Die enthaltene Struktur entspricht nicht dem erwarteten Format.",
       "INTERNAL_ERROR": "Interner Fehler",
       "EMPTY_REQUIRED_FIELD": "Dieses Feld ist ein Pflichtfeld.",
@@ -188,6 +197,26 @@
       "MINIMUM_LENGTH": "Es sind mindestens {{chars}} Zeichen erforderlich.",
       "PATTERN_ERROR": "Die Eingabe entspricht nicht dem benötigten Format.",
       "FILETYPE_PATTERN_ERROR": "Die Datei entspricht nicht den erlaubten Formaten: .png, .jpg, .jpeg"
+    }
+  },
+  "EXCEPTIONS": {
+    "HTTP_STATUS_0": {
+      "BOOKMARK": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal."
+    },
+    "HTTP_STATUS_400": {
+      "BOOKMARK": "Ihre Anfrage konnte nicht bearbeitet werden."
+    },
+    "HTTP_STATUS_401": {
+      "BOOKMARK": "Sie sind nicht autorisiert, um Lesezeichen zu sehen."
+    },
+    "HTTP_STATUS_403": {
+      "BOOKMARK": "Sie haben keine Rechte, um Lesezeichen zu sehen."
+    },
+    "HTTP_STATUS_404": {
+      "BOOKMARK": "Lesezeichen nicht gefunden."
+    },
+    "HTTP_STATUS_500": {
+      "BOOKMARK": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal."
     }
   }
 }
