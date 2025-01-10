@@ -15,3 +15,9 @@
   max-height: unset !important;
   margin-bottom: unset !important;
 }
+
+// correct dialog created by portal dialog service => no footer section is used
+.p-dialog .p-dialog-content {
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}

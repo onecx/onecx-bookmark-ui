@@ -35,6 +35,10 @@ export class BookmarkSortComponent
     console.log('sort dialog: ngOnInit', this.vm)
     this.dialogResult = this.vm.initialBookmarks?.slice()
     this.dialogResult?.sort(this.sortByPosition)
+    // wait a moment for initialization to activate the primary button
+    setTimeout(() => {
+      this.primaryButtonEnabled.emit(true)
+    }, 500)
   }
 
   private sortByPosition(a: Bookmark, b: Bookmark): number {
