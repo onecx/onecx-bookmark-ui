@@ -49,6 +49,10 @@
         "RESET": "Filter entfernen"
       }
     },
+    "SORT": {
+      "LABEL": "Sortieren",
+      "TOOLTIP": "Die Reihenfolge der Lesezeichen ändern"
+    },
     "VIEW": {
       "LABEL": "Details",
       "TOOLTIP": "Die Details des Lesezeichens anzeigen"
@@ -137,18 +141,19 @@
     }
   },
   "BOOKMARK_SORT": {
-    "HEADER": "Lesezeichen sortieren"
+    "HEADER": "Lesezeichen sortieren",
+    "ERROR": "Sortierung fehlgeschlagen"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
       "ACTION": {
         "CREATE": "Lesezeichen hinzufügen",
-        "EDIT": "Lesezeichen verwalten",
+        "EDIT": "Lesezeichen bearbeiten",
         "LOADING": "Lesezeichen werden geladen"
       },
       "DIALOG": {
         "HEADER_CREATE": "Lesezeichen hinzufügen",
-        "HEADER_EDIT": "Lesezeichen verwalten",
+        "HEADER_EDIT": "Lesezeichen bearbeiten",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Aktuell kann kein Lesezeichen für diese Seite erstellt werden.",
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Wenden Sie sich an einen Administrator. Derzeit können Sie nur ein Lesezeichen für die Startseite ({{mfeBaseUrl}}) der Anwendung erstellen.",
         "NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION": "Schließen",

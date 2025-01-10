@@ -23,6 +23,7 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   public viewModel$: Observable<BookmarkSearchViewModel> = this.store.select(selectBookmarkSearchViewModel)
   public urls: Record<string, Observable<string>> = {}
   public urls2: Record<string, string> = {}
+  public actions: Action[] = []
   public tableActions: Action[] = []
   public rowActions: DataAction[] = []
   public quickFilterOptions: SelectItem[] = [{ value: 'BOOKMARK.SCOPES.PRIVATE' }, { value: 'BOOKMARK.SCOPES.PUBLIC' }]
@@ -52,6 +53,16 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
         show: 'always',
         permission: 'BOOKMARK#EXPORT',
         actionCallback: () => this.onExportItems()
+      }
+    ]
+    this.actions = [
+      {
+        labelKey: 'ACTIONS.SORT.LABEL',
+        titleKey: 'ACTIONS.SORT.TOOLTIP',
+        icon: PrimeIcons.SORT,
+        show: 'always',
+        permission: 'BOOKMARK#EDIT',
+        actionCallback: () => this.onSortDialog()
       }
     ]
     this.prepareActionButtons(this.quickFilterValue)
@@ -117,6 +128,9 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
   public onSearch() {
     this.store.dispatch(BookmarkSearchActions.search())
   }
+  public onSortDialog() {
+    this.store.dispatch(BookmarkSearchActions.openSortingDialog())
+  }
   public onExportItems() {
     this.store.dispatch(BookmarkSearchActions.exportButtonClicked())
   }
@@ -151,7 +165,7 @@ export class BookmarkSearchComponent implements OnInit, AfterViewInit {
     console.log('onCopy', data)
   }
   public onDelete(data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.deleteBookmarksButtonClicked({ id: data.id }))
+    this.store.dispatch(BookmarkSearchActions.openDeleteDialog({ id: data.id }))
   }
 
   public getUrl(bookmark: Bookmark) {

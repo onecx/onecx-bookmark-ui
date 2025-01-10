@@ -49,6 +49,10 @@
         "RESET": "Clear Filter"
       }
     },
+    "SORT": {
+      "LABEL": "Sorting",
+      "TOOLTIP": "Change the order of Bookmarks"
+    },
     "VIEW": {
       "LABEL": "View",
       "TOOLTIP": "View the Bookmark properties"
@@ -137,7 +141,8 @@
     }
   },
   "BOOKMARK_SORT": {
-    "HEADER": "Sort Bookmarks"
+    "HEADER": "Sort Bookmarks",
+    "ERROR": "Sorting failed"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {

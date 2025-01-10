@@ -19,6 +19,7 @@ import { BookmarkSearchActions } from './bookmark-search.actions'
 import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
 import { BookmarkDetailComponent } from '../bookmark-detail/bookmark-detail.component'
 import { BookmarkDeleteComponent } from '../bookmark-delete/bookmark-delete.component'
+import { BookmarkSortComponent } from '../bookmark-sort/bookmark-sort.component'
 
 @Injectable()
 export class BookmarkSearchEffects {
@@ -80,6 +81,41 @@ export class BookmarkSearchEffects {
     { dispatch: false }
   )
 
+  openSortingDialog$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(BookmarkSearchActions.openSortingDialog),
+      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
+      map(([, results]) => results),
+      mergeMap((bookmarks) => {
+        return this.portalDialogService.openDialog<Bookmark[] | undefined>(
+          'BOOKMARK_SORT.HEADER',
+          {
+            type: BookmarkSortComponent,
+            inputs: { vm: { initialBookmarks: bookmarks } }
+          },
+          { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE },
+          { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES },
+          {
+            modal: true,
+            draggable: true,
+            resizable: true,
+            width: '400px'
+          }
+        )
+      }),
+      switchMap((dialogResult) => {
+        console.log('sort dialog result:', dialogResult)
+        if (!dialogResult || dialogResult.button === 'secondary')
+          return of(BookmarkSearchActions.sortBookmarksCancelled())
+        else return of(BookmarkSearchActions.sortBookmarksSucceeded())
+      }),
+      catchError((error) => {
+        this.messageService.error({ summaryKey: 'BOOKMARK_SORT.ERROR' })
+        return of(BookmarkSearchActions.sortBookmarksFailed({ error }))
+      })
+    )
+  })
+
   detailButtonClicked$ = createEffect(() => {
     const canEdit = (bookmark?: Bookmark) => {
       return (
@@ -111,7 +147,7 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
-        console.log('dialogResult', dialogResult)
+        console.log('detail dialog result:', dialogResult)
         if (
           !dialogResult ||
           (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
@@ -145,7 +181,7 @@ export class BookmarkSearchEffects {
 
   deleteButtonClicked$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.deleteBookmarksButtonClicked),
+      ofType(BookmarkSearchActions.openDeleteDialog),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
       map(([action, results]) => {
         return results.find((item) => item.id == action.id)
