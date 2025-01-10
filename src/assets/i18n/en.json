@@ -142,6 +142,7 @@
   },
   "BOOKMARK_SORT": {
     "HEADER": "Sort Bookmarks",
+    "LIST": "Bookmarks",
     "ERROR": "Sorting failed",
     "SUCCESS": "Sorting successfully changed"
   },

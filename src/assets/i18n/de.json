@@ -142,6 +142,7 @@
   },
   "BOOKMARK_SORT": {
     "HEADER": "Lesezeichen sortieren",
+    "LIST": "Lesezeichen",
     "ERROR": "Sortierung fehlgeschlagen",
     "SUCCESS": "Sortierung erfolgreich geändert"
   },

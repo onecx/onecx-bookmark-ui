@@ -13,9 +13,8 @@
 // disable default settings of dialogs created by portal dialog service
 .buttonDialogScrollableContent {
   max-height: unset !important;
-  margin-bottom: unset !important;
+  margin-bottom: 1rem !important;
 }
-
 // correct dialog created by portal dialog service => no footer section is used
 .p-dialog .p-dialog-content {
   border-bottom-right-radius: var(--border-radius);

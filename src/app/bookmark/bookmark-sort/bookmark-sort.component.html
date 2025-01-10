@@ -5,7 +5,7 @@
     [metaKeySelection]="true"
     [value]="bookmarks"
     [listStyle]="{ 'max-height': '400px' }"
-    ariaLabel="Bookmark"
+    [attr.aria-label]="'BOOKMARK_SORT.LIST' | translate"
   >
     <ng-template let-bookmark pTemplate="item">{{ bookmark.displayName }}</ng-template>
   </p-orderList>
