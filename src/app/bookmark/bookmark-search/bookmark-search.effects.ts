@@ -27,11 +27,11 @@ export class BookmarkSearchEffects {
     private readonly actions$: Actions,
     private readonly store: Store,
     private readonly portalDialogService: PortalDialogService,
-    private readonly bookmarksService: BookmarksInternal,
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
     private readonly appStateService: AppStateService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly bookmarksService: BookmarksInternal
   ) {}
 
   private buildExceptionKey(status: string): string {
@@ -280,14 +280,11 @@ export class BookmarkSearchEffects {
           const e = this.errorMessages.find((e) => e.action.type === action.type)
           if (e) {
             console.error(action)
-            const error = action as any as ActionErrorType // convert due to access the props
+            const error = action as ActionErrorType // convert due to access the props
+            const text = error.errorText?.includes('VALIDATION.ERRORS') ? error.errorText : undefined
             this.messageService.error({
               summaryKey: e.key,
-              detailKey: error.status
-                ? this.buildExceptionKey(error.status)
-                : error.errorText?.includes('VALIDATION.ERRORS')
-                  ? error.errorText
-                  : undefined
+              detailKey: error.status ? this.buildExceptionKey(error.status) : text
             })
           }
         })

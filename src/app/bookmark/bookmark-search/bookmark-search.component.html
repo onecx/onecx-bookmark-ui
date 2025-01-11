@@ -1,4 +1,8 @@
-<ocx-portal-page permission="BOOKMARK#VIEW" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$; let vm">
+<ocx-portal-page
+  permission="BOOKMARK#VIEW"
+  helpArticleId="PAGE_BOOKMARK_SEARCH"
+  *ngrxLet="viewModel$ as vm; error as err; complete as done"
+>
   <ocx-page-header
     [header]="'BOOKMARK_SEARCH.HEADER' | translate"
     [subheader]="'BOOKMARK_SEARCH.SUB_HEADER' | translate"
@@ -18,10 +22,10 @@
       id="bm_search_message_error"
       severity="error"
       styleClass="m-3 p-2"
-      [text]="vm.exceptionKey | translate"
+      [text]="vm.exceptionKey! | translate"
     ></p-message>
 
-    <div *ngIf="!(vm.loading || vm.exceptionKey)" class="sm:px-3 correct-ocx-interactive-data-view">
+    <div *ngIf="!vm.loading && !vm.exceptionKey" class="sm:px-3 correct-ocx-interactive-data-view">
       <ocx-interactive-data-view
         [data]="vm.results"
         [columns]="vm.columns"
