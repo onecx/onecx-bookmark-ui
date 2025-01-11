@@ -105,8 +105,12 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     this.appConfigService.init(config.baseUrl)
     this.bookmarkApiUtils.loadBookmarks(this.handleBookmarkLoadError).subscribe((result) => {
       const bookmarks = result ?? []
-      this.privateBookmarks$.next(bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Private))
-      this.publicBookmarks$.next(bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Public))
+      this.privateBookmarks$.next(
+        bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Private).sort((a, b) => a.position - b.position)
+      )
+      this.publicBookmarks$.next(
+        bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Public).sort((a, b) => a.position - b.position)
+      )
       this.loading = false
     })
   }

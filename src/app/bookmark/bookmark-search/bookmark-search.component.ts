@@ -56,19 +56,24 @@ export class BookmarkSearchComponent implements OnInit {
         actionCallback: () => this.onExportItems()
       }
     ]
-    this.actions = [
+    this.prepareActionButtons(this.quickFilterValue)
+    this.actions = this.preparePageActions()
+  }
+
+  public preparePageActions(): Action[] {
+    return [
       {
         labelKey: 'ACTIONS.SORT.LABEL',
         titleKey: 'ACTIONS.SORT.TOOLTIP',
         icon: PrimeIcons.SORT,
         show: 'always',
         permission: 'BOOKMARK#EDIT',
+        //conditional: true,
+        //showCondition: vm.results?.length > 0,
         actionCallback: () => this.onSortDialog()
       }
     ]
-    this.prepareActionButtons(this.quickFilterValue)
   }
-
   /**
    * Table row actions
    * prepare row action buttons according to selected scope: PRIVATE, PUBLIC
@@ -133,6 +138,7 @@ export class BookmarkSearchComponent implements OnInit {
 
   public onFocusFilter() {
     if (!this.filterInit) {
+      this.filterInit = true
       fromEvent<KeyboardEvent>(this.bookmarkFilter?.nativeElement, 'keyup')
         .pipe(debounceTime(300), distinctUntilChanged())
         .subscribe((event: KeyboardEvent) => this.onFilterBookmarks(event))

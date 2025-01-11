@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store'
 
-import { BookmarkSearchActions } from './bookmark-search.actions'
+import { ActionErrorType, BookmarkSearchActions } from './bookmark-search.actions'
 import { bookmarkSearchColumns } from './bookmark-search.columns'
 import { BookmarkSearchState } from './bookmark-search.state'
 
@@ -20,12 +20,12 @@ export const bookmarkSearchReducer = createReducer(
     (state: BookmarkSearchState, { results }): BookmarkSearchState => ({ ...state, results, loading: false })
   ),
   on(
-    BookmarkSearchActions.bookmarkSearchResultsLoadingFailed,
-    (state: BookmarkSearchState, { error }): BookmarkSearchState => ({
+    BookmarkSearchActions.bookmarkSearchFailed,
+    (state: BookmarkSearchState, error: ActionErrorType): BookmarkSearchState => ({
       ...state,
       results: [],
       loading: false,
-      exceptionKey: error
+      exceptionKey: error.exceptionKey ?? null
     })
   ),
   on(

@@ -58,7 +58,7 @@
       "TOOLTIP": "Die Details des Lesezeichens anzeigen"
     },
     "CANCEL": "Abbrechen",
-    "LOADING": "...wid geladen",
+    "LOADING": "...wird geladen",
     "SAVE": "Speichern",
     "EXPORT": "Export",
     "IMPORT": "Import",
@@ -136,9 +136,7 @@
       "DELETE": "Lesezeichen löschen",
       "VISIT": "Zu Lesezeichen navigieren"
     },
-    "ERROR_MESSAGES": {
-      "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden."
-    }
+    "ERROR": "Suchergebnisse konnten nicht geladen werden."
   },
   "BOOKMARK_SORT": {
     "HEADER": "Lesezeichen sortieren",
@@ -207,10 +205,10 @@
       "BOOKMARK": "Ihre Anfrage konnte nicht bearbeitet werden."
     },
     "HTTP_STATUS_401": {
-      "BOOKMARK": "Sie sind nicht autorisiert, um Lesezeichen zu sehen."
+      "BOOKMARK": "Sie sind nicht autorisiert, um auf Lesezeichen zu arbeiten."
     },
     "HTTP_STATUS_403": {
-      "BOOKMARK": "Sie haben keine Rechte, um Lesezeichen zu sehen."
+      "BOOKMARK": "Sie haben keine Rechte, um auf Lesezeichen zu arbeiten."
     },
     "HTTP_STATUS_404": {
       "BOOKMARK": "Lesezeichen nicht gefunden."

@@ -108,7 +108,7 @@
       "ERROR": "Bookmark couldn't be created."
     },
     "EDIT": {
-      "HEADER": "Update Bookmark",
+      "HEADER": "Edit Bookmark",
       "FAILED": "Update failed",
       "ERROR": "Update failed",
       "SUCCESS": "Update successful",
@@ -136,9 +136,7 @@
       "DELETE": "Delete Bookmark",
       "VISIT": "Go to Bookmark"
     },
-    "ERROR_MESSAGES": {
-      "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed."
-    }
+    "ERROR": "Loading search results failed."
   },
   "BOOKMARK_SORT": {
     "HEADER": "Sort Bookmarks",
@@ -172,7 +170,7 @@
       "TITLE": "Bookmarks",
       "TABS": {
         "PRIVATE": "My Bookmarks",
-        "PUBLIC": "Additional links",
+        "PUBLIC": "Additional Links",
         "PUBLIC_TOOLTIP": "Links that have been provided by your organization."
       },
       "LOADING_ERROR": "Your Bookmarks couldn't be loaded.",
@@ -206,10 +204,10 @@
       "BOOKMARK": "Your request could not be processed."
     },
     "HTTP_STATUS_401": {
-      "BOOKMARK": "You are not authorized to see Bookmarks."
+      "BOOKMARK": "You are not authorized to work on Bookmarks.."
     },
     "HTTP_STATUS_403": {
-      "BOOKMARK": "You have no permissions to see Bookmarks."
+      "BOOKMARK": "You do not have permission to work on Bookmarks."
     },
     "HTTP_STATUS_404": {
       "BOOKMARK": "Bookmarks could not be found."
