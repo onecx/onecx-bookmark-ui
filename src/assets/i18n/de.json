@@ -104,6 +104,7 @@
     "DISPLAY_NAME": "Anzeigename",
     "DISPLAY_NAME.TOOLTIP": "Dieser Name wird in der Listenansicht verwendet.",
     "CREATE": {
+      "HEADER": "Lesezeichen erstellen",
       "SUCCESS": "Lesezeichen erfolgreich erstellt.",
       "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
     },
@@ -111,11 +112,7 @@
       "HEADER": "Lesezeichen bearbeiten",
       "FAILED": "Aktualisierung fehlgeschlagen",
       "ERROR": "Aktualisierung fehlgeschlagen",
-      "SUCCESS": "Aktualisierung erfolgreich",
-      "FORM": {
-        "SAVE": "Speichern",
-        "CANCEL": "Abbrechen"
-      }
+      "SUCCESS": "Aktualisierung erfolgreich"
     },
     "VIEW": {
       "HEADER": "Lesezeichen Details"
