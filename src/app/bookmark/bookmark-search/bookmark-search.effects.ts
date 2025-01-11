@@ -15,7 +15,7 @@ import {
 
 import { Bookmark, BookmarkScopeEnum, BookmarksInternal, UpdateBookmark } from 'src/app/shared/generated'
 
-import { BookmarkSearchActions } from './bookmark-search.actions'
+import { BookmarkSearchActions, ActionErrorType } from './bookmark-search.actions'
 import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
 import { BookmarkDetailComponent } from '../bookmark-detail/bookmark-detail.component'
 import { BookmarkDeleteComponent } from '../bookmark-delete/bookmark-delete.component'
@@ -33,6 +33,10 @@ export class BookmarkSearchEffects {
     private readonly appStateService: AppStateService,
     private readonly userService: UserService
   ) {}
+
+  private buildExceptionKey(status: string): string {
+    return 'EXCEPTIONS.HTTP_STATUS_' + status + '.BOOKMARK'
+  }
 
   search$ = createEffect(() => {
     return this.actions$.pipe(
@@ -69,10 +73,11 @@ export class BookmarkSearchEffects {
         })
       ),
       catchError((error) => {
-        console.error(error)
         return of(
-          BookmarkSearchActions.bookmarkSearchResultsLoadingFailed({
-            error: 'EXCEPTIONS.HTTP_STATUS_' + error.status + '.BOOKMARK'
+          BookmarkSearchActions.bookmarkSearchFailed({
+            status: error.status,
+            errorText: error.message,
+            exceptionKey: this.buildExceptionKey(error.status)
           })
         )
       })
@@ -119,7 +124,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkSearchActions.sortBookmarksCancelled())
         if (!dialogResult?.result || dialogResult?.result.length === 0) {
-          throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
+          throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         return this.bookmarksService.updateBookmarksOrder({ bookmarks: dialogResult?.result }).pipe(
           map(() => {
@@ -129,12 +134,7 @@ export class BookmarkSearchEffects {
         )
       }),
       catchError((error) => {
-        console.error(error)
-        this.messageService.error({
-          summaryKey: 'BOOKMARK_SORT.ERROR',
-          detailKey: error.message.includes('VALIDATION.ERRORS') ? error.message : undefined
-        })
-        return of(BookmarkSearchActions.sortBookmarksFailed({ error }))
+        return of(BookmarkSearchActions.sortBookmarksFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -178,7 +178,7 @@ export class BookmarkSearchEffects {
           return of(BookmarkSearchActions.updateBookmarksCancelled())
         }
         if (!dialogResult?.result) {
-          throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
+          throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         const itemToEditId = dialogResult.result.id
         const itemToEdit = {
@@ -195,12 +195,7 @@ export class BookmarkSearchEffects {
         )
       }),
       catchError((error) => {
-        console.error(error)
-        this.messageService.error({
-          summaryKey: 'BOOKMARK_DETAIL.EDIT.ERROR',
-          detailKey: error.message.includes('VALIDATION.ERRORS') ? error.message : undefined
-        })
-        return of(BookmarkSearchActions.sortBookmarksFailed({ error }))
+        return of(BookmarkSearchActions.updateBookmarksFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -236,7 +231,7 @@ export class BookmarkSearchEffects {
           return of(BookmarkSearchActions.deleteBookmarksCancelled())
         }
         if (!itemToDelete) {
-          throw new Error('VALIDATION.ERRORS.NOT_FOUND')
+          throw new Error('VALIDATION.ERRORS.NOT_FOUND') // error message
         }
 
         return this.bookmarksService.deleteBookmarkById(itemToDelete.id).pipe(
@@ -247,37 +242,53 @@ export class BookmarkSearchEffects {
         )
       }),
       catchError((error) => {
-        console.error(error)
-        this.messageService.error({
-          summaryKey: 'BOOKMARK_DELETE.ERROR',
-          detailKey: error.message.includes('VALIDATION.ERRORS') ? error.message : undefined
-        })
-        return of(BookmarkSearchActions.deleteBookmarksFailed({ error: 'hallo' }))
+        return of(
+          BookmarkSearchActions.deleteBookmarksFailed({
+            status: error.status,
+            errorText: error.message
+          })
+        )
       })
     )
   })
 
-  // for each error build the message
+  // for each failed action build the toast message key
   errorMessages: { action: Action; key: string }[] = [
     {
-      action: BookmarkSearchActions.bookmarkSearchResultsLoadingFailed,
-      key: 'BOOKMARK_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
+      action: BookmarkSearchActions.bookmarkSearchFailed,
+      key: 'BOOKMARK_SEARCH.ERROR'
+    },
+    {
+      action: BookmarkSearchActions.sortBookmarksFailed,
+      key: 'BOOKMARK_SORT.ERROR'
+    },
+    {
+      action: BookmarkSearchActions.updateBookmarksFailed,
+      key: 'BOOKMARK_DETAIL.EDIT.ERROR'
     },
     {
       action: BookmarkSearchActions.deleteBookmarksFailed,
-      key: 'BOOKMARK_SEARCH.ERROR_MESSAGES.SEARCH_RESULTS_LOADING_FAILED'
+      key: 'BOOKMARK_DELETE.ERROR'
     }
   ]
 
-  // listen on all errors
+  // build the toast message
   displayError$ = createEffect(
     () => {
       return this.actions$.pipe(
         tap((action) => {
           const e = this.errorMessages.find((e) => e.action.type === action.type)
           if (e) {
-            console.error('displayError', e)
-            this.messageService.error({ summaryKey: e.key })
+            console.error(action)
+            const error = action as any as ActionErrorType // convert due to access the props
+            this.messageService.error({
+              summaryKey: e.key,
+              detailKey: error.status
+                ? this.buildExceptionKey(error.status)
+                : error.errorText?.includes('VALIDATION.ERRORS')
+                  ? error.errorText
+                  : undefined
+            })
           }
         })
       )
