@@ -13,7 +13,14 @@ import {
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScopeEnum, BookmarksInternal, UpdateBookmark } from 'src/app/shared/generated'
+import {
+  Bookmark,
+  BookmarkScopeEnum,
+  BookmarksInternal,
+  CreateBookmark,
+  CreateBookmarkScopeEnum,
+  UpdateBookmark
+} from 'src/app/shared/generated'
 
 import { BookmarkSearchActions, ActionErrorType } from './bookmark-search.actions'
 import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
@@ -50,8 +57,9 @@ export class BookmarkSearchEffects {
   refreshSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
-        BookmarkSearchActions.updateBookmarksSucceeded,
-        BookmarkSearchActions.deleteBookmarksSucceeded,
+        BookmarkSearchActions.createBookmarkSucceeded,
+        BookmarkSearchActions.editBookmarkSucceeded,
+        BookmarkSearchActions.deleteBookmarkSucceeded,
         BookmarkSearchActions.sortBookmarksSucceeded
       ),
       withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
@@ -147,7 +155,7 @@ export class BookmarkSearchEffects {
       )
     }
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.openDetailDialog),
+      ofType(BookmarkSearchActions.viewOrEditBookmark),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
       map(([action, results]) => {
         return results.find((item) => item.id === action.id)
@@ -175,7 +183,7 @@ export class BookmarkSearchEffects {
           (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
           (dialogResult.button === 'primary' && !canEdit(dialogResult.result))
         ) {
-          return of(BookmarkSearchActions.updateBookmarksCancelled())
+          return of(BookmarkSearchActions.editBookmarkCancelled())
         }
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
@@ -190,12 +198,61 @@ export class BookmarkSearchEffects {
         return this.bookmarksService.updateBookmark(itemToEditId, itemToEdit).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
-            return BookmarkSearchActions.updateBookmarksSucceeded()
+            return BookmarkSearchActions.editBookmarkSucceeded()
           })
         )
       }),
       catchError((error) => {
-        return of(BookmarkSearchActions.updateBookmarksFailed({ status: error.status, errorText: error.message }))
+        return of(BookmarkSearchActions.editBookmarkFailed({ status: error.status, errorText: error.message }))
+      })
+    )
+  })
+
+  createBookmark$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(BookmarkSearchActions.createBookmark),
+      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
+      map(([action, results]) => {
+        return { ...results.find((item) => item.id === action.id), id: undefined }
+      }),
+      mergeMap((bookmark) => {
+        return this.portalDialogService.openDialog<Bookmark | undefined>(
+          `BOOKMARK_DETAIL.CREATE.HEADER`,
+          {
+            type: BookmarkDetailComponent,
+            inputs: { vm: { initialBookmark: bookmark } }
+          },
+          'ACTIONS.SAVE',
+          'ACTIONS.CANCEL',
+          {
+            modal: true,
+            draggable: true,
+            resizable: true,
+            width: '400px'
+          }
+        )
+      }),
+      switchMap((dialogResult) => {
+        if (!dialogResult || dialogResult.button === 'secondary') {
+          return of(BookmarkSearchActions.createBookmarkCancelled())
+        }
+        if (!dialogResult?.result) {
+          throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
+        }
+        const scope =
+          dialogResult.result.scope === BookmarkScopeEnum.Private
+            ? CreateBookmarkScopeEnum.Private
+            : CreateBookmarkScopeEnum.Public
+        const item = { ...dialogResult.result, scope: scope } as CreateBookmark
+        return this.bookmarksService.createNewBookmark(item).pipe(
+          map(() => {
+            this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS' })
+            return BookmarkSearchActions.createBookmarkSucceeded()
+          })
+        )
+      }),
+      catchError((error) => {
+        return of(BookmarkSearchActions.createBookmarkFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -228,7 +285,7 @@ export class BookmarkSearchEffects {
       }),
       switchMap(([dialogResult, itemToDelete]) => {
         if (!dialogResult || dialogResult.button === 'secondary') {
-          return of(BookmarkSearchActions.deleteBookmarksCancelled())
+          return of(BookmarkSearchActions.deleteBookmarkCancelled())
         }
         if (!itemToDelete) {
           throw new Error('VALIDATION.ERRORS.NOT_FOUND') // error message
@@ -237,13 +294,13 @@ export class BookmarkSearchEffects {
         return this.bookmarksService.deleteBookmarkById(itemToDelete.id).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DELETE.SUCCESS' })
-            return BookmarkSearchActions.deleteBookmarksSucceeded()
+            return BookmarkSearchActions.deleteBookmarkSucceeded()
           })
         )
       }),
       catchError((error) => {
         return of(
-          BookmarkSearchActions.deleteBookmarksFailed({
+          BookmarkSearchActions.deleteBookmarkFailed({
             status: error.status,
             errorText: error.message
           })
@@ -263,11 +320,15 @@ export class BookmarkSearchEffects {
       key: 'BOOKMARK_SORT.ERROR'
     },
     {
-      action: BookmarkSearchActions.updateBookmarksFailed,
+      action: BookmarkSearchActions.createBookmarkFailed,
+      key: 'BOOKMARK_DETAIL.CREATE.ERROR'
+    },
+    {
+      action: BookmarkSearchActions.editBookmarkFailed,
       key: 'BOOKMARK_DETAIL.EDIT.ERROR'
     },
     {
-      action: BookmarkSearchActions.deleteBookmarksFailed,
+      action: BookmarkSearchActions.deleteBookmarkFailed,
       key: 'BOOKMARK_DELETE.ERROR'
     }
   ]

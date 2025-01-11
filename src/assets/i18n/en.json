@@ -104,6 +104,7 @@
     "DISPLAY_NAME": "Display Name",
     "DISPLAY_NAME.TOOLTIP": "This name is used in list view.",
     "CREATE": {
+      "HEADER": "Create Bookmark",
       "SUCCESS": "Bookmark was created successfully.",
       "ERROR": "Bookmark couldn't be created."
     },
@@ -111,11 +112,7 @@
       "HEADER": "Edit Bookmark",
       "FAILED": "Update failed",
       "ERROR": "Update failed",
-      "SUCCESS": "Update successful",
-      "FORM": {
-        "SAVE": "Save",
-        "CANCEL": "Cancel"
-      }
+      "SUCCESS": "Update successful"
     },
     "VIEW": {
       "HEADER": "Bookmark Details"

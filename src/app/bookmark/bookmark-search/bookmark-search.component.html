@@ -103,56 +103,6 @@
             </div>
           </div>
         </ng-template>
-
-        <ng-template pTemplate="actionsIdTableCell" let-rowData="rowObject" let-i="rowIndex" let-column="column">
-          <ng-container *ocxIfNotPermission="'BOOKMARK#EDIT'">
-            <a
-              *ocxIfPermission="'BOOKMARK#VIEW'"
-              tabindex="0"
-              class="p-2 text-primary font-medium"
-              [id]="'bm_search_table_row_' + i + '_action_view'"
-              (click)="onDetail('VIEW', rowData)"
-              (keydown.enter)="onDetail('VIEW', rowData)"
-              (keydown.space)="onDetail('VIEW', rowData)"
-              [attr.aria-label]="'ACTIONS.VIEW.LABEL' | translate"
-              [pTooltip]="'ACTIONS.VIEW.LABEL' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            >
-              <span class="pi pi-eye" aria-hidden="true"></span>
-            </a>
-          </ng-container>
-          <a
-            *ocxIfPermission="'BOOKMARK#EDIT'"
-            tabindex="0"
-            class="p-2 text-primary font-medium"
-            [id]="'bm_search_table_row_' + i + '_action_edit'"
-            (click)="onDetail('EDIT', rowData)"
-            (keydown.enter)="onDetail('EDIT', rowData)"
-            (keydown.space)="onDetail('EDIT', rowData)"
-            [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
-            [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          >
-            <span class="pi pi-pencil" aria-hidden="true"></span>
-          </a>
-          <a
-            *ocxIfPermission="'BOOKMARK#DELETE'"
-            tabindex="0"
-            class="p-2 danger-action-text font-medium"
-            [id]="'bm_search_table_row_' + i + '_action_delete'"
-            (click)="onDelete(rowData)"
-            (keydown.enter)="onDelete(rowData)"
-            (keydown.space)="onDelete(rowData)"
-            [attr.aria-label]="'ACTIONS.DELETE.LABEL' | translate"
-            [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          >
-            <span class="pi pi-trash" aria-hidden="true"></span>
-          </a>
-        </ng-template>
       </ocx-interactive-data-view>
     </div>
   </ocx-page-content>

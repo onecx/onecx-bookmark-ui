@@ -95,7 +95,14 @@ export class BookmarkSearchComponent implements OnInit {
         labelKey: editPermission ? 'ACTIONS.EDIT.LABEL' : 'ACTIONS.VIEW.LABEL',
         icon: editPermission ? PrimeIcons.PENCIL : PrimeIcons.EYE,
         permission: editPermission ? 'BOOKMARK#' + prefix + 'EDIT' : 'BOOKMARK#VIEW',
-        callback: (data) => this.onDetail(editPermission ? 'EDIT' : 'VIEW', data)
+        callback: (data) => this.onDetail(data)
+      },
+      {
+        id: 'action_copy',
+        labelKey: 'ACTIONS.COPY.LABEL',
+        icon: PrimeIcons.COPY,
+        permission: 'BOOKMARK#CREATE',
+        callback: (data) => this.onCopy(data)
       },
       {
         id: 'action_delete',
@@ -167,11 +174,11 @@ export class BookmarkSearchComponent implements OnInit {
     // this.router.navigate(['./', data., 'menu'], { relativeTo: this.route })
   }
 
-  public onDetail(mode: string, data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.openDetailDialog({ id: data.id }))
+  public onDetail(data: Bookmark): void {
+    this.store.dispatch(BookmarkSearchActions.viewOrEditBookmark({ id: data.id }))
   }
   public onCopy(data: Bookmark): void {
-    console.log('onCopy', data)
+    this.store.dispatch(BookmarkSearchActions.createBookmark({ id: data.id }))
   }
   public onDelete(data: Bookmark): void {
     this.store.dispatch(BookmarkSearchActions.openDeleteDialog({ id: data.id }))

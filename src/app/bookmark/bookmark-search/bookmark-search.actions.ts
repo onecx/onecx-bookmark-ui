@@ -21,14 +21,18 @@ export const BookmarkSearchActions = createActionGroup({
     // extras
     'Export button clicked': emptyProps(),
     // detail: create, edit, view
-    'Open detail dialog': props<{ id: number | string }>(),
-    'Update bookmarks cancelled': emptyProps(),
-    'Update bookmarks succeeded': emptyProps(),
-    'Update bookmarks failed': props<ActionErrorType>(),
+    'Create bookmark': props<{ id: number | string }>(),
+    'Create bookmark cancelled': emptyProps(),
+    'Create bookmark succeeded': emptyProps(),
+    'Create bookmark failed': props<ActionErrorType>(),
+    'View or edit Bookmark': props<{ id: number | string }>(),
+    'Edit bookmark cancelled': emptyProps(),
+    'Edit bookmark succeeded': emptyProps(),
+    'Edit bookmark failed': props<ActionErrorType>(),
     // delete
     'Open delete dialog': props<{ id: number | string }>(),
-    'Delete bookmarks cancelled': emptyProps(),
-    'Delete bookmarks succeeded': emptyProps(),
-    'Delete bookmarks failed': props<ActionErrorType>()
+    'Delete bookmark cancelled': emptyProps(),
+    'Delete bookmark succeeded': emptyProps(),
+    'Delete bookmark failed': props<ActionErrorType>()
   }
 })
