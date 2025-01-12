@@ -7,6 +7,7 @@ import { PrimeIcons } from 'primeng/api'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import {
+  ButtonDialogButtonDetails,
   DialogState,
   ExportDataService,
   PortalDialogService,
@@ -154,6 +155,11 @@ export class BookmarkSearchEffects {
         (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScopeEnum.Public)
       )
     }
+    const saveAction = (editable: boolean) => {
+      return editable
+        ? { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE }
+        : { key: 'ACTIONS.NAVIGATION.CLOSE', icon: PrimeIcons.TIMES }
+    }
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.viewOrEditBookmark),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
@@ -161,14 +167,15 @@ export class BookmarkSearchEffects {
         return results.find((item) => item.id === action.id)
       }),
       mergeMap((bookmark) => {
+        const editable = canEdit(bookmark)
         return this.portalDialogService.openDialog<Bookmark | undefined>(
-          `BOOKMARK_DETAIL.${canEdit(bookmark) ? 'EDIT' : 'VIEW'}.HEADER`,
+          `BOOKMARK_DETAIL.${editable ? 'EDIT' : 'VIEW'}.HEADER`,
           {
             type: BookmarkDetailComponent,
             inputs: { vm: { initialBookmark: bookmark } }
           },
-          canEdit(bookmark) ? 'ACTIONS.SAVE' : 'ACTIONS.NAVIGATION.CLOSE',
-          canEdit(bookmark) ? 'ACTIONS.CANCEL' : undefined,
+          saveAction(editable) as ButtonDialogButtonDetails,
+          editable ? { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES } : undefined,
           {
             modal: true,
             draggable: true,
@@ -222,8 +229,8 @@ export class BookmarkSearchEffects {
             type: BookmarkDetailComponent,
             inputs: { vm: { initialBookmark: bookmark } }
           },
-          'ACTIONS.SAVE',
-          'ACTIONS.CANCEL',
+          { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE },
+          { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES },
           {
             modal: true,
             draggable: true,
