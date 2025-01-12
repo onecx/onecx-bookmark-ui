@@ -428,6 +428,11 @@
         background-color: var(--table-body-row-even-bg);
       }
     }
+    .p-orderlist:not(.p-disabled) .p-orderlist-item:not(.p-highlight):not(.p-disabled) {
+      &:nth-child(even) {
+        background-color: var(--table-body-row-even-bg);
+      }
+    }
   }
 }
 @mixin picklist-zebra-rows {

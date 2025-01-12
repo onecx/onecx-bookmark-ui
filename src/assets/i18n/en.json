@@ -172,8 +172,8 @@
       },
       "LOADING_ERROR": "Your Bookmarks couldn't be loaded.",
       "LOADING_ERROR_DETAIL": "Please try again later.",
-      "NO_PRIVATE_BOOKMARKS": "You don't have bookmarks.",
-      "NO_PRIVATE_BOOKMARKS_DETAIL": "Use the \"Star\" symbol in the topbar, to create a Bookmark for the current page."
+      "NO_PRIVATE_BOOKMARKS.STATE": "You don't have bookmarks.",
+      "NO_PRIVATE_BOOKMARKS.TODO": "Use the \"Star\" symbol in the topbar, to create a Bookmark for the current page."
     }
   },
   "VALIDATION": {

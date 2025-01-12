@@ -272,7 +272,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     const mode = isBookmarked ? 'EDIT' : 'CREATE'
     return {
       key: isBookmarkable ? 'REMOTES.MANAGE_BOOKMARK.DIALOG.' + mode + '_ACTIONS.SAVE' : 'ACTIONS.NAVIGATION.CLOSE',
-      icon: isBookmarkable ? PrimeIcons.CHECK : PrimeIcons.TIMES
+      icon: isBookmarkable ? PrimeIcons.SAVE : PrimeIcons.TIMES
     }
   }
 
