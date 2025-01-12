@@ -1,4 +1,6 @@
-<div [ocxContent]="'REMOTES.BOOKMARK_LIST.TITLE' | translate" class="min-height-10rem surface-200">
+<div class="card min-height-10rem surface-200">
+  <div class="mb-3 font-medium text-lg">{{'REMOTES.BOOKMARK_LIST.TITLE' | translate}}</div>
+
   <p-tabView *ngIf="!bookmarkLoadingError && !loading; else loadingSpinner">
     <p-tabPanel
       [header]="'REMOTES.BOOKMARK_LIST.TABS.PRIVATE' | translate"
@@ -31,6 +33,7 @@
         </div>
       </ng-template>
     </p-tabPanel>
+
     <p-tabPanel
       [header]="'REMOTES.BOOKMARK_LIST.TABS.PUBLIC' | translate"
       *ngIf="publicBookmarks$.getValue().length > 0"
