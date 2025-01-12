@@ -211,8 +211,8 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
             if (dialogState.button === 'secondary') {
               return of(undefined)
             }
-            const createBookmark = dialogState.result as CreateBookmark
-            return this.createBookmark(createBookmark, endpointForCurrentPage, currentMfe, currentPage)
+            const newBookmark = dialogState.result as CreateBookmark
+            return this.createBookmark(newBookmark, endpointForCurrentPage, currentMfe, currentPage)
           }
           if (isBookmarked) {
             const dialogResultBookmark = dialogState.result as Bookmark
@@ -238,30 +238,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
       })
   }
 
-  private getBookmarkDialogConfig(isBookmarkable: boolean): PortalDialogConfig {
-    return {
-      position: 'top-right',
-      style: { top: '4rem' },
-      modal: false,
-      draggable: true,
-      resizable: true,
-      width: isBookmarkable ? '400px' : undefined
-    } as PortalDialogConfig
-  }
-
-  private generateInitialCreationBookmark(currentMfe: MfeInfo, currentWorkspace: Workspace) {
-    const createBookmark: CreateBookmark = {
-      displayName: document.title,
-      endpointName: '',
-      position: 0,
-      productName: currentMfe.productName,
-      appId: currentMfe.appId,
-      workspaceName: currentWorkspace.workspaceName,
-      scope: CreateBookmarkScopeEnum.Private
-    }
-    return createBookmark
-  }
-
+  /**
+   * DIALOG details
+   */
   private getDialogBody(
     isBookmarkable: boolean,
     isBookmarked: boolean,
@@ -274,11 +253,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
           type: BookmarkCreateUpdateComponent,
           inputs: {
             vm: {
-              initialBookmark: isBookmarked
-                ? currentBookmark
-                : this.generateInitialCreationBookmark(currentMfe, currentWorkspace),
-              permissions: this.permissions,
-              mode: isBookmarked ? 'EDIT' : 'CREATE'
+              initialBookmark: isBookmarked ? currentBookmark : this.prepareNewBookmark(currentMfe, currentWorkspace),
+              mode: isBookmarked ? 'EDIT' : 'CREATE',
+              permissions: this.permissions
             }
           }
         }
@@ -309,8 +286,34 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     return secondaryButton
   }
 
+  private getBookmarkDialogConfig(isBookmarkable: boolean): PortalDialogConfig {
+    return {
+      position: 'top-right',
+      style: { top: '4rem' },
+      modal: false,
+      draggable: true,
+      resizable: true,
+      width: isBookmarkable ? '400px' : undefined
+    } as PortalDialogConfig
+  }
+
+  /**
+   * CREATE
+   */
+  private prepareNewBookmark(currentMfe: MfeInfo, currentWorkspace: Workspace) {
+    const newBookmark: CreateBookmark = {
+      displayName: document.title,
+      position: 0,
+      productName: currentMfe.productName,
+      appId: currentMfe.appId,
+      workspaceName: currentWorkspace.workspaceName,
+      scope: CreateBookmarkScopeEnum.Private
+    }
+    return newBookmark
+  }
+
   private createBookmark(
-    createBookmark: CreateBookmark,
+    newBookmark: CreateBookmark,
     endpointForCurrentPage: Endpoint | undefined,
     currentMfe: MfeInfo,
     currentPage: PageInfo | undefined
@@ -321,13 +324,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
         const pagePath = extractPathAfter(currentPage.path, currentMfe.baseHref)
         endpointParameters = mapPathSegmentsToPathParameters(endpointForCurrentPage.path, pagePath)
       }
-      createBookmark = {
-        ...createBookmark,
-        endpointName: endpointForCurrentPage.name ?? '',
+      newBookmark = {
+        ...newBookmark,
+        endpointName: endpointForCurrentPage.name,
         endpointParameters
       }
     }
-    return this.bookmarkApiUtils.createNewBookmark(createBookmark)
+    return this.bookmarkApiUtils.createNewBookmark(newBookmark)
   }
 
   private editBookmark(dialogResultBookmark: Bookmark) {

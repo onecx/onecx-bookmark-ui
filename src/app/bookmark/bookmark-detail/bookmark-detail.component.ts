@@ -64,6 +64,10 @@ export class BookmarkDetailComponent
           this.primaryButtonEnabled.emit(false)
         }
       })
+    // wait a moment for initialization to activate the primary button
+    setTimeout(() => {
+      this.primaryButtonEnabled.emit(true)
+    }, 500)
   }
 
   private hasEditPermission(): boolean {
