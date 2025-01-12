@@ -45,7 +45,7 @@
       "RELOAD": "Reload data",
       "FILTER": {
         "LABEL": "Filter",
-        "TOOLTIP": "Filter by Display name",
+        "TOOLTIP": "Filter by Name",
         "RESET": "Clear Filter"
       }
     },
@@ -86,9 +86,8 @@
     }
   },
   "BOOKMARK": {
-    "DISPLAY_NAME": "Display Name",
+    "DISPLAY_NAME": "Name",
     "POSITION": "Position",
-    "WORKSPACE": "Workspace",
     "PRODUCT": "Application",
     "ENDPOINT": "Endpoint",
     "ENDPOINT_PARAMETER": "Parameter",
@@ -98,11 +97,17 @@
       "ALL": "All",
       "PRIVATE": "Private",
       "PUBLIC": "Public"
+    },
+    "TOOLTIPS": {
+      "DISPLAY_NAME": "This name is used in list view.",
+      "POSITION": "Position in list view",
+      "PRODUCT": "Target Application",
+      "APP_ID": "App ID",
+      "ENDPOINT": "Target Endpoint",
+      "ENDPOINT_PARAMETER": "Parameter for endpoint in JSON format"
     }
   },
   "BOOKMARK_DETAIL": {
-    "DISPLAY_NAME": "Display Name",
-    "DISPLAY_NAME.TOOLTIP": "This name is used in list view.",
     "CREATE": {
       "HEADER": "Create Bookmark",
       "SUCCESS": "Bookmark was created successfully.",
@@ -127,12 +132,7 @@
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Bookmarks",
-    "SUB_HEADER": "View and manage Bookmarks",
-    "BREADCRUMB": "Bookmarks",
-    "CARD_ACTIONS": {
-      "DELETE": "Delete Bookmark",
-      "VISIT": "Go to Bookmark"
-    },
+    "SUB_HEADER": "Manage Bookmarks",
     "ERROR": "Loading search results failed."
   },
   "BOOKMARK_SORT": {
@@ -144,8 +144,8 @@
   "REMOTES": {
     "MANAGE_BOOKMARK": {
       "ACTION": {
-        "ADD": "Add Bookmark",
-        "UPDATE": "Edit Bookmark",
+        "CREATE": "Add Bookmark",
+        "EDIT": "Edit Bookmark",
         "LOADING": "Loading Bookmark"
       },
       "DIALOG": {

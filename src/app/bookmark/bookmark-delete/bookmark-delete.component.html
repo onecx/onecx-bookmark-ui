@@ -12,7 +12,11 @@
           {{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}
         </div>
       </div>
-      <div *ngIf="bookmark?.endpointName !== ''" class="flex flex-row column-gap-2">
+      <div class="flex flex-row column-gap-2">
+        <div class="w-4 text-right font-bold">{{ 'BOOKMARK.PRODUCT' | translate }}:</div>
+        <div class="w-8 text-left white-space-nowrap" id="bm_delete_product">{{ bookmark?.productName }}</div>
+      </div>
+      <div *ngIf="bookmark?.endpointName" class="flex flex-row column-gap-2">
         <div class="w-4 text-right font-bold">{{ 'BOOKMARK.ENDPOINT' | translate }}:</div>
         <div class="w-8 text-left white-space-nowrap" id="bm_delete_endpoint">{{ bookmark?.endpointName }}</div>
       </div>

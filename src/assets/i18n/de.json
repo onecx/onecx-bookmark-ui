@@ -45,7 +45,7 @@
       "RELOAD": "Daten neu laden",
       "FILTER": {
         "LABEL": "Filter",
-        "TOOLTIP": "Filtern nach Anzeigename",
+        "TOOLTIP": "Filtern nach Name",
         "RESET": "Filter entfernen"
       }
     },
@@ -86,9 +86,8 @@
     }
   },
   "BOOKMARK": {
-    "DISPLAY_NAME": "Anzeigename",
+    "DISPLAY_NAME": "Name",
     "POSITION": "Position",
-    "WORKSPACE": "Workspace",
     "PRODUCT": "Applikation",
     "ENDPOINT": "Endpunkt",
     "ENDPOINT_PARAMETER": "Parameter",
@@ -98,11 +97,17 @@
       "ALL": "Alle",
       "PRIVATE": "Privat",
       "PUBLIC": "Öffentlich"
+    },
+    "TOOLTIPS": {
+      "DISPLAY_NAME": "Dieser Name wird in der Listenansicht verwendet.",
+      "POSITION": "Position in der Listenansicht",
+      "PRODUCT": "Zielapplikation",
+      "APP_ID": "ID der Zielapp",
+      "ENDPOINT": "Endpunkt",
+      "ENDPOINT_PARAMETER": "Parameter des Endpunkts im JSON Format"
     }
   },
   "BOOKMARK_DETAIL": {
-    "DISPLAY_NAME": "Anzeigename",
-    "DISPLAY_NAME.TOOLTIP": "Dieser Name wird in der Listenansicht verwendet.",
     "CREATE": {
       "HEADER": "Lesezeichen erstellen",
       "SUCCESS": "Lesezeichen erfolgreich erstellt.",
@@ -127,12 +132,7 @@
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Lesezeichen",
-    "SUB_HEADER": "Anzeigen und verwalten von Lesezeichen",
-    "BREADCRUMB": "Lesezeichen",
-    "CARD_ACTIONS": {
-      "DELETE": "Lesezeichen löschen",
-      "VISIT": "Zu Lesezeichen navigieren"
-    },
+    "SUB_HEADER": "Verwalten von Lesezeichen",
     "ERROR": "Suchergebnisse konnten nicht geladen werden."
   },
   "BOOKMARK_SORT": {
@@ -153,7 +153,6 @@
         "HEADER_EDIT": "Lesezeichen bearbeiten",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Aktuell kann kein Lesezeichen für diese Seite erstellt werden.",
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Wenden Sie sich an einen Administrator. Derzeit können Sie nur ein Lesezeichen für die Startseite ({{mfeBaseUrl}}) der Anwendung erstellen.",
-        "NO_ENDPOINT_CONFIGURED_CONFIRM_ACTION": "Schließen",
         "CREATE_ACTIONS": {
           "CANCEL": "Abbrechen",
           "SAVE": "Speichern"
