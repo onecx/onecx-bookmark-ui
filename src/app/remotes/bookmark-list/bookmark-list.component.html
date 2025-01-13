@@ -1,5 +1,5 @@
-<div class="card min-height-10rem surface-200">
-  <div class="mb-3 font-medium text-lg">{{'REMOTES.BOOKMARK_LIST.TITLE' | translate}}</div>
+<div class="card surface-200">
+  <div class="mb-2 sm:mb-3 font-medium text-lg">{{'REMOTES.BOOKMARK_LIST.TITLE' | translate}}</div>
 
   <p-tabView *ngIf="!bookmarkLoadingError && !loading; else loadingSpinner">
     <p-tabPanel
