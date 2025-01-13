@@ -156,9 +156,10 @@ export class BookmarkSearchEffects {
       )
     }
     const saveAction = (editable: boolean) => {
-      return editable
+      const button = editable
         ? { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE }
         : { key: 'ACTIONS.NAVIGATION.CLOSE', icon: PrimeIcons.TIMES }
+      return button
     }
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.viewOrEditBookmark),
