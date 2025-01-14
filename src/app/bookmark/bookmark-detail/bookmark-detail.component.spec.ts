@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { TabViewModule } from 'primeng/tabview'
 
 import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
 
@@ -24,6 +25,14 @@ Object.defineProperty(window, 'matchMedia', {
   }))
 })
 
+window.ResizeObserver =
+  window.ResizeObserver ||
+  jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+
 describe('BookmarkDetailComponent', () => {
   let component: BookmarkDetailComponent
   let fixture: ComponentFixture<BookmarkDetailComponent>
@@ -38,6 +47,7 @@ describe('BookmarkDetailComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         LetDirective,
+        TabViewModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
