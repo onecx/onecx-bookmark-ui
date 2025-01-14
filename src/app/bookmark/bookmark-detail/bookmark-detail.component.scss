@@ -1,4 +1,5 @@
 @import '/src/app/_bm-mixins.scss';
 
+@include readable-disabled-form-controls;
 @include tabview-reduce-padding;
 @include tabview-fix-color-selected-tab;

@@ -11,7 +11,8 @@ import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 @Component({
   selector: 'app-bookmark-detail',
-  templateUrl: './bookmark-detail.component.html'
+  templateUrl: './bookmark-detail.component.html',
+  styleUrls: ['./bookmark-detail.component.scss']
 })
 export class BookmarkDetailComponent
   implements
@@ -33,26 +34,46 @@ export class BookmarkDetailComponent
   private permissionKey = 'BOOKMARK#EDIT'
   private hasPermission = false
   public datetimeFormat: string
+  public userId: string | undefined
 
   constructor(private readonly user: UserService) {
     this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
+    // to be used if switching scope back to PRIVATE
+    this.user.profile$.subscribe({
+      next: (data) => {
+        this.userId = data.userId
+      }
+    })
     this.formGroup = new FormGroup({
-      displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
+      displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
+      is_public: new FormControl(false)
     })
   }
 
   ocxDialogButtonClicked() {
-    this.dialogResult = { ...this.vm.initialBookmark, ...this.formGroup.value }
+    console.log('ocxDialogButtonClicked', this.formGroup.value)
+    console.log('ocxDialogButtonClicked', this.formGroup.controls['is_public'].value)
+    this.dialogResult = {
+      ...this.vm.initialBookmark,
+      ...this.formGroup.value,
+      userId: this.userId,
+      scope: this.formGroup.controls['is_public'].value ? BookmarkScope.Public : BookmarkScope.Private
+    }
   }
 
   ngOnInit() {
+    console.log('ngOnInit', this.vm.initialBookmark)
     if (this.vm.initialBookmark) {
-      this.formGroup.patchValue({ ...this.vm.initialBookmark })
+      this.formGroup.patchValue({
+        ...this.vm.initialBookmark,
+        is_public: this.vm.initialBookmark.scope === BookmarkScope.Public
+      })
       if (this.vm.initialBookmark.scope === BookmarkScope.Public) {
         this.permissionKey = 'BOOKMARK#ADMIN_EDIT'
         this.isPublicBookmark = true
       }
     }
+    console.log('ngOnInit', this.formGroup.value)
     this.hasPermission = this.hasEditPermission()
     if (!this.hasPermission) {
       this.formGroup.disable()

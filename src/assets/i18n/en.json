@@ -103,6 +103,7 @@
       "POSITION": "Position in list view",
       "PRODUCT": "Target Application",
       "APP_ID": "App ID",
+      "SCOPE_IS_PUBLIC": "If checked, the bookmark is visible to everyone in the workspace (public).",
       "ENDPOINT": "Target Endpoint",
       "ENDPOINT_PARAMETER": "Parameter for endpoint in JSON format"
     }

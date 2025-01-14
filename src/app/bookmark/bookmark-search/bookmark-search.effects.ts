@@ -38,6 +38,36 @@ export class BookmarkSearchEffects {
   private buildExceptionKey(status: string): string {
     return 'EXCEPTIONS.HTTP_STATUS_' + status + '.BOOKMARK'
   }
+  private yesButton: ButtonDialogButtonDetails = {
+    key: 'ACTIONS.CONFIRMATION.YES',
+    tooltipKey: 'ACTIONS.CONFIRMATION.YES.TOOLTIP',
+    tooltipPosition: 'top',
+    icon: PrimeIcons.TIMES
+  }
+  private noButton: ButtonDialogButtonDetails = {
+    key: 'ACTIONS.CONFIRMATION.NO',
+    tooltipKey: 'ACTIONS.CONFIRMATION.NO.TOOLTIP',
+    tooltipPosition: 'top',
+    icon: PrimeIcons.TIMES
+  }
+  private closeButton: ButtonDialogButtonDetails = {
+    key: 'ACTIONS.NAVIGATION.CLOSE',
+    tooltipKey: 'ACTIONS.NAVIGATION.CLOSE.TOOLTIP',
+    tooltipPosition: 'top',
+    icon: PrimeIcons.TIMES
+  }
+  private cancelButton: ButtonDialogButtonDetails = {
+    key: 'ACTIONS.CANCEL',
+    tooltipKey: 'ACTIONS.TOOLTIPS.CANCEL',
+    tooltipPosition: 'top',
+    icon: PrimeIcons.TIMES
+  }
+  private saveButton: ButtonDialogButtonDetails = {
+    key: 'ACTIONS.SAVE',
+    tooltipKey: 'ACTIONS.TOOLTIPS.SAVE',
+    tooltipPosition: 'top',
+    icon: PrimeIcons.SAVE
+  }
 
   search$ = createEffect(() => {
     return this.actions$.pipe(
@@ -113,12 +143,13 @@ export class BookmarkSearchEffects {
             type: BookmarkSortComponent,
             inputs: { vm: { initialBookmarks: bookmarks } }
           },
-          { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE },
-          { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES },
+          this.saveButton,
+          this.cancelButton,
           {
             modal: true,
             draggable: true,
-            resizable: true
+            resizable: true,
+            autoFocusButton: 'secondary'
           }
         )
       }),
@@ -148,12 +179,6 @@ export class BookmarkSearchEffects {
         (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScope.Public)
       )
     }
-    const saveAction = (editable: boolean) => {
-      const button = editable
-        ? { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE }
-        : { key: 'ACTIONS.NAVIGATION.CLOSE', icon: PrimeIcons.TIMES }
-      return button
-    }
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.viewOrEditBookmark),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
@@ -168,13 +193,14 @@ export class BookmarkSearchEffects {
             type: BookmarkDetailComponent,
             inputs: { vm: { initialBookmark: bookmark, changeMode: editable ? 'EDIT' : 'VIEW' } }
           },
-          saveAction(editable) as ButtonDialogButtonDetails,
-          editable ? { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES } : undefined,
+          editable ? this.saveButton : this.closeButton,
+          editable ? this.cancelButton : undefined,
           {
             modal: true,
             draggable: true,
             resizable: true,
-            width: '550px'
+            width: '550px',
+            autoFocusButton: 'secondary'
           }
         )
       }),
@@ -189,14 +215,8 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
-        const itemToEditId = dialogResult.result.id
-        const itemToEdit = {
-          id: dialogResult.result.id,
-          position: dialogResult.result.position ?? 0,
-          displayName: dialogResult.result.displayName,
-          modificationCount: dialogResult.result.modificationCount
-        } as UpdateBookmark
-        return this.bookmarksService.updateBookmark(itemToEditId, itemToEdit).pipe(
+        console.log(dialogResult.result)
+        return this.bookmarksService.updateBookmark(dialogResult.result.id, dialogResult.result as UpdateBookmark).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
             return BookmarkSearchActions.editBookmarkSucceeded()
@@ -223,13 +243,14 @@ export class BookmarkSearchEffects {
             type: BookmarkDetailComponent,
             inputs: { vm: { initialBookmark: bookmark, changeMode: 'CREATE' } }
           },
-          { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE },
-          { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES },
+          this.saveButton,
+          this.cancelButton,
           {
             modal: true,
             draggable: true,
             resizable: true,
-            width: '400px'
+            width: '400px',
+            autoFocusButton: 'secondary'
           }
         )
       }),
@@ -266,12 +287,13 @@ export class BookmarkSearchEffects {
           .openDialog<unknown>(
             'BOOKMARK_DELETE.HEADER',
             { type: BookmarkDeleteComponent, inputs: { bookmark: itemToDelete } },
-            { key: 'ACTIONS.CONFIRMATION.YES', icon: PrimeIcons.CHECK },
-            { key: 'ACTIONS.CONFIRMATION.NO', icon: PrimeIcons.TIMES },
+            this.yesButton,
+            this.noButton,
             {
               modal: true,
               draggable: true,
-              resizable: true
+              resizable: true,
+              autoFocusButton: 'secondary'
             }
           )
           .pipe(
