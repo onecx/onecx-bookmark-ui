@@ -3,17 +3,16 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
 import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
-import { PrimeIcons } from 'primeng/api'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import {
-  ButtonDialogButtonDetails,
   DialogState,
   ExportDataService,
   PortalDialogService,
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 
+import * as actton from 'src/app/shared/utils/actionButtons'
 import { Bookmark, BookmarkScope, BookmarksInternal, CreateBookmark, UpdateBookmark } from 'src/app/shared/generated'
 
 import { BookmarkSearchActions, ActionErrorType } from './bookmark-search.actions'
@@ -37,36 +36,6 @@ export class BookmarkSearchEffects {
 
   private buildExceptionKey(status: string): string {
     return 'EXCEPTIONS.HTTP_STATUS_' + status + '.BOOKMARK'
-  }
-  private yesButton: ButtonDialogButtonDetails = {
-    key: 'ACTIONS.CONFIRMATION.YES',
-    tooltipKey: 'ACTIONS.CONFIRMATION.YES.TOOLTIP',
-    tooltipPosition: 'top',
-    icon: PrimeIcons.TIMES
-  }
-  private noButton: ButtonDialogButtonDetails = {
-    key: 'ACTIONS.CONFIRMATION.NO',
-    tooltipKey: 'ACTIONS.CONFIRMATION.NO.TOOLTIP',
-    tooltipPosition: 'top',
-    icon: PrimeIcons.TIMES
-  }
-  private closeButton: ButtonDialogButtonDetails = {
-    key: 'ACTIONS.NAVIGATION.CLOSE',
-    tooltipKey: 'ACTIONS.NAVIGATION.CLOSE.TOOLTIP',
-    tooltipPosition: 'top',
-    icon: PrimeIcons.TIMES
-  }
-  private cancelButton: ButtonDialogButtonDetails = {
-    key: 'ACTIONS.CANCEL',
-    tooltipKey: 'ACTIONS.TOOLTIPS.CANCEL',
-    tooltipPosition: 'top',
-    icon: PrimeIcons.TIMES
-  }
-  private saveButton: ButtonDialogButtonDetails = {
-    key: 'ACTIONS.SAVE',
-    tooltipKey: 'ACTIONS.TOOLTIPS.SAVE',
-    tooltipPosition: 'top',
-    icon: PrimeIcons.SAVE
   }
 
   search$ = createEffect(() => {
@@ -143,8 +112,8 @@ export class BookmarkSearchEffects {
             type: BookmarkSortComponent,
             inputs: { vm: { initialBookmarks: bookmarks } }
           },
-          this.saveButton,
-          this.cancelButton,
+          actton.saveButton,
+          actton.cancelButton,
           {
             modal: true,
             draggable: true,
@@ -193,8 +162,8 @@ export class BookmarkSearchEffects {
             type: BookmarkDetailComponent,
             inputs: { vm: { initialBookmark: bookmark, changeMode: editable ? 'EDIT' : 'VIEW' } }
           },
-          editable ? this.saveButton : this.closeButton,
-          editable ? this.cancelButton : undefined,
+          editable ? actton.saveButton : actton.closeButton,
+          editable ? actton.cancelButton : undefined,
           {
             modal: true,
             draggable: true,
@@ -243,8 +212,8 @@ export class BookmarkSearchEffects {
             type: BookmarkDetailComponent,
             inputs: { vm: { initialBookmark: bookmark, changeMode: 'CREATE' } }
           },
-          this.saveButton,
-          this.cancelButton,
+          actton.saveButton,
+          actton.cancelButton,
           {
             modal: true,
             draggable: true,
@@ -287,8 +256,8 @@ export class BookmarkSearchEffects {
           .openDialog<unknown>(
             'BOOKMARK_DELETE.HEADER',
             { type: BookmarkDeleteComponent, inputs: { bookmark: itemToDelete } },
-            this.yesButton,
-            this.noButton,
+            actton.yesButton,
+            actton.noButton,
             {
               modal: true,
               draggable: true,
