@@ -14,14 +14,7 @@ import {
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 
-import {
-  Bookmark,
-  BookmarkScopeEnum,
-  BookmarksInternal,
-  CreateBookmark,
-  CreateBookmarkScopeEnum,
-  UpdateBookmark
-} from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope, BookmarksInternal, CreateBookmark, UpdateBookmark } from 'src/app/shared/generated'
 
 import { BookmarkSearchActions, ActionErrorType } from './bookmark-search.actions'
 import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
@@ -151,8 +144,8 @@ export class BookmarkSearchEffects {
   detailButtonClicked$ = createEffect(() => {
     const canEdit = (bookmark?: Bookmark) => {
       return (
-        (this.userService.hasPermission('BOOKMARK#EDIT') && bookmark?.scope === BookmarkScopeEnum.Private) ||
-        (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScopeEnum.Public)
+        (this.userService.hasPermission('BOOKMARK#EDIT') && bookmark?.scope === BookmarkScope.Private) ||
+        (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScope.Public)
       )
     }
     const saveAction = (editable: boolean) => {
@@ -173,7 +166,7 @@ export class BookmarkSearchEffects {
           `BOOKMARK_DETAIL.${editable ? 'EDIT' : 'VIEW'}.HEADER`,
           {
             type: BookmarkDetailComponent,
-            inputs: { vm: { initialBookmark: bookmark } }
+            inputs: { vm: { initialBookmark: bookmark, changeMode: editable ? 'EDIT' : 'VIEW' } }
           },
           saveAction(editable) as ButtonDialogButtonDetails,
           editable ? { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES } : undefined,
@@ -181,7 +174,7 @@ export class BookmarkSearchEffects {
             modal: true,
             draggable: true,
             resizable: true,
-            width: '400px'
+            width: '550px'
           }
         )
       }),
@@ -228,7 +221,7 @@ export class BookmarkSearchEffects {
           `BOOKMARK_DETAIL.CREATE.HEADER`,
           {
             type: BookmarkDetailComponent,
-            inputs: { vm: { initialBookmark: bookmark } }
+            inputs: { vm: { initialBookmark: bookmark, changeMode: 'CREATE' } }
           },
           { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE },
           { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES },
@@ -247,11 +240,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
-        const scope =
-          dialogResult.result.scope === BookmarkScopeEnum.Private
-            ? CreateBookmarkScopeEnum.Private
-            : CreateBookmarkScopeEnum.Public
-        const item = { ...dialogResult.result, scope: scope } as CreateBookmark
+        const item = { ...dialogResult.result } as CreateBookmark
         return this.bookmarksService.createNewBookmark(item).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS' })

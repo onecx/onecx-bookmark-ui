@@ -121,6 +121,14 @@
     },
     "VIEW": {
       "HEADER": "Lesezeichen Details"
+    },
+    "TAB": {
+      "PROPS": "Eigenschaften",
+      "INTERN": "Intern",
+      "TOOLTIPS": {
+        "PROPS": "Basiseigenschaften der Neuigkeit",
+        "INTERN": "Interne Eigenschaften"
+      }
     }
   },
   "BOOKMARK_DELETE": {

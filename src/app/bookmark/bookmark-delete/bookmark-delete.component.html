@@ -6,7 +6,7 @@
       {{ bookmark?.displayName }}
     </div>
     <div class="px-2 flex flex-column row-gap-1">
-      <div *ngIf="bookmark?.scope === BookmarkScopeEnum.Public" class="flex flex-row column-gap-2">
+      <div *ngIf="bookmark?.scope === BookmarkScope.Public" class="flex flex-row column-gap-2">
         <div class="w-4 text-right font-bold">{{ 'BOOKMARK.SCOPE' | translate }}:</div>
         <div class="w-8 text-left white-space-nowrap" id="am_delete_scope">
           {{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}

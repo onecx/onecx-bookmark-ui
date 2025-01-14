@@ -8,6 +8,7 @@ import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputGroupModule } from 'primeng/inputgroup'
 import { InputTextModule } from 'primeng/inputtext'
 import { OrderListModule } from 'primeng/orderlist'
+import { TabViewModule } from 'primeng/tabview'
 import { TooltipModule } from 'primeng/tooltip'
 
 @NgModule({
@@ -20,6 +21,7 @@ import { TooltipModule } from 'primeng/tooltip'
     InputTextModule,
     OrderListModule,
     ReactiveFormsModule,
+    TabViewModule,
     TooltipModule,
     TranslateModule,
     errorTailorImports
@@ -30,6 +32,7 @@ import { TooltipModule } from 'primeng/tooltip'
     InputGroupModule,
     ReactiveFormsModule,
     OrderListModule,
+    TabViewModule,
     TooltipModule,
     TranslateModule,
     errorTailorImports

@@ -257,7 +257,7 @@ components:
         appId:
           type: string
         scope:
-          type: string
+          $ref: '#/components/schemas/BookmarkScope'
         pageNumber:
           format: int32
           description: The number of page.
@@ -314,10 +314,7 @@ components:
         appId:
           type: string
         scope:
-          type: string
-          enum:
-            - PRIVATE
-            - PUBLIC
+          $ref: '#/components/schemas/BookmarkScope'
         position:
           type: integer
           format: int32
@@ -374,10 +371,7 @@ components:
         appId:
           type: string
         scope:
-          type: string
-          enum:
-            - PRIVATE
-            - PUBLIC
+          $ref: '#/components/schemas/BookmarkScope'
         position:
           type: integer
           format: int32
@@ -399,6 +393,25 @@ components:
           format: int32
         id:
           type: string
+        endpointName:
+          type: string
+        endpointParameters:
+          type: object
+          additionalProperties:
+            type: string
+        scope:
+          $ref: '#/components/schemas/BookmarkScope'
+        query:
+          type: string
+        hash:
+          type: string
+        userId:
+          type: string
+    BookmarkScope:
+      type: string
+      enum:
+        - PRIVATE
+        - PUBLIC
     ProblemDetailResponse:
       type: object
       properties:

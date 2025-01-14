@@ -121,6 +121,14 @@
     },
     "VIEW": {
       "HEADER": "Bookmark Details"
+    },
+    "TAB": {
+      "PROPS": "Properties",
+      "INTERN": "Internal",
+      "TOOLTIPS": {
+        "PROPS": "Base properties of the Announcement",
+        "INTERN": "Internal Properties"
+      }
     }
   },
   "BOOKMARK_DELETE": {

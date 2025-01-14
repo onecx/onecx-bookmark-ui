@@ -5,7 +5,7 @@ import { map } from 'rxjs'
 import { UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
@@ -20,7 +20,11 @@ export class BookmarkDetailComponent
     DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
-  @Input() public vm: BookmarkDetailViewModel = { initialBookmark: undefined, permissions: undefined }
+  @Input() public vm: BookmarkDetailViewModel = {
+    initialBookmark: undefined,
+    permissions: undefined,
+    changeMode: 'VIEW'
+  }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public formGroup: FormGroup
@@ -28,8 +32,10 @@ export class BookmarkDetailComponent
   public isPublicBookmark = false
   private permissionKey = 'BOOKMARK#EDIT'
   private hasPermission = false
+  public datetimeFormat: string
 
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly user: UserService) {
+    this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
     this.formGroup = new FormGroup({
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
     })
@@ -42,7 +48,7 @@ export class BookmarkDetailComponent
   ngOnInit() {
     if (this.vm.initialBookmark) {
       this.formGroup.patchValue({ ...this.vm.initialBookmark })
-      if (this.vm.initialBookmark.scope === BookmarkScopeEnum.Public) {
+      if (this.vm.initialBookmark.scope === BookmarkScope.Public) {
         this.permissionKey = 'BOOKMARK#ADMIN_EDIT'
         this.isPublicBookmark = true
       }
@@ -74,6 +80,6 @@ export class BookmarkDetailComponent
     if (this.vm.permissions) {
       return this.vm.permissions.includes(this.permissionKey)
     }
-    return this.userService.hasPermission(this.permissionKey)
+    return this.user.hasPermission(this.permissionKey)
   }
 }
