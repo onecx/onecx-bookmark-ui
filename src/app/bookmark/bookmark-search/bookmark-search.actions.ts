@@ -20,11 +20,12 @@ export const BookmarkSearchActions = createActionGroup({
     'Sort bookmarks failed': props<ActionErrorType>(),
     // extras
     'Export button clicked': emptyProps(),
-    // detail: create, edit, view
+    // detail: create
     'Create bookmark': props<{ id: number | string }>(),
     'Create bookmark cancelled': emptyProps(),
     'Create bookmark succeeded': emptyProps(),
     'Create bookmark failed': props<ActionErrorType>(),
+    // detail: edit, view
     'View or edit Bookmark': props<{ id: number | string }>(),
     'Edit bookmark cancelled': emptyProps(),
     'Edit bookmark succeeded': emptyProps(),

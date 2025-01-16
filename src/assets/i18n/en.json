@@ -89,9 +89,11 @@
     "DISPLAY_NAME": "Name",
     "POSITION": "Position",
     "PRODUCT": "Application",
-    "ENDPOINT": "Endpoint",
-    "ENDPOINT_PARAMETER": "Parameter",
     "APP_ID": "App ID",
+    "ENDPOINT": "Endpoint Name",
+    "ENDPOINT_PARAMETER": "Endpoint Parameter",
+    "QUERY": "Query",
+    "HASH": "Anchor Link",
     "SCOPE": "Scope",
     "SCOPES": {
       "ALL": "All",
@@ -104,8 +106,10 @@
       "PRODUCT": "Target Application",
       "APP_ID": "App ID",
       "SCOPE_IS_PUBLIC": "If checked, the bookmark is visible to everyone in the workspace (public).",
-      "ENDPOINT": "Target Endpoint",
-      "ENDPOINT_PARAMETER": "Parameter for endpoint in JSON format"
+      "ENDPOINT": "The name of the app endpoint that the bookmark points to.",
+      "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
+      "QUERY": "Additional information that can be further processed on the server or client side.",
+      "HASH": "Reference to an area on the target page (anchor link). Used on the client side to navigate to the area."
     }
   },
   "BOOKMARK_DETAIL": {
@@ -125,9 +129,11 @@
     },
     "TAB": {
       "PROPS": "Properties",
+      "ENDPOINT": "Endpoint",
       "INTERN": "Internal",
       "TOOLTIPS": {
         "PROPS": "Base properties of the Announcement",
+        "ENDPOINT": "The endpoint targeted by the bookmark and its parameters.",
         "INTERN": "Internal Properties"
       }
     }

@@ -70,6 +70,61 @@
     </div>
   </p-tabPanel>
 
+  <p-tabPanel
+    *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
+    [header]="'BOOKMARK_DETAIL.TAB.ENDPOINT' | translate"
+    [tooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.ENDPOINT' | translate"
+    tooltipPosition="top"
+    tooltipEvent="hover"
+  >
+    <div class="mt-1 mb-2 flex flex-column row-gap-4">
+      <span class="p-float-label">
+        <input
+          pInputText
+          type="text"
+          id="bm_detail_form_endpoint_name"
+          class="w-full pt-3 pb-2"
+          [value]="vm.initialBookmark?.endpointName"
+          [attr.aria-label]="'BOOKMARK.ENDPOINT' | translate"
+          [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
+        <label for="bm_detail_form_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
+      </span>
+      <span class="p-float-label">
+        <input
+          pInputText
+          type="text"
+          id="bm_detail_form_query"
+          class="w-full pt-3 pb-2"
+          [value]="vm.initialBookmark?.query"
+          [attr.aria-label]="'BOOKMARK.QUERY' | translate"
+          [pTooltip]="'BOOKMARK.TOOLTIPS.QUERY' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
+        <label for="bm_detail_form_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
+      </span>
+      <span class="p-float-label">
+        <input
+          pInputText
+          type="text"
+          readonly
+          [disabled]="true"
+          id="bm_detail_form_hash"
+          class="w-full pt-3 pb-2"
+          [value]="vm.initialBookmark?.hash"
+          [attr.aria-label]="'BOOKMARK.HASH' | translate"
+          [pTooltip]="'BOOKMARK.TOOLTIPS.HASH' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
+        <label for="bm_detail_form_hash">{{ 'BOOKMARK.HASH' | translate }}</label>
+      </span>
+    </div>
+  </p-tabPanel>
+
   <!-- The internals - in case of an existing item only -->
   <p-tabPanel
     *ngIf="!['COPY', 'CREATE'].includes(vm.changeMode)"

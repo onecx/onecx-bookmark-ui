@@ -89,9 +89,11 @@
     "DISPLAY_NAME": "Name",
     "POSITION": "Position",
     "PRODUCT": "Applikation",
-    "ENDPOINT": "Endpunkt",
-    "ENDPOINT_PARAMETER": "Parameter",
     "APP_ID": "App ID",
+    "ENDPOINT": "Endpunktname",
+    "ENDPOINT_PARAMETER": "Endpunktparameter",
+    "QUERY": "Query",
+    "HASH": "Anker Link",
     "SCOPE": "Bereich",
     "SCOPES": {
       "ALL": "Alle",
@@ -103,9 +105,11 @@
       "POSITION": "Position in der Listenansicht",
       "PRODUCT": "Zielapplikation",
       "APP_ID": "ID der Zielapp",
-      "SCOPE_IS_PUBLIC": "Wenn markiert, dann ist das Lesezeichen für alle im Workspace sichtbar (öffentlich).",
-      "ENDPOINT": "Endpunkt",
-      "ENDPOINT_PARAMETER": "Parameter des Endpunkts im JSON Format"
+      "SCOPE_IS_PUBLIC": "Wenn markiert, dann ist das Lesezeichen für alle im Workspace sichtbar.",
+      "ENDPOINT": "Der Name des, mit dem Lesezeichen angesteuerten, Endpunkts der App.",
+      "ENDPOINT_PARAMETER": "Ein spezieller Parameter des Endpunkts dem ein Wert zugeordnet werden kann.",
+      "QUERY": "Zusätzliche Informationen die server- oder clientseitig weiterverarbeitet werden können.",
+      "HASH": "Referenz zu einem Bereich auf der Zielseite (Anchor Link). Wird clientseitig benutzt um zu dem Bereich zu navigieren."
     }
   },
   "BOOKMARK_DETAIL": {
@@ -125,9 +129,11 @@
     },
     "TAB": {
       "PROPS": "Eigenschaften",
+      "ENDPOINT": "Endpunkt",
       "INTERN": "Intern",
       "TOOLTIPS": {
         "PROPS": "Basiseigenschaften des Lesezeichens",
+        "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Parameter",
         "INTERN": "Interne Eigenschaften"
       }
     }
