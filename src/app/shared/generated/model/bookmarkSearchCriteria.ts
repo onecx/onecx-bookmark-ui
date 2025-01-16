@@ -8,13 +8,14 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BookmarkScope } from './bookmarkScope';
 
 
 export interface BookmarkSearchCriteria { 
     workspaceName: string;
     productName?: string;
     appId?: string;
-    scope?: string;
+    scope?: BookmarkScope;
     /**
      * The number of page.
      */
@@ -24,4 +25,6 @@ export interface BookmarkSearchCriteria {
      */
     pageSize?: number;
 }
+
+
 

@@ -43,7 +43,7 @@ import {
   AppConfigService
 } from '@onecx/portal-integration-angular'
 
-import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
+import { Bookmark, CreateBookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
 import { extractPathAfter, mapPathSegmentsToPathParameters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
@@ -307,7 +307,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
       productName: currentMfe.productName,
       appId: currentMfe.appId,
       workspaceName: currentWorkspace.workspaceName,
-      scope: CreateBookmarkScopeEnum.Private
+      scope: BookmarkScope.Private
     }
     return newBookmark
   }

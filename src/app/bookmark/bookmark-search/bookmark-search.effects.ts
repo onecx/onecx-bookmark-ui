@@ -3,25 +3,17 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
 import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
-import { PrimeIcons } from 'primeng/api'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import {
-  ButtonDialogButtonDetails,
   DialogState,
   ExportDataService,
   PortalDialogService,
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 
-import {
-  Bookmark,
-  BookmarkScopeEnum,
-  BookmarksInternal,
-  CreateBookmark,
-  CreateBookmarkScopeEnum,
-  UpdateBookmark
-} from 'src/app/shared/generated'
+import * as actton from 'src/app/shared/utils/actionButtons'
+import { Bookmark, BookmarkScope, BookmarksInternal, CreateBookmark, UpdateBookmark } from 'src/app/shared/generated'
 
 import { BookmarkSearchActions, ActionErrorType } from './bookmark-search.actions'
 import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
@@ -120,12 +112,13 @@ export class BookmarkSearchEffects {
             type: BookmarkSortComponent,
             inputs: { vm: { initialBookmarks: bookmarks } }
           },
-          { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE },
-          { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES },
+          actton.saveButton,
+          actton.cancelButton,
           {
             modal: true,
             draggable: true,
-            resizable: true
+            resizable: true,
+            autoFocusButton: 'secondary'
           }
         )
       }),
@@ -151,15 +144,9 @@ export class BookmarkSearchEffects {
   detailButtonClicked$ = createEffect(() => {
     const canEdit = (bookmark?: Bookmark) => {
       return (
-        (this.userService.hasPermission('BOOKMARK#EDIT') && bookmark?.scope === BookmarkScopeEnum.Private) ||
-        (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScopeEnum.Public)
+        (this.userService.hasPermission('BOOKMARK#EDIT') && bookmark?.scope === BookmarkScope.Private) ||
+        (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScope.Public)
       )
-    }
-    const saveAction = (editable: boolean) => {
-      const button = editable
-        ? { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE }
-        : { key: 'ACTIONS.NAVIGATION.CLOSE', icon: PrimeIcons.TIMES }
-      return button
     }
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.viewOrEditBookmark),
@@ -173,15 +160,16 @@ export class BookmarkSearchEffects {
           `BOOKMARK_DETAIL.${editable ? 'EDIT' : 'VIEW'}.HEADER`,
           {
             type: BookmarkDetailComponent,
-            inputs: { vm: { initialBookmark: bookmark } }
+            inputs: { vm: { initialBookmark: bookmark, changeMode: editable ? 'EDIT' : 'VIEW' } }
           },
-          saveAction(editable) as ButtonDialogButtonDetails,
-          editable ? { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES } : undefined,
+          editable ? actton.saveButton : actton.closeButton,
+          editable ? actton.cancelButton : undefined,
           {
             modal: true,
             draggable: true,
             resizable: true,
-            width: '400px'
+            width: '550px',
+            autoFocusButton: 'secondary'
           }
         )
       }),
@@ -196,14 +184,8 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
-        const itemToEditId = dialogResult.result.id
-        const itemToEdit = {
-          id: dialogResult.result.id,
-          position: dialogResult.result.position ?? 0,
-          displayName: dialogResult.result.displayName,
-          modificationCount: dialogResult.result.modificationCount
-        } as UpdateBookmark
-        return this.bookmarksService.updateBookmark(itemToEditId, itemToEdit).pipe(
+        console.log(dialogResult.result)
+        return this.bookmarksService.updateBookmark(dialogResult.result.id, dialogResult.result as UpdateBookmark).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
             return BookmarkSearchActions.editBookmarkSucceeded()
@@ -228,15 +210,16 @@ export class BookmarkSearchEffects {
           `BOOKMARK_DETAIL.CREATE.HEADER`,
           {
             type: BookmarkDetailComponent,
-            inputs: { vm: { initialBookmark: bookmark } }
+            inputs: { vm: { initialBookmark: bookmark, changeMode: 'CREATE' } }
           },
-          { key: 'ACTIONS.SAVE', icon: PrimeIcons.SAVE },
-          { key: 'ACTIONS.CANCEL', icon: PrimeIcons.TIMES },
+          actton.saveButton,
+          actton.cancelButton,
           {
             modal: true,
             draggable: true,
             resizable: true,
-            width: '400px'
+            width: '400px',
+            autoFocusButton: 'secondary'
           }
         )
       }),
@@ -247,11 +230,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
-        const scope =
-          dialogResult.result.scope === BookmarkScopeEnum.Private
-            ? CreateBookmarkScopeEnum.Private
-            : CreateBookmarkScopeEnum.Public
-        const item = { ...dialogResult.result, scope: scope } as CreateBookmark
+        const item = { ...dialogResult.result } as CreateBookmark
         return this.bookmarksService.createNewBookmark(item).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS' })
@@ -277,12 +256,13 @@ export class BookmarkSearchEffects {
           .openDialog<unknown>(
             'BOOKMARK_DELETE.HEADER',
             { type: BookmarkDeleteComponent, inputs: { bookmark: itemToDelete } },
-            { key: 'ACTIONS.CONFIRMATION.YES', icon: PrimeIcons.CHECK },
-            { key: 'ACTIONS.CONFIRMATION.NO', icon: PrimeIcons.TIMES },
+            actton.yesButton,
+            actton.noButton,
             {
               modal: true,
               draggable: true,
-              resizable: true
+              resizable: true,
+              autoFocusButton: 'secondary'
             }
           )
           .pipe(
