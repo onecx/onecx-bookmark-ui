@@ -154,33 +154,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-  /bookmarks/convert:
-    post:
-      x-onecx:
-        permissions:
-          scope:
-            - write
-      tags:
-        - bookmarksInternal
-      description: Update a bookmark's scope to public
-      operationId: convertBookmark
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateBookmark'
-      responses:
-        "204":
-          description: Bookmark updated
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-        "404":
-          description: Bookmark not found
   /bookmarks/reorder:
     post:
       x-onecx:
