@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
@@ -11,7 +10,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmodel'
 
@@ -94,7 +93,7 @@ export class BookmarkCreateUpdateComponent
       this.formGroup.patchValue({
         ...this.vm.initialBookmark
       })
-      if (this.vm.initialBookmark.scope === BookmarkScopeEnum.Public) {
+      if (this.vm.initialBookmark.scope === BookmarkScope.Public) {
         this.isPublicBookmark = true
       }
     }

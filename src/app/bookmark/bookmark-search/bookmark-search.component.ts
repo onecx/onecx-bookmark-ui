@@ -7,7 +7,7 @@ import { PrimeIcons, SelectItem } from 'primeng/api'
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
 import { Action, DataAction, DataSortDirection } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 import { BookmarkSearchActions } from './bookmark-search.actions'
 import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
@@ -30,8 +30,8 @@ export class BookmarkSearchComponent implements OnInit {
   public quickFilterOptions: SelectItem[] = [{ value: 'BOOKMARK.SCOPES.PRIVATE' }, { value: 'BOOKMARK.SCOPES.PUBLIC' }]
   public quickFilterValue = this.quickFilterOptions[0].value
   public defaultSortDirection = DataSortDirection.ASCENDING
-  public privateBookmarkScope = BookmarkScopeEnum.Private
-  private myPermissions = new Array<string>() // permissions of the user
+  public privateBookmarkScope = BookmarkScope.Private
+  private readonly myPermissions = new Array<string>() // permissions of the user
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
@@ -119,12 +119,12 @@ export class BookmarkSearchComponent implements OnInit {
     this.onSearch()
   }
 
-  public hasPermissions(scope: BookmarkScopeEnum, perm: string) {
+  public hasPermissions(scope: BookmarkScope, perm: string) {
     let hasPerm = false
-    if (scope === BookmarkScopeEnum.Private) {
+    if (scope === BookmarkScope.Private) {
       hasPerm = this.user.hasPermission(perm)
     }
-    if (scope === BookmarkScopeEnum.Public) {
+    if (scope === BookmarkScope.Public) {
       hasPerm = this.user.hasPermission('ADMIN_' + perm)
     }
     return hasPerm

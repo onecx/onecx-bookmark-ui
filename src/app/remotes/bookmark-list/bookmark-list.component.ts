@@ -22,8 +22,8 @@ import {
 } from '@onecx/angular-remote-components'
 import { PortalCoreModule, AppConfigService } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
 import { SharedModule } from 'src/app/shared/shared.module'
+import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
 
 import { BookmarkLinksComponent } from './bookmark-links/bookmark-links.component'
@@ -106,10 +106,10 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     this.bookmarkApiUtils.loadBookmarks(this.handleBookmarkLoadError).subscribe((result) => {
       const bookmarks = result ?? []
       this.privateBookmarks$.next(
-        bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Private).sort((a, b) => a.position - b.position)
+        bookmarks.filter((bm) => bm.scope === BookmarkScope.Private).sort((a, b) => a.position - b.position)
       )
       this.publicBookmarks$.next(
-        bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Public).sort((a, b) => a.position - b.position)
+        bookmarks.filter((bm) => bm.scope === BookmarkScope.Public).sort((a, b) => a.position - b.position)
       )
       this.loading = false
     })

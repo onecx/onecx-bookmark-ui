@@ -1,6 +1,7 @@
 export * from './bookmark';
 export * from './bookmarkPageResult';
 export * from './bookmarkReorderRequest';
+export * from './bookmarkScope';
 export * from './bookmarkSearchCriteria';
 export * from './createBookmark';
 export * from './problemDetailInvalidParam';
