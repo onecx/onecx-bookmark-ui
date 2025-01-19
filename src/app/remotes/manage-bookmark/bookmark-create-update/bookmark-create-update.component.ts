@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'

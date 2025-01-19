@@ -31,7 +31,7 @@ export class BookmarkSearchComponent implements OnInit {
   public quickFilterValue = this.quickFilterOptions[0].value
   public defaultSortDirection = DataSortDirection.ASCENDING
   public privateBookmarkScope = BookmarkScope.Private
-  private myPermissions = new Array<string>() // permissions of the user
+  private readonly myPermissions = new Array<string>() // permissions of the user
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
