@@ -1,6 +1,11 @@
 <div class="p-1 flex flex-column gap-1 max-h-17rem overflow-auto">
   @for (bookmark of bookmarks; track $index) {
-  <a [routerLink]="getUrl(bookmark) | async" class="mt-1 p-1 border-round bookmark-link font-italic text-primary">
+  <a
+    [routerLink]="getUrl(bookmark) | async"
+    [queryParams]="query[bookmark.id]"
+    [fragment]="bookmark.hash"
+    class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
+  >
     {{ bookmark.displayName }}
   </a>
   }

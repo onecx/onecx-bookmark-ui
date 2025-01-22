@@ -49,10 +49,9 @@
   }
 }
 
-/* disable preset of opacity in form: not readable */
 @mixin readable-disabled-form-controls {
   :host ::ng-deep {
-    --disabled-opacity: 0.6;
+    --disabled-opacity: 0.7;
   }
 }
 

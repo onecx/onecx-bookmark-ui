@@ -9,8 +9,6 @@ import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
-//type ParameterType = { [key: string]: string; }
-
 @Component({
   selector: 'app-bookmark-detail',
   templateUrl: './bookmark-detail.component.html',
@@ -51,6 +49,7 @@ export class BookmarkDetailComponent
       is_public: new FormControl(false),
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
       endpointName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
+      endpointParams: new FormControl(null, [Validators.maxLength(255)]),
       query: new FormControl(null, [Validators.maxLength(255)]),
       hash: new FormControl(null, [Validators.maxLength(255)])
     })
@@ -60,31 +59,34 @@ export class BookmarkDetailComponent
    * Dialog Button clicked => return what we have
    */
   ocxDialogButtonClicked() {
-    console.log('ocxDialogButtonClicked', this.formGroup.value)
-    //if (this.formGroup.controls['endpointName'].value.length === 0)
-    //  this.formGroup.controls['endpointParameters'].setValue(null)
+    // due to using a temporary key for displaying formatted JSON we have to create a clean result object
+    const reducedEndpoint = (({ endpointParams, ...o }) => o)(this.formGroup.value) // omit temporary used key
+    const result = {
+      ...reducedEndpoint,
+      endpointParameters: JSON.parse(this.formGroup.controls['endpointParams'].value) // add the current value
+    }
     this.dialogResult = {
       ...this.vm.initialBookmark,
-      ...this.formGroup.value,
+      ...result,
       userId: this.userId,
       scope: this.formGroup.controls['is_public'].value ? BookmarkScope.Public : BookmarkScope.Private
     }
   }
 
   ngOnInit() {
-    // open => manage parameter field depends on endpointName content
-    console.log('ngOnInit', this.vm.initialBookmark)
+    // on open dialog => manage parameter field depends on endpointName content
     if (this.vm.initialBookmark) {
       this.formGroup.patchValue({
         ...this.vm.initialBookmark,
-        is_public: this.vm.initialBookmark.scope === BookmarkScope.Public
+        is_public: this.vm.initialBookmark.scope === BookmarkScope.Public,
+        // use a temporary key field for displaying JSON format
+        endpointParams: JSON.stringify(this.vm.initialBookmark?.endpointParameters, undefined, 2)
       })
       if (this.vm.initialBookmark.scope === BookmarkScope.Public) {
         this.permissionKey = 'BOOKMARK#ADMIN_EDIT'
         this.isPublicBookmark = true
       }
     }
-    console.log('ngOnInit', this.formGroup.value)
     this.hasPermission = this.hasEditPermission()
     if (!this.hasPermission || this.vm.changeMode === 'VIEW') {
       this.formGroup.disable()
