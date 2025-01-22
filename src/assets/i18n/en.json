@@ -129,11 +129,15 @@
     },
     "TAB": {
       "PROPS": "Properties",
+      "TARGET": "Target",
       "ENDPOINT": "Endpoint",
+      "PARAMS": "Parameter",
       "INTERN": "Internal",
       "TOOLTIPS": {
-        "PROPS": "Base properties of the Announcement",
-        "ENDPOINT": "The endpoint targeted by the bookmark and its parameters.",
+        "PROPS": "Base properties of the Bookmark",
+        "TARGET": "Target Application and App",
+        "ENDPOINT": "The Endpoint targeted by the bookmark and its parameters.",
+        "PARAMS": "Additional parameters added to the path",
         "INTERN": "Internal Properties"
       }
     }

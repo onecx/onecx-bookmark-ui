@@ -129,11 +129,15 @@
     },
     "TAB": {
       "PROPS": "Eigenschaften",
+      "TARGET": "Ziel",
       "ENDPOINT": "Endpunkt",
+      "PARAMS": "Parameter",
       "INTERN": "Intern",
       "TOOLTIPS": {
         "PROPS": "Basiseigenschaften des Lesezeichens",
+        "TARGET": "Ziel-Applkation und App",
         "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Parameter",
+        "PARAMS": "Zusätzliche Parameter, die zum Pfad hinzugefügt werden",
         "INTERN": "Interne Eigenschaften"
       }
     }

@@ -61,8 +61,6 @@ export class BookmarkDetailComponent
    */
   ocxDialogButtonClicked() {
     console.log('ocxDialogButtonClicked', this.formGroup.value)
-    //if (this.formGroup.controls['endpointName'].value.length === 0)
-    //  this.formGroup.controls['endpointParameters'].setValue(null)
     this.dialogResult = {
       ...this.vm.initialBookmark,
       ...this.formGroup.value,
