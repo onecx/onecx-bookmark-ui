@@ -101,6 +101,21 @@
         />
         <label for="bm_detail_form_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
       </span>
+      <span class="p-float-label">
+        <textarea
+          class="w-full"
+          pInputTextarea
+          autoresize="true"
+          rows="3"
+          id="bm_detail_form_endpoint_parameter"
+          formControlName="endpointParams"
+          [attr.aria-label]="'BOOKMARK.ENDPOINT_PARAMETER' | translate"
+          [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT_PARAMETER' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></textarea>
+        <label for="bm_detail_form_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
+      </span>
     </div>
   </p-tabPanel>
 
