@@ -21,7 +21,7 @@ export interface Bookmark {
     displayName: string;
     endpointName?: string;
     endpointParameters?: { [key: string]: string; };
-    query?: string;
+    query?: { [key: string]: string; };
     hash?: string;
     userId?: string;
     workspaceName: string;

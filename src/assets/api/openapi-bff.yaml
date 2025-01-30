@@ -275,7 +275,9 @@ components:
           additionalProperties:
             type: string
         query:
-          type: string
+          type: object
+          additionalProperties:
+            type: string
         hash:
           type: string
         userId:
@@ -332,7 +334,9 @@ components:
           additionalProperties:
             type: string
         query:
-          type: string
+          type: object
+          additionalProperties:
+            type: string
         hash:
           type: string
         userId:
@@ -375,7 +379,9 @@ components:
         scope:
           $ref: '#/components/schemas/BookmarkScope'
         query:
-          type: string
+          type: object
+          additionalProperties:
+            type: string
         hash:
           type: string
         userId:
