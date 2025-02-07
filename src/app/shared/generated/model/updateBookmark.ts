@@ -19,7 +19,7 @@ export interface UpdateBookmark {
     endpointName?: string;
     endpointParameters?: { [key: string]: string; };
     scope?: BookmarkScope;
-    query?: string;
+    query?: { [key: string]: string; };
     hash?: string;
     userId?: string;
 }

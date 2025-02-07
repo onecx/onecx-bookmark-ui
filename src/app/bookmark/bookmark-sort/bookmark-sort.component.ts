@@ -46,7 +46,13 @@ export class BookmarkSortComponent
       id: b.id,
       modificationCount: b.modificationCount ?? 0,
       displayName: b.displayName,
-      position: b.position
+      position: b.position,
+      endpointName: b.endpointName,
+      endpointParameters: b.endpointParameters,
+      scope: b.scope,
+      query: b.query,
+      hash: b.hash,
+      userId: b.userId
     }))
   }
 }

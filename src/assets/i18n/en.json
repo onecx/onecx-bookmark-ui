@@ -93,7 +93,7 @@
     "ENDPOINT": "Endpoint Name",
     "ENDPOINT_PARAMETER": "Endpoint Parameter",
     "QUERY": "Query",
-    "HASH": "Anchor Link",
+    "HASH": "Fragment",
     "SCOPE": "Scope",
     "SCOPES": {
       "ALL": "All",
@@ -109,7 +109,7 @@
       "ENDPOINT": "The name of the app endpoint that the bookmark points to.",
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
-      "HASH": "Reference to an area on the target page (anchor link). Used on the client side to navigate to the area."
+      "HASH": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area."
     }
   },
   "BOOKMARK_DETAIL": {
@@ -196,6 +196,8 @@
     }
   },
   "VALIDATION": {
+    "URL_FORMAT": "https://<path-to-page>",
+    "JSON_FORMAT": "{ \"key\": \"value\", ... }",
     "FORM_INVALID": "The form contains invalid values.",
     "HINTS": {
       "FORMAT_URL": "Format: "

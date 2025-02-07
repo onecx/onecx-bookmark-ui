@@ -93,7 +93,7 @@
     "ENDPOINT": "Endpunktname",
     "ENDPOINT_PARAMETER": "Endpunktparameter",
     "QUERY": "Query",
-    "HASH": "Anker Link",
+    "HASH": "Fragment",
     "SCOPE": "Bereich",
     "SCOPES": {
       "ALL": "Alle",
@@ -109,7 +109,7 @@
       "ENDPOINT": "Der Name des, mit dem Lesezeichen angesteuerten, Endpunkts der App.",
       "ENDPOINT_PARAMETER": "Ein spezieller Parameter des Endpunkts dem ein Wert zugeordnet werden kann.",
       "QUERY": "Zusätzliche Informationen die server- oder clientseitig weiterverarbeitet werden können.",
-      "HASH": "Referenz zu einem Bereich auf der Zielseite (Anchor Link). Wird clientseitig benutzt um zu dem Bereich zu navigieren."
+      "HASH": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren."
     }
   },
   "BOOKMARK_DETAIL": {
@@ -196,6 +196,8 @@
     }
   },
   "VALIDATION": {
+    "URL_FORMAT": "https://<path-to-page>",
+    "JSON_FORMAT": "{ \"key\": \"value\", ... }",
     "FORM_INVALID": "Das Formular enthält ungültige Werte.",
     "HINTS": {
       "FORMAT_URL": "Format: "
