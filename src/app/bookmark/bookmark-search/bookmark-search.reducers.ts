@@ -8,7 +8,7 @@ export const initialState: BookmarkSearchState = {
   columns: bookmarkSearchColumns,
   results: [],
   bookmarkFilter: '',
-  scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE',
+  scopeQuickFilter: 'PRIVATE',
   loading: true,
   exceptionKey: null
 }

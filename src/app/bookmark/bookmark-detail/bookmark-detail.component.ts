@@ -1,14 +1,30 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { AbstractControl, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { map } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
+export function JsonValidator(): ValidatorFn {
+  return (control: AbstractControl): { [key: string]: any } | null => {
+    let isValid = false
+    const value = control.value as string
+    console.log('JsonValidator', value)
+    if (value === '' || value === '{}') isValid = true
+    else {
+      const pattern = /:\s*(["{].*["}])\s*[,}]/
+      isValid = pattern.test(value)
+    }
+    if (isValid) {
+      return null // Validation passes
+    } else {
+      return { pattern: true } // Validation fails
+    }
+  }
+}
 @Component({
   selector: 'app-bookmark-detail',
   templateUrl: './bookmark-detail.component.html',
@@ -36,7 +52,6 @@ export class BookmarkDetailComponent
   private hasPermission = false
   public datetimeFormat: string
   public userId: string | undefined
-  private readonly jsonPattern = /:\s*(["{].*["}])\s*[,}]/
 
   constructor(private readonly user: UserService) {
     this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
@@ -50,14 +65,13 @@ export class BookmarkDetailComponent
       is_public: new FormControl(false),
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
       endpointName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
-      endpointParams: new FormControl(null, {
-        validators: Validators.compose([Validators.pattern(this.jsonPattern), Validators.maxLength(255)]),
-        updateOn: 'change'
-      }),
+      endpointParams: new FormControl(null, [Validators.maxLength(255)]),
       query: new FormControl(null, {
-        validators: Validators.compose([Validators.pattern(this.jsonPattern), Validators.maxLength(255)]),
+        validators: Validators.compose([JsonValidator(), Validators.maxLength(255)]),
+        //validators: Validators.compose([Validators.pattern(this.jsonPattern), Validators.maxLength(255)]),
         updateOn: 'change'
       }),
+
       hash: new FormControl(null, [Validators.maxLength(255)])
     })
   }

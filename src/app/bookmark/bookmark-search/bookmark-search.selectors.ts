@@ -20,9 +20,7 @@ export const selectResults = createSelector(
         scope_key: 'BOOKMARK.SCOPES.' + item.scope
       }))
       .filter((item) => {
-        return (
-          item.displayName?.toLowerCase().includes(bookmarkFilter.toLowerCase()) && item.scope_key === scopeQuickFilter
-        )
+        return item.displayName?.toLowerCase().includes(bookmarkFilter.toLowerCase()) && item.scope === scopeQuickFilter
       })
   }
 )
