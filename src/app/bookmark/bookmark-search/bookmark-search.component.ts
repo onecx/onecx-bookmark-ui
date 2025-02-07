@@ -66,9 +66,6 @@ export class BookmarkSearchComponent implements OnInit {
       next: (vm) => {
         const a = vm?.results?.filter((b) => b['scope'] === this.quickFilterValue)
         this.pageActions = this.preparePageActions(a.length > 1)
-      },
-      error: () => {
-        console.error('data loading failed')
       }
     })
   }

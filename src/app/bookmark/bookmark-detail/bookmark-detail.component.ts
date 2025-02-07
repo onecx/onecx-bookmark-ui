@@ -68,7 +68,6 @@ export class BookmarkDetailComponent
       endpointParams: new FormControl(null, [Validators.maxLength(255)]),
       query: new FormControl(null, {
         validators: Validators.compose([JsonValidator(), Validators.maxLength(255)]),
-        //validators: Validators.compose([Validators.pattern(this.jsonPattern), Validators.maxLength(255)]),
         updateOn: 'change'
       }),
 
