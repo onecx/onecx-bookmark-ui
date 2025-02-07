@@ -218,7 +218,7 @@ export class BookmarkSearchEffects {
             modal: true,
             draggable: true,
             resizable: true,
-            width: '400px',
+            width: '450px',
             autoFocusButton: 'secondary'
           }
         )
