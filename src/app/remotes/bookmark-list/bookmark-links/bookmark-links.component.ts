@@ -31,7 +31,7 @@ export class BookmarkLinksComponent {
           .getUrl(bookmark.productName, bookmark.appId, bookmark.endpointName, bookmark.endpointParameters)
           .pipe(
             map((path) => {
-              //if (bookmark.query) this.query[bookmark.id] = JSON.parse(bookmark.query)
+              if (bookmark.query) this.query[bookmark.id] = bookmark.query
               return path
             })
           )

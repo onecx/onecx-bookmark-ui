@@ -36,7 +36,7 @@ export class BookmarkDetailComponent
   private hasPermission = false
   public datetimeFormat: string
   public userId: string | undefined
-  private jsonPattern = /:\s*(["{].*["}])\s*[,}]/
+  private readonly jsonPattern = /:\s*(["{].*["}])\s*[,}]/
 
   constructor(private readonly user: UserService) {
     this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
