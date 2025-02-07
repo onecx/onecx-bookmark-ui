@@ -36,6 +36,7 @@ export class BookmarkDetailComponent
   private hasPermission = false
   public datetimeFormat: string
   public userId: string | undefined
+  private jsonPattern = /:\s*(["{].*["}])\s*[,}]/
 
   constructor(private readonly user: UserService) {
     this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
@@ -49,8 +50,14 @@ export class BookmarkDetailComponent
       is_public: new FormControl(false),
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
       endpointName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
-      endpointParams: new FormControl(null, [Validators.maxLength(255)]),
-      query: new FormControl(null, [Validators.maxLength(255)]),
+      endpointParams: new FormControl(null, {
+        validators: Validators.compose([Validators.pattern(this.jsonPattern), Validators.maxLength(255)]),
+        updateOn: 'change'
+      }),
+      query: new FormControl(null, {
+        validators: Validators.compose([Validators.pattern(this.jsonPattern), Validators.maxLength(255)]),
+        updateOn: 'change'
+      }),
       hash: new FormControl(null, [Validators.maxLength(255)])
     })
   }
@@ -59,17 +66,23 @@ export class BookmarkDetailComponent
    * Dialog Button clicked => return what we have
    */
   ocxDialogButtonClicked() {
-    // due to using a temporary key for displaying formatted JSON we have to create a clean result object
-    const reducedEndpoint = (({ endpointParams, ...o }) => o)(this.formGroup.value) // omit temporary used key
-    const result = {
-      ...reducedEndpoint,
-      endpointParameters: JSON.parse(this.formGroup.controls['endpointParams'].value) // add the current value
-    }
-    this.dialogResult = {
-      ...this.vm.initialBookmark,
-      ...result,
-      userId: this.userId,
-      scope: this.formGroup.controls['is_public'].value ? BookmarkScope.Public : BookmarkScope.Private
+    try {
+      // due to using a temporary key for displaying formatted JSON we have to create a clean result object
+      const reducedEndpoint = (({ endpointParams, query, ...o }) => o)(this.formGroup.value) // omit temporary used key
+      const result = {
+        ...reducedEndpoint,
+        endpointParameters: JSON.parse(this.formGroup.controls['endpointParams'].value), // add the current value
+        query: JSON.parse(this.formGroup.controls['query'].value) // add the current value
+      }
+      this.dialogResult = {
+        ...this.vm.initialBookmark,
+        ...result,
+        userId: this.userId,
+        scope: this.formGroup.controls['is_public'].value ? BookmarkScope.Public : BookmarkScope.Private
+      }
+    } catch (err) {
+      console.log('Parse error', err)
+      this.dialogResult = this.vm.initialBookmark
     }
   }
 
@@ -80,7 +93,8 @@ export class BookmarkDetailComponent
         ...this.vm.initialBookmark,
         is_public: this.vm.initialBookmark.scope === BookmarkScope.Public,
         // use a temporary key field for displaying JSON format
-        endpointParams: JSON.stringify(this.vm.initialBookmark?.endpointParameters, undefined, 2)
+        endpointParams: JSON.stringify(this.vm.initialBookmark?.endpointParameters, undefined, 2),
+        query: JSON.stringify(this.vm.initialBookmark?.query, undefined, 2)
       })
       if (this.vm.initialBookmark.scope === BookmarkScope.Public) {
         this.permissionKey = 'BOOKMARK#ADMIN_EDIT'

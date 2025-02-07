@@ -93,7 +93,7 @@
     "ENDPOINT": "Endpoint Name",
     "ENDPOINT_PARAMETER": "Endpoint Parameter",
     "QUERY": "Query",
-    "HASH": "Anchor Link",
+    "HASH": "Fragment",
     "SCOPE": "Scope",
     "SCOPES": {
       "ALL": "All",
@@ -196,6 +196,10 @@
     }
   },
   "VALIDATION": {
+    "URL_FORMAT": "https://<path-to-page>",
+    "URL_FORMAT_QUERY": "key_1=value_1&key_2=value_2",
+    "URL_FORMAT_FRAGMENT": "ressource",
+    "JSON_FORMAT": "{ \"key\": \"value\", ... }",
     "FORM_INVALID": "The form contains invalid values.",
     "HINTS": {
       "FORMAT_URL": "Format: "

@@ -174,6 +174,7 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
+        console.log(dialogResult)
         if (
           !dialogResult ||
           (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
@@ -184,7 +185,6 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
-        console.log(dialogResult.result)
         return this.bookmarksService.updateBookmark(dialogResult.result.id, dialogResult.result as UpdateBookmark).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
