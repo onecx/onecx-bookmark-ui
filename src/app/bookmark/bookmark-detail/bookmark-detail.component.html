@@ -131,27 +131,26 @@
     tooltipEvent="hover"
   >
     <div class="mb-2 flex flex-column row-gap-4">
-      <div class="mb-2 mx-auto flex flex-column text-xs font-italic">
+      <div class="mx-auto flex flex-column text-xs">
         <div class="mb-1 flex flex-row gap-2">
           <div class="w-5rem font-bold">URL Format</div>
           :
-          <div class="">
+          <div class="font-italic">
             {{ 'VALIDATION.URL_FORMAT' | translate }}
             <span class="text-red-500 font-bold"> ? </span>
-            <b>query</b>
+            <i><b>query</b></i>
             <span class="text-red-500 font-bold"> # </span>
-            <b>fragment</b>
+            <i><b>fragment</b></i>
           </div>
         </div>
         <div class="flex flex-row gap-2">
           <div class="w-5rem font-bold">Query</div>
           :
-          <div class="">{{ 'VALIDATION.URL_FORMAT_QUERY' | translate }}</div>
+          <i>key_1=value_1<span class="text-red-500 font-bold"> & </span>key_2=value_2</i>
         </div>
         <div class="flex flex-row gap-2">
           <div class="w-5rem font-bold">Fragment</div>
-          :
-          <div class="">{{ 'VALIDATION.URL_FORMAT_FRAGMENT' | translate }}</div>
+          :<i>ressource</i>
         </div>
       </div>
       <div>
