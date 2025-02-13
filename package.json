@@ -55,7 +55,7 @@
     "@ngrx/store-devtools": "^18.0.2",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
-    "@nx/angular": "19.8.2",
+    "@nx/angular": "20.4.3",
     "@onecx/accelerator": "5.30.0",
     "@onecx/angular-accelerator": "5.30.0",
     "@onecx/angular-auth": "5.30.0",
