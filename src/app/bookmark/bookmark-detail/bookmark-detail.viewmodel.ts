@@ -1,7 +1,7 @@
-import { Bookmark } from 'src/app/shared/generated'
+import { CombinedBookmark } from './bookmark-detail.component'
 
 export interface BookmarkDetailViewModel {
-  initialBookmark: Bookmark | undefined
+  initialBookmark: CombinedBookmark | undefined
   permissions: string[] | undefined
-  changeMode: 'CREATE' | 'EDIT' | 'VIEW'
+  changeMode: 'COPY' | 'CREATE' | 'EDIT' | 'VIEW'
 }

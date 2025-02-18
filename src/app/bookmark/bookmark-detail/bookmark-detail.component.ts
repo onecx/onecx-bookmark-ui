@@ -2,18 +2,17 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { AbstractControl, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { map } from 'rxjs'
 
-import { UserService } from '@onecx/angular-integration-interface'
+import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { BookmarkScope, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 export function JsonValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
     let isValid = false
     const value = control.value as string
-    console.log('JsonValidator', value)
-    if (value === '' || value === '{}') isValid = true
+    if (!value || value === '' || value === '{}') isValid = true
     else {
       const pattern = /:\s*(["{].*["}])\s*[,}]/
       isValid = pattern.test(value)
@@ -25,6 +24,17 @@ export function JsonValidator(): ValidatorFn {
     }
   }
 }
+
+// dialog is used for creation and editing
+export type CombinedBookmark = CreateBookmark & {
+  id?: string
+  modificationCount?: number
+  creationDate?: string
+  creationUser?: string
+  modificationDate?: string
+  modificationUser?: string
+}
+
 @Component({
   selector: 'app-bookmark-detail',
   templateUrl: './bookmark-detail.component.html',
@@ -33,7 +43,7 @@ export function JsonValidator(): ValidatorFn {
 export class BookmarkDetailComponent
   implements
     DialogPrimaryButtonDisabled,
-    DialogResult<Bookmark | undefined>,
+    DialogResult<CombinedBookmark | undefined>,
     DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
@@ -46,14 +56,18 @@ export class BookmarkDetailComponent
 
   @ViewChild('endpointParameter') endpointParameter!: ElementRef
   public formGroup: FormGroup
-  public dialogResult: Bookmark | undefined = undefined
+  public dialogResult: CombinedBookmark | undefined = undefined
   public isPublicBookmark = false
   private permissionKey = 'BOOKMARK#EDIT'
   private hasPermission = false
   public datetimeFormat: string
   public userId: string | undefined
+  public workspaceName = ''
 
-  constructor(private readonly user: UserService) {
+  constructor(
+    private readonly user: UserService,
+    private readonly appState: AppStateService
+  ) {
     this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
     // to be used if switching scope back to PRIVATE
     this.user.profile$.subscribe({
@@ -61,45 +75,30 @@ export class BookmarkDetailComponent
         this.userId = data.userId
       }
     })
+    this.appState.currentWorkspace$.subscribe({
+      next: (data) => {
+        this.workspaceName = data.workspaceName
+      }
+    })
+    // this is the universal form: used for specific URL bookmarks and other bookmarks
     this.formGroup = new FormGroup({
       is_public: new FormControl(false),
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
       endpointName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
-      endpointParams: new FormControl(null, [Validators.maxLength(255)]),
+      endpointParams: new FormControl(null, {
+        validators: Validators.compose([JsonValidator(), Validators.maxLength(255)]),
+        updateOn: 'change'
+      }),
       query: new FormControl(null, {
         validators: Validators.compose([JsonValidator(), Validators.maxLength(255)]),
         updateOn: 'change'
       }),
-
-      hash: new FormControl(null, [Validators.maxLength(255)])
+      fragment: new FormControl(null, [Validators.maxLength(255)]),
+      url: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)])
     })
   }
 
-  /**
-   * Dialog Button clicked => return what we have
-   */
-  ocxDialogButtonClicked() {
-    try {
-      // due to using a temporary key for displaying formatted JSON we have to create a clean result object
-      const reducedEndpoint = (({ endpointParams, query, ...o }) => o)(this.formGroup.value) // omit temporary used key
-      const result = {
-        ...reducedEndpoint,
-        endpointParameters: JSON.parse(this.formGroup.controls['endpointParams'].value), // add the current value
-        query: JSON.parse(this.formGroup.controls['query'].value) // add the current value
-      }
-      this.dialogResult = {
-        ...this.vm.initialBookmark,
-        ...result,
-        userId: this.userId,
-        scope: this.formGroup.controls['is_public'].value ? BookmarkScope.Public : BookmarkScope.Private
-      }
-    } catch (err) {
-      console.log('Parse error', err)
-      this.dialogResult = this.vm.initialBookmark
-    }
-  }
-
-  ngOnInit() {
+  public ngOnInit() {
     // on open dialog => manage parameter field depends on endpointName content
     if (this.vm.initialBookmark) {
       this.formGroup.patchValue({
@@ -133,16 +132,64 @@ export class BookmarkDetailComponent
           }
         })
     }
-    // wait a moment for initialization to activate the primary button
-    setTimeout(() => {
-      this.primaryButtonEnabled.emit(true)
-    }, 500)
+    if (this.vm.changeMode === 'CREATE' || this.vm.initialBookmark?.url) {
+      this.formGroup.controls['url'].setValidators(Validators.required)
+    } else
+      // wait a moment for initialization to activate the primary button
+      setTimeout(() => {
+        this.primaryButtonEnabled.emit(true)
+      }, 500)
   }
 
-  private hasEditPermission(): boolean {
+  public hasEditPermission(): boolean {
     if (this.vm.permissions) {
       return this.vm.permissions.includes(this.permissionKey)
     }
     return this.user.hasPermission(this.permissionKey)
+  }
+
+  /**
+   * Dialog Button clicked => return what we have
+   */
+  public ocxDialogButtonClicked() {
+    try {
+      // exclude all temporary or special (JSON) fields from object
+      const reducedBookmark = (({ endpointParams, query, is_public, ...o }) => o)(this.formGroup.value)
+      // default result
+      let result = {
+        ...reducedBookmark,
+        endpointParameters: undefined,
+        query: undefined
+      }
+      if (this.vm.changeMode !== 'CREATE') {
+        const ep = this.formGroup.controls['endpointParams'].value
+          ? JSON.parse(this.formGroup.controls['endpointParams'].value)
+          : undefined
+        const q = this.formGroup.controls['query'].value
+          ? JSON.parse(this.formGroup.controls['query'].value)
+          : undefined
+        // default result
+        result = {
+          ...reducedBookmark,
+          endpointParameters: ep,
+          query: q
+        }
+      }
+      const bookmark = (({ creationDate, creationUser, modificationDate, modificationUser, ...o }) => o)(
+        this.vm.initialBookmark as CombinedBookmark
+      )
+      this.dialogResult = {
+        ...bookmark,
+        ...result,
+        userId: this.userId,
+        position: bookmark.position ?? 0,
+        scope: this.formGroup.controls['is_public'].value ? BookmarkScope.Public : BookmarkScope.Private,
+        url: this.formGroup.controls['url'].value,
+        workspaceName: this.workspaceName
+      }
+    } catch (err) {
+      console.error('Parse error', err)
+      this.dialogResult = this.vm.initialBookmark
+    }
   }
 }

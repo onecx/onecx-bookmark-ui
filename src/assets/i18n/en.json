@@ -12,6 +12,10 @@
       "LABEL": "Copy",
       "TOOLTIP": "Create a new Bookmark with this data"
     },
+    "CREATE": {
+      "LABEL": "Create",
+      "TOOLTIP": "Create a new URL Bookmark"
+    },
     "DELETE": {
       "LABEL": "Delete",
       "TOOLTIP": "Delete the Bookmark",
@@ -100,6 +104,7 @@
       "PRIVATE": "Private",
       "PUBLIC": "Public"
     },
+    "URL": "URL",
     "TOOLTIPS": {
       "DISPLAY_NAME": "This name is used in list view.",
       "POSITION": "Position in list view",
@@ -109,7 +114,8 @@
       "ENDPOINT": "The name of the app endpoint that the bookmark points to.",
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
-      "HASH": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area."
+      "HASH": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
+      "URL": "Complete URL to be used 1:1"
     }
   },
   "BOOKMARK_DETAIL": {
@@ -129,7 +135,7 @@
     },
     "TAB": {
       "PROPS": "Properties",
-      "TARGET": "Target",
+      "TARGET": "Application",
       "ENDPOINT": "Endpoint",
       "PARAMS": "Parameter",
       "INTERN": "Internal",

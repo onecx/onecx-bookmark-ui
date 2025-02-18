@@ -9,6 +9,7 @@ import { InputGroupModule } from 'primeng/inputgroup'
 import { InputTextModule } from 'primeng/inputtext'
 import { InputTextareaModule } from 'primeng/inputtextarea'
 import { OrderListModule } from 'primeng/orderlist'
+import { SkeletonModule } from 'primeng/skeleton'
 import { TabViewModule } from 'primeng/tabview'
 import { TooltipModule } from 'primeng/tooltip'
 
@@ -23,6 +24,7 @@ import { TooltipModule } from 'primeng/tooltip'
     InputTextareaModule,
     OrderListModule,
     ReactiveFormsModule,
+    SkeletonModule,
     TabViewModule,
     TooltipModule,
     TranslateModule,
@@ -36,6 +38,7 @@ import { TooltipModule } from 'primeng/tooltip'
     InputTextareaModule,
     ReactiveFormsModule,
     OrderListModule,
+    SkeletonModule,
     TabViewModule,
     TooltipModule,
     TranslateModule,

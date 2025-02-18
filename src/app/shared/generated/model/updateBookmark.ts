@@ -20,7 +20,8 @@ export interface UpdateBookmark {
     endpointParameters?: { [key: string]: string; };
     scope?: BookmarkScope;
     query?: { [key: string]: string; };
-    hash?: string;
+    fragment?: string;
+    url?: string;
     userId?: string;
 }
 

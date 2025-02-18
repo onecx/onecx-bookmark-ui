@@ -17,7 +17,6 @@ import { PortalCoreModule, UserService } from '@onecx/portal-integration-angular
 import { SharedModule } from 'src/app/shared/shared.module'
 
 import { initialState } from './bookmark-search.reducers'
-import { BookmarkImageComponent } from '../product-image/bookmark-image.component'
 import { BookmarkSearchActions } from './bookmark-search.actions'
 import { bookmarkSearchColumns } from './bookmark-search.columns'
 import { BookmarkSearchComponent } from './bookmark-search.component'
@@ -61,7 +60,7 @@ describe('BookmarkSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkSearchComponent, BookmarkImageComponent],
+      declarations: [BookmarkSearchComponent],
       imports: [
         SharedModule,
         PortalCoreModule,

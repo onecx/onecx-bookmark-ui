@@ -51,7 +51,7 @@ export class BookmarkSortComponent
       endpointParameters: b.endpointParameters,
       scope: b.scope,
       query: b.query,
-      hash: b.hash,
+      fragment: b.fragment,
       userId: b.userId
     }))
   }
