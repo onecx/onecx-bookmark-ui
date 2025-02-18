@@ -59,7 +59,7 @@ export class BookmarkSearchComponent implements OnInit {
         icon: PrimeIcons.DOWNLOAD,
         show: 'always',
         permission: 'BOOKMARK#EXPORT',
-        actionCallback: () => this.onExportItems()
+        actionCallback: () => this.onExport()
       }
     ]
     this.viewModel$.subscribe({
@@ -80,6 +80,14 @@ export class BookmarkSearchComponent implements OnInit {
         show: 'always',
         permission: 'BOOKMARK#EDIT',
         actionCallback: () => this.onSortDialog()
+      },
+      {
+        labelKey: 'ACTIONS.CREATE.LABEL',
+        titleKey: 'ACTIONS.CREATE.TOOLTIP',
+        icon: PrimeIcons.PLUS,
+        show: 'asOverflow',
+        permission: 'BOOKMARK#CREATE',
+        actionCallback: () => this.onCreate()
       }
     ]
   }
@@ -108,8 +116,11 @@ export class BookmarkSearchComponent implements OnInit {
   public onSortDialog() {
     this.store.dispatch(BookmarkSearchActions.openSortingDialog())
   }
-  public onExportItems() {
-    this.store.dispatch(BookmarkSearchActions.exportButtonClicked())
+  public onExport() {
+    this.store.dispatch(BookmarkSearchActions.exportBookmarks())
+  }
+  public onImport() {
+    this.store.dispatch(BookmarkSearchActions.importBookmarks())
   }
 
   public onFocusFilter() {
@@ -147,8 +158,11 @@ export class BookmarkSearchComponent implements OnInit {
   public onDetail(data: Bookmark): void {
     this.store.dispatch(BookmarkSearchActions.viewOrEditBookmark({ id: data.id }))
   }
+  public onCreate() {
+    this.store.dispatch(BookmarkSearchActions.createBookmark())
+  }
   public onCopy(data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.createBookmark({ id: data.id }))
+    this.store.dispatch(BookmarkSearchActions.copyBookmark({ id: data.id }))
   }
   public onDelete(data: Bookmark): void {
     this.store.dispatch(BookmarkSearchActions.openDeleteDialog({ id: data.id }))

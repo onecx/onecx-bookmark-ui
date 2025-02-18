@@ -2,7 +2,7 @@
 <img
   *ngIf="bookmark"
   [alt]="bookmark.displayName"
-  [ocxSrc]="(this.errorImage$ | async) ?? (productLogoBaseURL$ | async) + bookmark.productName"
+  [ocxSrc]="(this.errorImage$ | async) ?? (productLogoBaseURL$ | async) + (bookmark.productName ?? '')"
   class="max-w-10rem max-h-5rem w-10rem h-5rem image-object"
   [ngClass]="loading ? 'hidden': ''"
   (error)="onImageError()"

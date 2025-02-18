@@ -246,8 +246,6 @@ components:
       required:
         - id
         - displayName
-        - productName
-        - appId
         - scope
         - workspaceName
         - position
@@ -278,7 +276,9 @@ components:
           type: object
           additionalProperties:
             type: string
-        hash:
+        fragment:
+          type: string
+        url:
           type: string
         userId:
           type: string
@@ -320,7 +320,6 @@ components:
       required:
         - displayName
         - workspaceName
-        - productName
         - scope
         - position
       type: object
@@ -337,7 +336,9 @@ components:
           type: object
           additionalProperties:
             type: string
-        hash:
+        fragment:
+          type: string
+        url:
           type: string
         userId:
           type: string
@@ -382,7 +383,9 @@ components:
           type: object
           additionalProperties:
             type: string
-        hash:
+        fragment:
+          type: string
+        url:
           type: string
         userId:
           type: string

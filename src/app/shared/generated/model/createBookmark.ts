@@ -16,10 +16,11 @@ export interface CreateBookmark {
     endpointName?: string;
     endpointParameters?: { [key: string]: string; };
     query?: { [key: string]: string; };
-    hash?: string;
+    fragment?: string;
+    url?: string;
     userId?: string;
     workspaceName: string;
-    productName: string;
+    productName?: string;
     appId?: string;
     scope: BookmarkScope;
     position: number;

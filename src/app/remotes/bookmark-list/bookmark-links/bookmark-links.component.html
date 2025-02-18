@@ -3,7 +3,7 @@
   <a
     [routerLink]="getUrl(bookmark) | async"
     [queryParams]="query[bookmark.id]"
-    [fragment]="bookmark.hash"
+    [fragment]="bookmark.fragment"
     class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
   >
     {{ bookmark.displayName }}

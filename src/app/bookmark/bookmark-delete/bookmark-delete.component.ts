@@ -12,4 +12,12 @@ export class BookmarkDeleteComponent {
 
   public BookmarkScope = BookmarkScope
   public Object = Object
+
+  public limitText(text: string | null | undefined, limit: number): string {
+    if (text) {
+      return text.length < limit ? text : text.substring(0, limit) + '...'
+    } else {
+      return ''
+    }
+  }
 }

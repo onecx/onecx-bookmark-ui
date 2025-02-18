@@ -12,6 +12,10 @@
       "LABEL": "Kopieren",
       "TOOLTIP": "Einen neues Lesezeichen mit den Daten der Zeile erstellen"
     },
+    "CREATE": {
+      "LABEL": "Erstellen",
+      "TOOLTIP": "Einen neues URL Lesezeichen erstellen"
+    },
     "DELETE": {
       "LABEL": "Löschen",
       "TOOLTIP": "Das Lesezeichen löschen",
@@ -100,6 +104,7 @@
       "PRIVATE": "Privat",
       "PUBLIC": "Öffentlich"
     },
+    "URL": "URL",
     "TOOLTIPS": {
       "DISPLAY_NAME": "Dieser Name wird in der Listenansicht verwendet.",
       "POSITION": "Position in der Listenansicht",
@@ -109,7 +114,8 @@
       "ENDPOINT": "Der Name des, mit dem Lesezeichen angesteuerten, Endpunkts der App.",
       "ENDPOINT_PARAMETER": "Ein spezieller Parameter des Endpunkts dem ein Wert zugeordnet werden kann.",
       "QUERY": "Zusätzliche Informationen die server- oder clientseitig weiterverarbeitet werden können.",
-      "HASH": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren."
+      "HASH": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
+      "URL": "Komplette URL, die 1:1 benutzt werden soll"
     }
   },
   "BOOKMARK_DETAIL": {
@@ -129,7 +135,7 @@
     },
     "TAB": {
       "PROPS": "Eigenschaften",
-      "TARGET": "Ziel",
+      "TARGET": "Applikation",
       "ENDPOINT": "Endpunkt",
       "PARAMS": "Parameter",
       "INTERN": "Intern",
