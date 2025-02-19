@@ -165,7 +165,6 @@ export class BookmarkSearchEffects {
         return results.find((item) => item.id === action.id) as CombinedBookmark
       }),
       mergeMap((bookmark: CombinedBookmark) => {
-        console.log(bookmark)
         const editable = canEdit(bookmark)
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `BOOKMARK_DETAIL.${editable ? 'EDIT' : 'VIEW'}.HEADER`,
@@ -185,7 +184,6 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
-        console.log('viewOrEditBookmark', dialogResult)
         if (
           !dialogResult ||
           (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
@@ -236,7 +234,6 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
-        console.log('createBookmark', dialogResult)
         if (!dialogResult || dialogResult.button === 'secondary') {
           return of(BookmarkSearchActions.createBookmarkCancelled())
         }

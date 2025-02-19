@@ -45,13 +45,14 @@ export class BookmarkSortComponent
     return bookmarks.map((b) => ({
       id: b.id,
       modificationCount: b.modificationCount ?? 0,
-      displayName: b.displayName,
+      scope: b.scope,
       position: b.position,
+      displayName: b.displayName,
       endpointName: b.endpointName,
       endpointParameters: b.endpointParameters,
-      scope: b.scope,
       query: b.query,
       fragment: b.fragment,
+      url: b.url,
       userId: b.userId
     }))
   }

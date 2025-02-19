@@ -18,7 +18,6 @@ import { SharedModule } from 'src/app/shared/shared.module'
 
 import { initialState } from './bookmark-search.reducers'
 import { BookmarkSearchActions } from './bookmark-search.actions'
-import { bookmarkSearchColumns } from './bookmark-search.columns'
 import { BookmarkSearchComponent } from './bookmark-search.component'
 import { BookmarkSearchHarness } from './bookmark-search.harness'
 import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
@@ -34,7 +33,7 @@ describe('BookmarkSearchComponent', () => {
 
   const mockActivatedRoute = {}
   const baseBookmarkSearchViewModel: BookmarkSearchViewModel = {
-    columns: bookmarkSearchColumns,
+    columns: [],
     results: [],
     bookmarkFilter: '',
     scopeQuickFilter: 'BOOKMARK.SCOPES.PRIVATE',

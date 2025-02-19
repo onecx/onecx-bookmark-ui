@@ -10,17 +10,9 @@
 
 :host ::ng-deep {
   .p-datatable {
-    .p-datatable-thead {
-      > tr {
-        vertical-align: middle !important;
-        > th {
-          border-bottom-width: 2px;
-        }
-      }
-    }
     .p-datatable-thead > tr > th,
     .p-datatable-tbody > tr > td {
-      padding: 0.5rem;
+      padding: 0.5rem 1rem;
       &:first-of-type {
         padding: 0.2rem;
         text-align: center;
@@ -29,31 +21,19 @@
       }
     }
   }
-  .correct-ocx-interactive-data-view {
-    padding: var(--table-header-padding);
-  }
-
   // hide unusable stuff
-  ocx-interactive-data-view > div > div {
-    > div:first-of-type {
-      display: none !important; // hide view selector
-    }
-    > div:nth-of-type(2) {
-      width: 100%;
-    }
-  }
   ocx-column-group-selection,
-  ocx-custom-group-column-selector {
-    display: none; // hide column selector
+  ocx-data-view-controls div div button {
+    display: none;
+  }
+  ocx-data-view-controls div {
+    justify-content: center !important;
   }
 
-  /* correct header layouting by lib */
-  .table-header-wrapper {
-    flex-direction: row !important;
-    justify-content: flex-start !important;
-    flex-wrap: wrap !important;
+  .max-height-for-2-lines {
+    max-height: 2.5rem;
   }
-  .table-header-wrapper span:first-child {
-    margin-right: 10px !important;
+  .text-ellipsis-2-lines {
+    @include displaying-text-ellipsis(2);
   }
 }

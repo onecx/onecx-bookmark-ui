@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule, Params } from '@angular/router'
+import { RouterModule } from '@angular/router'
 import { Observable, map } from 'rxjs'
 
 import { WorkspaceService } from '@onecx/angular-integration-interface'
@@ -19,8 +19,6 @@ export class BookmarkLinksComponent {
   urls: Record<string, Observable<string>> = {}
   @Input() public bookmarks: Bookmark[] | undefined
 
-  public query: Record<string, Params> = {}
-
   constructor(private readonly workspaceService: WorkspaceService) {}
 
   // get the URL basically used by Bookmark
@@ -31,7 +29,6 @@ export class BookmarkLinksComponent {
           .getUrl(bookmark.productName, bookmark.appId, bookmark.endpointName, bookmark.endpointParameters)
           .pipe(
             map((path) => {
-              if (bookmark.query) this.query[bookmark.id] = bookmark.query
               return path
             })
           )

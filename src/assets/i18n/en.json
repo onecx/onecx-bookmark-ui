@@ -46,11 +46,16 @@
     "SEARCH": {
       "ERROR": "Data not available",
       "NO_DATA": "No Data",
+      "OF": "of",
       "RELOAD": "Reload data",
       "FILTER": {
         "LABEL": "Filter",
         "TOOLTIP": "Filter by Name",
         "RESET": "Clear Filter"
+      },
+      "MESSAGE": {
+        "NO_RESULTS": "Search returned no results",
+        "SEARCH_FAILED": "Search failed"
       }
     },
     "SORT": {
@@ -89,15 +94,44 @@
       "MODIFICATION_USER": "ID of the user of the last change"
     }
   },
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "Bookmarks",
+      "SUBHEADER": "Search and manage Bookmarks"
+    },
+    "DETAIL": {
+      "COPY.HEADER": "Create Bookmark",
+      "CREATE.HEADER": "Create Bookmark",
+      "DELETE.HEADER": "Delete Bookmark",
+      "EDIT.HEADER": "Edit Bookmark",
+      "VIEW.HEADER": "Bookmark Details",
+      "TAB": {
+        "PROPS": "Properties",
+        "INTERN": "Internal",
+        "TOOLTIPS": {
+          "PROPS": "Base properties of the Bookmark",
+          "INTERN": "Internal Properties"
+        }
+      },
+      "CHARACTERS": "Still remaining characters"
+    },
+    "DATAVIEW": {
+      "FILTER": "Filter",
+      "FILTER_TOOLTIP": "Filtering ...",
+      "FILTER_BY": "Filter by ",
+      "FILTER_CLEAR": "Clear Filter",
+      "FILTER_PLACEHOLDER": "Filter"
+    }
+  },
   "BOOKMARK": {
     "DISPLAY_NAME": "Name",
     "POSITION": "Position",
     "PRODUCT": "Application",
     "APP_ID": "App ID",
     "ENDPOINT": "Endpoint Name",
-    "ENDPOINT_PARAMETER": "Endpoint Parameter",
+    "ENDPOINT_PARAMETER": "Endpoint Bookmark",
     "QUERY": "Query",
-    "HASH": "Fragment",
+    "FRAGMENT": "Fragment",
     "SCOPE": "Scope",
     "SCOPES": {
       "ALL": "All",
@@ -105,6 +139,7 @@
       "PUBLIC": "Public"
     },
     "URL": "URL",
+    "URL_SEARCH": "URL",
     "TOOLTIPS": {
       "DISPLAY_NAME": "This name is used in list view.",
       "POSITION": "Position in list view",
@@ -114,8 +149,12 @@
       "ENDPOINT": "The name of the app endpoint that the bookmark points to.",
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
-      "HASH": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
-      "URL": "Complete URL to be used 1:1"
+      "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
+      "TYPE": "URL or an endpoint of an application",
+      "TYPE_URL": "Static URL to target maybe also outside of teh Workspace",
+      "TYPE_PRODUCT": "URL to endpoint of an Application within the current Workspace",
+      "URL": "Complete URL to be used 1:1",
+      "URL_SEARCH": "Final URL which is used as target link"
     }
   },
   "BOOKMARK_DETAIL": {
