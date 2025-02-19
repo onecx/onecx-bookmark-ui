@@ -1,11 +1,10 @@
 import { createReducer, on } from '@ngrx/store'
 
 import { ActionErrorType, BookmarkSearchActions } from './bookmark-search.actions'
-import { bookmarkSearchColumns } from './bookmark-search.columns'
 import { BookmarkSearchState } from './bookmark-search.state'
 
 export const initialState: BookmarkSearchState = {
-  columns: bookmarkSearchColumns,
+  columns: [],
   results: [],
   bookmarkFilter: '',
   scopeQuickFilter: 'PRIVATE',

@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { AbstractControl, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
+import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { map } from 'rxjs'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
@@ -7,6 +7,15 @@ import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '
 
 import { BookmarkScope, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
+
+// trim the value (string!) of a form control before passes to the control
+const original = DefaultValueAccessor.prototype.registerOnChange
+DefaultValueAccessor.prototype.registerOnChange = function (fn) {
+  return original.call(this, (value) => {
+    const trimmed = value.trim()
+    return fn(trimmed)
+  })
+}
 
 export function JsonValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {

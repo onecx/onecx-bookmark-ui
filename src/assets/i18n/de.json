@@ -46,11 +46,16 @@
     "SEARCH": {
       "ERROR": "Daten nicht abrufbar",
       "NO_DATA": "Keine Daten",
+      "OF": "von",
       "RELOAD": "Daten neu laden",
       "FILTER": {
         "LABEL": "Filter",
         "TOOLTIP": "Filtern nach Name",
         "RESET": "Filter entfernen"
+      },
+      "MESSAGE": {
+        "NO_RESULTS": "Die Suche ergab keine Treffer",
+        "SEARCH_FAILED": "Suche ist fehlgeschlagen"
       }
     },
     "SORT": {
@@ -89,6 +94,35 @@
       "MODIFICATION_USER": "ID des Benutzers der letzten Änderung"
     }
   },
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "Lesezeichen",
+      "SUBHEADER": "Suchen und verwalten von Lesezeichen"
+    },
+    "DETAIL": {
+      "COPY.HEADER": "Lesezeichen erstellen",
+      "CREATE.HEADER": "Lesezeichen erstellen",
+      "DELETE.HEADER": "Lesezeichen löschen",
+      "EDIT.HEADER": "Lesezeichen ändern",
+      "VIEW.HEADER": "Lesezeichen Details",
+      "TAB": {
+        "PROPS": "Eigenschaften",
+        "INTERN": "Intern",
+        "TOOLTIPS": {
+          "PROPS": "Basiseigenschaften des Lesezeichens",
+          "INTERN": "Interne Eigenschaften"
+        }
+      },
+      "CHARACTERS": "Noch mögliche Zeichen"
+    },
+    "DATAVIEW": {
+      "FILTER": "Filter",
+      "FILTER_TOOLTIP": "...filtern",
+      "FILTER_BY": "Filter für ",
+      "FILTER_CLEAR": "Filter entfernen",
+      "FILTER_PLACEHOLDER": "Filter"
+    }
+  },
   "BOOKMARK": {
     "DISPLAY_NAME": "Name",
     "POSITION": "Position",
@@ -97,7 +131,7 @@
     "ENDPOINT": "Endpunktname",
     "ENDPOINT_PARAMETER": "Endpunktparameter",
     "QUERY": "Query",
-    "HASH": "Fragment",
+    "FRAGMENT": "Fragment",
     "SCOPE": "Bereich",
     "SCOPES": {
       "ALL": "Alle",
@@ -105,6 +139,7 @@
       "PUBLIC": "Öffentlich"
     },
     "URL": "URL",
+    "URL_SEARCH": "URL",
     "TOOLTIPS": {
       "DISPLAY_NAME": "Dieser Name wird in der Listenansicht verwendet.",
       "POSITION": "Position in der Listenansicht",
@@ -112,10 +147,13 @@
       "APP_ID": "ID der Zielapp",
       "SCOPE_IS_PUBLIC": "Wenn markiert, dann ist das Lesezeichen für alle im Workspace sichtbar.",
       "ENDPOINT": "Der Name des, mit dem Lesezeichen angesteuerten, Endpunkts der App.",
-      "ENDPOINT_PARAMETER": "Ein spezieller Parameter des Endpunkts dem ein Wert zugeordnet werden kann.",
+      "ENDPOINT_PARAMETER": "Ein spezieller Lesezeichen des Endpunkts dem ein Wert zugeordnet werden kann.",
       "QUERY": "Zusätzliche Informationen die server- oder clientseitig weiterverarbeitet werden können.",
-      "HASH": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
-      "URL": "Komplette URL, die 1:1 benutzt werden soll"
+      "FRAGMENT": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
+      "TYPE_URL": "Feste URL zu einem Ziel ggf. auch ausserhalb des Workspaces",
+      "TYPE_PRODUCT": "URL zu einem Endpunkt einer Applikation im aktuellen Workspace",
+      "URL": "Komplette URL, die 1:1 benutzt wird",
+      "URL_SEARCH": "Finale URL die als Link benutzt wird"
     }
   },
   "BOOKMARK_DETAIL": {
@@ -142,8 +180,8 @@
       "TOOLTIPS": {
         "PROPS": "Basiseigenschaften des Lesezeichens",
         "TARGET": "Ziel-Applkation und App",
-        "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Parameter",
-        "PARAMS": "Zusätzliche Parameter, die zum Pfad hinzugefügt werden",
+        "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Lesezeichen",
+        "PARAMS": "Zusätzliche Lesezeichen, die zum Pfad hinzugefügt werden",
         "INTERN": "Interne Eigenschaften"
       }
     }
