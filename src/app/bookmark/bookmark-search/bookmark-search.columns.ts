@@ -32,6 +32,6 @@ export const bookmarkColumns: ExtendedColumn[] = [
     active: true,
     translationPrefix: 'BOOKMARK',
     limit: false,
-    sort: false
+    sort: true
   }
 ]
