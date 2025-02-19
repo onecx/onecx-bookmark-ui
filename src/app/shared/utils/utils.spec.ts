@@ -1,5 +1,6 @@
 import { FormGroup, FormControl } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
+import { expect, jest } from '@jest/globals'
 
 import {
   limitText,
@@ -33,16 +34,16 @@ describe('util functions', () => {
   })
 
   describe('copyToClipboard', () => {
-    let writeTextSpy: jasmine.Spy
+    it('should copy to clipboard', () => {
+      Object.assign(window.navigator, {
+        clipboard: {
+          writeText: jest.fn().mockImplementation(() => Promise.resolve())
+        }
+      })
 
-    beforeEach(() => {
-      writeTextSpy = spyOn(navigator.clipboard, 'writeText')
-    })
-
-    it('should copy text to clipboard', () => {
       copyToClipboard('text')
 
-      expect(writeTextSpy).toHaveBeenCalledWith('text')
+      expect(window.navigator.clipboard.writeText).toHaveBeenCalledWith('text')
     })
   })
 
