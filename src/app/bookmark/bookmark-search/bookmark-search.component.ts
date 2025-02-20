@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { Observable, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { PrimeIcons } from 'primeng/api'
+import { SelectItem } from 'primeng/api'
 import { Table } from 'primeng/table'
 
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
@@ -42,6 +43,7 @@ export class BookmarkSearchComponent implements OnInit {
   public filteredColumns: Column[] = []
   public bookmarkColumns = bookmarkColumns
   public limitText = limitText
+  public quickFilterItems$: Observable<SelectItem[]> | undefined
 
   @ViewChild('dataTable', { static: false }) dataTable: Table | undefined
   public dataViewControlsTranslations: DataViewControlTranslations = {}
@@ -88,6 +90,7 @@ export class BookmarkSearchComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.prepareQuickFilterItems()
     this.prepareDialogTranslations()
     this.prepareRowActionButtons(this.quickFilterValue)
     this.onSearch()
@@ -283,5 +286,16 @@ export class BookmarkSearchComponent implements OnInit {
         callback: (data) => this.onDelete(data)
       }
     ]
+  }
+
+  public prepareQuickFilterItems(): void {
+    this.quickFilterItems$ = this.translate.get(['BOOKMARK.SCOPES.PRIVATE', 'BOOKMARK.SCOPES.PUBLIC']).pipe(
+      map((data) => {
+        return [
+          { label: data['BOOKMARK.SCOPES.PRIVATE'], value: 'PRIVATE' },
+          { label: data['BOOKMARK.SCOPES.PUBLIC'], value: 'PUBLIC' }
+        ]
+      })
+    )
   }
 }
