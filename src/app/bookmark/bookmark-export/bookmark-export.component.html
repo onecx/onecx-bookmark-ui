@@ -1,29 +1,38 @@
-<div class="flex flex-column row-gap-4">
-  <div class="">{{ 'BOOKMARK_EXPORT.INFO' | translate }}</div>
-  <p-checkbox
-    id="bm_export_field_private"
-    class="ml-3"
-    (onChange)="onScopeChange()"
-    [(ngModel)]="private"
-    [binary]="true"
-    [label]="'BOOKMARK.SCOPES.PRIVATE' | translate"
-    [ariaLabel]="'BOOKMARK.SCOPES.PRIVATE' | translate"
-    [pTooltip]="'BOOKMARK_EXPORT.SCOPE_PRIVATE' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-  </p-checkbox>
-  <p-checkbox
-    id="bm_export_field_public"
-    class="ml-3"
-    (onChange)="onScopeChange()"
-    [(ngModel)]="public"
-    [binary]="true"
-    [label]="'BOOKMARK.SCOPES.PUBLIC' | translate"
-    [ariaLabel]="'BOOKMARK.SCOPES.PUBLIC' | translate"
-    [pTooltip]="'BOOKMARK_EXPORT.SCOPE_PUBLIC' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-  </p-checkbox>
+<div class="flex flex-row flex-nowrap column-gap-4 row-gap-1 justify-content-start align-items-center">
+  <div class="pi pi-download text-3xl"></div>
+  <div class="flex flex-column row-gap-3 mb-2">
+    <div>{{ 'BOOKMARK_EXPORT.INFO' | translate }}</div>
+    <div class="flex flex-row column-gap-6 justify-content-center">
+      <p-checkbox
+        id="bm_export_field_private"
+        class=""
+        (onChange)="onScopeChange()"
+        [(ngModel)]="private"
+        [binary]="true"
+        [label]="'BOOKMARK.SCOPES.PRIVATE' | translate"
+        [ariaLabel]="'BOOKMARK.SCOPES.PRIVATE' | translate"
+        [pTooltip]="'BOOKMARK_EXPORT.SCOPE_PRIVATE' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      >
+      </p-checkbox>
+      <p-checkbox
+        id="bm_export_field_public"
+        class=""
+        (onChange)="onScopeChange()"
+        [(ngModel)]="public"
+        [binary]="true"
+        [label]="'BOOKMARK.SCOPES.PUBLIC' | translate"
+        [ariaLabel]="'BOOKMARK.SCOPES.PUBLIC' | translate"
+        [pTooltip]="'BOOKMARK_EXPORT.SCOPE_PUBLIC' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      >
+      </p-checkbox>
+    </div>
+  </div>
 </div>
+
+<!--div class="flex flex-column row-gap-4">
+  <div class="">{{ 'BOOKMARK_EXPORT.INFO' | translate }}</div>
+</div-->
