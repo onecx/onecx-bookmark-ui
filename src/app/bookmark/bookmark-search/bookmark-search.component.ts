@@ -121,6 +121,22 @@ export class BookmarkSearchComponent implements OnInit {
         actionCallback: () => this.onSortDialog()
       },
       {
+        labelKey: 'ACTIONS.EXPORT.LABEL',
+        titleKey: 'ACTIONS.EXPORT.TOOLTIP',
+        icon: PrimeIcons.DOWNLOAD,
+        show: 'always',
+        permission: 'BOOKMARK#EXPORT',
+        actionCallback: () => this.onExport()
+      },
+      {
+        labelKey: 'ACTIONS.IMPORT.LABEL',
+        titleKey: 'ACTIONS.IMPORT.TOOLTIP',
+        icon: PrimeIcons.UPLOAD,
+        show: 'always',
+        permission: 'BOOKMARK#IMPORT',
+        actionCallback: () => this.onImport()
+      },
+      {
         labelKey: 'ACTIONS.CREATE.LABEL',
         titleKey: 'ACTIONS.CREATE.TOOLTIP',
         icon: PrimeIcons.PLUS,
@@ -244,13 +260,6 @@ export class BookmarkSearchComponent implements OnInit {
     const prefix = filter.includes('PUBLIC') ? 'ADMIN_' : ''
     const editPermission = this.user.hasPermission('BOOKMARK#' + prefix + 'EDIT')
     this.rowActions = [
-      /*      {
-        id: 'action_link',
-        labelKey: 'ACTIONS.NAVIGATION.GOTO',
-        icon: PrimeIcons.LINK,
-        permission: 'BOOKMARK#VIEW',
-        callback: (event) => this.router.navigate([this.getUrl(event)])
-      },*/
       {
         id: 'action_detail',
         labelKey: editPermission ? 'ACTIONS.EDIT.LABEL' : 'ACTIONS.VIEW.LABEL',

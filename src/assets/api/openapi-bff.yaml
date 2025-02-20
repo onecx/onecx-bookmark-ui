@@ -179,6 +179,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
+  /bookmarks/export:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - read
+      tags:
+        - bookmarkExportImport
+      description: Export bookmarks by workspace name and scopes
+      operationId: exportBookmarks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportBookmarksRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookmarkSnapshot'
+        "404":
+          description: No bookmarks found
+  /bookmarks/import:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - write
+      tags:
+        - bookmarkExportImport
+      description: Import bookmarks
+      operationId: importBookmarks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportBookmarkRequest'
+      responses:
+        "200":
+          description: Import successful
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
   /images/product/{productName}:
     get:
       x-onecx:
@@ -211,6 +261,77 @@ paths:
                 $ref: '#/components/schemas/ProblemDetailResponse'
 components:
   schemas:
+    ImportBookmarkRequest:
+      type: object
+      properties:
+        snapshot:
+          $ref: '#/components/schemas/BookmarkSnapshot'
+        importMode:
+          $ref: '#/components/schemas/EximMode'
+        workspace:
+          type: string
+    BookmarkSnapshot:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 10
+          description: ID of the request
+        created:
+          $ref: '#/components/schemas/OffsetDateTime'
+        bookmarks:
+          type: object
+          nullable: false
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/EximBookmark'
+    EximBookmark:
+      type: object
+      properties:
+        displayName:
+          type: string
+        endpointName:
+          type: string
+        endpointParameters:
+          type: object
+          additionalProperties:
+            type: string
+        query:
+          type: object
+          additionalProperties:
+            type: string
+        fragment:
+          type: string
+        url:
+          type: string
+        productName:
+          type: string
+        appId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/EximBookmarkScope'
+    EximBookmarkScope:
+      type: string
+      enum:
+        - PRIVATE
+        - PUBLIC
+    EximMode:
+      type: string
+      enum:
+        - APPEND
+        - OVERWRITE
+    ExportBookmarksRequest:
+      type: object
+      required:
+        - scopes
+      properties:
+        workspaceName:
+          type: string
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EximBookmarkScope'
     BookmarkReorderRequest:
       type: object
       properties:

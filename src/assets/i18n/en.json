@@ -35,6 +35,22 @@
         "NOK": "An error has occurred. The Bookmark was not changed."
       }
     },
+    "EXPORT": {
+      "LABEL": "Export",
+      "TOOLTIP": "Export and download the Bookmarks in JSON format",
+      "MESSAGE": {
+        "OK": "The Bookmarks were successfully exported.",
+        "NOK": "An error has occurred. The Bookmarks could not be exported."
+      }
+    },
+    "IMPORT": {
+      "LABEL": "Import",
+      "TOOLTIP": "Upload Bookmarks in JSON format",
+      "MESSAGE": {
+        "OK": "The Bookmarks were successfully imported.",
+        "NOK": "An error has occurred. The Bookmarks could not be imported."
+      }
+    },
     "NAVIGATION": {
       "CLOSE": "Close",
       "CLOSE.TOOLTIP": "Close dialog",
@@ -69,14 +85,10 @@
     "CANCEL": "Cancel",
     "LOADING": "...is loading",
     "SAVE": "Save",
-    "EXPORT": "Export",
-    "IMPORT": "Import",
     "TOOLTIPS": {
       "CANCEL": "Cancel action",
       "SAVE": "Save changes",
-      "SAVE_AND_CLOSE": "Save changes and close dialog",
-      "EXPORT": "Export and download the Bookmarks as CSV file",
-      "IMPORT": "Upload a CSV file and replacing all existing Bookmarks"
+      "SAVE_AND_CLOSE": "Save changes and close dialog"
     }
   },
   "BREADCRUMBS": {
@@ -193,6 +205,11 @@
     "INFO": "This action cannot be undone!",
     "ERROR": "Bookmark could not be deleted",
     "SUCCESS": "Bookmark deleted successfully"
+  },
+  "BOOKMARK_EXPORT": {
+    "HEADER": "Export Bookmarks",
+    "ERROR": "Export failed",
+    "SUCCESS": "Bookmarks successfully exported"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Bookmarks",

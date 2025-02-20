@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
-import { map } from 'rxjs'
+import { filter } from 'rxjs'
 
-import { AppStateService, UserService } from '@onecx/angular-integration-interface'
+import { UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
 import { BookmarkScope, CreateBookmark } from 'src/app/shared/generated'
@@ -56,6 +56,7 @@ export class BookmarkDetailComponent
     DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
+  @Input() public workspaceName = ''
   @Input() public vm: BookmarkDetailViewModel = {
     initialBookmark: undefined,
     permissions: undefined,
@@ -71,22 +72,13 @@ export class BookmarkDetailComponent
   private hasPermission = false
   public datetimeFormat: string
   public userId: string | undefined
-  public workspaceName = ''
 
-  constructor(
-    private readonly user: UserService,
-    private readonly appState: AppStateService
-  ) {
+  constructor(private readonly user: UserService) {
     this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
     // to be used if switching scope back to PRIVATE
     this.user.profile$.subscribe({
       next: (data) => {
         this.userId = data.userId
-      }
-    })
-    this.appState.currentWorkspace$.subscribe({
-      next: (data) => {
-        this.workspaceName = data.workspaceName
       }
     })
     // this is the universal form: used for specific URL bookmarks and other bookmarks
@@ -127,27 +119,18 @@ export class BookmarkDetailComponent
       this.formGroup.disable()
     } else {
       this.formGroup.enable()
-      this.formGroup.statusChanges
-        .pipe(
-          map((status) => {
-            return status === 'VALID'
-          })
-        )
-        .subscribe((val) => {
-          if (this.hasPermission) {
-            this.primaryButtonEnabled.emit(val)
-          } else {
-            this.primaryButtonEnabled.emit(false)
-          }
-        })
+      // do something if form is valid
+      this.formGroup.statusChanges.pipe(filter(() => this.formGroup.valid)).subscribe((val) => {
+        if (this.hasPermission) {
+          this.primaryButtonEnabled.emit(true)
+        } else {
+          this.primaryButtonEnabled.emit(false)
+        }
+      })
     }
     if (this.vm.changeMode === 'CREATE' || this.vm.initialBookmark?.url) {
       this.formGroup.controls['url'].setValidators(Validators.required)
-    } else
-      // wait a moment for initialization to activate the primary button
-      setTimeout(() => {
-        this.primaryButtonEnabled.emit(true)
-      }, 500)
+    }
   }
 
   public hasEditPermission(): boolean {

@@ -3,6 +3,7 @@
 README.md
 api.module.ts
 api/api.ts
+api/bookmarkExportImport.service.ts
 api/bookmarksInternal.service.ts
 api/imagesInternal.service.ts
 configuration.ts
@@ -14,7 +15,13 @@ model/bookmarkPageResult.ts
 model/bookmarkReorderRequest.ts
 model/bookmarkScope.ts
 model/bookmarkSearchCriteria.ts
+model/bookmarkSnapshot.ts
 model/createBookmark.ts
+model/eximBookmark.ts
+model/eximBookmarkScope.ts
+model/eximMode.ts
+model/exportBookmarksRequest.ts
+model/importBookmarkRequest.ts
 model/models.ts
 model/problemDetailInvalidParam.ts
 model/problemDetailParam.ts

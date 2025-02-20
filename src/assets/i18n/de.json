@@ -35,6 +35,22 @@
         "NOK": "Ein Fehler ist aufgetreten. Das Lesezeichen wurde nicht verändert."
       }
     },
+    "EXPORT": {
+      "LABEL": "Export",
+      "TOOLTIP": "Export und Speichern der Lesezeichen im JSON Format",
+      "MESSAGE": {
+        "OK": "Die Lesezeichen wurden erfolgreich exportiert.",
+        "NOK": "Ein Fehler ist aufgetreten. Die Lesezeichen konnten nicht exportiert werden."
+      }
+    },
+    "IMPORT": {
+      "LABEL": "Import",
+      "TOOLTIP": "Hochladen einer CSV Datei mit Lesezeichen",
+      "MESSAGE": {
+        "OK": "Die Lesezeichen wurden erfolgreich importiert.",
+        "NOK": "Ein Fehler ist aufgetreten. Die Lesezeichen wurden nicht importiert."
+      }
+    },
     "NAVIGATION": {
       "CLOSE": "Schließen",
       "CLOSE.TOOLTIP": "Dialog schließen",
@@ -69,14 +85,10 @@
     "CANCEL": "Abbrechen",
     "LOADING": "...wird geladen",
     "SAVE": "Speichern",
-    "EXPORT": "Export",
-    "IMPORT": "Import",
     "TOOLTIPS": {
       "CANCEL": "Aktion abbrechen",
       "SAVE": "Änderungen speichern",
-      "SAVE_AND_CLOSE": "Änderungen speichern und Dialog schließen",
-      "EXPORT": "Export und Speichern der Lesezeichen als CSV Datei",
-      "IMPORT": "Hochladen einer CSV Datei mit Lesezeichen und ersetzen aller Lesezeichen"
+      "SAVE_AND_CLOSE": "Änderungen speichern und Dialog schließen"
     }
   },
   "BREADCRUMBS": {
@@ -192,6 +204,11 @@
     "INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
     "ERROR": "Lesezeichen konnte nicht gelöscht werden.",
     "SUCCESS": "Lesezeichen erfolgreich gelöscht"
+  },
+  "BOOKMARK_EXPORT": {
+    "HEADER": "Lesezeichen exportieren",
+    "ERROR": "Export fehlgeschlagen",
+    "SUCCESS": "Lesezeichen erfolgreich exportiert"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Lesezeichen",

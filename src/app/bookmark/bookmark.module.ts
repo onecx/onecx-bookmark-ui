@@ -16,6 +16,7 @@ import { BookmarkSearchEffects } from './bookmark-search/bookmark-search.effects
 import { BookmarkSearchComponent } from './bookmark-search/bookmark-search.component'
 import { BookmarkDeleteComponent } from './bookmark-delete/bookmark-delete.component'
 import { BookmarkDetailComponent } from './bookmark-detail/bookmark-detail.component'
+import { BookmarkExportComponent } from './bookmark-export/bookmark-export.component'
 import { BookmarkImageComponent } from './product-image/bookmark-image.component'
 import { BookmarkSortComponent } from './bookmark-sort/bookmark-sort.component'
 
@@ -24,6 +25,7 @@ import { BookmarkSortComponent } from './bookmark-sort/bookmark-sort.component'
   declarations: [
     BookmarkDetailComponent,
     BookmarkDeleteComponent,
+    BookmarkExportComponent,
     BookmarkSearchComponent,
     BookmarkImageComponent,
     BookmarkSortComponent
