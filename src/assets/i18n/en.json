@@ -208,6 +208,9 @@
   },
   "BOOKMARK_EXPORT": {
     "HEADER": "Export Bookmarks",
+    "INFO": "Select the areas to which the Bookmarks should be exported.",
+    "SCOPE_PRIVATE": "Export the own Bookmarks",
+    "SCOPE_PUBLIC": "Export the public Bookmarks",
     "ERROR": "Export failed",
     "SUCCESS": "Bookmarks successfully exported"
   },

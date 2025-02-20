@@ -3,6 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
 import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import FileSaver from 'file-saver'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import {
@@ -23,6 +24,7 @@ import {
   EximBookmarkScope,
   ExportBookmarksRequest
 } from 'src/app/shared/generated'
+import { getCurrentDateTime } from 'src/app/shared/utils/utils'
 
 import { BookmarkSearchActions, ActionErrorType } from './bookmark-search.actions'
 import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
@@ -126,15 +128,15 @@ export class BookmarkSearchEffects {
       }),
       mergeMap((data) => {
         // no bookmarks to be exported
-        if (!data.exist) return of({ button: 'secondary' } as DialogState<ExportBookmarksRequest>)
+        if (!data.exist) return of({ button: 'secondary' } as DialogState<ExportBookmarksRequest | undefined>)
         // no ADMIN permission: export PRIVATE bookmarks only
-        if (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT'))
+        if (!this.userService.hasPermission('BOOKMARK#ADMIN_EDIT'))
           return of({
             button: 'primary',
             result: { workspaceName: data.workspaceName, scopes: [EximBookmarkScope.Private] }
           } as DialogState<ExportBookmarksRequest>)
         // any other cases: ADMIN user select scopes
-        return this.portalDialogService.openDialog<ExportBookmarksRequest>(
+        return this.portalDialogService.openDialog<ExportBookmarksRequest | undefined>(
           'BOOKMARK_EXPORT.HEADER',
           { type: BookmarkExportComponent, inputs: { workspaceName: data.workspaceName } },
           actton.exportButton,
@@ -143,18 +145,29 @@ export class BookmarkSearchEffects {
             modal: true,
             draggable: true,
             resizable: true,
+            width: '400px',
             autoFocusButton: 'secondary'
           }
         )
       }),
-      switchMap((dialogResult: DialogState<ExportBookmarksRequest>) => {
+      switchMap((dialogResult) => {
+        console.log(dialogResult)
+        // cancel
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkSearchActions.exportBookmarksCancelled())
+        // wrong result
         if (!dialogResult?.result || dialogResult?.result.scopes.length === 0) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
+        // execute
         return this.eximService.exportBookmarks(dialogResult?.result).pipe(
-          map(() => {
+          map((snapshot) => {
+            console.log(snapshot)
+            const workspaceJson = JSON.stringify(snapshot, null, 2)
+            FileSaver.saveAs(
+              new Blob([workspaceJson], { type: 'text/json' }),
+              `onecx-bookmarks_${getCurrentDateTime()}.json`
+            )
             this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
             return BookmarkSearchActions.exportBookmarksSucceeded()
           })
@@ -199,6 +212,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result || dialogResult?.result.length === 0) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
+        // execute
         return this.bookmarksService.updateBookmarksOrder({ bookmarks: dialogResult?.result }).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_SORT.SUCCESS' })
@@ -255,6 +269,7 @@ export class BookmarkSearchEffects {
         )
       }),
       switchMap((dialogResult) => {
+        console.log(dialogResult)
         if (
           !dialogResult ||
           (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
@@ -265,6 +280,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
+        // execute
         return this.bookmarksService
           .updateBookmark((dialogResult.result as Bookmark).id, dialogResult.result as UpdateBookmark)
           .pipe(
@@ -315,6 +331,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
+        // execute
         const item = { ...dialogResult.result } as CreateBookmark
         return this.bookmarksService.createNewBookmark(item).pipe(
           map(() => {
@@ -371,6 +388,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
+        // execute
         const item = { ...dialogResult.result } as CreateBookmark
         return this.bookmarksService.createNewBookmark(item).pipe(
           map(() => {
@@ -416,12 +434,14 @@ export class BookmarkSearchEffects {
           )
       }),
       switchMap(([dialogResult, itemToDelete]) => {
+        // cancel
         if (!dialogResult || dialogResult.button === 'secondary') {
           return of(BookmarkSearchActions.deleteBookmarkCancelled())
         }
         if (!itemToDelete) {
           throw new Error('VALIDATION.ERRORS.NOT_FOUND') // error message
         }
+        // execute
         return this.bookmarksService.deleteBookmarkById(itemToDelete.id).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DELETE.SUCCESS' })

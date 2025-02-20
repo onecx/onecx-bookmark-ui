@@ -207,6 +207,9 @@
   },
   "BOOKMARK_EXPORT": {
     "HEADER": "Lesezeichen exportieren",
+    "INFO": "Wählen Sie die Bereiche zu welchen die Lesezeichen exportiert werden sollen.",
+    "SCOPE_PRIVATE": "Die eigenen Lesezeichen exportieren",
+    "SCOPE_PUBLIC": "Die öffentlichen Lesezeichen exportieren",
     "ERROR": "Export fehlgeschlagen",
     "SUCCESS": "Lesezeichen erfolgreich exportiert"
   },
