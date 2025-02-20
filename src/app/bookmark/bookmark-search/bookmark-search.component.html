@@ -59,7 +59,7 @@
               [options]="(quickFilterItems$ | async) ?? []"
               [(ngModel)]="quickFilterValue"
               (onChange)="onQuickFilterChange($event.value)"
-              [ariaLabel]="'BOOKMARK.SCOPE' | translate"
+              [attr.ariaLabel]="'BOOKMARK.SCOPE' | translate"
             >
               <ng-template let-item pTemplate
                 ><span [id]="'bm_search_table_quick_filter_' + item.value"> {{ item.label }}</span></ng-template
