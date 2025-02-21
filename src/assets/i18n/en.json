@@ -150,7 +150,11 @@
     "SCOPES": {
       "ALL": "All",
       "PRIVATE": "Private",
-      "PUBLIC": "Public"
+      "PUBLIC": "Public",
+      "TOOLTIPS": {
+        "PRIVATE": "My Bookmarks",
+        "PUBLIC": "Bookmarks for all Workspace User"
+      }
     },
     "URL": "URL",
     "URL_SEARCH": "URL",

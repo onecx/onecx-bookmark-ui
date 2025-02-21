@@ -23,7 +23,7 @@ import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
 import { selectBookmarkSearchViewModel } from './bookmark-search.selectors'
 import { bookmarkColumns } from './bookmark-search.columns'
 
-export type KeyValueType = { key: string; value: string }
+export type ExtendedSelectItem = SelectItem & { title_key: string }
 
 @Component({
   selector: 'app-bookmark-search',
@@ -49,9 +49,9 @@ export class BookmarkSearchComponent implements OnInit {
 
   @ViewChild('bookmarkFilter') bookmarkFilter: ElementRef | undefined
   private filterInit = false
-  public quickFilterOptions: KeyValueType[] = [
-    { key: 'BOOKMARK.SCOPES.PRIVATE', value: 'PRIVATE' },
-    { key: 'BOOKMARK.SCOPES.PUBLIC', value: 'PUBLIC' }
+  public quickFilterOptions: ExtendedSelectItem[] = [
+    { label: 'BOOKMARK.SCOPES.PRIVATE', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PRIVATE', value: 'PRIVATE' },
+    { label: 'BOOKMARK.SCOPES.PUBLIC', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PUBLIC', value: 'PUBLIC' }
   ]
   public quickFilterValue = this.quickFilterOptions[0].value
 
@@ -89,7 +89,6 @@ export class BookmarkSearchComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.prepareQuickFilterItems()
     this.prepareDialogTranslations()
     this.prepareRowActionButtons(this.quickFilterValue)
     this.onSearch()
@@ -285,16 +284,5 @@ export class BookmarkSearchComponent implements OnInit {
         callback: (data) => this.onDelete(data)
       }
     ]
-  }
-
-  public prepareQuickFilterItems(): void {
-    this.quickFilterItems$ = this.translate.get(['BOOKMARK.SCOPES.PRIVATE', 'BOOKMARK.SCOPES.PUBLIC']).pipe(
-      map((data) => {
-        return [
-          { label: data['BOOKMARK.SCOPES.PRIVATE'], value: 'PRIVATE' },
-          { label: data['BOOKMARK.SCOPES.PUBLIC'], value: 'PUBLIC' }
-        ]
-      })
-    )
   }
 }

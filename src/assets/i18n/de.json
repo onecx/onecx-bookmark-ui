@@ -150,7 +150,11 @@
     "SCOPES": {
       "ALL": "Alle",
       "PRIVATE": "Privat",
-      "PUBLIC": "Öffentlich"
+      "PUBLIC": "Öffentlich",
+      "TOOLTIPS": {
+        "PRIVATE": "Meine Lesezeichen",
+        "PUBLIC": "Lesezeichen für alle Workspace Benutzer"
+      }
     },
     "URL": "URL",
     "URL_SEARCH": "URL",

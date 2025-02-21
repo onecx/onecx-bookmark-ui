@@ -12,8 +12,8 @@
           {{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}
         </div>
       </div>
-      <div *ngIf="bookmark?.url" id="bm_delete_url" class="h-2rem font-italic text-xs">
-        {{ limitText(bookmark?.url, 140) }}
+      <div *ngIf="bookmark?.url" id="bm_delete_url" class="h-2rem font-italic text-xs word-break-all">
+        {{ limitText(bookmark?.url, 120) }}
       </div>
       <div *ngIf="bookmark?.productName" class="flex flex-row column-gap-2">
         <div class="w-4 text-right font-bold">{{ 'BOOKMARK.PRODUCT' | translate }}:</div>

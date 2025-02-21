@@ -53,13 +53,21 @@
             <p-selectButton
               inputid="bm_search_table_quick_filter"
               styleClass="data-view-control"
-              [options]="(quickFilterItems$ | async) ?? []"
+              [options]="quickFilterOptions"
               [(ngModel)]="quickFilterValue"
               (onChange)="onQuickFilterChange($event.value)"
               [attr.ariaLabel]="'BOOKMARK.SCOPE' | translate"
             >
               <ng-template let-item pTemplate
-                ><span [id]="'bm_search_table_quick_filter_' + item.value"> {{ item.label }}</span></ng-template
+                ><span
+                  [id]="'bm_search_table_quick_filter_' + item.value"
+                  [ariaLabel]="item.label | translate"
+                  [pTooltip]="item.title_key | translate"
+                  tooltipPosition="top"
+                  tooltipEvent="hover"
+                >
+                  {{ item.label | translate }}</span
+                ></ng-template
               >
             </p-selectButton>
           </div>

@@ -213,7 +213,7 @@ export class BookmarkSearchEffects {
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkSearchActions.importBookmarksCancelled())
         // wrong result
-        if (!dialogResult?.result || !dialogResult?.result.snapshot) {
+        if (!dialogResult?.result?.snapshot) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
         }
         // execute

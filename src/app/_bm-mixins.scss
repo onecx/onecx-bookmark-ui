@@ -83,6 +83,14 @@
   }
 }
 
+@mixin word-break-all {
+  :host ::ng-deep {
+    .word-break-all {
+      word-break: break-all;
+    }
+  }
+}
+
 /* highlight */
 @mixin danger-action {
   :host ::ng-deep {
