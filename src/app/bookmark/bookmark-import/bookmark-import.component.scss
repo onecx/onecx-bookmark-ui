@@ -1,5 +1,7 @@
 @import '/src/app/_bm-mixins.scss';
 
+@include displaying-text-responsive;
+@include readable-disabled-form-controls;
 @include correct-file-upload;
 @include correct-select-button;
 @include search-criteria-select-button;

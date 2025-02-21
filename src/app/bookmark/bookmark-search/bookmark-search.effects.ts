@@ -19,6 +19,7 @@ import {
   BookmarkScope,
   BookmarksInternal,
   BookmarkExportImport,
+  BookmarkSearchCriteria,
   CreateBookmark,
   UpdateBookmark,
   EximBookmarkScope,
@@ -96,7 +97,9 @@ export class BookmarkSearchEffects {
    * Bookmark Search in context of current workspace
    */
   private performSearch(workspaceName: string) {
-    return this.bookmarksService.searchBookmarksByCriteria({ workspaceName: workspaceName }).pipe(
+    let criteria: BookmarkSearchCriteria = { workspaceName: workspaceName }
+    if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) criteria = { ...criteria, scope: BookmarkScope.Private }
+    return this.bookmarksService.searchBookmarksByCriteria(criteria).pipe(
       map(({ stream, totalElements }) =>
         BookmarkSearchActions.bookmarkSearchResultsReceived({
           results: stream?.sort(this.sortByPosition) ?? [],

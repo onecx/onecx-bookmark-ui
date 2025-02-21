@@ -225,12 +225,12 @@
     "ERROR": "Import failed",
     "SUCCESS": "Bookmarks successfully imported",
     "MODE": {
-      "INFO": "How to import the bookmarks:",
+      "INFO": "How to import the bookmarks?",
       "APPEND": "Add Bookmarks",
       "OVERWRITE": "Replace existing Bookmarks"
     },
     "SCOPE": {
-      "INFO": "Which bookmarks to import:",
+      "INFO": "Which bookmarks to import?",
       "PRIVATE": "My Bookmarks",
       "PUBLIC": "Public Bookmarks"
     },
@@ -242,6 +242,9 @@
         "CONTENT": "List the content of the read file"
       }
     }
+  },
+  "SNAPSHOT": {
+    "DATE": "Created on"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Bookmarks",

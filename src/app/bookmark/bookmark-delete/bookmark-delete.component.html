@@ -2,7 +2,10 @@
   <div class="pi pi-question-circle text-3xl danger-action-text"></div>
   <div class="flex flex-column row-gap-2">
     <div id="bm_delete_message_text" class="font-bold">{{ 'BOOKMARK_DELETE.MESSAGE' | translate }}</div>
-    <div id="bm_delete_bookmark_display_name" class="px-5 text-center font-bold danger-action-text">
+    <div
+      id="bm_delete_bookmark_display_name"
+      class="px-5 text-center font-bold danger-action-text max-w-25rem text-responsive"
+    >
       {{ bookmark?.displayName }}
     </div>
     <div class="max-w-28rem px-2 flex flex-column row-gap-1">
