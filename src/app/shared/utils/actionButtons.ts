@@ -42,3 +42,10 @@ export const exportButton: ButtonDialogButtonDetails = {
   tooltipPosition: 'top',
   icon: PrimeIcons.DOWNLOAD
 }
+
+export const importButton: ButtonDialogButtonDetails = {
+  key: 'ACTIONS.IMPORT.LABEL',
+  tooltipKey: 'ACTIONS.IMPORT.TOOLTIP',
+  tooltipPosition: 'top',
+  icon: PrimeIcons.UPLOAD
+}

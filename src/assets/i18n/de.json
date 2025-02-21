@@ -45,6 +45,8 @@
     },
     "IMPORT": {
       "LABEL": "Import",
+      "CHOOSE": "Datei auswählen",
+      "UPLOAD": "Datei hochladen",
       "TOOLTIP": "Hochladen einer CSV Datei mit Lesezeichen",
       "MESSAGE": {
         "OK": "Die Lesezeichen wurden erfolgreich importiert.",
@@ -212,6 +214,17 @@
     "SCOPE_PUBLIC": "Die öffentlichen Lesezeichen exportieren",
     "ERROR": "Export fehlgeschlagen",
     "SUCCESS": "Lesezeichen erfolgreich exportiert"
+  },
+  "BOOKMARK_IMPORT": {
+    "HEADER": "Lesezeichen importieren",
+    "INFO": "Hinweis: Nach dem Import finden Sie alle importierten Lesezeichen in ihrem privaten Bereich.",
+    "MODE": {
+      "INFO": "Wählen Sie wie die Lesezeichen importiert werden sollen:",
+      "APPEND": "Lesezeichen hinzufügen",
+      "OVERWRITE": "Bestehende Lesezeichen ersetzen"
+    },
+    "ERROR": "Import fehlgeschlagen",
+    "SUCCESS": "Lesezeichen erfolgreich importiert"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Lesezeichen",

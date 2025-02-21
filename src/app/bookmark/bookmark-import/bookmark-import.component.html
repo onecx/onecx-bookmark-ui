@@ -1,0 +1,48 @@
+<div class="flex flex-column row-gap-3">
+  <p-fileUpload
+    #fileUploader
+    id="bm_import_file_upload"
+    mode="advanced"
+    name="file"
+    accept=".json"
+    [maxFileSize]="1000000"
+    [customUpload]="true"
+    (onImportClear)="onImportClear()"
+    (onRemove)="onImportClear()"
+    (onSelect)="onImportFileSelect($event)"
+    [showUploadButton]="false"
+    [chooseLabel]="'ACTIONS.IMPORT.CHOOSE' | translate"
+    [cancelLabel]="'ACTIONS.CANCEL' | translate"
+  />
+  <p-message
+    *ngIf="importError?.exceptionKey"
+    id="bm_import_error_message_general"
+    class="w-full"
+    severity="error"
+    [text]="importError ? (importError.exceptionKey | translate) : ''"
+  ></p-message>
+
+  <div class="flex flex-column row-gap-4 mb-2">
+    <div class="text-center">
+      <div>{{ 'BOOKMARK_IMPORT.MODE.INFO' | translate }}</div>
+      <div class="mt-1 slim-selectbutton search-criteria-selectbutton">
+        <p-selectButton
+          inputid="bm_import_mode"
+          [(ngModel)]="mode"
+          [options]="(modeItems$ | async) ?? []"
+          (onChange)="mode = $event.value"
+        >
+          <ng-template let-item pTemplate
+            ><span [id]="'bm_import_mode_' + item.value"> {{ item.label }}</span></ng-template
+          >
+        </p-selectButton>
+      </div>
+    </div>
+    <p-message
+      id="bm_import_info"
+      class="w-full"
+      severity="info"
+      [text]="'BOOKMARK_IMPORT.INFO' | translate"
+    ></p-message>
+  </div>
+</div>

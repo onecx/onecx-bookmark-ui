@@ -22,7 +22,8 @@ import {
   CreateBookmark,
   UpdateBookmark,
   EximBookmarkScope,
-  ExportBookmarksRequest
+  ExportBookmarksRequest,
+  ImportBookmarkRequest
 } from 'src/app/shared/generated'
 import { getCurrentDateTime } from 'src/app/shared/utils/utils'
 
@@ -32,6 +33,7 @@ import { BookmarkDetailComponent, CombinedBookmark } from '../bookmark-detail/bo
 import { BookmarkDeleteComponent } from '../bookmark-delete/bookmark-delete.component'
 import { BookmarkSortComponent } from '../bookmark-sort/bookmark-sort.component'
 import { BookmarkExportComponent } from '../bookmark-export/bookmark-export.component'
+import { BookmarkImportComponent } from '../bookmark-import/bookmark-import.component'
 
 @Injectable()
 export class BookmarkSearchEffects {
@@ -175,6 +177,56 @@ export class BookmarkSearchEffects {
       }),
       catchError((error) => {
         return of(BookmarkSearchActions.exportBookmarksFailed({ status: error.status, errorText: error.message }))
+      })
+    )
+  })
+
+  /**
+   * IMPORT
+   */
+  importBookmarks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(BookmarkSearchActions.importBookmarks),
+      concatLatestFrom(() => this.appStateService.currentWorkspace$.asObservable()),
+      map(([, workspace]) => {
+        return { workspaceName: workspace.workspaceName }
+      }),
+      mergeMap((data) => {
+        // select file
+        return this.portalDialogService.openDialog<ImportBookmarkRequest | undefined>(
+          'BOOKMARK_IMPORT.HEADER',
+          { type: BookmarkImportComponent, inputs: { workspaceName: data.workspaceName } },
+          actton.importButton,
+          actton.cancelButton,
+          {
+            modal: true,
+            draggable: true,
+            resizable: true,
+            width: '550px',
+            autoFocusButton: 'secondary'
+          }
+        )
+      }),
+      switchMap((dialogResult) => {
+        console.log(dialogResult)
+        // cancel
+        if (!dialogResult || dialogResult.button === 'secondary')
+          return of(BookmarkSearchActions.importBookmarksCancelled())
+        // wrong result
+        if (!dialogResult?.result || !dialogResult?.result.snapshot) {
+          throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
+        }
+        // execute
+        // return of(BookmarkSearchActions.importBookmarksSucceeded())
+        return this.eximService.importBookmarks(dialogResult?.result).pipe(
+          map(() => {
+            this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
+            return BookmarkSearchActions.importBookmarksSucceeded()
+          })
+        )
+      }),
+      catchError((error) => {
+        return of(BookmarkSearchActions.importBookmarksFailed({ status: error.status, errorText: error.message }))
       })
     )
   })

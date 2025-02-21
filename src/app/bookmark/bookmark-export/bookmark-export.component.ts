@@ -38,6 +38,5 @@ export class BookmarkExportComponent
       workspaceName: this.workspaceName,
       scopes: scopes
     }
-    console.log('ocxDialogButtonClicked', this.dialogResult)
   }
 }

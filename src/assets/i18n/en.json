@@ -45,6 +45,8 @@
     },
     "IMPORT": {
       "LABEL": "Import",
+      "CHOOSE": "Choose file",
+      "UPLOAD": "Upload file",
       "TOOLTIP": "Upload Bookmarks in JSON format",
       "MESSAGE": {
         "OK": "The Bookmarks were successfully imported.",
@@ -213,6 +215,17 @@
     "SCOPE_PUBLIC": "Export the public Bookmarks",
     "ERROR": "Export failed",
     "SUCCESS": "Bookmarks successfully exported"
+  },
+  "BOOKMARK_IMPORT": {
+    "HEADER": "Import Bookmarks",
+    "INFO": "Note: After importing, you will find all imported bookmarks in your private area.",
+    "MODE": {
+      "INFO": "Choose how to import the bookmarks:",
+      "APPEND": "Add Bookmarks",
+      "OVERWRITE": "Replace existing Bookmarks"
+    },
+    "ERROR": "Import failed",
+    "SUCCESS": "Bookmarks successfully imported"
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Bookmarks",

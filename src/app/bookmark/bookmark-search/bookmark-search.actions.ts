@@ -25,6 +25,9 @@ export const BookmarkSearchActions = createActionGroup({
     'Export bookmarks failed': props<ActionErrorType>(),
     // import
     'Import bookmarks': emptyProps(),
+    'Import bookmarks cancelled': emptyProps(),
+    'Import bookmarks succeeded': emptyProps(),
+    'Import bookmarks failed': props<ActionErrorType>(),
     // detail: create URL bookmark
     'Create bookmark': emptyProps(),
     'Create bookmark cancelled': emptyProps(),
