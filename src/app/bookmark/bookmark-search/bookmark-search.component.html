@@ -61,7 +61,7 @@
               <ng-template let-item pTemplate
                 ><span
                   [id]="'bm_search_table_quick_filter_' + item.value"
-                  [ariaLabel]="item.label | translate"
+                  [attr.ariaLabel]="item.label | translate"
                   [pTooltip]="item.title_key | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
