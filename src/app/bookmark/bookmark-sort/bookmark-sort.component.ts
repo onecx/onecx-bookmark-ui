@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { DialogButtonClicked, DialogResult } from '@onecx/portal-integration-angular'
 
 import { Bookmark, UpdateBookmark } from 'src/app/shared/generated'
+import { limitText } from 'src/app/shared/utils/utils'
 
 import { BookmarkSortViewModel } from './bookmark-sort.viewmodel'
 
@@ -18,6 +19,7 @@ export class BookmarkSortComponent
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public dialogResult: UpdateBookmark[] = []
+  public limitText = limitText
 
   ocxDialogButtonClicked() {
     this.dialogResult?.forEach((b, i) => (this.dialogResult[i] = { ...b, position: i + 1 }))
