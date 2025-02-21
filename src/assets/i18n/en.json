@@ -35,6 +35,24 @@
         "NOK": "An error has occurred. The Bookmark was not changed."
       }
     },
+    "EXPORT": {
+      "LABEL": "Export",
+      "TOOLTIP": "Export and download the Bookmarks in JSON format",
+      "MESSAGE": {
+        "OK": "The Bookmarks were successfully exported.",
+        "NOK": "An error has occurred. The Bookmarks could not be exported."
+      }
+    },
+    "IMPORT": {
+      "LABEL": "Import",
+      "CHOOSE": "Choose file",
+      "UPLOAD": "Upload file",
+      "TOOLTIP": "Upload Bookmarks in JSON format",
+      "MESSAGE": {
+        "OK": "The Bookmarks were successfully imported.",
+        "NOK": "An error has occurred. The Bookmarks could not be imported."
+      }
+    },
     "NAVIGATION": {
       "CLOSE": "Close",
       "CLOSE.TOOLTIP": "Close dialog",
@@ -69,14 +87,10 @@
     "CANCEL": "Cancel",
     "LOADING": "...is loading",
     "SAVE": "Save",
-    "EXPORT": "Export",
-    "IMPORT": "Import",
     "TOOLTIPS": {
       "CANCEL": "Cancel action",
       "SAVE": "Save changes",
-      "SAVE_AND_CLOSE": "Save changes and close dialog",
-      "EXPORT": "Export and download the Bookmarks as CSV file",
-      "IMPORT": "Upload a CSV file and replacing all existing Bookmarks"
+      "SAVE_AND_CLOSE": "Save changes and close dialog"
     }
   },
   "BREADCRUMBS": {
@@ -136,7 +150,11 @@
     "SCOPES": {
       "ALL": "All",
       "PRIVATE": "Private",
-      "PUBLIC": "Public"
+      "PUBLIC": "Public",
+      "TOOLTIPS": {
+        "PRIVATE": "My Bookmarks",
+        "PUBLIC": "Bookmarks for all Workspace User"
+      }
     },
     "URL": "URL",
     "URL_SEARCH": "URL",
@@ -150,7 +168,6 @@
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
       "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
-      "TYPE": "URL or an endpoint of an application",
       "TYPE_URL": "Static URL to target maybe also outside of teh Workspace",
       "TYPE_PRODUCT": "URL to endpoint of an Application within the current Workspace",
       "URL": "Complete URL to be used 1:1",
@@ -193,6 +210,38 @@
     "INFO": "This action cannot be undone!",
     "ERROR": "Bookmark could not be deleted",
     "SUCCESS": "Bookmark deleted successfully"
+  },
+  "BOOKMARK_EXPORT": {
+    "HEADER": "Export Bookmarks",
+    "INFO": "Select the areas whose bookmarks you want to export.",
+    "SCOPE_PRIVATE": "Export the own Bookmarks",
+    "SCOPE_PUBLIC": "Export the public Bookmarks",
+    "ERROR": "Export failed",
+    "SUCCESS": "Bookmarks successfully exported"
+  },
+  "BOOKMARK_IMPORT": {
+    "HEADER": "Import Bookmarks",
+    "INFO": "After importing, you will find all imported bookmarks in your private area.",
+    "ERROR": "Import failed",
+    "SUCCESS": "Bookmarks successfully imported",
+    "MODE": {
+      "INFO": "How to import the bookmarks:",
+      "APPEND": "Add Bookmarks",
+      "OVERWRITE": "Replace existing Bookmarks"
+    },
+    "SCOPE": {
+      "INFO": "Which bookmarks to import:",
+      "PRIVATE": "My Bookmarks",
+      "PUBLIC": "Public Bookmarks"
+    },
+    "TABS": {
+      "IMPORT": "Import",
+      "CONTENT": "File Content",
+      "TOOLTIPS": {
+        "IMPORT": "Manage the import",
+        "CONTENT": "List the content of the read file"
+      }
+    }
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Bookmarks",

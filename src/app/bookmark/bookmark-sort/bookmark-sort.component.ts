@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
+import { DialogButtonClicked, DialogResult } from '@onecx/portal-integration-angular'
 
 import { Bookmark, UpdateBookmark } from 'src/app/shared/generated'
 
@@ -12,11 +12,7 @@ import { BookmarkSortViewModel } from './bookmark-sort.viewmodel'
   styleUrls: ['./bookmark-sort.component.scss']
 })
 export class BookmarkSortComponent
-  implements
-    DialogPrimaryButtonDisabled,
-    DialogResult<UpdateBookmark[] | undefined>,
-    DialogButtonClicked<BookmarkSortComponent>,
-    OnInit
+  implements DialogResult<UpdateBookmark[] | undefined>, DialogButtonClicked<BookmarkSortComponent>, OnInit
 {
   @Input() public vm: BookmarkSortViewModel = { initialBookmarks: undefined }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
@@ -33,7 +29,7 @@ export class BookmarkSortComponent
     // wait a moment for initialization to activate the primary button
     setTimeout(() => {
       this.primaryButtonEnabled.emit(true)
-    }, 500)
+    }, 200)
   }
 
   private sortByPosition(a: UpdateBookmark, b: UpdateBookmark): number {

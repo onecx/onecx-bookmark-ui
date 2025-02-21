@@ -5,7 +5,7 @@ export const yesButton: ButtonDialogButtonDetails = {
   key: 'ACTIONS.CONFIRMATION.YES',
   tooltipKey: 'ACTIONS.CONFIRMATION.YES.TOOLTIP',
   tooltipPosition: 'top',
-  icon: PrimeIcons.TIMES
+  icon: PrimeIcons.CHECK
 }
 
 export const noButton: ButtonDialogButtonDetails = {
@@ -34,4 +34,18 @@ export const saveButton: ButtonDialogButtonDetails = {
   tooltipKey: 'ACTIONS.TOOLTIPS.SAVE',
   tooltipPosition: 'top',
   icon: PrimeIcons.SAVE
+}
+
+export const exportButton: ButtonDialogButtonDetails = {
+  key: 'ACTIONS.EXPORT.LABEL',
+  tooltipKey: 'ACTIONS.EXPORT.TOOLTIP',
+  tooltipPosition: 'top',
+  icon: PrimeIcons.DOWNLOAD
+}
+
+export const importButton: ButtonDialogButtonDetails = {
+  key: 'ACTIONS.IMPORT.LABEL',
+  tooltipKey: 'ACTIONS.IMPORT.TOOLTIP',
+  tooltipPosition: 'top',
+  icon: PrimeIcons.UPLOAD
 }

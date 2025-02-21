@@ -25,7 +25,7 @@
       *ngIf="!(vm.loading || vm.exceptionKey)"
       #dataTable
       id="bm_search_table"
-      styleClass="mx-3 mb-2"
+      styleClass="pb-2 px-3"
       [value]="vm.results"
       [columns]="filteredColumns"
       dataKey="id"
@@ -41,22 +41,55 @@
       [showCurrentPageReport]="true"
       currentPageReportTemplate="{first} - {last} {{ 'ACTIONS.SEARCH.OF' | translate }} {totalRecords}"
     >
-      <ng-template pTemplate="caption">
-        <ocx-data-view-controls
-          [supportedViews]="['table']"
-          [enableFiltering]="true"
-          [enableSorting]="false"
-          [columnDefinitions]="bookmarkColumns"
-          (columnsChange)="onColumnsChange($event)"
-          (filterChange)="onFilterChange($event)"
-          [translations]="dataViewControlsTranslations"
-        ></ocx-data-view-controls>
-      </ng-template>
-
       <ng-template pTemplate="emptymessage">
         <tr>
           <td id="bm_search_table_emptymessage" colspan="5">{{ 'ACTIONS.SEARCH.NO_DATA' | translate }}</td>
         </tr>
+      </ng-template>
+
+      <ng-template pTemplate="caption">
+        <div class="flex flex-wrap justify-content-between align-items-center row-gap-1">
+          <div class="slim-selectbutton align-items-start filter-selectbutton">
+            <p-selectButton
+              inputid="bm_search_table_quick_filter"
+              styleClass="data-view-control"
+              [options]="quickFilterOptions"
+              [(ngModel)]="quickFilterValue"
+              (onChange)="onQuickFilterChange($event.value)"
+              [attr.ariaLabel]="'BOOKMARK.SCOPE' | translate"
+            >
+              <ng-template let-item pTemplate
+                ><span
+                  [id]="'bm_search_table_quick_filter_' + item.value"
+                  [attr.ariaLabel]="item.label | translate"
+                  [pTooltip]="item.title_key | translate"
+                  tooltipPosition="top"
+                  tooltipEvent="hover"
+                >
+                  {{ item.label | translate }}</span
+                ></ng-template
+              >
+            </p-selectButton>
+          </div>
+          <ocx-data-view-controls
+            [supportedViews]="['table']"
+            [enableFiltering]="true"
+            [enableSorting]="false"
+            [columnDefinitions]="bookmarkColumns"
+            (columnsChange)="onColumnsChange($event)"
+            (filterChange)="onFilterChange($event)"
+            [translations]="dataViewControlsTranslations"
+          ></ocx-data-view-controls>
+          <p-button
+            id="bm_search_table_reload_button"
+            icon="pi pi-refresh"
+            (onClick)="onSearch()"
+            [ariaLabel]="'ACTIONS.SEARCH.RELOAD' | translate"
+            [pTooltip]="'ACTIONS.SEARCH.RELOAD' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          ></p-button>
+        </div>
       </ng-template>
 
       <ng-template pTemplate="header" let-columns>

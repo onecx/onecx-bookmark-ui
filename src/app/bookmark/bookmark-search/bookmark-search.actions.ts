@@ -18,9 +18,16 @@ export const BookmarkSearchActions = createActionGroup({
     'Sort bookmarks cancelled': emptyProps(),
     'Sort bookmarks succeeded': emptyProps(),
     'Sort bookmarks failed': props<ActionErrorType>(),
-    // extras
+    // export
     'Export bookmarks': emptyProps(),
+    'Export bookmarks cancelled': emptyProps(),
+    'Export bookmarks succeeded': emptyProps(),
+    'Export bookmarks failed': props<ActionErrorType>(),
+    // import
     'Import bookmarks': emptyProps(),
+    'Import bookmarks cancelled': emptyProps(),
+    'Import bookmarks succeeded': emptyProps(),
+    'Import bookmarks failed': props<ActionErrorType>(),
     // detail: create URL bookmark
     'Create bookmark': emptyProps(),
     'Create bookmark cancelled': emptyProps(),
@@ -28,9 +35,6 @@ export const BookmarkSearchActions = createActionGroup({
     'Create bookmark failed': props<ActionErrorType>(),
     // detail: copy
     'Copy bookmark': props<{ id: number | string }>(),
-    'Copy bookmark cancelled': emptyProps(),
-    'Copy bookmark succeeded': emptyProps(),
-    'Copy bookmark failed': props<ActionErrorType>(),
     // detail: edit, view
     'View or edit Bookmark': props<{ id: number | string }>(),
     'Edit bookmark cancelled': emptyProps(),

@@ -1,0 +1,8 @@
+@import '/src/app/_bm-mixins.scss';
+
+@include correct-file-upload;
+@include correct-select-button;
+@include search-criteria-select-button;
+@include search-criteria-select-button-slim;
+@include tabview-reduce-padding;
+@include tabview-fix-color-selected-tab;

@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { Observable, debounceTime, distinctUntilChanged, fromEvent, map } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { PrimeIcons } from 'primeng/api'
+import { PrimeIcons, SelectItem } from 'primeng/api'
 import { Table } from 'primeng/table'
 
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
@@ -23,7 +23,7 @@ import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
 import { selectBookmarkSearchViewModel } from './bookmark-search.selectors'
 import { bookmarkColumns } from './bookmark-search.columns'
 
-export type KeyValueType = { key: string; value: string }
+export type ExtendedSelectItem = SelectItem & { title_key: string }
 
 @Component({
   selector: 'app-bookmark-search',
@@ -42,15 +42,16 @@ export class BookmarkSearchComponent implements OnInit {
   public filteredColumns: Column[] = []
   public bookmarkColumns = bookmarkColumns
   public limitText = limitText
+  public quickFilterItems$: Observable<SelectItem[]> | undefined
 
   @ViewChild('dataTable', { static: false }) dataTable: Table | undefined
   public dataViewControlsTranslations: DataViewControlTranslations = {}
 
   @ViewChild('bookmarkFilter') bookmarkFilter: ElementRef | undefined
   private filterInit = false
-  public quickFilterOptions: KeyValueType[] = [
-    { key: 'BOOKMARK.SCOPES.PRIVATE', value: 'PRIVATE' },
-    { key: 'BOOKMARK.SCOPES.PUBLIC', value: 'PUBLIC' }
+  public quickFilterOptions: ExtendedSelectItem[] = [
+    { label: 'BOOKMARK.SCOPES.PRIVATE', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PRIVATE', value: 'PRIVATE' },
+    { label: 'BOOKMARK.SCOPES.PUBLIC', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PUBLIC', value: 'PUBLIC' }
   ]
   public quickFilterValue = this.quickFilterOptions[0].value
 
@@ -119,6 +120,22 @@ export class BookmarkSearchComponent implements OnInit {
         show: 'always',
         permission: 'BOOKMARK#EDIT',
         actionCallback: () => this.onSortDialog()
+      },
+      {
+        labelKey: 'ACTIONS.EXPORT.LABEL',
+        titleKey: 'ACTIONS.EXPORT.TOOLTIP',
+        icon: PrimeIcons.DOWNLOAD,
+        show: 'always',
+        permission: 'BOOKMARK#EXPORT',
+        actionCallback: () => this.onExport()
+      },
+      {
+        labelKey: 'ACTIONS.IMPORT.LABEL',
+        titleKey: 'ACTIONS.IMPORT.TOOLTIP',
+        icon: PrimeIcons.UPLOAD,
+        show: 'always',
+        permission: 'BOOKMARK#IMPORT',
+        actionCallback: () => this.onImport()
       },
       {
         labelKey: 'ACTIONS.CREATE.LABEL',
@@ -244,13 +261,6 @@ export class BookmarkSearchComponent implements OnInit {
     const prefix = filter.includes('PUBLIC') ? 'ADMIN_' : ''
     const editPermission = this.user.hasPermission('BOOKMARK#' + prefix + 'EDIT')
     this.rowActions = [
-      /*      {
-        id: 'action_link',
-        labelKey: 'ACTIONS.NAVIGATION.GOTO',
-        icon: PrimeIcons.LINK,
-        permission: 'BOOKMARK#VIEW',
-        callback: (event) => this.router.navigate([this.getUrl(event)])
-      },*/
       {
         id: 'action_detail',
         labelKey: editPermission ? 'ACTIONS.EDIT.LABEL' : 'ACTIONS.VIEW.LABEL',
