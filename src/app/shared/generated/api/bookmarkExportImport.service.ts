@@ -22,7 +22,7 @@ import { BookmarkSnapshot } from '../model/bookmarkSnapshot';
 // @ts-ignore
 import { ExportBookmarksRequest } from '../model/exportBookmarksRequest';
 // @ts-ignore
-import { ImportBookmarkRequest } from '../model/importBookmarkRequest';
+import { ImportBookmarksRequest } from '../model/importBookmarksRequest';
 // @ts-ignore
 import { ProblemDetailResponse } from '../model/problemDetailResponse';
 
@@ -167,16 +167,16 @@ export class BookmarkExportImport {
 
     /**
      * Import bookmarks
-     * @param importBookmarkRequest 
+     * @param importBookmarksRequest 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public importBookmarks(importBookmarkRequest: ImportBookmarkRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public importBookmarks(importBookmarkRequest: ImportBookmarkRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public importBookmarks(importBookmarkRequest: ImportBookmarkRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public importBookmarks(importBookmarkRequest: ImportBookmarkRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        if (importBookmarkRequest === null || importBookmarkRequest === undefined) {
-            throw new Error('Required parameter importBookmarkRequest was null or undefined when calling importBookmarks.');
+    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        if (importBookmarksRequest === null || importBookmarksRequest === undefined) {
+            throw new Error('Required parameter importBookmarksRequest was null or undefined when calling importBookmarks.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -223,7 +223,7 @@ export class BookmarkExportImport {
         return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: importBookmarkRequest,
+                body: importBookmarksRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

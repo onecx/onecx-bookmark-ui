@@ -29,7 +29,7 @@ export class BookmarkSortComponent
     // wait a moment for initialization to activate the primary button
     setTimeout(() => {
       this.primaryButtonEnabled.emit(true)
-    }, 500)
+    }, 200)
   }
 
   private sortByPosition(a: UpdateBookmark, b: UpdateBookmark): number {

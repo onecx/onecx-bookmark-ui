@@ -21,7 +21,7 @@ model/eximBookmark.ts
 model/eximBookmarkScope.ts
 model/eximMode.ts
 model/exportBookmarksRequest.ts
-model/importBookmarkRequest.ts
+model/importBookmarksRequest.ts
 model/models.ts
 model/problemDetailInvalidParam.ts
 model/problemDetailParam.ts

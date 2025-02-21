@@ -11,7 +11,7 @@
           <input
             pInputText
             type="text"
-            id="bm_detail_form_display_name"
+            id="bm_detail_form_field_display_name"
             class="w-full pt-3 pb-2"
             formControlName="displayName"
             [attr.aria-label]="'BOOKMARK.DISPLAY_NAME' | translate"
@@ -19,7 +19,7 @@
             tooltipPosition="top"
             tooltipEvent="hover"
           />
-          <label class="ocx-required-label" for="bm_detail_form_display_name">
+          <label class="ocx-required-label" for="bm_detail_form_field_display_name">
             {{ 'BOOKMARK.DISPLAY_NAME' | translate }}</label
           >
         </span>
@@ -32,19 +32,19 @@
             pInputTextarea
             autoresize="true"
             rows="3"
-            id="bm_detail_form_url"
+            id="bm_detail_form_field_url"
             formControlName="url"
             [attr.aria-label]="'BOOKMARK.URL' | translate"
             [pTooltip]="'BOOKMARK.TOOLTIPS.URL' | translate"
             tooltipPosition="top"
             tooltipEvent="hover"
           ></textarea>
-          <label class="ocx-required-label" for="bm_detail_form_url">{{ 'BOOKMARK.URL' | translate }}</label>
+          <label class="ocx-required-label" for="bm_detail_form_field_url">{{ 'BOOKMARK.URL' | translate }}</label>
         </span>
       </div>
       <p-checkbox
         *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
-        id="bm_detail_form_is_public"
+        id="bm_detail_form_field_is_public"
         class="ml-3"
         formControlName="is_public"
         [binary]="true"
@@ -72,7 +72,7 @@
           type="text"
           readonly
           [disabled]="true"
-          id="bm_detail_product"
+          id="bm_detail_form_field_product"
           class="w-full pt-3 pb-2"
           [value]="vm.initialBookmark?.productName"
           [attr.aria-label]="'BOOKMARK.PRODUCT' | translate"
@@ -80,13 +80,13 @@
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="bm_detail_product">{{ 'BOOKMARK.PRODUCT' | translate }}</label>
+        <label for="bm_detail_form_field_product">{{ 'BOOKMARK.PRODUCT' | translate }}</label>
       </span>
       <span *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="p-float-label">
         <input
           pInputText
           type="text"
-          id="bm_detail_app_id"
+          id="bm_detail_form_field_app_id"
           class="w-full pt-3 pb-2"
           [disabled]="true"
           [value]="vm.initialBookmark?.appId"
@@ -95,7 +95,7 @@
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="bm_detail_app_id">{{ 'BOOKMARK.APP_ID' | translate }}</label>
+        <label for="bm_detail_form_field_app_id">{{ 'BOOKMARK.APP_ID' | translate }}</label>
       </span>
     </div>
   </p-tabPanel>
@@ -112,7 +112,7 @@
         <input
           pInputText
           type="text"
-          id="bm_detail_form_endpoint_name"
+          id="bm_detail_form_field_endpoint_name"
           class="w-full pt-3 pb-2"
           [value]="vm.initialBookmark?.endpointName"
           [attr.aria-label]="'BOOKMARK.ENDPOINT' | translate"
@@ -120,7 +120,7 @@
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="bm_detail_form_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
+        <label for="bm_detail_form_field_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
       </span>
       <div>
         <div controlErrorAnchor>
@@ -130,14 +130,14 @@
               pInputTextarea
               autoresize="true"
               rows="3"
-              id="bm_detail_form_endpoint_parameter"
+              id="bm_detail_form_field_endpoint_parameter"
               formControlName="endpointParams"
               [attr.aria-label]="'BOOKMARK.ENDPOINT_PARAMETER' | translate"
               [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT_PARAMETER' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             ></textarea>
-            <label for="bm_detail_form_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
+            <label for="bm_detail_form_field_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
           </span>
           <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
         </div>
@@ -184,14 +184,14 @@
               pInputTextarea
               autoresize="true"
               rows="3"
-              id="bm_detail_form_query"
+              id="bm_detail_form_field_query"
               formControlName="query"
               [attr.aria-label]="'BOOKMARK.QUERY' | translate"
               [pTooltip]="'BOOKMARK.TOOLTIPS.QUERY' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             ></textarea>
-            <label for="bm_detail_form_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
+            <label for="bm_detail_form_field_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
           </span>
           <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
         </div>
@@ -202,14 +202,14 @@
           pInputTextarea
           autoresize="true"
           rows="3"
-          id="bm_detail_form_fragment"
+          id="bm_detail_form_field_fragment"
           formControlName="fragment"
           [attr.aria-label]="'BOOKMARK.FRAGMENT' | translate"
           [pTooltip]="'BOOKMARK.TOOLTIPS.FRAGMENT' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         ></textarea>
-        <label for="bm_detail_form_hash">{{ 'BOOKMARK.FRAGMENT' | translate }}</label>
+        <label for="bm_detail_form_field_fragment">{{ 'BOOKMARK.FRAGMENT' | translate }}</label>
       </span>
     </div>
   </p-tabPanel>
@@ -229,21 +229,21 @@
           <input
             pInputText
             type="text"
-            id="ps_app_detail_form_field_creation_date"
+            id="bm_detail_form_field_creation_date"
             class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
             [disabled]="true"
-            [value]="vm.initialBookmark?.creationDate ? (vm.initialBookmark?.creationDate | date: datetimeFormat) : ''"
+            [value]="vm.initialBookmark?.creationDate ? (vm.initialBookmark?.creationDate | date: dateFormat) : ''"
             [pTooltip]="'INTERNAL.TOOLTIPS.CREATION_DATE' | translate"
             tooltipPosition="top"
             tooltipEvent="hover"
           />
-          <label for="ps_app_detail_form_field_creation_date">{{ 'INTERNAL.CREATION_DATE' | translate }}</label>
+          <label for="bm_detail_form_field_creation_date">{{ 'INTERNAL.CREATION_DATE' | translate }}</label>
         </span>
         <span class="flex-grow-1 p-float-label">
           <input
             pInputText
             type="text"
-            id="ps_app_detail_form_field_creation_user"
+            id="bm_detail_form_field_creation_user"
             class="w-full pt-3 pb-2 text-responsive"
             [disabled]="true"
             [value]="vm.initialBookmark?.creationUser"
@@ -251,7 +251,7 @@
             tooltipPosition="top"
             tooltipEvent="hover"
           />
-          <label for="ps_app_detail_form_field_creation_user"> {{ 'INTERNAL.CREATION_USER' | translate }} </label>
+          <label for="bm_detail_form_field_creation_user"> {{ 'INTERNAL.CREATION_USER' | translate }} </label>
         </span>
       </div>
 
@@ -261,23 +261,21 @@
           <input
             pInputText
             type="text"
-            id="ps_app_detail_form_field_modification_date"
+            id="bm_detail_form_field_modification_date"
             class="w-full sm:w-13rem pt-3 pb-2"
             [disabled]="true"
-            [value]="vm.initialBookmark?.modificationDate ? (vm.initialBookmark?.modificationDate | date: datetimeFormat) : ''"
+            [value]="vm.initialBookmark?.modificationDate ? (vm.initialBookmark?.modificationDate | date: dateFormat) : ''"
             [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_DATE' | translate"
             tooltipPosition="top"
             tooltipEvent="hover"
           />
-          <label for="ps_app_detail_form_field_modification_date">
-            {{ 'INTERNAL.MODIFICATION_DATE' | translate }}
-          </label>
+          <label for="bm_detail_form_field_modification_date"> {{ 'INTERNAL.MODIFICATION_DATE' | translate }} </label>
         </span>
         <span class="flex-grow-1 p-float-label">
           <input
             pInputText
             type="text"
-            id="ps_app_detail_form_field_modification_user"
+            id="bm_detail_form_field_modification_user"
             class="w-full pt-3 pb-2 text-responsive"
             [disabled]="true"
             [value]="vm.initialBookmark?.modificationUser"
@@ -285,9 +283,7 @@
             tooltipPosition="top"
             tooltipEvent="hover"
           />
-          <label for="ps_app_detail_form_field_modification_user">
-            {{ 'INTERNAL.MODIFICATION_USER' | translate }}
-          </label>
+          <label for="bm_detail_form_field_modification_user"> {{ 'INTERNAL.MODIFICATION_USER' | translate }} </label>
         </span>
       </div>
     </div>

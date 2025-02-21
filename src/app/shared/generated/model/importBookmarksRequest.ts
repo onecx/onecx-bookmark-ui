@@ -10,12 +10,14 @@
  */
 import { BookmarkSnapshot } from './bookmarkSnapshot';
 import { EximMode } from './eximMode';
+import { EximBookmarkScope } from './eximBookmarkScope';
 
 
-export interface ImportBookmarkRequest { 
+export interface ImportBookmarksRequest { 
     snapshot?: BookmarkSnapshot;
     importMode?: EximMode;
-    workspace?: string;
+    workspaceName?: string;
+    scopes?: Array<EximBookmarkScope>;
 }
 
 

@@ -57,6 +57,9 @@ export class BookmarkDetailComponent
     OnInit
 {
   @Input() public workspaceName = ''
+  @Input() public dateFormat = 'medium'
+  @Input() public userId: string | undefined = undefined
+
   @Input() public vm: BookmarkDetailViewModel = {
     initialBookmark: undefined,
     permissions: undefined,
@@ -70,17 +73,8 @@ export class BookmarkDetailComponent
   public isPublicBookmark = false
   private permissionKey = 'BOOKMARK#EDIT'
   private hasPermission = false
-  public datetimeFormat: string
-  public userId: string | undefined
 
   constructor(private readonly user: UserService) {
-    this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
-    // to be used if switching scope back to PRIVATE
-    this.user.profile$.subscribe({
-      next: (data) => {
-        this.userId = data.userId
-      }
-    })
     // this is the universal form: used for specific URL bookmarks and other bookmarks
     this.formGroup = new FormGroup({
       is_public: new FormControl(false),

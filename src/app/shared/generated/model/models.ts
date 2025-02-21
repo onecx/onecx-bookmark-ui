@@ -9,7 +9,7 @@ export * from './eximBookmark';
 export * from './eximBookmarkScope';
 export * from './eximMode';
 export * from './exportBookmarksRequest';
-export * from './importBookmarkRequest';
+export * from './importBookmarksRequest';
 export * from './problemDetailInvalidParam';
 export * from './problemDetailParam';
 export * from './problemDetailResponse';

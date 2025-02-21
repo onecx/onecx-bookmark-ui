@@ -168,7 +168,6 @@
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
       "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
-      "TYPE": "URL or an endpoint of an application",
       "TYPE_URL": "Static URL to target maybe also outside of teh Workspace",
       "TYPE_PRODUCT": "URL to endpoint of an Application within the current Workspace",
       "URL": "Complete URL to be used 1:1",
@@ -222,14 +221,27 @@
   },
   "BOOKMARK_IMPORT": {
     "HEADER": "Import Bookmarks",
-    "INFO": "Note: After importing, you will find all imported bookmarks in your private area.",
+    "INFO": "After importing, you will find all imported bookmarks in your private area.",
+    "ERROR": "Import failed",
+    "SUCCESS": "Bookmarks successfully imported",
     "MODE": {
-      "INFO": "Choose how to import the bookmarks:",
+      "INFO": "How to import the bookmarks:",
       "APPEND": "Add Bookmarks",
       "OVERWRITE": "Replace existing Bookmarks"
     },
-    "ERROR": "Import failed",
-    "SUCCESS": "Bookmarks successfully imported"
+    "SCOPE": {
+      "INFO": "Which bookmarks to import:",
+      "PRIVATE": "My Bookmarks",
+      "PUBLIC": "Public Bookmarks"
+    },
+    "TABS": {
+      "IMPORT": "Import",
+      "CONTENT": "File Content",
+      "TOOLTIPS": {
+        "IMPORT": "Manage the import",
+        "CONTENT": "List the content of the read file"
+      }
+    }
   },
   "BOOKMARK_SEARCH": {
     "HEADER": "Bookmarks",

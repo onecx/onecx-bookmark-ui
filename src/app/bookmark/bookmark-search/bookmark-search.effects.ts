@@ -23,7 +23,7 @@ import {
   UpdateBookmark,
   EximBookmarkScope,
   ExportBookmarksRequest,
-  ImportBookmarkRequest
+  ImportBookmarksRequest
 } from 'src/app/shared/generated'
 import { getCurrentDateTime } from 'src/app/shared/utils/utils'
 
@@ -37,6 +37,9 @@ import { BookmarkImportComponent } from '../bookmark-import/bookmark-import.comp
 
 @Injectable()
 export class BookmarkSearchEffects {
+  public userId: string | undefined
+  public datetimeFormat = 'medium'
+
   constructor(
     private readonly actions$: Actions,
     private readonly store: Store,
@@ -44,10 +47,17 @@ export class BookmarkSearchEffects {
     private readonly messageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
     private readonly appStateService: AppStateService,
-    private readonly userService: UserService,
+    private readonly user: UserService,
     private readonly bookmarksService: BookmarksInternal,
     private readonly eximService: BookmarkExportImport
-  ) {}
+  ) {
+    this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
+    this.user.profile$.subscribe({
+      next: (data) => {
+        this.userId = data.userId
+      }
+    })
+  }
 
   private buildExceptionKey(status: string): string {
     return 'EXCEPTIONS.HTTP_STATUS_' + status + '.BOOKMARK'
@@ -72,6 +82,7 @@ export class BookmarkSearchEffects {
         BookmarkSearchActions.createBookmarkSucceeded,
         BookmarkSearchActions.editBookmarkSucceeded,
         BookmarkSearchActions.deleteBookmarkSucceeded,
+        BookmarkSearchActions.importBookmarksSucceeded,
         BookmarkSearchActions.sortBookmarksSucceeded
       ),
       withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
@@ -132,7 +143,7 @@ export class BookmarkSearchEffects {
         // no bookmarks to be exported
         if (!data.exist) return of({ button: 'secondary' } as DialogState<ExportBookmarksRequest | undefined>)
         // no ADMIN permission: export PRIVATE bookmarks only
-        if (!this.userService.hasPermission('BOOKMARK#ADMIN_EDIT'))
+        if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT'))
           return of({
             button: 'primary',
             result: { workspaceName: data.workspaceName, scopes: [EximBookmarkScope.Private] }
@@ -193,9 +204,12 @@ export class BookmarkSearchEffects {
       }),
       mergeMap((data) => {
         // select file
-        return this.portalDialogService.openDialog<ImportBookmarkRequest | undefined>(
+        return this.portalDialogService.openDialog<ImportBookmarksRequest | undefined>(
           'BOOKMARK_IMPORT.HEADER',
-          { type: BookmarkImportComponent, inputs: { workspaceName: data.workspaceName } },
+          {
+            type: BookmarkImportComponent,
+            inputs: { workspaceName: data.workspaceName, dateFormat: this.datetimeFormat }
+          },
           actton.importButton,
           actton.cancelButton,
           {
@@ -217,7 +231,6 @@ export class BookmarkSearchEffects {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
         }
         // execute
-        // return of(BookmarkSearchActions.importBookmarksSucceeded())
         return this.eximService.importBookmarks(dialogResult?.result).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
@@ -284,8 +297,8 @@ export class BookmarkSearchEffects {
   viewOrEditBookmark$ = createEffect(() => {
     const canEdit = (bookmark?: CombinedBookmark) => {
       return (
-        (this.userService.hasPermission('BOOKMARK#EDIT') && bookmark?.scope === BookmarkScope.Private) ||
-        (this.userService.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScope.Public)
+        (this.user.hasPermission('BOOKMARK#EDIT') && bookmark?.scope === BookmarkScope.Private) ||
+        (this.user.hasPermission('BOOKMARK#ADMIN_EDIT') && bookmark?.scope === BookmarkScope.Public)
       )
     }
     return this.actions$.pipe(
@@ -295,6 +308,8 @@ export class BookmarkSearchEffects {
       map(([[action, workspace], results]) => {
         return {
           workspaceName: workspace.workspaceName,
+          dateFormat: this.datetimeFormat,
+          userId: this.userId,
           bookmark: results.find((item) => item.id === action.id) as CombinedBookmark
         }
       }),

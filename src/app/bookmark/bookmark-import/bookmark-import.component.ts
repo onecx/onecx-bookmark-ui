@@ -1,12 +1,10 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
-import { map, Observable } from 'rxjs'
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload'
-import { SelectItem } from 'primeng/api'
 
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
-import { BookmarkSnapshot, ImportBookmarkRequest, EximMode } from 'src/app/shared/generated'
+import { BookmarkSnapshot, EximBookmarkScope, EximMode, ImportBookmarksRequest } from 'src/app/shared/generated'
 
 export type ImportError = {
   name: string
@@ -26,29 +24,34 @@ export type ImportError = {
 export class BookmarkImportComponent
   implements
     DialogPrimaryButtonDisabled,
-    DialogResult<ImportBookmarkRequest | undefined>,
+    DialogResult<ImportBookmarksRequest | undefined>,
     DialogButtonClicked<BookmarkImportComponent>
 {
   @Input() public workspaceName = ''
+  @Input() public dateFormat = 'medium'
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   @ViewChild(FileUpload) fileUploader: FileUpload | undefined
 
-  public dialogResult: ImportBookmarkRequest | undefined = undefined
+  public dialogResult: ImportBookmarksRequest | undefined = undefined
   public importError: ImportError | undefined = undefined
   public snapshot: BookmarkSnapshot | undefined = undefined
-  public modeItems$: Observable<SelectItem[]> | undefined
   public mode: EximMode = EximMode.Append
+  public EximMode = EximMode
+  public private = true
+  public public = false
 
-  constructor(private readonly translate: TranslateService) {
-    this.modeItems$ = this.translate.get(['BOOKMARK_IMPORT.MODE.APPEND', 'BOOKMARK_IMPORT.MODE.OVERWRITE']).pipe(
-      map((data) => {
-        return [
-          { label: data['BOOKMARK_IMPORT.MODE.APPEND'], value: EximMode.Append },
-          { label: data['BOOKMARK_IMPORT.MODE.OVERWRITE'], value: EximMode.Overwrite }
-        ]
-      })
-    )
+  constructor(private readonly translate: TranslateService) {}
+
+  private checkImportReady() {
+    this.primaryButtonEnabled.emit((this.private || this.public) && this.snapshot !== undefined)
+  }
+
+  /**
+   * UI Actions
+   */
+  public onScopeChange() {
+    this.checkImportReady()
   }
 
   public onImportFileSelect(event: FileSelectEvent): void {
@@ -56,7 +59,7 @@ export class BookmarkImportComponent
     event.files[0].text().then((text) => {
       try {
         this.snapshot = JSON.parse(text)
-        this.primaryButtonEnabled.emit(true)
+        this.checkImportReady()
       } catch (err) {
         console.error('Import parse error', err)
         this.importError = {
@@ -81,11 +84,15 @@ export class BookmarkImportComponent
    * Dialog Button clicked => return what we have
    */
   public ocxDialogButtonClicked() {
+    const scopes: EximBookmarkScope[] = []
+    if (this.private) scopes.push(EximBookmarkScope.Private)
+    if (this.public) scopes.push(EximBookmarkScope.Public)
+
     this.dialogResult = {
-      workspace: this.workspaceName,
+      workspaceName: this.workspaceName,
       snapshot: this.snapshot,
-      importMode: this.mode
+      importMode: this.mode,
+      scopes: scopes
     }
-    console.log('ocxDialogButtonClicked', this.dialogResult)
   }
 }
