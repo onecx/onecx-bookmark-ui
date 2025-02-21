@@ -29,7 +29,7 @@
         [text]="importError ? (importError.exceptionKey | translate) : ''"
       ></p-message>
 
-      <div class="mt-2 flex flex-column row-gap-4">
+      <div *ngIf="snapshot !== undefined" class="mt-2 flex flex-column row-gap-4">
         <div class="flex flex-column row-gap-1">
           <div>{{ 'BOOKMARK_IMPORT.MODE.INFO' | translate }}</div>
           <div class="mt-1 flex flex-row justify-content-center align-items-center column-gap-6">
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div class="flex flex-column row-gap-2">
+        <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="flex flex-column row-gap-2">
           <div>{{ 'BOOKMARK_IMPORT.SCOPE.INFO' | translate }}</div>
           <div class="flex flex-row justify-content-center align-items-center column-gap-6">
             <p-checkbox
@@ -95,13 +95,15 @@
           </div>
         </div>
         <p-message
+          *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
           id="bm_import_info"
-          class="my-2 w-full"
+          class="mt-2"
           severity="info"
           [text]="'BOOKMARK_IMPORT.INFO' | translate"
         ></p-message>
       </div>
     </div>
+    <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'" class="my-2"></div>
   </p-tabPanel>
 
   <p-tabPanel
@@ -116,16 +118,47 @@
         <input
           pInputText
           type="text"
-          id="ps_app_detail_form_field_modification_user"
+          id="bm_import_snapshot_date"
           class="w-full pt-3 pb-2 text-responsive"
           [disabled]="true"
           [value]="snapshot?.created | date : dateFormat"
-          [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_USER' | translate"
+          [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.TOOLTIPS.DATE' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="ps_app_detail_form_field_modification_user"> {{ 'INTERNAL.MODIFICATION_USER' | translate }} </label>
+        <label for="bm_import_snapshot_date">{{ 'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate }}</label>
       </span>
+      <!-- For ADMINs only: Show both lists in parallel -->
+      <div
+        *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
+        class="flex flex-row justify-content-center align-items-start column-gap-5"
+      >
+        <div class="flex flex-column">
+          <div class="font-bold text-sm">{{ 'BOOKMARK.SCOPES.PRIVATE' | translate }}</div>
+          <div class="m-0 py-1 pl-2 text-sm">
+            <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PRIVATE']">
+              {{ item.displayName }}
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-column">
+          <div class="font-bold text-sm">{{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}</div>
+          <div class="m-0 py-1 pl-2 text-sm">
+            <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PUBLIC']">
+              {{ item.displayName }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- For non-admins: Show both lists in parallel -->
+      <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'" class="ml-3 flex flex-column">
+        <div class="font-bold">{{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}</div>
+        <div class="m-0 py-1 pl-2">
+          <div class="w-30rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PRIVATE']">
+            {{ item.displayName }}
+          </div>
+        </div>
+      </div>
     </div>
   </p-tabPanel>
 </p-tabView>
