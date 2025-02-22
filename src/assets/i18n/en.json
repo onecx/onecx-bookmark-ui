@@ -81,8 +81,7 @@
       "TOOLTIP": "Change the order of Bookmarks"
     },
     "VIEW": {
-      "LABEL": "View",
-      "TOOLTIP": "View the Bookmark properties"
+      "LABEL": "View"
     },
     "CANCEL": "Cancel",
     "LOADING": "...is loading",
@@ -111,7 +110,7 @@
   "DIALOG": {
     "SEARCH": {
       "HEADER": "Bookmarks",
-      "SUBHEADER": "Search and manage Bookmarks"
+      "SUBHEADER": "Manage Bookmarks"
     },
     "DETAIL": {
       "COPY.HEADER": "Create Bookmark",
@@ -163,12 +162,12 @@
       "POSITION": "Position in list view",
       "PRODUCT": "Target Application",
       "APP_ID": "App ID",
-      "SCOPE_IS_PUBLIC": "If checked, the bookmark is visible to everyone in the workspace (public).",
-      "ENDPOINT": "The name of the app endpoint that the bookmark points to.",
+      "SCOPE_IS_PUBLIC": "If checked, the Bookmark is visible to everyone in the workspace (public).",
+      "ENDPOINT": "The name of the app endpoint that the Bookmark points to.",
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
       "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
-      "TYPE_URL": "Static URL to target maybe also outside of teh Workspace",
+      "TYPE_URL": "Static URL to target maybe also outside of the Workspace",
       "TYPE_PRODUCT": "URL to endpoint of an Application within the current Workspace",
       "URL": "Complete URL to be used 1:1",
       "URL_SEARCH": "Final URL which is used as target link"
@@ -176,12 +175,10 @@
   },
   "BOOKMARK_DETAIL": {
     "CREATE": {
-      "HEADER": "Create Bookmark",
       "SUCCESS": "Bookmark was created successfully.",
       "ERROR": "Bookmark couldn't be created."
     },
     "EDIT": {
-      "HEADER": "Edit Bookmark",
       "FAILED": "Update failed",
       "ERROR": "Update failed",
       "SUCCESS": "Update successful"
@@ -198,7 +195,7 @@
       "TOOLTIPS": {
         "PROPS": "Base properties of the Bookmark",
         "TARGET": "Target Application and App",
-        "ENDPOINT": "The Endpoint targeted by the bookmark and its parameters.",
+        "ENDPOINT": "The Endpoint targeted by the Bookmark and its parameters.",
         "PARAMS": "Additional parameters added to the path",
         "INTERN": "Internal Properties"
       }
@@ -213,7 +210,7 @@
   },
   "BOOKMARK_EXPORT": {
     "HEADER": "Export Bookmarks",
-    "INFO": "Select the areas whose bookmarks you want to export.",
+    "INFO": "Select the areas whose Bookmarks you want to export.",
     "SCOPE_PRIVATE": "Export the own Bookmarks",
     "SCOPE_PUBLIC": "Export the public Bookmarks",
     "ERROR": "Export failed",
@@ -221,18 +218,22 @@
   },
   "BOOKMARK_IMPORT": {
     "HEADER": "Import Bookmarks",
-    "INFO": "After importing, you will find all imported bookmarks in your private area.",
+    "INFO": "After importing, you will find all imported Bookmarks in your private area.",
     "ERROR": "Import failed",
     "SUCCESS": "Bookmarks successfully imported",
     "MODE": {
-      "INFO": "How to import the bookmarks?",
+      "INFO": "How to import the Bookmarks?",
       "APPEND": "Add Bookmarks",
       "OVERWRITE": "Replace existing Bookmarks"
     },
     "SCOPE": {
-      "INFO": "Which bookmarks to import?",
+      "INFO": "Which Bookmarks to import?",
       "PRIVATE": "My Bookmarks",
       "PUBLIC": "Public Bookmarks"
+    },
+    "SNAPSHOT": {
+      "DATE": "Created on",
+      "DATE.TOOLTIP": "The time at which the file was created."
     },
     "TABS": {
       "IMPORT": "Import",
@@ -242,14 +243,6 @@
         "CONTENT": "List the content of the read file"
       }
     }
-  },
-  "SNAPSHOT": {
-    "DATE": "Created on"
-  },
-  "BOOKMARK_SEARCH": {
-    "HEADER": "Bookmarks",
-    "SUB_HEADER": "Manage Bookmarks",
-    "ERROR": "Loading search results failed."
   },
   "BOOKMARK_SORT": {
     "HEADER": "Sort Bookmarks",
@@ -288,7 +281,7 @@
       },
       "LOADING_ERROR": "Your Bookmarks couldn't be loaded.",
       "LOADING_ERROR_DETAIL": "Please try again later.",
-      "NO_PRIVATE_BOOKMARKS.STATE": "You don't have bookmarks.",
+      "NO_PRIVATE_BOOKMARKS.STATE": "You don't have Bookmarks.",
       "NO_PRIVATE_BOOKMARKS.TODO": "Use the \"Star\" symbol in the topbar, to create a Bookmark for the current page."
     }
   },

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { filter } from 'rxjs'
 
@@ -58,8 +58,8 @@ export class BookmarkDetailComponent
 {
   @Input() public workspaceName = ''
   @Input() public dateFormat = 'medium'
+  @Input() public editable = false
   @Input() public userId: string | undefined = undefined
-
   @Input() public vm: BookmarkDetailViewModel = {
     initialBookmark: undefined,
     permissions: undefined,
@@ -67,12 +67,8 @@ export class BookmarkDetailComponent
   }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
-  @ViewChild('endpointParameter') endpointParameter!: ElementRef
   public formGroup: FormGroup
   public dialogResult: CombinedBookmark | undefined = undefined
-  public isPublicBookmark = false
-  private permissionKey = 'BOOKMARK#EDIT'
-  private hasPermission = false
 
   constructor(private readonly user: UserService) {
     // this is the universal form: used for specific URL bookmarks and other bookmarks
@@ -103,35 +99,25 @@ export class BookmarkDetailComponent
         endpointParams: JSON.stringify(this.vm.initialBookmark?.endpointParameters, undefined, 2),
         query: JSON.stringify(this.vm.initialBookmark?.query, undefined, 2)
       })
-      if (this.vm.initialBookmark.scope === BookmarkScope.Public) {
-        this.permissionKey = 'BOOKMARK#ADMIN_EDIT'
-        this.isPublicBookmark = true
-      }
     }
-    this.hasPermission = this.hasEditPermission()
-    if (!this.hasPermission || this.vm.changeMode === 'VIEW') {
+    if (!this.editable || this.vm.changeMode === 'VIEW') {
       this.formGroup.disable()
     } else {
       this.formGroup.enable()
       // do something if form is valid
       this.formGroup.statusChanges.pipe(filter(() => this.formGroup.valid)).subscribe((val) => {
-        if (this.hasPermission) {
-          this.primaryButtonEnabled.emit(true)
-        } else {
-          this.primaryButtonEnabled.emit(false)
-        }
+        this.primaryButtonEnabled.emit(this.editable)
       })
     }
     if (this.vm.changeMode === 'CREATE' || this.vm.initialBookmark?.url) {
       this.formGroup.controls['url'].setValidators(Validators.required)
     }
-  }
-
-  public hasEditPermission(): boolean {
-    if (this.vm.permissions) {
-      return this.vm.permissions.includes(this.permissionKey)
+    if (this.vm.changeMode === 'COPY' || this.vm.changeMode === 'VIEW') {
+      // avoid ExpressionChangedAfterItHasBeenCheckedError
+      setTimeout(() => {
+        this.primaryButtonEnabled.emit(true)
+      }, 500)
     }
-    return this.user.hasPermission(this.permissionKey)
   }
 
   /**

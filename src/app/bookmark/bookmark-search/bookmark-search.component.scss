@@ -6,8 +6,8 @@
 @include table-zebra-rows;
 @include correct-data-view-control;
 @include correct-select-button;
+@include search-criteria-select-button;
 @include search-criteria-select-button-slim;
-@include search-criteria-select-button-filter;
 
 :host ::ng-deep {
   .p-datatable {

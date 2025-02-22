@@ -1,7 +1,7 @@
 <ocx-portal-page permission="BOOKMARK#VIEW" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$ as vm">
   <ocx-page-header
-    [header]="'BOOKMARK_SEARCH.HEADER' | translate"
-    [subheader]="'BOOKMARK_SEARCH.SUB_HEADER' | translate"
+    [header]="'DIALOG.SEARCH.HEADER' | translate"
+    [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
     [actions]="pageActions"
   />
 
@@ -50,10 +50,9 @@
       <ng-template pTemplate="caption">
         <div class="flex flex-wrap justify-content-between align-items-center row-gap-1">
           <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'"></div>
-          <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="slim-selectbutton align-items-start filter-selectbutton">
+          <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="slim-selectbutton search-criteria-selectbutton">
             <p-selectButton
               inputid="bm_search_table_quick_filter"
-              styleClass="data-view-control"
               [options]="quickFilterOptions"
               [(ngModel)]="quickFilterValue"
               (onChange)="onQuickFilterChange($event.value)"
@@ -119,28 +118,10 @@
         <tr [pSelectableRow]="vm.results">
           <!-- actions -->
           <td pFrozenColumn class="align-items-center border-right-1 text-center white-space-nowrap">
-            <ng-container *ocxIfNotPermission="'BOOKMARK#EDIT'">
-              <button
-                pbutton
-                type="button"
-                *ocxIfPermission="'BOOKMARK#VIEW'"
-                class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
-                [id]="'bm_search_table_row_' + i + '_action_view'"
-                (click)="onDetail(rowData)"
-                (keydown.enter)="onDetail(rowData)"
-                (keydown.space)="onDetail(rowData)"
-                [attr.aria-label]="'ACTIONS.VIEW.LABEL' | translate"
-                [pTooltip]="'ACTIONS.VIEW.LABEL' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              >
-                <span class="font-medium p-button-icon pi pi-eye" aria-hidden="true"></span>
-              </button>
-            </ng-container>
+            @if (canEdit(rowData.scope)) {
             <button
               pbutton
               type="button"
-              *ocxIfPermission="'BOOKMARK#EDIT'"
               [id]="'bm_search_table_row_' + i + '_action_edit'"
               class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
               (click)="onDetail(rowData)"
@@ -153,10 +134,28 @@
             >
               <span class="font-medium p-button-icon pi pi-pencil" aria-hidden="true"></span>
             </button>
+            } @else {
             <button
+              *ocxIfPermission="'BOOKMARK#VIEW'"
               pbutton
               type="button"
-              *ocxIfPermission="'BOOKMARK#EDIT'"
+              class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
+              [id]="'bm_search_table_row_' + i + '_action_view'"
+              (click)="onDetail(rowData)"
+              (keydown.enter)="onDetail(rowData)"
+              (keydown.space)="onDetail(rowData)"
+              [attr.aria-label]="'ACTIONS.VIEW.LABEL' | translate"
+              [pTooltip]="'ACTIONS.VIEW.LABEL' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+              <span class="font-medium p-button-icon pi pi-eye" aria-hidden="true"></span>
+            </button>
+            }
+            <button
+              *ocxIfPermission="'BOOKMARK#CREATE'"
+              pbutton
+              type="button"
               class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
               [id]="'bm_search_table_row_' + i + '_action_copy'"
               (click)="onCopy(rowData)"
@@ -170,9 +169,9 @@
               <span class="font-medium p-button-icon pi pi-copy" aria-hidden="true"></span>
             </button>
             <button
+              *ocxIfPermission="'BOOKMARK#DELETE'"
               pbutton
               type="button"
-              *ocxIfPermission="'BOOKMARK#DELETE'"
               [id]="'bm_search_table_row_' + i + '_action_delete'"
               class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
               (click)="onDelete(rowData)"

@@ -320,7 +320,6 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   ) {
     if (endpointForCurrentPage) {
       let endpointParameters = {}
-      console.log('currentPage', currentPage)
       if (currentPage && endpointForCurrentPage.path) {
         const pagePath = extractPathAfter(currentPage.path, currentMfe.baseHref)
         endpointParameters = mapPathSegmentsToPathParameters(endpointForCurrentPage.path, pagePath)
