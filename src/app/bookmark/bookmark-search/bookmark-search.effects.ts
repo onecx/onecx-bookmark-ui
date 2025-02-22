@@ -41,6 +41,7 @@ export class BookmarkSearchEffects {
   public userId: string | undefined
   public workspaceName = ''
   public datetimeFormat = 'medium'
+  private context = 'BOOKMARK'
 
   constructor(
     private readonly actions$: Actions,
@@ -67,7 +68,7 @@ export class BookmarkSearchEffects {
   }
 
   private buildExceptionKey(status: string): string {
-    return 'EXCEPTIONS.HTTP_STATUS_' + status + '.BOOKMARK'
+    return 'EXCEPTIONS.HTTP_STATUS_' + status + '.' + this.context
   }
 
   private sortByPosition(a: Bookmark, b: Bookmark): number {
@@ -101,6 +102,7 @@ export class BookmarkSearchEffects {
    * Bookmark Search in context of current workspace
    */
   private performSearch(workspaceName: string) {
+    this.context = 'BOOKMARKS'
     let criteria: BookmarkSearchCriteria = { workspaceName: workspaceName }
     // Normal user must see only his own bookmarks
     if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) criteria = { ...criteria, scope: BookmarkScope.Private }
@@ -126,20 +128,8 @@ export class BookmarkSearchEffects {
   /**
    * EXPORT
    */
-  exportData$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(BookmarkSearchActions.exportBookmarks),
-        concatLatestFrom(() => this.store.select(selectBookmarkSearchViewModel)),
-        map(([, viewModel]) => {
-          this.exportDataService.exportCsv(viewModel.columns, viewModel.results, 'Bookmarks.csv')
-        })
-      )
-    },
-    { dispatch: false }
-  )
-
   exportBookmarks$ = createEffect(() => {
+    this.context = 'BOOKMARKS'
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.exportBookmarks),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
@@ -201,6 +191,7 @@ export class BookmarkSearchEffects {
    * IMPORT
    */
   importBookmarks$ = createEffect(() => {
+    this.context = 'BOOKMARKS'
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.importBookmarks),
       mergeMap(() => {
@@ -248,6 +239,7 @@ export class BookmarkSearchEffects {
    * SORT
    */
   openSortingDialog$ = createEffect(() => {
+    this.context = 'BOOKMARKS'
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.openSortingDialog),
       concatLatestFrom(() => this.store.select(selectBookmarkSearchViewModel)),
@@ -295,6 +287,7 @@ export class BookmarkSearchEffects {
    * DETAIL => displaying & editing
    */
   viewOrEditBookmark$ = createEffect(() => {
+    this.context = 'BOOKMARK'
     const canEdit = (bookmark?: CombinedBookmark) => {
       return (
         (this.user.hasPermission('BOOKMARK#EDIT') && bookmark?.scope === BookmarkScope.Private) ||
@@ -363,6 +356,7 @@ export class BookmarkSearchEffects {
    * DETAIL => create URL bookmark
    */
   createBookmark$ = createEffect(() => {
+    this.context = 'BOOKMARK'
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.createBookmark),
       mergeMap(() => {
@@ -414,6 +408,7 @@ export class BookmarkSearchEffects {
    * DETAIL => copy bookmark
    */
   copyBookmark$ = createEffect(() => {
+    this.context = 'BOOKMARK'
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.copyBookmark),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
@@ -469,6 +464,7 @@ export class BookmarkSearchEffects {
    * DELETE
    */
   deleteBookmark$ = createEffect(() => {
+    this.context = 'BOOKMARK'
     return this.actions$.pipe(
       ofType(BookmarkSearchActions.openDeleteDialog),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),

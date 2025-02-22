@@ -306,22 +306,28 @@
   },
   "EXCEPTIONS": {
     "HTTP_STATUS_0": {
-      "BOOKMARK": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal."
+      "BOOKMARK": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal.",
+      "BOOKMARKS": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal."
     },
     "HTTP_STATUS_400": {
-      "BOOKMARK": "Ihre Anfrage konnte nicht bearbeitet werden."
+      "BOOKMARK": "Ihre Anfrage konnte nicht bearbeitet werden.",
+      "BOOKMARKS": "Ihre Anfrage konnte nicht bearbeitet werden."
     },
     "HTTP_STATUS_401": {
-      "BOOKMARK": "Sie sind nicht autorisiert, um auf Lesezeichen zu arbeiten."
+      "BOOKMARK": "Sie sind nicht autorisiert, um auf Lesezeichen zu arbeiten.",
+      "BOOKMARKS": "Sie haben keine Rechte, um Lesezeichen zu suchen."
     },
     "HTTP_STATUS_403": {
-      "BOOKMARK": "Sie haben keine Rechte, um auf Lesezeichen zu arbeiten."
+      "BOOKMARK": "Sie haben keine Rechte, um auf Lesezeichen zu arbeiten.",
+      "BOOKMARKS": "Sie haben keine Rechte, um Lesezeichen zu suchen."
     },
     "HTTP_STATUS_404": {
-      "BOOKMARK": "Lesezeichen nicht gefunden."
+      "BOOKMARK": "Lesezeichen nicht gefunden.",
+      "BOOKMARKS": "Lesezeichen nicht gefunden."
     },
     "HTTP_STATUS_500": {
-      "BOOKMARK": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal."
+      "BOOKMARK": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal.",
+      "BOOKMARKS": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal."
     }
   }
 }

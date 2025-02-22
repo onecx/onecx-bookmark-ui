@@ -85,6 +85,12 @@ export class BookmarkSearchComponent implements OnInit {
       (scope === BookmarkScope.Private && this.user.hasPermission('BOOKMARK#EDIT'))
     )
   }
+  public canDelete(scope: BookmarkScope): boolean {
+    return (
+      (scope === BookmarkScope.Public && this.user.hasPermission('BOOKMARK#ADMIN_DELETE')) ||
+      (scope === BookmarkScope.Private && this.user.hasPermission('BOOKMARK#DELETE'))
+    )
+  }
   private prepareDialogTranslations(): void {
     this.translate
       .get(['DIALOG.DATAVIEW.FILTER', 'DIALOG.DATAVIEW.FILTER_BY', 'BOOKMARK.DISPLAY_NAME'])

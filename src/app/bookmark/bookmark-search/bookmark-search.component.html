@@ -1,4 +1,4 @@
-<ocx-portal-page permission="BOOKMARK#VIEW" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$ as vm">
+<ocx-portal-page permission="BOOKMARK#SEARCH" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$ as vm">
   <ocx-page-header
     [header]="'DIALOG.SEARCH.HEADER' | translate"
     [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
@@ -169,7 +169,7 @@
               <span class="font-medium p-button-icon pi pi-copy" aria-hidden="true"></span>
             </button>
             <button
-              *ocxIfPermission="'BOOKMARK#DELETE'"
+              *ngIf="canDelete(rowData.scope)"
               pbutton
               type="button"
               [id]="'bm_search_table_row_' + i + '_action_delete'"
