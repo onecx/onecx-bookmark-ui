@@ -6,8 +6,8 @@
 @include table-zebra-rows;
 @include correct-data-view-control;
 @include correct-select-button;
+@include search-criteria-select-button;
 @include search-criteria-select-button-slim;
-@include search-criteria-select-button-filter;
 
 :host ::ng-deep {
   .p-datatable {
@@ -19,7 +19,7 @@
     .p-datatable-tbody > tr > td {
       padding: 0.5rem 1rem;
       &:first-of-type {
-        padding: 0.2rem;
+        padding: 0.2rem 0.8rem;
         text-align: center;
         border-right-width: 1px !important;
         white-space: nowrap;

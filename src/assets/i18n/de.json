@@ -81,8 +81,7 @@
       "TOOLTIP": "Die Reihenfolge der Lesezeichen ändern"
     },
     "VIEW": {
-      "LABEL": "Details",
-      "TOOLTIP": "Die Details des Lesezeichens anzeigen"
+      "LABEL": "Details"
     },
     "CANCEL": "Abbrechen",
     "LOADING": "...wird geladen",
@@ -111,7 +110,7 @@
   "DIALOG": {
     "SEARCH": {
       "HEADER": "Lesezeichen",
-      "SUBHEADER": "Suchen und verwalten von Lesezeichen"
+      "SUBHEADER": "Verwalten von Lesezeichen"
     },
     "DETAIL": {
       "COPY.HEADER": "Lesezeichen erstellen",
@@ -176,12 +175,10 @@
   },
   "BOOKMARK_DETAIL": {
     "CREATE": {
-      "HEADER": "Lesezeichen erstellen",
       "SUCCESS": "Lesezeichen erfolgreich erstellt.",
       "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
     },
     "EDIT": {
-      "HEADER": "Lesezeichen bearbeiten",
       "FAILED": "Aktualisierung fehlgeschlagen",
       "ERROR": "Aktualisierung fehlgeschlagen",
       "SUCCESS": "Aktualisierung erfolgreich"
@@ -231,11 +228,12 @@
     },
     "SCOPE": {
       "INFO": "Welche Lesezeichen sollen importiert werden?",
-      "PRIVATE": "Eigene Lesezeichen",
+      "PRIVATE": "Meine Lesezeichen",
       "PUBLIC": "Öffentliche Lesezeichen"
     },
     "SNAPSHOT": {
-      "DATE": "Erstellt am"
+      "DATE": "Erstellt am",
+      "DATE.TOOLTIP": "Der Zeitpunkt an dem die Datei erstellt wurde."
     },
     "TABS": {
       "IMPORT": "Import",
@@ -245,11 +243,6 @@
         "CONTENT": "Den Inhalt der eingelesenen Datei auflisten"
       }
     }
-  },
-  "BOOKMARK_SEARCH": {
-    "HEADER": "Lesezeichen",
-    "SUB_HEADER": "Verwalten von Lesezeichen",
-    "ERROR": "Suchergebnisse konnten nicht geladen werden."
   },
   "BOOKMARK_SORT": {
     "HEADER": "Lesezeichen sortieren",
@@ -313,22 +306,28 @@
   },
   "EXCEPTIONS": {
     "HTTP_STATUS_0": {
-      "BOOKMARK": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal."
+      "BOOKMARK": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal.",
+      "BOOKMARKS": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal."
     },
     "HTTP_STATUS_400": {
-      "BOOKMARK": "Ihre Anfrage konnte nicht bearbeitet werden."
+      "BOOKMARK": "Ihre Anfrage konnte nicht bearbeitet werden.",
+      "BOOKMARKS": "Ihre Anfrage konnte nicht bearbeitet werden."
     },
     "HTTP_STATUS_401": {
-      "BOOKMARK": "Sie sind nicht autorisiert, um auf Lesezeichen zu arbeiten."
+      "BOOKMARK": "Sie sind nicht autorisiert, um auf Lesezeichen zu arbeiten.",
+      "BOOKMARKS": "Sie haben keine Rechte, um Lesezeichen zu suchen."
     },
     "HTTP_STATUS_403": {
-      "BOOKMARK": "Sie haben keine Rechte, um auf Lesezeichen zu arbeiten."
+      "BOOKMARK": "Sie haben keine Rechte, um auf Lesezeichen zu arbeiten.",
+      "BOOKMARKS": "Sie haben keine Rechte, um Lesezeichen zu suchen."
     },
     "HTTP_STATUS_404": {
-      "BOOKMARK": "Lesezeichen nicht gefunden."
+      "BOOKMARK": "Lesezeichen nicht gefunden.",
+      "BOOKMARKS": "Lesezeichen nicht gefunden."
     },
     "HTTP_STATUS_500": {
-      "BOOKMARK": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal."
+      "BOOKMARK": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal.",
+      "BOOKMARKS": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal."
     }
   }
 }

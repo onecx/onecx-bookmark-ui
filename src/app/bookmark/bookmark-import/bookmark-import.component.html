@@ -119,10 +119,11 @@
           pInputText
           type="text"
           id="bm_import_snapshot_date"
-          class="w-full pt-3 pb-2 text-responsive"
+          class="pt-3 pb-2 text-responsive"
           [disabled]="true"
           [value]="snapshot?.created | date : dateFormat"
-          [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.TOOLTIPS.DATE' | translate"
+          [attr.ariaLabel]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
+          [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.DATE.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
