@@ -45,5 +45,6 @@ app:
             DELETE: 'Delete bookmarks'
             IMPORT: 'Import bookmarks'
             EXPORT: 'Export bookmarks'
+            SEARCH: Search bookmarks
             VIEW: 'View mode for bookmarks'
     
