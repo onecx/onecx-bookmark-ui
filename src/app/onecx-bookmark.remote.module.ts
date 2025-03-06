@@ -9,7 +9,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
-import { createTranslateLoader } from '@onecx/angular-accelerator'
+import { createTranslateLoader, TRANSLATION_PATH, translationPathFactory } from '@onecx/angular-utils'
 import { addInitializeModuleGuard, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { PortalCoreModule, PortalMissingTranslationHandler } from '@onecx/portal-integration-angular'
 
@@ -35,11 +35,7 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
     TranslateModule.forRoot({
       extend: true,
       isolate: false,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient, AppStateService]
-      },
+      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
         useClass: PortalMissingTranslationHandler
@@ -70,6 +66,12 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       useFactory: initializeRouter,
       multi: true,
       deps: [Router, AppStateService]
+    },
+    {
+      provide: TRANSLATION_PATH,
+      useFactory: (appStateService: AppStateService) => translationPathFactory('assets/i18n/')(appStateService),
+      multi: true,
+      deps: [AppStateService]
     },
     provideHttpClient(withInterceptorsFromDi())
   ]

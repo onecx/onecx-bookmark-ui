@@ -13,7 +13,7 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 
 import { KeycloakAuthModule } from '@onecx/keycloak-auth'
 import { APP_CONFIG, AppStateService, ConfigurationService, UserService } from '@onecx/angular-integration-interface'
-import { createTranslateLoader } from '@onecx/angular-accelerator'
+import { createTranslateLoader } from '@onecx/angular-utils'
 import {
   PortalCoreModule,
   providePortalDialogService,
@@ -50,11 +50,7 @@ export const commonImports = [CommonModule, BrowserModule, BrowserAnimationsModu
     PortalCoreModule.forRoot('onecx-bookmark-ui'),
     TranslateModule.forRoot({
       extend: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient, AppStateService]
-      }
+      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] }
     })
   ],
   providers: [
