@@ -2,10 +2,9 @@
 import { TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { RouterTestingModule } from '@angular/router/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { AUTH_SERVICE, MockAuthModule, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { MockAuthModule, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { AppComponent } from './app.component'
 
 describe('AppComponent', () => {
@@ -13,14 +12,14 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
       imports: [
-        RouterTestingModule,
+        MockAuthModule,
         PortalCoreModule.forRoot('test'),
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
-      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: AUTH_SERVICE, useClass: MockAuthModule }]
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents()
   })
 
