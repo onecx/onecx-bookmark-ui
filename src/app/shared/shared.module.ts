@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
 
+import { DockModule } from 'primeng/dock'
 import { FileUploadModule } from 'primeng/fileupload'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputGroupModule } from 'primeng/inputgroup'
@@ -19,6 +20,7 @@ import { TooltipModule } from 'primeng/tooltip'
   declarations: [],
   imports: [
     CommonModule,
+    DockModule,
     FileUploadModule,
     FloatLabelModule,
     FormsModule,
@@ -35,6 +37,7 @@ import { TooltipModule } from 'primeng/tooltip'
     errorTailorImports
   ],
   exports: [
+    DockModule,
     FileUploadModule,
     FloatLabelModule,
     FormsModule,

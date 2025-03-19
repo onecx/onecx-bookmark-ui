@@ -18,21 +18,21 @@ import {
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { limitText } from 'src/app/shared/utils/utils'
 
-import { BookmarkSearchActions } from './bookmark-search.actions'
-import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
-import { selectBookmarkSearchViewModel } from './bookmark-search.selectors'
-import { bookmarkColumns } from './bookmark-search.columns'
+import { BookmarkConfigureActions } from './bookmark-configure.actions'
+import { BookmarkConfigureViewModel } from './bookmark-configure.viewmodel'
+import { selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
+import { bookmarkColumns } from './bookmark-configure.columns'
 
 export type ExtendedSelectItem = SelectItem & { title_key: string }
 
 @Component({
-  selector: 'app-bookmark-search',
-  templateUrl: './bookmark-search.component.html',
-  styleUrls: ['./bookmark-search.component.scss']
+  selector: 'app-bookmark-configure',
+  templateUrl: './bookmark-configure.component.html',
+  styleUrls: ['./bookmark-configure.component.scss']
 })
-export class BookmarkSearchComponent implements OnInit {
+export class BookmarkConfigureComponent implements OnInit {
   // data
-  public viewModel$: Observable<BookmarkSearchViewModel> = this.store.select(selectBookmarkSearchViewModel)
+  public viewModel$: Observable<BookmarkConfigureViewModel> = this.store.select(selectBookmarkConfigureViewModel)
   public urls: Record<string, Observable<string>> = {}
   public pageActions: Action[] = []
   public rowActions: DataAction[] = []
@@ -44,7 +44,7 @@ export class BookmarkSearchComponent implements OnInit {
   public quickFilterItems$: Observable<SelectItem[]> | undefined
 
   @ViewChild('dataTable', { static: false }) dataTable: Table | undefined
-  public dataViewControlsTranslations: DataViewControlTranslations = {}
+  public dataViewControlsTranslations$: Observable<DataViewControlTranslations> | undefined
   public quickFilterOptions: ExtendedSelectItem[] = [
     { label: 'BOOKMARK.SCOPES.PRIVATE', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PRIVATE', value: 'PRIVATE' },
     { label: 'BOOKMARK.SCOPES.PUBLIC', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PUBLIC', value: 'PUBLIC' }
@@ -91,18 +91,18 @@ export class BookmarkSearchComponent implements OnInit {
       (scope === BookmarkScope.Private && this.user.hasPermission('BOOKMARK#DELETE'))
     )
   }
+
   private prepareDialogTranslations(): void {
-    this.translate
+    this.dataViewControlsTranslations$ = this.translate
       .get(['DIALOG.DATAVIEW.FILTER', 'DIALOG.DATAVIEW.FILTER_BY', 'BOOKMARK.DISPLAY_NAME'])
       .pipe(
         map((data) => {
-          this.dataViewControlsTranslations = {
+          return {
             filterInputPlaceholder: data['DIALOG.DATAVIEW.FILTER'],
             filterInputTooltip: data['DIALOG.DATAVIEW.FILTER_BY'] + data['BOOKMARK.DISPLAY_NAME']
-          }
+          } as DataViewControlTranslations
         })
       )
-      .subscribe()
   }
   private preparePageActions(dataExists: boolean, scope: BookmarkScope): Action[] {
     if (!dataExists) return []
@@ -147,39 +147,39 @@ export class BookmarkSearchComponent implements OnInit {
    * UI Events
    */
   public onSearch() {
-    this.store.dispatch(BookmarkSearchActions.search())
+    this.store.dispatch(BookmarkConfigureActions.search())
   }
   public onExport() {
-    this.store.dispatch(BookmarkSearchActions.exportBookmarks())
+    this.store.dispatch(BookmarkConfigureActions.exportBookmarks())
   }
   public onImport() {
-    this.store.dispatch(BookmarkSearchActions.importBookmarks())
+    this.store.dispatch(BookmarkConfigureActions.importBookmarks())
   }
   public onSortDialog() {
-    this.store.dispatch(BookmarkSearchActions.openSortingDialog())
+    this.store.dispatch(BookmarkConfigureActions.openSortingDialog())
   }
 
   public onColumnsChange(activeIds: string[]) {
     this.filteredColumns = activeIds.map((id) => bookmarkColumns.find((col) => col.field === id)) as Column[]
   }
   public onQuickFilterChange(scopeQuickFilter: string): void {
-    this.store.dispatch(BookmarkSearchActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
+    this.store.dispatch(BookmarkConfigureActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
   }
   public onFilterChange(event: string): void {
     this.dataTable?.filterGlobal(event, 'contains')
   }
 
   public onDetail(data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.viewOrEditBookmark({ id: data.id }))
+    this.store.dispatch(BookmarkConfigureActions.viewOrEditBookmark({ id: data.id }))
   }
   public onCreate() {
-    this.store.dispatch(BookmarkSearchActions.createBookmark())
+    this.store.dispatch(BookmarkConfigureActions.createBookmark())
   }
   public onCopy(data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.copyBookmark({ id: data.id }))
+    this.store.dispatch(BookmarkConfigureActions.copyBookmark({ id: data.id }))
   }
   public onDelete(data: Bookmark): void {
-    this.store.dispatch(BookmarkSearchActions.openDeleteDialog({ id: data.id }))
+    this.store.dispatch(BookmarkConfigureActions.openDeleteDialog({ id: data.id }))
   }
 
   /**

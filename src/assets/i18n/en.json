@@ -8,6 +8,10 @@
       "NO.TOOLTIP": "Cancel the action",
       "YES.TOOLTIP": "Proceed with the action"
     },
+    "CONFIGURE": {
+      "LABEL": "Configuration",
+      "TOOLTIP": "Configure Bookmarks"
+    },
     "COPY": {
       "LABEL": "Copy",
       "TOOLTIP": "Create a new Bookmark with this data"
@@ -93,9 +97,11 @@
     }
   },
   "BREADCRUMBS": {
-    "SEARCH": "Bookmarks"
+    "CONFIGURE": "Configure"
   },
   "INTERNAL": {
+    "HEADER": "Internal",
+    "TOOLTIP": "Internal properties",
     "CREATION_DATE": "Created on",
     "CREATION_USER": "Created by",
     "MODIFICATION_DATE": "Changed on",
@@ -108,9 +114,13 @@
     }
   },
   "DIALOG": {
-    "SEARCH": {
-      "HEADER": "Bookmarks",
-      "SUBHEADER": "Manage Bookmarks"
+    "OVERVIEW": {
+      "HEADER": "My Bookmarks",
+      "SUBHEADER": "List of My Bookmarks"
+    },
+    "CONFIGURE": {
+      "HEADER": "Configure Bookmarks",
+      "SUBHEADER": "Manage my Bookmarks"
     },
     "DETAIL": {
       "COPY.HEADER": "Create Bookmark",

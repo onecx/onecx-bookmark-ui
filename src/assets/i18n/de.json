@@ -8,6 +8,10 @@
       "NO.TOOLTIP": "Abbruch der Aktion",
       "YES.TOOLTIP": "Fortfahren mit der Aktion"
     },
+    "CONFIGURE": {
+      "LABEL": "Konfigurieren",
+      "TOOLTIP": "Lesezeichen konfigurieren"
+    },
     "COPY": {
       "LABEL": "Kopieren",
       "TOOLTIP": "Einen neues Lesezeichen mit den Daten der Zeile erstellen"
@@ -93,9 +97,11 @@
     }
   },
   "BREADCRUMBS": {
-    "SEARCH": "Lesezeichen"
+    "CONFIGURE": "Konfigurieren"
   },
   "INTERNAL": {
+    "HEADER": "Intern",
+    "TOOLTIP": "Interne Eigenschaften",
     "CREATION_DATE": "Erstellt am",
     "CREATION_USER": "Erstellt von",
     "MODIFICATION_DATE": "Geändert am",
@@ -108,9 +114,13 @@
     }
   },
   "DIALOG": {
-    "SEARCH": {
-      "HEADER": "Lesezeichen",
-      "SUBHEADER": "Verwalten von Lesezeichen"
+    "OVERVIEW": {
+      "HEADER": "Meine Lesezeichen",
+      "SUBHEADER": "Liste meiner Lesezeichen"
+    },
+    "CONFIGURE": {
+      "HEADER": "Lesezeichen konfigurieren",
+      "SUBHEADER": "Verwalten meiner Lesezeichen"
     },
     "DETAIL": {
       "COPY.HEADER": "Lesezeichen erstellen",

@@ -13,12 +13,13 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./bookmark-image.component.scss']
 })
 export class BookmarkImageComponent {
-  defaultImageUrl$: Observable<string>
-  productLogoBaseURL$: Observable<string>
-
   @Input() public bookmark: Bookmark | undefined
-  public loading = true
+  @Input() public styleClass: string | undefined
+
+  public defaultImageUrl$: Observable<string>
+  public productLogoBaseURL$: Observable<string>
   public errorImage$: Observable<string> | undefined
+  public loading = true
 
   constructor(appStateService: AppStateService) {
     this.defaultImageUrl$ = appStateService.currentMfe$.pipe(
@@ -34,17 +35,17 @@ export class BookmarkImageComponent {
     )
   }
 
-  prepareUrlPath(url?: string, path?: string): string {
+  private prepareUrlPath(url?: string, path?: string): string {
     if (url && path) return Location.joinWithSlash(url, path)
     else if (url) return url
     else return ''
   }
 
-  onImageLoad() {
+  public onImageLoad() {
     this.loading = false
   }
 
-  onImageError() {
+  public onImageError() {
     this.errorImage$ = this.defaultImageUrl$
   }
 }

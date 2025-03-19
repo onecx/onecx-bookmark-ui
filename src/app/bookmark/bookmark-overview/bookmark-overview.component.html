@@ -1,0 +1,52 @@
+<ocx-portal-page permission="BOOKMARK#OVERVIEW" helpArticleId="PAGE_BOOKMARK_OVERVIEW" *ngrxLet="viewModel$ as vm">
+  <!-- DOCK -->
+  <div class="absolute dock-top-right-minimized">
+    <p-dock *ocxIfPermission="'BOOKMARK#EDIT'" [model]="dockItems$ | async" [position]="'top'" styleClass="z-2">
+      <ng-template pTemplate="item" let-item>
+        <span
+          [class]="'text-primary cursor-pointer text-lg sm:text-2xl ' + item.iconClass"
+          [attr.aria-label]="'ACTIONS.CONFIGURE.LABEL' | translate"
+        ></span>
+      </ng-template>
+    </p-dock>
+  </div>
+
+  <!-- BOOKMARKS -->
+  <div
+    class="absolute top-0 left-0 w-full h-full z-1 overflow-hidden flex flex-row flex-wrap gap-5 justify-content-center align-items-center"
+  >
+    <div *ngIf="vm.loading || vm.exceptionKey">
+      <p-message
+        *ngIf="vm.loading"
+        id="bm_overview_message_loading"
+        severity="info"
+        styleClass="m-3"
+        [text]="'ACTIONS.LOADING' | translate"
+      ></p-message>
+      <p-message
+        *ngIf="vm.exceptionKey"
+        id="bm_overview_message_error"
+        severity="error"
+        styleClass="m-3"
+        [text]="vm.exceptionKey! | translate"
+      ></p-message>
+    </div>
+
+    <div class="p-6 flex flex-row flex-nowrap column-gap-4">
+      <!-- PRIVATE -->
+      <app-bookmark-list
+        headerKey="REMOTES.BOOKMARK_LIST.TABS.PRIVATE"
+        [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Private)"
+        [isPrivate]="true"
+      />
+
+      <p-divider layout="vertical" type="solid" styleClass="m-0 p-1"></p-divider>
+
+      <!-- PUBLIC -->
+      <app-bookmark-list
+        headerKey="REMOTES.BOOKMARK_LIST.TABS.PUBLIC"
+        [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Public)"
+      />
+    </div>
+  </div>
+</ocx-portal-page>

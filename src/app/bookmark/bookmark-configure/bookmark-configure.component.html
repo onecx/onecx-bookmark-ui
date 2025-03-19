@@ -1,21 +1,21 @@
-<ocx-portal-page permission="BOOKMARK#SEARCH" helpArticleId="PAGE_BOOKMARK_SEARCH" *ngrxLet="viewModel$ as vm">
+<ocx-portal-page permission="BOOKMARK#CONFIGURE" helpArticleId="PAGE_BOOKMARK_CONFIGURE" *ngrxLet="viewModel$ as vm">
   <ocx-page-header
-    [header]="'DIALOG.SEARCH.HEADER' | translate"
-    [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
+    [header]="'DIALOG.CONFIGURE.HEADER' | translate"
+    [subheader]="'DIALOG.CONFIGURE.SUBHEADER' | translate"
     [actions]="pageActions"
   />
 
   <ocx-page-content>
     <p-message
       *ngIf="vm.loading"
-      id="bm_search_message_loading"
+      id="bm_configure_message_loading"
       severity="info"
       styleClass="m-3 p-2"
       [text]="'ACTIONS.LOADING' | translate"
     ></p-message>
     <p-message
       *ngIf="vm.exceptionKey"
-      id="bm_search_message_error"
+      id="bm_configure_message_error"
       severity="error"
       styleClass="m-3 p-2"
       [text]="vm.exceptionKey! | translate"
@@ -24,7 +24,7 @@
     <p-table
       *ngIf="!(vm.loading || vm.exceptionKey)"
       #dataTable
-      id="bm_search_table"
+      id="bm_configure_table"
       styleClass="pb-2 px-3"
       [value]="vm.results"
       [columns]="filteredColumns"
@@ -43,7 +43,7 @@
     >
       <ng-template pTemplate="emptymessage">
         <tr>
-          <td id="bm_search_table_emptymessage" colspan="5">{{ 'ACTIONS.SEARCH.NO_DATA' | translate }}</td>
+          <td id="bm_configure_table_emptymessage" colspan="5">{{ 'ACTIONS.SEARCH.NO_DATA' | translate }}</td>
         </tr>
       </ng-template>
 
@@ -52,16 +52,15 @@
           <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'"></div>
           <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="slim-selectbutton search-criteria-selectbutton">
             <p-selectButton
-              inputid="bm_search_table_quick_filter"
+              inputid="bm_configure_table_quick_filter"
               [options]="quickFilterOptions"
               [(ngModel)]="quickFilterValue"
               (onChange)="onQuickFilterChange($event.value)"
-              [attr.ariaLabel]="'BOOKMARK.SCOPE' | translate"
+              [attr.aria-label]="'BOOKMARK.SCOPE' | translate"
             >
               <ng-template let-item pTemplate
                 ><span
-                  [id]="'bm_search_table_quick_filter_' + item.value"
-                  [attr.ariaLabel]="item.label | translate"
+                  [id]="'bm_configure_table_quick_filter_' + item.value"
                   [pTooltip]="item.title_key | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -78,10 +77,10 @@
             [columnDefinitions]="bookmarkColumns"
             (columnsChange)="onColumnsChange($event)"
             (filterChange)="onFilterChange($event)"
-            [translations]="dataViewControlsTranslations"
+            [translations]="(dataViewControlsTranslations$ | async) ?? {}"
           ></ocx-data-view-controls>
           <p-button
-            id="bm_search_table_reload_button"
+            id="bm_configure_table_reload_button"
             icon="pi pi-refresh"
             (onClick)="onSearch()"
             [ariaLabel]="'ACTIONS.SEARCH.RELOAD' | translate"
@@ -94,12 +93,16 @@
 
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pFrozenColumn id="bm_search_table_header_actions" class="border-right-1 text-center white-space-nowrap">
+          <th
+            pFrozenColumn
+            id="bm_configure_table_header_actions"
+            class="border-right-1 text-center white-space-nowrap"
+          >
             {{ 'ACTIONS.LABEL' | translate }}
           </th>
           <th
             *ngFor="let col of columns"
-            [id]="'bm_search_table_header_col_' + col.field"
+            [id]="'bm_configure_table_header_col_' + col.field"
             [class]="'white-space-nowrap ' + col.css"
             [pSortableColumn]="col.field"
             [attr.aria-label]="col.translationPrefix + '.' + col.header | translate"
@@ -122,7 +125,7 @@
             <button
               pbutton
               type="button"
-              [id]="'bm_search_table_row_' + i + '_action_edit'"
+              [id]="'bm_configure_table_row_' + i + '_action_edit'"
               class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
               (click)="onDetail(rowData)"
               (keydown.enter)="onDetail(rowData)"
@@ -140,7 +143,7 @@
               pbutton
               type="button"
               class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
-              [id]="'bm_search_table_row_' + i + '_action_view'"
+              [id]="'bm_configure_table_row_' + i + '_action_view'"
               (click)="onDetail(rowData)"
               (keydown.enter)="onDetail(rowData)"
               (keydown.space)="onDetail(rowData)"
@@ -157,7 +160,7 @@
               pbutton
               type="button"
               class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
-              [id]="'bm_search_table_row_' + i + '_action_copy'"
+              [id]="'bm_configure_table_row_' + i + '_action_copy'"
               (click)="onCopy(rowData)"
               (keydown.enter)="onCopy(rowData)"
               (keydown.space)="onCopy(rowData)"
@@ -172,7 +175,7 @@
               *ngIf="canDelete(rowData.scope)"
               pbutton
               type="button"
-              [id]="'bm_search_table_row_' + i + '_action_delete'"
+              [id]="'bm_configure_table_row_' + i + '_action_delete'"
               class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
               (click)="onDelete(rowData)"
               (keydown.enter)="onDelete(rowData)"
@@ -185,7 +188,7 @@
               <span class="danger-action-text font-medium p-button-icon pi pi-trash" aria-hidden="true"></span>
             </button>
           </td>
-          <td *ngFor="let col of columns" [id]="'bm_search_table_row_' + i + '_' + col.field" [class]="col.css">
+          <td *ngFor="let col of columns" [id]="'bm_configure_table_row_' + i + '_' + col.field" [class]="col.css">
             <!-- needs a div due to manage ellipsis -->
             <ng-container *ngIf="col.field === 'position'">{{ rowData[col.field] }}</ng-container>
             <div *ngIf="col.limit" class="text-ellipsis-2-lines">{{ rowData[col.field] }}</div>

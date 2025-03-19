@@ -4,12 +4,18 @@
 @include displaying-text-responsive;
 @include table-inline-buttons;
 @include table-zebra-rows;
-@include correct-data-view-control;
 @include correct-select-button;
 @include search-criteria-select-button;
 @include search-criteria-select-button-slim;
 
 :host ::ng-deep {
+  ocx-data-view-controls div {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    div:first-of-type {
+      display: none !important;
+    }
+  }
   .p-datatable {
     .p-datatable-header {
       padding-left: 0;

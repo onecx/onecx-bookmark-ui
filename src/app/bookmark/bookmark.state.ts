@@ -1,5 +1,7 @@
-import { BookmarkSearchState } from './bookmark-search/bookmark-search.state'
+import { BookmarkConfigureState } from './bookmark-configure/bookmark-configure.state'
+import { BookmarkOverviewState } from './bookmark-overview/bookmark-overview.state'
 
 export interface BookmarkState {
-  search: BookmarkSearchState
+  configure: BookmarkConfigureState
+  overview: BookmarkOverviewState
 }
