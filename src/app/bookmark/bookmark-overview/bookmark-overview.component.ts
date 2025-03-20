@@ -9,7 +9,6 @@ import { UserService, WorkspaceService } from '@onecx/angular-integration-interf
 import { Action } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { limitText } from 'src/app/shared/utils/utils'
 
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
 import { BookmarkOverviewViewModel } from './bookmark-overview.viewmodel'
@@ -23,11 +22,9 @@ import { selectBookmarkOverviewViewModel } from './bookmark-overview.selectors'
 export class BookmarkOverviewComponent implements OnInit {
   // data
   public viewModel$: Observable<BookmarkOverviewViewModel> = this.store.select(selectBookmarkOverviewViewModel)
-  public urls: Record<string, Observable<string>> = {}
   public pageActions: Action[] = []
-  public limitText = limitText
   public BookmarkScope = BookmarkScope
-  public editable = false
+  public hasEditPermissions = false
   public dockItems$: Observable<MenuItem[]> = of([])
 
   constructor(
@@ -39,7 +36,7 @@ export class BookmarkOverviewComponent implements OnInit {
     private readonly translate: TranslateService,
     private readonly workspaceService: WorkspaceService
   ) {
-    this.editable = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
+    this.hasEditPermissions = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
   }
 
   public ngOnInit() {
@@ -91,29 +88,5 @@ export class BookmarkOverviewComponent implements OnInit {
   }
   public onFilterBookmarksByScope(bs: Bookmark[], sc: BookmarkScope): Bookmark[] {
     return bs.filter((b) => b.scope === sc)
-    //return []
-  }
-
-  /**
-   * URL preparation
-   */
-  public getUrl(bookmark: Bookmark) {
-    if (bookmark.id && bookmark.productName && bookmark.appId) {
-      if (!this.urls[bookmark.id]) {
-        this.urls[bookmark.id] = this.workspaceService.getUrl(
-          bookmark.productName,
-          bookmark.appId,
-          bookmark.endpointName,
-          bookmark.endpointParameters
-        )
-      }
-      return this.urls[bookmark.id]
-    }
-    return undefined
-  }
-  public prepareUrlBookmarkLink(url: string | null, b: Bookmark): string {
-    if (!url) return ''
-    const q = new URLSearchParams(b.query).toString()
-    return url + (q ? '?' + q : '') + (b.fragment ? '#' + b.fragment : '')
   }
 }

@@ -22,7 +22,7 @@ import { BookmarkDeleteComponent } from './bookmark-delete/bookmark-delete.compo
 import { BookmarkDetailComponent } from './bookmark-detail/bookmark-detail.component'
 import { BookmarkExportComponent } from './bookmark-export/bookmark-export.component'
 import { BookmarkImportComponent } from './bookmark-import/bookmark-import.component'
-import { BookmarkImageComponent } from './product-image/bookmark-image.component'
+import { BookmarkImageComponent } from './bookmark-image/bookmark-image.component'
 import { BookmarkSortComponent } from './bookmark-sort/bookmark-sort.component'
 
 @NgModule({
@@ -46,7 +46,7 @@ import { BookmarkSortComponent } from './bookmark-sort/bookmark-sort.component'
     RouterModule.forChild(addInitializeModuleGuard(routes)),
     SharedModule,
     StoreModule.forFeature(bookmarkFeature),
-    EffectsModule.forFeature([BookmarkOverviewEffects, BookmarkConfigureEffects])
+    EffectsModule.forFeature([BookmarkConfigureEffects, BookmarkOverviewEffects])
   ]
 })
 export class BookmarkModule {}

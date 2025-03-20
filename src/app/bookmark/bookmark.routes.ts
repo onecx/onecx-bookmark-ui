@@ -9,12 +9,12 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    component: BookmarkOverviewComponent
+    component: BookmarkConfigureComponent
   },
   {
     path: './configure',
     pathMatch: 'full',
-    component: BookmarkConfigureComponent,
+    component: BookmarkOverviewComponent,
     data: {
       breadcrumb: 'BREADCRUMBS.CONFIGURE',
       breadcrumbFn: (data: any) => `${data.labeli18n}`

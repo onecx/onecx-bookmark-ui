@@ -1,7 +1,7 @@
 <ocx-portal-page permission="BOOKMARK#OVERVIEW" helpArticleId="PAGE_BOOKMARK_OVERVIEW" *ngrxLet="viewModel$ as vm">
   <!-- DOCK -->
   <div class="absolute dock-top-right-minimized">
-    <p-dock *ocxIfPermission="'BOOKMARK#EDIT'" [model]="dockItems$ | async" [position]="'top'" styleClass="z-2">
+    <p-dock *ngIf="hasEditPermissions" [model]="dockItems$ | async" [position]="'top'" styleClass="z-2">
       <ng-template pTemplate="item" let-item>
         <span
           [class]="'text-primary cursor-pointer text-lg sm:text-2xl ' + item.iconClass"
