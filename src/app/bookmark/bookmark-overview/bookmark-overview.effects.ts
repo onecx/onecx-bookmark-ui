@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { Action, Store } from '@ngrx/store'
+import { ActivatedRoute, Router } from '@angular/router'
+import { Action } from '@ngrx/store'
 import { catchError, map, mergeMap, of, tap } from 'rxjs'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
@@ -19,7 +20,8 @@ export class BookmarkOverviewEffects {
 
   constructor(
     private readonly actions$: Actions,
-    private readonly store: Store,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
     private readonly messageService: PortalMessageService,
     private readonly appStateService: AppStateService,
     private readonly user: UserService,
@@ -89,6 +91,17 @@ export class BookmarkOverviewEffects {
       })
     )
   }
+
+  navigate$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(BookmarkOverviewActions.navigate),
+        tap((action) => {
+          this.router.navigate(action.path, { relativeTo: this.route })
+        })
+      ),
+    { dispatch: false }
+  )
 
   /**
    * ERROR handling

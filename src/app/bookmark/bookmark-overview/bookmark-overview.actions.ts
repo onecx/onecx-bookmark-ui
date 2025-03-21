@@ -10,6 +10,7 @@ export const BookmarkOverviewActions = createActionGroup({
     // search
     Search: emptyProps(),
     'Bookmark search results received': props<{ results: Bookmark[]; totalNumberOfResults: number }>(),
-    'Bookmark search failed': props<ActionErrorType>()
+    'Bookmark search failed': props<ActionErrorType>(),
+    Navigate: props<{ path: string[] }>()
   }
 })

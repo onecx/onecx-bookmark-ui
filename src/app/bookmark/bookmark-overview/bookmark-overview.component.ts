@@ -40,7 +40,6 @@ export class BookmarkOverviewComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.preparePageActions()
     this.prepareDockItems()
     this.onSearch()
   }
@@ -48,25 +47,13 @@ export class BookmarkOverviewComponent implements OnInit {
   /**
    * DIALOG preparation
    */
-  private preparePageActions(): void {
-    this.pageActions = [
-      {
-        labelKey: 'ACTIONS.CONFIGURATION.LABEL',
-        titleKey: 'ACTIONS.CONFIGURATION.TOOLTIP',
-        icon: PrimeIcons.COG,
-        show: 'always',
-        permission: 'BOOKMARK#CONFIGURE',
-        actionCallback: () => this.router.navigate(['./configure'], { relativeTo: this.route })
-      }
-    ]
-  }
   private prepareDockItems(): void {
     this.dockItems$ = this.translate.get(['ACTIONS.CONFIGURE.TOOLTIP']).pipe(
       map((data) => {
         return [
           {
             id: 'bm_overview_action_configure',
-            iconClass: 'pi pi-cog',
+            iconClass: PrimeIcons.COG,
             tabindex: '0',
             tooltipOptions: {
               tooltipLabel: data['ACTIONS.CONFIGURE.TOOLTIP'],
@@ -74,7 +61,7 @@ export class BookmarkOverviewComponent implements OnInit {
               tooltipEvent: 'hover'
             },
             routerLink: 'configure'
-          }
+          } as MenuItem
         ]
       })
     )
@@ -88,5 +75,8 @@ export class BookmarkOverviewComponent implements OnInit {
   }
   public onFilterBookmarksByScope(bs: Bookmark[], sc: BookmarkScope): Bookmark[] {
     return bs.filter((b) => b.scope === sc)
+  }
+  public onGoToConfigure() {
+    this.store.dispatch(BookmarkOverviewActions.navigate({ path: ['configure'] }))
   }
 }

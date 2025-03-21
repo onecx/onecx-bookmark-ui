@@ -61,7 +61,6 @@ export class BookmarkConfigureComponent implements OnInit {
     private readonly workspaceService: WorkspaceService
   ) {
     this.editable = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
-    console.log('book conf constructor')
     this.filteredColumns = bookmarkColumns.filter((a) => a.active === true)
     this.viewModel$.subscribe({
       next: (vm) => {

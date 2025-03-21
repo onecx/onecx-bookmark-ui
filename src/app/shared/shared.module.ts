@@ -16,6 +16,8 @@ import { SkeletonModule } from 'primeng/skeleton'
 import { TabViewModule } from 'primeng/tabview'
 import { TooltipModule } from 'primeng/tooltip'
 
+import { LabelResolver } from 'src/app/shared/utils/label.resolver'
+
 @NgModule({
   declarations: [],
   imports: [
@@ -54,6 +56,7 @@ import { TooltipModule } from 'primeng/tooltip'
     errorTailorImports
   ],
   providers: [
+    LabelResolver,
     provideErrorTailorConfig({
       controlErrorsOn: { async: true, blur: true, change: true },
       errors: {

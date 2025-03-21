@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
+import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import FileSaver from 'file-saver'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
@@ -55,6 +55,7 @@ export class BookmarkConfigureEffects {
     private readonly eximService: BookmarkExportImport
   ) {
     this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
+    // with latest from ...
     this.user.profile$.subscribe({
       next: (data) => {
         this.userId = data.userId
@@ -78,8 +79,9 @@ export class BookmarkConfigureEffects {
   search$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.search),
-      mergeMap(() => {
-        return this.performSearch(this.workspaceName)
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
+      mergeMap(([, { workspaceName }]) => {
+        return this.performSearch(workspaceName)
       })
     )
   })
