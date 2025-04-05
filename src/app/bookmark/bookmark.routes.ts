@@ -7,12 +7,12 @@ import { BookmarkConfigureComponent } from './bookmark-configure/bookmark-config
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'overview',
     pathMatch: 'full',
     component: BookmarkOverviewComponent
   },
   {
-    path: 'configure',
+    path: '',
     pathMatch: 'full',
     component: BookmarkConfigureComponent,
     data: {

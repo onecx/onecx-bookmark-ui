@@ -6,12 +6,7 @@ import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'r
 import FileSaver from 'file-saver'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
-import {
-  DialogState,
-  ExportDataService,
-  PortalDialogService,
-  PortalMessageService
-} from '@onecx/portal-integration-angular'
+import { DialogState, PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
 
 import * as actton from 'src/app/shared/utils/actionButtons'
 import {
@@ -38,34 +33,21 @@ import { BookmarkImportComponent } from '../bookmark-import/bookmark-import.comp
 
 @Injectable()
 export class BookmarkConfigureEffects {
-  public userId: string | undefined
-  public workspaceName = ''
-  public datetimeFormat = 'medium'
   private context = 'BOOKMARK'
 
   constructor(
     private readonly actions$: Actions,
+    private readonly user: UserService,
     private readonly store: Store,
+    private readonly appStateService: AppStateService,
     private readonly portalDialogService: PortalDialogService,
     private readonly messageService: PortalMessageService,
-    private readonly exportDataService: ExportDataService,
-    private readonly appStateService: AppStateService,
-    private readonly user: UserService,
     private readonly bookmarksService: BookmarksInternal,
     private readonly eximService: BookmarkExportImport
-  ) {
-    this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
-    // with latest from ...
-    this.user.profile$.subscribe({
-      next: (data) => {
-        this.userId = data.userId
-      }
-    })
-    this.appStateService.currentWorkspace$.subscribe({
-      next: (data) => {
-        this.workspaceName = data.workspaceName
-      }
-    })
+  ) {}
+
+  private dateFormat(lang: string) {
+    return lang === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
   }
 
   private buildExceptionKey(status: string): string {
@@ -85,6 +67,7 @@ export class BookmarkConfigureEffects {
       })
     )
   })
+
   refreshSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
@@ -94,8 +77,9 @@ export class BookmarkConfigureEffects {
         BookmarkConfigureActions.importBookmarksSucceeded,
         BookmarkConfigureActions.sortBookmarksSucceeded
       ),
-      mergeMap(() => {
-        return this.performSearch(this.workspaceName)
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
+      mergeMap(([, { workspaceName }]) => {
+        return this.performSearch(workspaceName)
       })
     )
   })
@@ -134,9 +118,12 @@ export class BookmarkConfigureEffects {
     this.context = 'BOOKMARKS'
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.exportBookmarks),
-      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
-      map(([, results]) => {
-        return { exist: results.length > 0 }
+      withLatestFrom(
+        this.appStateService.currentWorkspace$.asObservable(),
+        this.store.select(bookmarkSearchSelectors.selectResults)
+      ),
+      map(([, { workspaceName }, results]) => {
+        return { workspaceName: workspaceName, exist: results.length > 0 }
       }),
       mergeMap((data) => {
         // no bookmarks to be exported
@@ -145,12 +132,12 @@ export class BookmarkConfigureEffects {
         if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT'))
           return of({
             button: 'primary',
-            result: { workspaceName: this.workspaceName, scopes: [EximBookmarkScope.Private] }
+            result: { workspaceName: data.workspaceName, scopes: [EximBookmarkScope.Private] }
           } as DialogState<ExportBookmarksRequest>)
         // any other cases: ADMIN user select scopes
         return this.portalDialogService.openDialog<ExportBookmarksRequest | undefined>(
           'BOOKMARK_EXPORT.HEADER',
-          { type: BookmarkExportComponent, inputs: { workspaceName: this.workspaceName } },
+          { type: BookmarkExportComponent, inputs: { workspaceName: data.workspaceName } },
           actton.exportButton,
           actton.cancelButton,
           {
@@ -196,13 +183,14 @@ export class BookmarkConfigureEffects {
     this.context = 'BOOKMARKS'
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.importBookmarks),
-      mergeMap(() => {
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable(), this.user.lang$.asObservable()),
+      mergeMap(([, { workspaceName }, lang]) => {
         // select file
         return this.portalDialogService.openDialog<ImportBookmarksRequest | undefined>(
           'BOOKMARK_IMPORT.HEADER',
           {
             type: BookmarkImportComponent,
-            inputs: { workspaceName: this.workspaceName, dateFormat: this.datetimeFormat }
+            inputs: { workspaceName: workspaceName, dateFormat: this.dateFormat(lang) }
           },
           actton.importButton,
           actton.cancelButton,
@@ -298,22 +286,32 @@ export class BookmarkConfigureEffects {
     }
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.viewOrEditBookmark),
-      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
-      map(([action, results]) => {
-        return results.find((item) => item.id === action.id)
+      withLatestFrom(
+        this.appStateService.currentWorkspace$.asObservable(),
+        this.user.profile$.asObservable(),
+        this.user.lang$.asObservable(),
+        this.store.select(bookmarkSearchSelectors.selectResults)
+      ),
+      map(([action, { workspaceName }, profile, lang, results]) => {
+        return {
+          bookmark: results.find((item) => item.id === action.id),
+          workspaceName: workspaceName,
+          userId: profile.userId,
+          lang: lang
+        }
       }),
-      mergeMap((bookmark) => {
-        const editable = canEdit(bookmark)
+      mergeMap((data) => {
+        const editable = canEdit(data.bookmark)
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.${editable ? 'EDIT' : 'VIEW'}.HEADER`,
           {
             type: BookmarkDetailComponent,
             inputs: {
-              workspaceName: this.workspaceName,
-              dateFormat: this.datetimeFormat,
-              userId: this.userId,
+              workspaceName: data.workspaceName,
+              dateFormat: this.dateFormat(data.lang),
+              userId: data.userId,
               editable: editable,
-              vm: { initialBookmark: bookmark, changeMode: editable ? 'EDIT' : 'VIEW' }
+              vm: { initialBookmark: data.bookmark, changeMode: editable ? 'EDIT' : 'VIEW' }
             }
           },
           editable ? actton.saveButton : actton.closeButton,
@@ -361,15 +359,16 @@ export class BookmarkConfigureEffects {
     this.context = 'BOOKMARK'
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.createBookmark),
-      mergeMap(() => {
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable(), this.user.profile$.asObservable()),
+      mergeMap(([, { workspaceName }, profile]) => {
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.CREATE.HEADER`,
           {
             type: BookmarkDetailComponent,
             inputs: {
-              workspaceName: this.workspaceName,
+              workspaceName: workspaceName,
               editable: true,
-              userId: this.userId,
+              userId: profile.userId,
               vm: { initialBookmark: {}, changeMode: 'CREATE' }
             }
           },
@@ -413,20 +412,28 @@ export class BookmarkConfigureEffects {
     this.context = 'BOOKMARK'
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.copyBookmark),
-      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
-      map(([action, results]) => {
-        return { ...results.find((item) => item.id === action.id), id: undefined } as CombinedBookmark
+      withLatestFrom(
+        this.appStateService.currentWorkspace$.asObservable(),
+        this.user.profile$.asObservable(),
+        this.store.select(bookmarkSearchSelectors.selectResults)
+      ),
+      map(([action, { workspaceName }, profile, results]) => {
+        return {
+          bookmark: { ...results.find((item) => item.id === action.id), id: undefined } as CombinedBookmark,
+          workspaceName: workspaceName,
+          userId: profile.userId
+        }
       }),
-      mergeMap((bookmark) => {
+      mergeMap((data) => {
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.CREATE.HEADER`,
           {
             type: BookmarkDetailComponent,
             inputs: {
-              workspaceName: this.workspaceName,
+              workspaceName: data.workspaceName,
               editable: true,
-              userId: this.userId,
-              vm: { initialBookmark: bookmark, changeMode: 'COPY' }
+              userId: data.userId,
+              vm: { initialBookmark: data.bookmark, changeMode: 'COPY' }
             }
           },
           actton.saveButton,

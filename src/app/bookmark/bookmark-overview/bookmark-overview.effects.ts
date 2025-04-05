@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Action } from '@ngrx/store'
-import { catchError, map, mergeMap, of, tap } from 'rxjs'
+import { catchError, map, mergeMap, of, tap, withLatestFrom } from 'rxjs'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { PortalMessageService } from '@onecx/portal-integration-angular'
@@ -13,32 +13,17 @@ import { BookmarkOverviewActions, ActionErrorType } from './bookmark-overview.ac
 
 @Injectable()
 export class BookmarkOverviewEffects {
-  public userId: string | undefined
-  public workspaceName = ''
-  public datetimeFormat = 'medium'
   private context = 'BOOKMARK'
 
   constructor(
     private readonly actions$: Actions,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    private readonly messageService: PortalMessageService,
-    private readonly appStateService: AppStateService,
     private readonly user: UserService,
+    private readonly appStateService: AppStateService,
+    private readonly messageService: PortalMessageService,
     private readonly bookmarksService: BookmarksInternal
-  ) {
-    this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
-    this.user.profile$.subscribe({
-      next: (data) => {
-        this.userId = data.userId
-      }
-    })
-    this.appStateService.currentWorkspace$.subscribe({
-      next: (data) => {
-        this.workspaceName = data.workspaceName
-      }
-    })
-  }
+  ) {}
 
   private buildExceptionKey(status: string): string {
     return 'EXCEPTIONS.HTTP_STATUS_' + status + '.' + this.context
@@ -51,16 +36,18 @@ export class BookmarkOverviewEffects {
   search$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(BookmarkOverviewActions.search),
-      mergeMap(() => {
-        return this.performSearch(this.workspaceName)
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
+      mergeMap(([, { workspaceName }]) => {
+        return this.performSearch(workspaceName)
       })
     )
   })
   refreshSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(),
-      mergeMap(() => {
-        return this.performSearch(this.workspaceName)
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
+      mergeMap(([, { workspaceName }]) => {
+        return this.performSearch(workspaceName)
       })
     )
   })
