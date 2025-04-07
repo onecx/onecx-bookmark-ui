@@ -32,6 +32,11 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
           tagName: ocx-bookmark-list-component
+    # Microservice
+    microservice:
+      spec:
+        name: OneCX Bookmark UI
+        description: OneCX Bookmark Frontend
     # Permission
     permission:
       enabled: true
