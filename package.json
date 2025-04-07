@@ -51,7 +51,7 @@
     "@ngrx/component": "^18.0.2",
     "@ngrx/effects": "^18.0.2",
     "@ngrx/router-store": "^18.0.2",
-    "@ngrx/store": "^18.0.2",
+    "@ngrx/store": "^19.1.0",
     "@ngrx/store-devtools": "^18.0.2",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
