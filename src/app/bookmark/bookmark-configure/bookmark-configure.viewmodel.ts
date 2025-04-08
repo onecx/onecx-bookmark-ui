@@ -1,6 +1,6 @@
 import { DataTableColumn, RowListGridData } from '@onecx/portal-integration-angular'
 
-export interface BookmarkSearchViewModel {
+export interface BookmarkConfigureViewModel {
   columns: DataTableColumn[]
   results: RowListGridData[]
   bookmarkFilter: string

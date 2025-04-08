@@ -91,6 +91,14 @@
   }
 }
 
+@mixin cursor-default {
+  :host ::ng-deep {
+    .cursor-default {
+      cursor: default;
+    }
+  }
+}
+
 /* highlight */
 @mixin danger-action {
   :host ::ng-deep {

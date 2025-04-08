@@ -18,6 +18,7 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
   standalone: true,
   selector: 'app-bookmark-create-update',
   templateUrl: './bookmark-create-update.component.html',
+  styleUrls: ['./bookmark-create-update.component.scss'],
   imports: [
     errorTailorImports,
     FormsModule,

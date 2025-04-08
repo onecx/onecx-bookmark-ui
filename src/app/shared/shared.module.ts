@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
 
+import { DockModule } from 'primeng/dock'
 import { FileUploadModule } from 'primeng/fileupload'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputGroupModule } from 'primeng/inputgroup'
@@ -15,10 +16,13 @@ import { SkeletonModule } from 'primeng/skeleton'
 import { TabViewModule } from 'primeng/tabview'
 import { TooltipModule } from 'primeng/tooltip'
 
+import { LabelResolver } from 'src/app/shared/utils/label.resolver'
+
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
+    DockModule,
     FileUploadModule,
     FloatLabelModule,
     FormsModule,
@@ -35,6 +39,7 @@ import { TooltipModule } from 'primeng/tooltip'
     errorTailorImports
   ],
   exports: [
+    DockModule,
     FileUploadModule,
     FloatLabelModule,
     FormsModule,
@@ -51,6 +56,7 @@ import { TooltipModule } from 'primeng/tooltip'
     errorTailorImports
   ],
   providers: [
+    LabelResolver,
     provideErrorTailorConfig({
       controlErrorsOn: { async: true, blur: true, change: true },
       errors: {

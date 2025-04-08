@@ -16,23 +16,23 @@ import { DialogService } from 'primeng/dynamicdialog'
 import { PortalCoreModule, UserService } from '@onecx/portal-integration-angular'
 import { SharedModule } from 'src/app/shared/shared.module'
 
-import { initialState } from './bookmark-search.reducers'
-import { BookmarkSearchActions } from './bookmark-search.actions'
-import { BookmarkSearchComponent } from './bookmark-search.component'
-import { BookmarkSearchHarness } from './bookmark-search.harness'
-import { BookmarkSearchViewModel } from './bookmark-search.viewmodel'
-import { selectBookmarkSearchViewModel } from './bookmark-search.selectors'
+import { initialState } from './bookmark-configure.reducers'
+import { BookmarkConfigureActions } from './bookmark-configure.actions'
+import { BookmarkConfigureComponent } from './bookmark-configure.component'
+import { BookmarkConfigureHarness } from './bookmark-configure.harness'
+import { BookmarkConfigureViewModel } from './bookmark-configure.viewmodel'
+import { selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
 
-describe('BookmarkSearchComponent', () => {
+describe('BookmarkConfigureComponent', () => {
   HTMLCanvasElement.prototype.getContext = jest.fn()
-  let component: BookmarkSearchComponent
-  let fixture: ComponentFixture<BookmarkSearchComponent>
+  let component: BookmarkConfigureComponent
+  let fixture: ComponentFixture<BookmarkConfigureComponent>
   let store: MockStore<Store>
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let bookmarkSearch: BookmarkSearchHarness
+  let bookmarkSearch: BookmarkConfigureHarness
 
   const mockActivatedRoute = {}
-  const baseBookmarkSearchViewModel: BookmarkSearchViewModel = {
+  const baseBookmarkConfigureViewModel: BookmarkConfigureViewModel = {
     columns: [],
     results: [],
     bookmarkFilter: '',
@@ -59,7 +59,7 @@ describe('BookmarkSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkSearchComponent],
+      declarations: [BookmarkConfigureComponent],
       imports: [
         SharedModule,
         PortalCoreModule,
@@ -87,13 +87,13 @@ describe('BookmarkSearchComponent', () => {
     translateService.use('en')
 
     store = TestBed.inject(MockStore)
-    store.overrideSelector(selectBookmarkSearchViewModel, baseBookmarkSearchViewModel)
+    store.overrideSelector(selectBookmarkConfigureViewModel, baseBookmarkConfigureViewModel)
     store.refreshState()
 
-    fixture = TestBed.createComponent(BookmarkSearchComponent)
+    fixture = TestBed.createComponent(BookmarkConfigureComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    bookmarkSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarkSearchHarness)
+    bookmarkSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarkConfigureHarness)
   })
 
   it('should create the component', () => {
@@ -101,7 +101,7 @@ describe('BookmarkSearchComponent', () => {
   })
 
   it('should dispatch searchButtonClicked action on page init', (done) => {
-    store.scannedActions$.pipe(ofType(BookmarkSearchActions.search)).subscribe(() => {
+    store.scannedActions$.pipe(ofType(BookmarkConfigureActions.search)).subscribe(() => {
       done()
     })
   })
@@ -124,8 +124,8 @@ describe('BookmarkSearchComponent', () => {
         id: 'column_1'
       }
     ]
-    store.overrideSelector(selectBookmarkSearchViewModel, {
-      ...baseBookmarkSearchViewModel,
+    store.overrideSelector(selectBookmarkConfigureViewModel, {
+      ...baseBookmarkConfigureViewModel,
       results: results,
       columns: columns,
       displayedColumns: columns
@@ -136,7 +136,7 @@ describe('BookmarkSearchComponent', () => {
     const exportButton = await pageHeader.getInlineActionButtonByLabel('Export')
     await exportButton?.click()
 
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkSearchActions.exportButtonClicked())
+    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.exportButtonClicked())
   })
     */
 })

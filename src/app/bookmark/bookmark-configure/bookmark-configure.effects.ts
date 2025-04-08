@@ -2,16 +2,11 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
-import { catchError, map, mergeMap, of, switchMap, tap } from 'rxjs'
+import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import FileSaver from 'file-saver'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
-import {
-  DialogState,
-  ExportDataService,
-  PortalDialogService,
-  PortalMessageService
-} from '@onecx/portal-integration-angular'
+import { DialogState, PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
 
 import * as actton from 'src/app/shared/utils/actionButtons'
 import {
@@ -28,8 +23,8 @@ import {
 } from 'src/app/shared/generated'
 import { getCurrentDateTime } from 'src/app/shared/utils/utils'
 
-import { BookmarkSearchActions, ActionErrorType } from './bookmark-search.actions'
-import { bookmarkSearchSelectors, selectBookmarkSearchViewModel } from './bookmark-search.selectors'
+import { BookmarkConfigureActions, ActionErrorType } from './bookmark-configure.actions'
+import { bookmarkSearchSelectors, selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
 import { BookmarkDetailComponent, CombinedBookmark } from '../bookmark-detail/bookmark-detail.component'
 import { BookmarkDeleteComponent } from '../bookmark-delete/bookmark-delete.component'
 import { BookmarkSortComponent } from '../bookmark-sort/bookmark-sort.component'
@@ -37,34 +32,22 @@ import { BookmarkExportComponent } from '../bookmark-export/bookmark-export.comp
 import { BookmarkImportComponent } from '../bookmark-import/bookmark-import.component'
 
 @Injectable()
-export class BookmarkSearchEffects {
-  public userId: string | undefined
-  public workspaceName = ''
-  public datetimeFormat = 'medium'
+export class BookmarkConfigureEffects {
   private context = 'BOOKMARK'
 
   constructor(
     private readonly actions$: Actions,
+    private readonly user: UserService,
     private readonly store: Store,
+    private readonly appStateService: AppStateService,
     private readonly portalDialogService: PortalDialogService,
     private readonly messageService: PortalMessageService,
-    private readonly exportDataService: ExportDataService,
-    private readonly appStateService: AppStateService,
-    private readonly user: UserService,
     private readonly bookmarksService: BookmarksInternal,
     private readonly eximService: BookmarkExportImport
-  ) {
-    this.datetimeFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
-    this.user.profile$.subscribe({
-      next: (data) => {
-        this.userId = data.userId
-      }
-    })
-    this.appStateService.currentWorkspace$.subscribe({
-      next: (data) => {
-        this.workspaceName = data.workspaceName
-      }
-    })
+  ) {}
+
+  private dateFormat(lang: string) {
+    return lang === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
   }
 
   private buildExceptionKey(status: string): string {
@@ -77,23 +60,26 @@ export class BookmarkSearchEffects {
 
   search$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.search),
-      mergeMap(() => {
-        return this.performSearch(this.workspaceName)
+      ofType(BookmarkConfigureActions.search),
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
+      mergeMap(([, { workspaceName }]) => {
+        return this.performSearch(workspaceName)
       })
     )
   })
+
   refreshSearch$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(
-        BookmarkSearchActions.createBookmarkSucceeded,
-        BookmarkSearchActions.editBookmarkSucceeded,
-        BookmarkSearchActions.deleteBookmarkSucceeded,
-        BookmarkSearchActions.importBookmarksSucceeded,
-        BookmarkSearchActions.sortBookmarksSucceeded
+        BookmarkConfigureActions.createBookmarkSucceeded,
+        BookmarkConfigureActions.editBookmarkSucceeded,
+        BookmarkConfigureActions.deleteBookmarkSucceeded,
+        BookmarkConfigureActions.importBookmarksSucceeded,
+        BookmarkConfigureActions.sortBookmarksSucceeded
       ),
-      mergeMap(() => {
-        return this.performSearch(this.workspaceName)
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
+      mergeMap(([, { workspaceName }]) => {
+        return this.performSearch(workspaceName)
       })
     )
   })
@@ -108,14 +94,14 @@ export class BookmarkSearchEffects {
     if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) criteria = { ...criteria, scope: BookmarkScope.Private }
     return this.bookmarksService.searchBookmarksByCriteria(criteria).pipe(
       map(({ stream, totalElements }) =>
-        BookmarkSearchActions.bookmarkSearchResultsReceived({
+        BookmarkConfigureActions.bookmarkSearchResultsReceived({
           results: stream?.sort(this.sortByPosition) ?? [],
           totalNumberOfResults: totalElements ?? 0
         })
       ),
       catchError((error) => {
         return of(
-          BookmarkSearchActions.bookmarkSearchFailed({
+          BookmarkConfigureActions.bookmarkSearchFailed({
             status: error.status,
             errorText: error.message,
             exceptionKey: this.buildExceptionKey(error.status)
@@ -131,10 +117,13 @@ export class BookmarkSearchEffects {
   exportBookmarks$ = createEffect(() => {
     this.context = 'BOOKMARKS'
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.exportBookmarks),
-      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
-      map(([, results]) => {
-        return { exist: results.length > 0 }
+      ofType(BookmarkConfigureActions.exportBookmarks),
+      withLatestFrom(
+        this.appStateService.currentWorkspace$.asObservable(),
+        this.store.select(bookmarkSearchSelectors.selectResults)
+      ),
+      map(([, { workspaceName }, results]) => {
+        return { workspaceName: workspaceName, exist: results.length > 0 }
       }),
       mergeMap((data) => {
         // no bookmarks to be exported
@@ -143,12 +132,12 @@ export class BookmarkSearchEffects {
         if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT'))
           return of({
             button: 'primary',
-            result: { workspaceName: this.workspaceName, scopes: [EximBookmarkScope.Private] }
+            result: { workspaceName: data.workspaceName, scopes: [EximBookmarkScope.Private] }
           } as DialogState<ExportBookmarksRequest>)
         // any other cases: ADMIN user select scopes
         return this.portalDialogService.openDialog<ExportBookmarksRequest | undefined>(
           'BOOKMARK_EXPORT.HEADER',
-          { type: BookmarkExportComponent, inputs: { workspaceName: this.workspaceName } },
+          { type: BookmarkExportComponent, inputs: { workspaceName: data.workspaceName } },
           actton.exportButton,
           actton.cancelButton,
           {
@@ -163,7 +152,7 @@ export class BookmarkSearchEffects {
       switchMap((dialogResult) => {
         // cancel
         if (!dialogResult || dialogResult.button === 'secondary')
-          return of(BookmarkSearchActions.exportBookmarksCancelled())
+          return of(BookmarkConfigureActions.exportBookmarksCancelled())
         // wrong result
         if (!dialogResult?.result || dialogResult?.result.scopes.length === 0) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
@@ -177,12 +166,12 @@ export class BookmarkSearchEffects {
               `onecx-bookmarks_${getCurrentDateTime()}.json`
             )
             this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
-            return BookmarkSearchActions.exportBookmarksSucceeded()
+            return BookmarkConfigureActions.exportBookmarksSucceeded()
           })
         )
       }),
       catchError((error) => {
-        return of(BookmarkSearchActions.exportBookmarksFailed({ status: error.status, errorText: error.message }))
+        return of(BookmarkConfigureActions.exportBookmarksFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -193,14 +182,15 @@ export class BookmarkSearchEffects {
   importBookmarks$ = createEffect(() => {
     this.context = 'BOOKMARKS'
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.importBookmarks),
-      mergeMap(() => {
+      ofType(BookmarkConfigureActions.importBookmarks),
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable(), this.user.lang$.asObservable()),
+      mergeMap(([, { workspaceName }, lang]) => {
         // select file
         return this.portalDialogService.openDialog<ImportBookmarksRequest | undefined>(
           'BOOKMARK_IMPORT.HEADER',
           {
             type: BookmarkImportComponent,
-            inputs: { workspaceName: this.workspaceName, dateFormat: this.datetimeFormat }
+            inputs: { workspaceName: workspaceName, dateFormat: this.dateFormat(lang) }
           },
           actton.importButton,
           actton.cancelButton,
@@ -216,7 +206,7 @@ export class BookmarkSearchEffects {
       switchMap((dialogResult) => {
         // cancel
         if (!dialogResult || dialogResult.button === 'secondary')
-          return of(BookmarkSearchActions.importBookmarksCancelled())
+          return of(BookmarkConfigureActions.importBookmarksCancelled())
         // wrong result
         if (!dialogResult?.result?.snapshot) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
@@ -225,12 +215,12 @@ export class BookmarkSearchEffects {
         return this.eximService.importBookmarks(dialogResult?.result).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
-            return BookmarkSearchActions.importBookmarksSucceeded()
+            return BookmarkConfigureActions.importBookmarksSucceeded()
           })
         )
       }),
       catchError((error) => {
-        return of(BookmarkSearchActions.importBookmarksFailed({ status: error.status, errorText: error.message }))
+        return of(BookmarkConfigureActions.importBookmarksFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -241,8 +231,8 @@ export class BookmarkSearchEffects {
   openSortingDialog$ = createEffect(() => {
     this.context = 'BOOKMARKS'
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.openSortingDialog),
-      concatLatestFrom(() => this.store.select(selectBookmarkSearchViewModel)),
+      ofType(BookmarkConfigureActions.openSortingDialog),
+      concatLatestFrom(() => this.store.select(selectBookmarkConfigureViewModel)),
       map(([, viewModel]) => {
         return viewModel.results
       }),
@@ -265,7 +255,7 @@ export class BookmarkSearchEffects {
       }),
       switchMap((dialogResult) => {
         if (!dialogResult || dialogResult.button === 'secondary')
-          return of(BookmarkSearchActions.sortBookmarksCancelled())
+          return of(BookmarkConfigureActions.sortBookmarksCancelled())
         if (!dialogResult?.result || dialogResult?.result.length === 0) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
@@ -273,12 +263,12 @@ export class BookmarkSearchEffects {
         return this.bookmarksService.updateBookmarksOrder({ bookmarks: dialogResult?.result }).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_SORT.SUCCESS' })
-            return BookmarkSearchActions.sortBookmarksSucceeded()
+            return BookmarkConfigureActions.sortBookmarksSucceeded()
           })
         )
       }),
       catchError((error) => {
-        return of(BookmarkSearchActions.sortBookmarksFailed({ status: error.status, errorText: error.message }))
+        return of(BookmarkConfigureActions.sortBookmarksFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -295,23 +285,33 @@ export class BookmarkSearchEffects {
       )
     }
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.viewOrEditBookmark),
-      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
-      map(([action, results]) => {
-        return results.find((item) => item.id === action.id)
+      ofType(BookmarkConfigureActions.viewOrEditBookmark),
+      withLatestFrom(
+        this.appStateService.currentWorkspace$.asObservable(),
+        this.user.profile$.asObservable(),
+        this.user.lang$.asObservable(),
+        this.store.select(bookmarkSearchSelectors.selectResults)
+      ),
+      map(([action, { workspaceName }, profile, lang, results]) => {
+        return {
+          bookmark: results.find((item) => item.id === action.id),
+          workspaceName: workspaceName,
+          userId: profile.userId,
+          lang: lang
+        }
       }),
-      mergeMap((bookmark) => {
-        const editable = canEdit(bookmark)
+      mergeMap((data) => {
+        const editable = canEdit(data.bookmark)
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.${editable ? 'EDIT' : 'VIEW'}.HEADER`,
           {
             type: BookmarkDetailComponent,
             inputs: {
-              workspaceName: this.workspaceName,
-              dateFormat: this.datetimeFormat,
-              userId: this.userId,
+              workspaceName: data.workspaceName,
+              dateFormat: this.dateFormat(data.lang),
+              userId: data.userId,
               editable: editable,
-              vm: { initialBookmark: bookmark, changeMode: editable ? 'EDIT' : 'VIEW' }
+              vm: { initialBookmark: data.bookmark, changeMode: editable ? 'EDIT' : 'VIEW' }
             }
           },
           editable ? actton.saveButton : actton.closeButton,
@@ -331,7 +331,7 @@ export class BookmarkSearchEffects {
           (dialogResult.button === 'secondary' && canEdit(dialogResult.result)) ||
           (dialogResult.button === 'primary' && !canEdit(dialogResult.result))
         ) {
-          return of(BookmarkSearchActions.editBookmarkCancelled())
+          return of(BookmarkConfigureActions.editBookmarkCancelled())
         }
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
@@ -342,12 +342,12 @@ export class BookmarkSearchEffects {
           .pipe(
             map(() => {
               this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
-              return BookmarkSearchActions.editBookmarkSucceeded()
+              return BookmarkConfigureActions.editBookmarkSucceeded()
             })
           )
       }),
       catchError((error) => {
-        return of(BookmarkSearchActions.editBookmarkFailed({ status: error.status, errorText: error.message }))
+        return of(BookmarkConfigureActions.editBookmarkFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -358,16 +358,17 @@ export class BookmarkSearchEffects {
   createBookmark$ = createEffect(() => {
     this.context = 'BOOKMARK'
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.createBookmark),
-      mergeMap(() => {
+      ofType(BookmarkConfigureActions.createBookmark),
+      withLatestFrom(this.appStateService.currentWorkspace$.asObservable(), this.user.profile$.asObservable()),
+      mergeMap(([, { workspaceName }, profile]) => {
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.CREATE.HEADER`,
           {
             type: BookmarkDetailComponent,
             inputs: {
-              workspaceName: this.workspaceName,
+              workspaceName: workspaceName,
               editable: true,
-              userId: this.userId,
+              userId: profile.userId,
               vm: { initialBookmark: {}, changeMode: 'CREATE' }
             }
           },
@@ -384,7 +385,7 @@ export class BookmarkSearchEffects {
       }),
       switchMap((dialogResult) => {
         if (!dialogResult || dialogResult.button === 'secondary') {
-          return of(BookmarkSearchActions.createBookmarkCancelled())
+          return of(BookmarkConfigureActions.createBookmarkCancelled())
         }
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
@@ -394,12 +395,12 @@ export class BookmarkSearchEffects {
         return this.bookmarksService.createNewBookmark(item).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS' })
-            return BookmarkSearchActions.createBookmarkSucceeded()
+            return BookmarkConfigureActions.createBookmarkSucceeded()
           })
         )
       }),
       catchError((error) => {
-        return of(BookmarkSearchActions.createBookmarkFailed({ status: error.status, errorText: error.message }))
+        return of(BookmarkConfigureActions.createBookmarkFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -410,21 +411,29 @@ export class BookmarkSearchEffects {
   copyBookmark$ = createEffect(() => {
     this.context = 'BOOKMARK'
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.copyBookmark),
-      concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
-      map(([action, results]) => {
-        return { ...results.find((item) => item.id === action.id), id: undefined } as CombinedBookmark
+      ofType(BookmarkConfigureActions.copyBookmark),
+      withLatestFrom(
+        this.appStateService.currentWorkspace$.asObservable(),
+        this.user.profile$.asObservable(),
+        this.store.select(bookmarkSearchSelectors.selectResults)
+      ),
+      map(([action, { workspaceName }, profile, results]) => {
+        return {
+          bookmark: { ...results.find((item) => item.id === action.id), id: undefined } as CombinedBookmark,
+          workspaceName: workspaceName,
+          userId: profile.userId
+        }
       }),
-      mergeMap((bookmark) => {
+      mergeMap((data) => {
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.CREATE.HEADER`,
           {
             type: BookmarkDetailComponent,
             inputs: {
-              workspaceName: this.workspaceName,
+              workspaceName: data.workspaceName,
               editable: true,
-              userId: this.userId,
-              vm: { initialBookmark: bookmark, changeMode: 'COPY' }
+              userId: data.userId,
+              vm: { initialBookmark: data.bookmark, changeMode: 'COPY' }
             }
           },
           actton.saveButton,
@@ -440,7 +449,7 @@ export class BookmarkSearchEffects {
       }),
       switchMap((dialogResult) => {
         if (!dialogResult || dialogResult.button === 'secondary') {
-          return of(BookmarkSearchActions.createBookmarkCancelled())
+          return of(BookmarkConfigureActions.createBookmarkCancelled())
         }
         if (!dialogResult?.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
@@ -450,12 +459,12 @@ export class BookmarkSearchEffects {
         return this.bookmarksService.createNewBookmark(item).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS' })
-            return BookmarkSearchActions.createBookmarkSucceeded()
+            return BookmarkConfigureActions.createBookmarkSucceeded()
           })
         )
       }),
       catchError((error) => {
-        return of(BookmarkSearchActions.createBookmarkFailed({ status: error.status, errorText: error.message }))
+        return of(BookmarkConfigureActions.createBookmarkFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -466,7 +475,7 @@ export class BookmarkSearchEffects {
   deleteBookmark$ = createEffect(() => {
     this.context = 'BOOKMARK'
     return this.actions$.pipe(
-      ofType(BookmarkSearchActions.openDeleteDialog),
+      ofType(BookmarkConfigureActions.openDeleteDialog),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
       map(([action, results]) => {
         return results.find((item) => item.id === action.id)
@@ -494,7 +503,7 @@ export class BookmarkSearchEffects {
       switchMap(([dialogResult, itemToDelete]) => {
         // cancel
         if (!dialogResult || dialogResult.button === 'secondary') {
-          return of(BookmarkSearchActions.deleteBookmarkCancelled())
+          return of(BookmarkConfigureActions.deleteBookmarkCancelled())
         }
         if (!itemToDelete) {
           throw new Error('VALIDATION.ERRORS.NOT_FOUND') // error message
@@ -503,13 +512,13 @@ export class BookmarkSearchEffects {
         return this.bookmarksService.deleteBookmarkById(itemToDelete.id).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DELETE.SUCCESS' })
-            return BookmarkSearchActions.deleteBookmarkSucceeded()
+            return BookmarkConfigureActions.deleteBookmarkSucceeded()
           })
         )
       }),
       catchError((error) => {
         return of(
-          BookmarkSearchActions.deleteBookmarkFailed({
+          BookmarkConfigureActions.deleteBookmarkFailed({
             status: error.status,
             errorText: error.message
           })
@@ -525,27 +534,27 @@ export class BookmarkSearchEffects {
   // for each failed action which a TOAST message should appear
   errorMessages: { action: Action; key: string }[] = [
     {
-      action: BookmarkSearchActions.exportBookmarksFailed,
+      action: BookmarkConfigureActions.exportBookmarksFailed,
       key: 'BOOKMARK_EXPORT.ERROR'
     },
     {
-      action: BookmarkSearchActions.importBookmarksFailed,
+      action: BookmarkConfigureActions.importBookmarksFailed,
       key: 'BOOKMARK_IMPORT.ERROR'
     },
     {
-      action: BookmarkSearchActions.sortBookmarksFailed,
+      action: BookmarkConfigureActions.sortBookmarksFailed,
       key: 'BOOKMARK_SORT.ERROR'
     },
     {
-      action: BookmarkSearchActions.createBookmarkFailed,
+      action: BookmarkConfigureActions.createBookmarkFailed,
       key: 'BOOKMARK_DETAIL.CREATE.ERROR'
     },
     {
-      action: BookmarkSearchActions.editBookmarkFailed,
+      action: BookmarkConfigureActions.editBookmarkFailed,
       key: 'BOOKMARK_DETAIL.EDIT.ERROR'
     },
     {
-      action: BookmarkSearchActions.deleteBookmarkFailed,
+      action: BookmarkConfigureActions.deleteBookmarkFailed,
       key: 'BOOKMARK_DELETE.ERROR'
     }
   ]

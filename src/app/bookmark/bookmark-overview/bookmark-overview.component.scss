@@ -1,0 +1,15 @@
+@import '/src/app/_bm-mixins.scss';
+
+@include danger-action;
+@include displaying-text-responsive;
+
+:host ::ng-deep {
+  .p-divider.p-divider-vertical:before {
+    border: 1px solid #e4e4e4 !important;
+  }
+  .dock-top-right-minimized {
+    top: 0;
+    right: 2rem;
+    width: 4rem;
+  }
+}

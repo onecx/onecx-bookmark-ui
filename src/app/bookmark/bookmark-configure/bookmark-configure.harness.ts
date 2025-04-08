@@ -6,7 +6,7 @@ import {
   PageHeaderHarness
 } from '@onecx/angular-accelerator/testing'
 
-export class BookmarkSearchHarness extends ComponentHarness {
+export class BookmarkConfigureHarness extends ComponentHarness {
   static readonly hostSelector = 'app-bookmark-search'
 
   getHeader = this.locatorFor(PageHeaderHarness)

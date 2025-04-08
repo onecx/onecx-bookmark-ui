@@ -217,8 +217,9 @@
   <!-- The internals - in case of an existing item only -->
   <p-tabPanel
     *ngIf="['EDIT', 'VIEW'].includes(vm.changeMode)"
-    [header]="'BOOKMARK_DETAIL.TAB.INTERN' | translate"
-    [tooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.INTERN' | translate"
+    [header]="'INTERNAL.HEADER' | translate"
+    [attr.aria-label]="'INTERNAL.HEADER' | translate"
+    [tooltip]="'INTERNAL.TOOLTIP' | translate"
     tooltipPosition="top"
     tooltipEvent="hover"
   >

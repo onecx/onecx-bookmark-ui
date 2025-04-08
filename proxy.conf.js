@@ -3,10 +3,10 @@
  *   Request proxy to rewrite URLs and prevent CORS errors
  */
 const logFn = function (req, res) {
-  console.log(new Date().toISOString() + `: bypassing ${req.method} ${req.url} `)
+  //console.log(new Date().toISOString() + `: bypassing ${req.method} ${req.url} `)
 }
 const onProxyRes = function (proxyRes, req, res) {
-  //logFn(req, res)
+  logFn(req, res)
   if (req.method.toUpperCase() === 'OPTIONS') {
     res.setHeader('Allow', 'GET, POST, HEAD, PUT, DELETE, OPTIONS')
     res.setHeader('Access-Control-Allow-Origin', '*')

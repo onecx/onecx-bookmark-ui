@@ -4,8 +4,8 @@ import { Bookmark } from 'src/app/shared/generated'
 
 export type ActionErrorType = { status?: string | null; errorText?: string | null; exceptionKey?: string | null }
 
-export const BookmarkSearchActions = createActionGroup({
-  source: 'BookmarkSearch',
+export const BookmarkConfigureActions = createActionGroup({
+  source: 'BookmarkConfigure',
   events: {
     // search
     Search: emptyProps(),
