@@ -69,7 +69,7 @@
     "@onecx/ngrx-accelerator": "^5.34.1",
     "@onecx/portal-integration-angular": "^5.34.1",
     "@onecx/portal-layout-styles": "^5.34.1",
-    "@onecx/nx-plugin": "1.8.1",
+    "@onecx/nx-plugin": "1.11.0",
     "@webcomponents/webcomponentsjs": "2.8.0",
     "fast-deep-equal": "^3.1.3",
     "file-saver": "^2.0.5",
