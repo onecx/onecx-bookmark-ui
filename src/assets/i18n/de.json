@@ -1,82 +1,284 @@
 {
-  "BOOKMARKS_CREATE_UPDATE": {
-    "UPDATE": {
-      "SUCCESS": "Aktualisierung erfolgreich",
-      "FAILED": "Aktualisierung fehlgeschlagen",
-      "ERROR": "Aktualisierung fehlgeschlagen",
-      "FORM": {
-        "SAVE": "Speichern",
-        "CANCEL": "Abbrechen"
-      },
-      "HEADER": "Lesezeichen bearbeiten",
-      "HEADER_READONLY": "Lesezeichen anzeigen"
+  "ACTIONS": {
+    "LABEL": "Aktionen",
+    "TOOLTIP": "Aktionen für die Daten der Tabellenzeile",
+    "CONFIRMATION": {
+      "NO": "Nein",
+      "YES": "Ja",
+      "NO.TOOLTIP": "Abbruch der Aktion",
+      "YES.TOOLTIP": "Fortfahren mit der Aktion"
+    },
+    "CONFIGURE": {
+      "LABEL": "Konfigurieren",
+      "TOOLTIP": "Lesezeichen konfigurieren"
+    },
+    "COPY": {
+      "LABEL": "Kopieren",
+      "TOOLTIP": "Einen neues Lesezeichen mit den Daten der Zeile erstellen"
     },
     "CREATE": {
-      "SUCCESS": "Lesezeichen wurde erfolgreich erstellt.",
-      "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
+      "LABEL": "Erstellen",
+      "TOOLTIP": "Einen neues URL Lesezeichen erstellen"
     },
-    "FORM": {
-      "DISPLAY_NAME": "Anzeigename"
+    "DELETE": {
+      "LABEL": "Löschen",
+      "TOOLTIP": "Das Lesezeichen löschen",
+      "MESSAGE": {
+        "TEXT": "Möchten Sie dieses Lesezeichen löschen?",
+        "OK": "Das Lesezeichen wurde gelöscht",
+        "NOK": "Ein Fehler ist aufgetreten. Das Lesezeichen wurde nicht gelöscht."
+      }
+    },
+    "EDIT": {
+      "LABEL": "Ändern",
+      "TOOLTIP": "Die Eigenschaften ändern",
+      "UP": "Das Leezeichen nach oben verschieben",
+      "DOWN": "Das Leezeichen nach unten verschieben",
+      "MESSAGE": {
+        "OK": "Das Lesezeichen wurde geändert",
+        "NOK": "Ein Fehler ist aufgetreten. Das Lesezeichen wurde nicht verändert."
+      }
+    },
+    "EXPORT": {
+      "LABEL": "Export",
+      "TOOLTIP": "Export und Speichern der Lesezeichen im JSON Format",
+      "MESSAGE": {
+        "OK": "Die Lesezeichen wurden erfolgreich exportiert.",
+        "NOK": "Ein Fehler ist aufgetreten. Die Lesezeichen konnten nicht exportiert werden."
+      }
+    },
+    "IMPORT": {
+      "LABEL": "Import",
+      "CHOOSE": "Datei auswählen",
+      "UPLOAD": "Datei hochladen",
+      "TOOLTIP": "Hochladen einer CSV Datei mit Lesezeichen",
+      "MESSAGE": {
+        "OK": "Die Lesezeichen wurden erfolgreich importiert.",
+        "NOK": "Ein Fehler ist aufgetreten. Die Lesezeichen wurden nicht importiert."
+      }
+    },
+    "NAVIGATION": {
+      "CLOSE": "Schließen",
+      "CLOSE.TOOLTIP": "Dialog schließen",
+      "CLOSE_WITHOUT_SAVE": "Dialog ohne Speichern schließen",
+      "BACK": "Zurück",
+      "BACK.TOOLTIP": "Vorherige Seite",
+      "GOTO": "Zu Lesezeichen navigieren"
+    },
+    "SEARCH": {
+      "ERROR": "Daten nicht abrufbar",
+      "NO_DATA": "Keine Daten",
+      "OF": "von",
+      "RELOAD": "Daten neu laden",
+      "FILTER": {
+        "LABEL": "Filter",
+        "TOOLTIP": "Filtern nach Name",
+        "RESET": "Filter entfernen"
+      },
+      "MESSAGE": {
+        "NO_RESULTS": "Die Suche ergab keine Treffer",
+        "SEARCH_FAILED": "Suche ist fehlgeschlagen"
+      }
+    },
+    "SORT": {
+      "LABEL": "Sortieren",
+      "TOOLTIP": "Die Reihenfolge der Lesezeichen ändern"
+    },
+    "VIEW": {
+      "LABEL": "Details"
+    },
+    "CANCEL": "Abbrechen",
+    "LOADING": "...wird geladen",
+    "SAVE": "Speichern",
+    "TOOLTIPS": {
+      "CANCEL": "Aktion abbrechen",
+      "SAVE": "Änderungen speichern",
+      "SAVE_AND_CLOSE": "Änderungen speichern und Dialog schließen"
     }
   },
-  "BOOKMARKS_DELETE": {
+  "BREADCRUMBS": {
+    "CONFIGURE": "Konfigurieren"
+  },
+  "INTERNAL": {
+    "HEADER": "Intern",
+    "TOOLTIP": "Interne Eigenschaften",
+    "CREATION_DATE": "Erstellt am",
+    "CREATION_USER": "Erstellt von",
+    "MODIFICATION_DATE": "Geändert am",
+    "MODIFICATION_USER": "Geändert von",
+    "TOOLTIPS": {
+      "CREATION_DATE": "Zeitpunkt der Erstellung",
+      "CREATION_USER": "ID des Benutzers der Erstellung",
+      "MODIFICATION_DATE": "Zeitpunkt der letzten Änderung",
+      "MODIFICATION_USER": "ID des Benutzers der letzten Änderung"
+    }
+  },
+  "DIALOG": {
+    "OVERVIEW": {
+      "HEADER": "Meine Lesezeichen",
+      "SUBHEADER": "Liste meiner Lesezeichen"
+    },
+    "CONFIGURE": {
+      "HEADER": "Lesezeichen konfigurieren",
+      "SUBHEADER": "Verwalten meiner Lesezeichen"
+    },
+    "DETAIL": {
+      "COPY.HEADER": "Lesezeichen erstellen",
+      "CREATE.HEADER": "Lesezeichen erstellen",
+      "DELETE.HEADER": "Lesezeichen löschen",
+      "EDIT.HEADER": "Lesezeichen ändern",
+      "VIEW.HEADER": "Lesezeichen Details",
+      "TAB": {
+        "PROPS": "Eigenschaften",
+        "INTERN": "Intern",
+        "TOOLTIPS": {
+          "PROPS": "Basiseigenschaften des Lesezeichens",
+          "INTERN": "Interne Eigenschaften"
+        }
+      },
+      "CHARACTERS": "Noch mögliche Zeichen"
+    },
+    "DATAVIEW": {
+      "FILTER": "Filter",
+      "FILTER_TOOLTIP": "...filtern",
+      "FILTER_BY": "Filter für ",
+      "FILTER_CLEAR": "Filter entfernen",
+      "FILTER_PLACEHOLDER": "Filter"
+    }
+  },
+  "BOOKMARK": {
+    "DISPLAY_NAME": "Name",
+    "POSITION": "Position",
+    "PRODUCT": "Applikation",
+    "APP_ID": "App ID",
+    "ENDPOINT": "Endpunktname",
+    "ENDPOINT_PARAMETER": "Endpunktparameter",
+    "QUERY": "Query",
+    "FRAGMENT": "Fragment",
+    "SCOPE": "Bereich",
+    "SCOPES": {
+      "ALL": "Alle",
+      "PRIVATE": "Privat",
+      "PUBLIC": "Öffentlich",
+      "TOOLTIPS": {
+        "PRIVATE": "Meine Lesezeichen",
+        "PUBLIC": "Lesezeichen für alle Workspace Benutzer"
+      }
+    },
+    "URL": "URL",
+    "URL_SEARCH": "URL",
+    "TOOLTIPS": {
+      "DISPLAY_NAME": "Dieser Name wird in der Listenansicht verwendet.",
+      "POSITION": "Position in der Listenansicht",
+      "PRODUCT": "Zielapplikation",
+      "APP_ID": "ID der Zielapp",
+      "SCOPE_IS_PUBLIC": "Wenn markiert, dann ist das Lesezeichen für alle im Workspace sichtbar.",
+      "ENDPOINT": "Der Name des, mit dem Lesezeichen angesteuerten, Endpunkts der App.",
+      "ENDPOINT_PARAMETER": "Ein spezieller Lesezeichen des Endpunkts dem ein Wert zugeordnet werden kann.",
+      "QUERY": "Zusätzliche Informationen die server- oder clientseitig weiterverarbeitet werden können.",
+      "FRAGMENT": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
+      "TYPE_URL": "Feste URL zu einem Ziel ggf. auch ausserhalb des Workspaces",
+      "TYPE_PRODUCT": "URL zu einem Endpunkt einer Applikation im aktuellen Workspace",
+      "URL": "Komplette URL, die 1:1 benutzt wird",
+      "URL_SEARCH": "Finale URL die als Link benutzt wird"
+    }
+  },
+  "BOOKMARK_DETAIL": {
+    "CREATE": {
+      "SUCCESS": "Lesezeichen erfolgreich erstellt.",
+      "ERROR": "Erstellen des Lesezeichens fehlgeschlagen."
+    },
+    "EDIT": {
+      "FAILED": "Aktualisierung fehlgeschlagen",
+      "ERROR": "Aktualisierung fehlgeschlagen",
+      "SUCCESS": "Aktualisierung erfolgreich"
+    },
+    "VIEW": {
+      "HEADER": "Lesezeichen Details"
+    },
+    "TAB": {
+      "PROPS": "Eigenschaften",
+      "TARGET": "Applikation",
+      "ENDPOINT": "Endpunkt",
+      "PARAMS": "Parameter",
+      "INTERN": "Intern",
+      "TOOLTIPS": {
+        "PROPS": "Basiseigenschaften des Lesezeichens",
+        "TARGET": "Ziel-Applkation und App",
+        "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Lesezeichen",
+        "PARAMS": "Zusätzliche Lesezeichen, die zum Pfad hinzugefügt werden",
+        "INTERN": "Interne Eigenschaften"
+      }
+    }
+  },
+  "BOOKMARK_DELETE": {
     "HEADER": "Lesezeichen löschen",
     "MESSAGE": "Möchten Sie dieses Lesezeichen löschen?",
-    "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
-    "CONFIRM": "Ja",
-    "CANCEL": "Nein",
-    "SUCCESS": "Lesezeichen erfolgreich gelöscht",
-    "ERROR": "Konnte Lesezeichen nicht löschen"
+    "INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
+    "ERROR": "Lesezeichen konnte nicht gelöscht werden.",
+    "SUCCESS": "Lesezeichen erfolgreich gelöscht"
   },
-  "BOOKMARKS_SEARCH": {
-    "HEADER": "Meine Lesezeichen",
-    "SORTING_OPTIONS": {
-      "DISPLAY_NAME": "Anzeigename"
-    },
-    "SUB_HEADER": "Anzeigen und verwalten meiner Lesezeichen.",
-    "EMPTY_RESULTS": "Keine Ergebnisse.",
-    "BREADCRUMB": "Suche",
-    "HEADER_ACTIONS": {
-      "EXPORT_ALL": "Export"
-    },
-    "CARD_ACTIONS": {
-      "DELETE": "Lesezeichen löschen",
-      "VISIT": "Zu Lesezeichen navigieren"
-    },
-    "ERROR_MESSAGES": {
-      "SEARCH_RESULTS_LOADING_FAILED": "Suchergebnisse konnten nicht geladen werden."
-    },
-    "INPUT_PLACEHOLDER": "Filter",
-    "INPUT_TOOLTIP": "Filter nach Anzeigename",
-    "INPUT_RESET_TOOLTIP": "Filter zurücksetzen"
+  "BOOKMARK_EXPORT": {
+    "HEADER": "Lesezeichen exportieren",
+    "INFO": "Wählen Sie die Bereiche deren Lesezeichen exportiert werden sollen.",
+    "SCOPE_PRIVATE": "Die eigenen Lesezeichen exportieren",
+    "SCOPE_PUBLIC": "Die öffentlichen Lesezeichen exportieren",
+    "ERROR": "Export fehlgeschlagen",
+    "SUCCESS": "Lesezeichen erfolgreich exportiert"
   },
-  "BOOKMARK_TYPES": {
-    "ALL": "Alle",
-    "PRIVATE": "Privat",
-    "PUBLIC": "Öffentlich"
+  "BOOKMARK_IMPORT": {
+    "HEADER": "Lesezeichen importieren",
+    "INFO": "Nach dem Import finden Sie alle importierten Lesezeichen in ihrem privaten Bereich.",
+    "ERROR": "Import fehlgeschlagen",
+    "SUCCESS": "Lesezeichen erfolgreich importiert",
+    "MODE": {
+      "INFO": "Wie sollen die Lesezeichen importiert werden?",
+      "APPEND": "Lesezeichen hinzufügen",
+      "OVERWRITE": "Bestehende Lesezeichen ersetzen"
+    },
+    "SCOPE": {
+      "INFO": "Welche Lesezeichen sollen importiert werden?",
+      "PRIVATE": "Meine Lesezeichen",
+      "PUBLIC": "Öffentliche Lesezeichen"
+    },
+    "SNAPSHOT": {
+      "DATE": "Erstellt am",
+      "DATE.TOOLTIP": "Der Zeitpunkt an dem die Datei erstellt wurde."
+    },
+    "TABS": {
+      "IMPORT": "Import",
+      "CONTENT": "Dateiinhalt",
+      "TOOLTIPS": {
+        "IMPORT": "Den Importvorgang gestalten",
+        "CONTENT": "Den Inhalt der eingelesenen Datei auflisten"
+      }
+    }
+  },
+  "BOOKMARK_SORT": {
+    "HEADER": "Lesezeichen sortieren",
+    "LIST": "Lesezeichen",
+    "ERROR": "Sortierung fehlgeschlagen",
+    "SUCCESS": "Sortierung erfolgreich geändert"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
-      "BUTTON": {
-        "TOOLTIP": {
-          "ADD": "Lesezeichen hinzufügen",
-          "UPDATE": "Lesezeichen verwalten",
-          "LOADING": "Lesezeichen werden geladen"
-        }
+      "ACTION": {
+        "CREATE": "Lesezeichen hinzufügen",
+        "EDIT": "Lesezeichen bearbeiten",
+        "LOADING": "Lesezeichen werden geladen"
       },
       "DIALOG": {
         "HEADER_CREATE": "Lesezeichen hinzufügen",
-        "HEADER_UPDATE": "Lesezeichen verwalten",
+        "HEADER_EDIT": "Lesezeichen bearbeiten",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Aktuell kann kein Lesezeichen für diese Seite erstellt werden.",
         "NO_ENDPOINT_CONFIGURED_MESSAGE": "Wenden Sie sich an einen Administrator. Derzeit können Sie nur ein Lesezeichen für die Startseite ({{mfeBaseUrl}}) der Anwendung erstellen.",
-        "NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON": "Schließen",
         "CREATE_ACTIONS": {
-          "CANCEL":  "Abbrechen",
-          "SAVE":  "Speichern"
+          "CANCEL": "Abbrechen",
+          "SAVE": "Speichern"
         },
-        "UPDATE_ACTIONS": {
-          "CANCEL": "Lesezeichen entfernen",
-          "SAVE":  "Speichern"
+        "EDIT_ACTIONS": {
+          "CANCEL": "Löschen",
+          "SAVE": "Speichern"
         }
       }
     },
@@ -89,8 +291,53 @@
       },
       "LOADING_ERROR": "Ihre Lesezeichen konnten nicht geladen werden.",
       "LOADING_ERROR_DETAIL": "Bitte versuchen Sie es in Kürze erneut.",
-      "NO_PRIVATE_BOOKMARKS": "Sie haben keine privaten Lesezeichen.",
-      "NO_PRIVATE_BOOKMARKS_DETAIL": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die aktuelle Seite zu erstellen."
+      "NO_PRIVATE_BOOKMARKS.STATE": "Keine Lesezeichen angelegt.",
+      "NO_PRIVATE_BOOKMARKS.TODO": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die aktuelle Seite zu erstellen."
+    }
+  },
+  "VALIDATION": {
+    "URL_FORMAT": "https://<path-to-page>",
+    "JSON_FORMAT": "{ \"key\": \"value\", ... }",
+    "FORM_INVALID": "Das Formular enthält ungültige Werte.",
+    "HINTS": {
+      "FORMAT_URL": "Format: "
+    },
+    "ERRORS": {
+      "NOT_FOUND": "Lesezeichen konnte nicht gefunden werden.",
+      "RESULT_WRONG": "DialogResult wurde nicht wie erwartet gesetzt.",
+      "PARSE_ERROR": "Parserfehler: Die enthaltene Struktur entspricht nicht dem erwarteten Format.",
+      "INTERNAL_ERROR": "Interner Fehler",
+      "EMPTY_REQUIRED_FIELD": "Dieses Feld ist ein Pflichtfeld.",
+      "MAXIMUM_LENGTH": "Es sind nur {{chars}} Zeichen erlaubt.",
+      "MINIMUM_LENGTH": "Es sind mindestens {{chars}} Zeichen erforderlich.",
+      "PATTERN_ERROR": "Die Eingabe entspricht nicht dem benötigten Format.",
+      "FILETYPE_PATTERN_ERROR": "Die Datei entspricht nicht den erlaubten Formaten: .png, .jpg, .jpeg"
+    }
+  },
+  "EXCEPTIONS": {
+    "HTTP_STATUS_0": {
+      "BOOKMARK": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal.",
+      "BOOKMARKS": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal."
+    },
+    "HTTP_STATUS_400": {
+      "BOOKMARK": "Ihre Anfrage konnte nicht bearbeitet werden.",
+      "BOOKMARKS": "Ihre Anfrage konnte nicht bearbeitet werden."
+    },
+    "HTTP_STATUS_401": {
+      "BOOKMARK": "Sie sind nicht autorisiert, um auf Lesezeichen zu arbeiten.",
+      "BOOKMARKS": "Sie haben keine Rechte, um Lesezeichen zu suchen."
+    },
+    "HTTP_STATUS_403": {
+      "BOOKMARK": "Sie haben keine Rechte, um auf Lesezeichen zu arbeiten.",
+      "BOOKMARKS": "Sie haben keine Rechte, um Lesezeichen zu suchen."
+    },
+    "HTTP_STATUS_404": {
+      "BOOKMARK": "Lesezeichen nicht gefunden.",
+      "BOOKMARKS": "Lesezeichen nicht gefunden."
+    },
+    "HTTP_STATUS_500": {
+      "BOOKMARK": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal.",
+      "BOOKMARKS": "Unbekanntes Server-Problem beim Abrufen der Lesezeichen - bitte versuchen Sie es noch einmal."
     }
   }
 }

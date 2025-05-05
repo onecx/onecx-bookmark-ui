@@ -11,7 +11,7 @@ app:
       enabled: true
       specs:
         main:
-          exposedModule: './OneCXBookmarkModule'
+          exposedModule: ./OneCXBookmarkModule
           description: 'OneCX Bookmark UI'
           note: 'OneCX Bookmark UI auto import via MF operator'
           type: MODULE
@@ -19,29 +19,38 @@ app:
           remoteName: onecx-bookmark
           tagName: ocx-bookmark-component
         manage-bookmark:
-          exposedModule: "./OneCXManageBookmarkComponent"
+          exposedModule: ./OneCXManageBookmarkComponent
           description: "Create and Delete User Bookmarks"
           type: COMPONENT
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
-          tagName: ocx-manage-bookmark-component
+          tagName: ocx-bookmark-manage-component
         bookmark-list:
-          exposedModule: "./OneCXBookmarkListComponent"
+          exposedModule: ./OneCXBookmarkListComponent
           description: "Display public and private bookmarks"
           type: COMPONENT
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
           tagName: ocx-bookmark-list-component
+    # Microservice
+    microservice:
+      spec:
+        name: OneCX Bookmark UI
+        description: OneCX Bookmark Frontend
     # Permission
     permission:
       enabled: true
       spec:
         permissions:
           BOOKMARK:
-            CREATE: 'Create bookmarks'
-            EDIT: 'Edit bookmarks'
-            DELETE: 'Delete bookmarks'
-            IMPORT: 'Import bookmarks'
-            EXPORT: 'Export bookmarks'
-            VIEW: 'View mode for bookmarks'
+            CREATE: Create bookmarks
+            EDIT: Edit bookmarks
+            ADMIN_EDIT: Edit public bookmarks
+            ADMIN_DELETE: Delete public bookmarks
+            DELETE: Delete bookmarks
+            IMPORT: Import bookmarks
+            EXPORT: Export bookmarks
+            CONFIGURE: Manage bookmarks
+            OVERVIEW: View my bookmarks
+            VIEW: View bookmark details
     

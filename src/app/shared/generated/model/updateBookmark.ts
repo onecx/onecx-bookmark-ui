@@ -8,6 +8,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BookmarkScope } from './bookmarkScope';
 
 
 export interface UpdateBookmark { 
@@ -15,5 +16,14 @@ export interface UpdateBookmark {
     displayName: string;
     position: number;
     id: string;
+    endpointName?: string;
+    endpointParameters?: { [key: string]: string; };
+    scope?: BookmarkScope;
+    query?: { [key: string]: string; };
+    fragment?: string;
+    url?: string;
+    userId?: string;
 }
+
+
 

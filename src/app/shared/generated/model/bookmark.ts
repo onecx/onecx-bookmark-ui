@@ -8,6 +8,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BookmarkScope } from './bookmarkScope';
 
 
 export interface Bookmark { 
@@ -20,19 +21,16 @@ export interface Bookmark {
     displayName: string;
     endpointName?: string;
     endpointParameters?: { [key: string]: string; };
-    query?: string;
-    hash?: string;
+    query?: { [key: string]: string; };
+    fragment?: string;
+    url?: string;
     userId?: string;
     workspaceName: string;
-    productName: string;
-    appId: string;
-    scope: BookmarkScopeEnum;
+    productName?: string;
+    appId?: string;
+    scope: BookmarkScope;
     position: number;
 }
-export enum BookmarkScopeEnum {
-    Private = 'PRIVATE',
-    Public = 'PUBLIC'
-};
 
 
 

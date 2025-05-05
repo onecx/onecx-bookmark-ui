@@ -40,7 +40,7 @@ function extractParameterValuesFromPath(parameters: PathParameter[], pathWithVal
   return parameterValues
 }
 
-export function mapPathSegmentsToPathParemeters(pathPattern: string, path: string) {
+export function mapPathSegmentsToPathParameters(pathPattern: string, path: string) {
   const pathParameters = extractParameterKeysFromPath(pathPattern)
   return extractParameterValuesFromPath(pathParameters, path)
 }

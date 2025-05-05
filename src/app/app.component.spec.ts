@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { TestBed } from '@angular/core/testing'
-import { RouterTestingModule } from '@angular/router/testing'
-import { AUTH_SERVICE, MockAuthModule, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+
+import { MockAuthModule, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { AppComponent } from './app.component'
 
 describe('AppComponent', () => {
@@ -11,15 +12,14 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
       imports: [
-        RouterTestingModule,
+        MockAuthModule,
         PortalCoreModule.forRoot('test'),
-        HttpClientTestingModule,
-        TranslateTestingModule.withTranslations('en', require('./../assets/i18n/en.json')).withTranslations(
-          'de',
-          require('./../assets/i18n/de.json')
-        )
+        TranslateTestingModule.withTranslations({
+          de: require('./src/assets/i18n/de.json'),
+          en: require('./src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
       ],
-      providers: [{ provide: AUTH_SERVICE, useClass: MockAuthModule }]
+      providers: [provideHttpClient(), provideHttpClientTesting()]
     }).compileComponents()
   })
 

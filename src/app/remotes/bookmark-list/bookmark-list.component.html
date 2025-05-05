@@ -1,4 +1,6 @@
-<div [ocxContent]="'REMOTES.BOOKMARK_LIST.TITLE' | translate" class="min-height-10rem">
+<div class="card surface-200">
+  <div class="mb-2 sm:mb-3 font-medium text-lg">{{'REMOTES.BOOKMARK_LIST.TITLE' | translate}}</div>
+
   <p-tabView *ngIf="!bookmarkLoadingError && !loading; else loadingSpinner">
     <p-tabPanel
       [header]="'REMOTES.BOOKMARK_LIST.TABS.PRIVATE' | translate"
@@ -10,7 +12,7 @@
         *ngIf="privateBookmarks.length > 0; else noPrivateBookmarks"
       ></app-bookmark-links>
       <ng-template #noPrivateBookmarks>
-        <div class="max-h-7rem sm:max-h-15rem overflow-auto">
+        <div class="max-h-16rem overflow-auto">
           <p-messages severity="info">
             <ng-template pTemplate>
               <div class="flex gap-2 align-items-center">
@@ -19,10 +21,10 @@
                 </span>
                 <div class="flex gap-1 flex-column">
                   <span class="p-message-summary">
-                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS' | translate }}
+                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.STATE' | translate }}
                   </span>
-                  <span class="p-message-detail m-0 max-w-30rem">
-                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS_DETAIL' | translate }}
+                  <span *ngIf="permissions.includes('BOOKMARK#CREATE')" class="p-message-detail m-0 max-w-30rem">
+                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}
                   </span>
                 </div>
               </div>
@@ -31,6 +33,7 @@
         </div>
       </ng-template>
     </p-tabPanel>
+
     <p-tabPanel
       [header]="'REMOTES.BOOKMARK_LIST.TABS.PUBLIC' | translate"
       *ngIf="publicBookmarks$.getValue().length > 0"
@@ -40,6 +43,7 @@
       <app-bookmark-links [bookmarks]="publicBookmarks$.getValue()"></app-bookmark-links>
     </p-tabPanel>
   </p-tabView>
+
   <ng-template #loadingSpinner>
     <div *ngIf="loading && !bookmarkLoadingError; else loadingError" class="flex flex-column gap-2">
       <p-skeleton height="2rem"></p-skeleton>
@@ -47,8 +51,9 @@
       <p-skeleton height="2rem"></p-skeleton>
     </div>
   </ng-template>
+
   <ng-template #loadingError>
-    <div class="max-h-7rem sm:max-h-15rem overflow-auto">
+    <div class="max-h-16rem overflow-auto">
       <p-messages severity="error">
         <ng-template pTemplate>
           <div class="flex gap-2 align-items-center">

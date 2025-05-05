@@ -1,0 +1,12 @@
+<div *ngIf="dialogResult as bookmarks">
+  <p-orderList
+    id="bm_sort_bookmark_list"
+    datakey="id"
+    [metaKeySelection]="true"
+    [value]="bookmarks"
+    [listStyle]="{ 'max-height': '400px' }"
+    [attr.aria-label]="'BOOKMARK_SORT.LIST' | translate"
+  >
+    <ng-template let-bookmark pTemplate="item">{{ limitText(bookmark.displayName, 50) }}</ng-template>
+  </p-orderList>
+</div>

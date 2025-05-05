@@ -1,10 +1,29 @@
-import { HttpClient } from '@angular/common/http'
-import { CommonModule } from '@angular/common'
 import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
-import { FormsModule } from '@angular/forms'
+import { CommonModule } from '@angular/common'
+import { HttpClient } from '@angular/common/http'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { PrimeIcons } from 'primeng/api'
+import { RippleModule } from 'primeng/ripple'
+import { DynamicDialogModule } from 'primeng/dynamicdialog'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import {
+  BehaviorSubject,
+  catchError,
+  combineLatest,
+  filter,
+  first,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  ReplaySubject,
+  withLatestFrom
+} from 'rxjs'
+
+import { AngularAuthModule } from '@onecx/angular-auth'
 import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 import {
   AngularRemoteComponentsModule,
   BASE_URL,
@@ -23,33 +42,14 @@ import {
   providePortalDialogService,
   AppConfigService
 } from '@onecx/portal-integration-angular'
-import { PrimeIcons } from 'primeng/api'
-import { RippleModule } from 'primeng/ripple'
-import {
-  BehaviorSubject,
-  catchError,
-  combineLatest,
-  filter,
-  first,
-  map,
-  mergeMap,
-  Observable,
-  of,
-  ReplaySubject,
-  withLatestFrom
-} from 'rxjs'
-import { Bookmark, CreateBookmark, CreateBookmarkScopeEnum, UpdateBookmark } from 'src/app/shared/generated'
-import { DynamicDialogModule } from 'primeng/dynamicdialog'
-import { ProgressSpinnerModule } from 'primeng/progressspinner'
-import { SharedModule } from 'src/app/shared/shared.module'
-import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
-import { CreateUpdateBookmarkDialogComponent } from 'src/app/shared/components/dialogs/create-update-bookmark-dialog/create-update-bookmark-dialog.component'
-import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
-import { mapPathSegmentsToPathParemeters } from 'src/app/shared/utils/path.utils'
+
+import { Bookmark, CreateBookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
+import { extractPathAfter, mapPathSegmentsToPathParameters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
-import { extractPathAfter } from 'src/app/shared/utils/path.utils'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
-import { AngularAuthModule } from '@onecx/angular-auth'
+
+import { BookmarkCreateUpdateComponent } from './bookmark-create-update/bookmark-create-update.component'
+import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
 
 export function slotInitializer(slotService: SlotService) {
   return () => slotService.init()
@@ -61,14 +61,11 @@ export function slotInitializer(slotService: SlotService) {
     AngularAuthModule,
     AngularRemoteComponentsModule,
     CommonModule,
-    FormsModule,
-    SharedModule,
     RippleModule,
     PortalCoreModule,
     ProgressSpinnerModule,
     TranslateModule,
-    DynamicDialogModule,
-    PageNotBookmarkableDialogComponent
+    DynamicDialogModule
   ],
   providers: [
     {
@@ -120,13 +117,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   constructor(
-    @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
-    private appConfigService: AppConfigService,
-    private appStateService: AppStateService,
-    private userService: UserService,
-    private translateService: TranslateService,
-    private portalDialogService: PortalDialogService,
-    private bookmarkApiUtils: BookmarkAPIUtilsService
+    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    private readonly appConfigService: AppConfigService,
+    private readonly appStateService: AppStateService,
+    private readonly userService: UserService,
+    private readonly translateService: TranslateService,
+    private readonly portalDialogService: PortalDialogService,
+    private readonly bookmarkApiUtils: BookmarkAPIUtilsService
   ) {
     this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
 
@@ -181,14 +178,14 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     })
   }
 
-  openBookmarkDialog() {
+  onOpenBookmarkDialog(): void {
     combineLatest([this.isBookmarkable$, this.isBookmarked$, this.currentBookmark$, this.commonObs$])
       .pipe(
         first(),
         mergeMap(([isBookmarkable, isBookmarked, currentBookmark, [currentWorkspace, currentMfe, currentPage]]) => {
           return this.portalDialogService
             .openDialog<unknown>(
-              `REMOTES.MANAGE_BOOKMARK.DIALOG.HEADER_${isBookmarked ? 'UPDATE' : 'CREATE'}`,
+              `REMOTES.MANAGE_BOOKMARK.DIALOG.HEADER_${isBookmarked ? 'EDIT' : 'CREATE'}`,
               this.getDialogBody(isBookmarkable, isBookmarked, currentBookmark, currentMfe, currentWorkspace),
               this.getPrimaryButton(isBookmarkable, isBookmarked),
               this.getSecondaryButton(isBookmarkable, isBookmarked),
@@ -214,8 +211,8 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
             if (dialogState.button === 'secondary') {
               return of(undefined)
             }
-            const createBookmark = dialogState.result as CreateBookmark
-            return this.createBookmark(createBookmark, endpointForCurrentPage, currentMfe, currentPage)
+            const newBookmark = dialogState.result as CreateBookmark
+            return this.createBookmark(newBookmark, endpointForCurrentPage, currentMfe, currentPage)
           }
           if (isBookmarked) {
             const dialogResultBookmark = dialogState.result as Bookmark
@@ -241,32 +238,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
       })
   }
 
-  private getBookmarkDialogConfig(isBookmarkable: boolean): PortalDialogConfig {
-    return {
-      position: 'top-right',
-      style: {
-        top: '4rem'
-      },
-      modal: false,
-      draggable: true,
-      resizable: true,
-      width: isBookmarkable ? '400px' : undefined
-    } as PortalDialogConfig
-  }
-
-  private generateInitialCreationBookmark(currentMfe: MfeInfo, currentWorkspace: Workspace) {
-    const createBookmark: CreateBookmark = {
-      displayName: document.title,
-      endpointName: '',
-      position: 0,
-      productName: currentMfe.productName,
-      appId: currentMfe.appId,
-      workspaceName: currentWorkspace.workspaceName,
-      scope: CreateBookmarkScopeEnum.Private
-    }
-    return createBookmark
-  }
-
+  /**
+   * DIALOG details
+   */
   private getDialogBody(
     isBookmarkable: boolean,
     isBookmarked: boolean,
@@ -274,14 +248,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     currentMfe: MfeInfo,
     currentWorkspace: Workspace
   ) {
-    return isBookmarkable
+    const dialogBody = isBookmarkable
       ? {
-          type: CreateUpdateBookmarkDialogComponent,
+          type: BookmarkCreateUpdateComponent,
           inputs: {
             vm: {
-              initialBookmark: isBookmarked
-                ? currentBookmark
-                : this.generateInitialCreationBookmark(currentMfe, currentWorkspace),
+              initialBookmark: isBookmarked ? currentBookmark : this.prepareNewBookmark(currentMfe, currentWorkspace),
+              mode: isBookmarked ? 'EDIT' : 'CREATE',
               permissions: this.permissions
             }
           }
@@ -292,28 +265,55 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
             mfeBaseUrl: currentMfe.baseHref
           }
         }
+    return dialogBody
   }
 
   private getPrimaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails {
+    const mode = isBookmarked ? 'EDIT' : 'CREATE'
     return {
-      key: isBookmarkable
-        ? `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'UPDATE' : 'CREATE'}_ACTIONS.SAVE`
-        : 'REMOTES.MANAGE_BOOKMARK.DIALOG.NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON',
-      icon: isBookmarkable ? PrimeIcons.CHECK : PrimeIcons.TIMES
+      key: isBookmarkable ? 'REMOTES.MANAGE_BOOKMARK.DIALOG.' + mode + '_ACTIONS.SAVE' : 'ACTIONS.NAVIGATION.CLOSE',
+      icon: isBookmarkable ? PrimeIcons.SAVE : PrimeIcons.TIMES
     }
   }
 
   private getSecondaryButton(isBookmarkable: boolean, isBookmarked: boolean): ButtonDialogButtonDetails | undefined {
-    return isBookmarkable
-      ? {
-          key: `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'UPDATE' : 'CREATE'}_ACTIONS.CANCEL`,
+    const secondaryButton = isBookmarkable
+      ? ({
+          key: `REMOTES.MANAGE_BOOKMARK.DIALOG.${isBookmarked ? 'EDIT' : 'CREATE'}_ACTIONS.CANCEL`,
           icon: isBookmarked ? PrimeIcons.TRASH : PrimeIcons.TIMES
-        }
+        } as ButtonDialogButtonDetails)
       : undefined
+    return secondaryButton
+  }
+
+  private getBookmarkDialogConfig(isBookmarkable: boolean): PortalDialogConfig {
+    return {
+      position: 'top-right',
+      style: { top: '4rem' },
+      modal: false,
+      draggable: true,
+      resizable: true,
+      width: isBookmarkable ? '400px' : undefined
+    } as PortalDialogConfig
+  }
+
+  /**
+   * CREATE
+   */
+  private prepareNewBookmark(currentMfe: MfeInfo, currentWorkspace: Workspace) {
+    const newBookmark: CreateBookmark = {
+      displayName: document.title,
+      position: 0,
+      productName: currentMfe.productName,
+      appId: currentMfe.appId,
+      workspaceName: currentWorkspace.workspaceName,
+      scope: BookmarkScope.Private
+    }
+    return newBookmark
   }
 
   private createBookmark(
-    createBookmark: CreateBookmark,
+    newBookmark: CreateBookmark,
     endpointForCurrentPage: Endpoint | undefined,
     currentMfe: MfeInfo,
     currentPage: PageInfo | undefined
@@ -322,15 +322,15 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
       let endpointParameters = {}
       if (currentPage && endpointForCurrentPage.path) {
         const pagePath = extractPathAfter(currentPage.path, currentMfe.baseHref)
-        endpointParameters = mapPathSegmentsToPathParemeters(endpointForCurrentPage.path, pagePath)
+        endpointParameters = mapPathSegmentsToPathParameters(endpointForCurrentPage.path, pagePath)
       }
-      createBookmark = {
-        ...createBookmark,
-        endpointName: endpointForCurrentPage.name ?? '',
+      newBookmark = {
+        ...newBookmark,
+        endpointName: endpointForCurrentPage.name,
         endpointParameters
       }
     }
-    return this.bookmarkApiUtils.createNewBookmark(createBookmark)
+    return this.bookmarkApiUtils.createNewBookmark(newBookmark)
   }
 
   private editBookmark(dialogResultBookmark: Bookmark) {
@@ -347,7 +347,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     return this.bookmarkApiUtils.deleteBookmarkById(bookmarkId)
   }
 
-  private handleBookmarkLoadError = () => {
+  private readonly handleBookmarkLoadError = () => {
     this.bookmarkLoadingError = true
   }
 }

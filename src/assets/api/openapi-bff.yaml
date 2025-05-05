@@ -154,33 +154,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-  /bookmarks/convert:
-    post:
-      x-onecx:
-        permissions:
-          scope:
-            - write
-      tags:
-        - bookmarksInternal
-      description: Update a bookmark's scope to public
-      operationId: convertBookmark
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateBookmark'
-      responses:
-        "204":
-          description: Bookmark updated
-        "400":
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
-        "404":
-          description: Bookmark not found
   /bookmarks/reorder:
     post:
       x-onecx:
@@ -202,6 +175,56 @@ paths:
           description: UPDATED
         "400":
           description: BAD REQUEST
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+  /bookmarks/export:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - read
+      tags:
+        - bookmarkExportImport
+      description: Export bookmarks by workspace name and scopes
+      operationId: exportBookmarks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportBookmarksRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookmarkSnapshot'
+        "404":
+          description: No bookmarks found
+  /bookmarks/import:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - write
+      tags:
+        - bookmarkExportImport
+      description: Import bookmarks
+      operationId: importBookmarks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImportBookmarksRequest'
+      responses:
+        "200":
+          description: Import successful
+        "400":
+          description: Bad request
           content:
             application/json:
               schema:
@@ -238,6 +261,82 @@ paths:
                 $ref: '#/components/schemas/ProblemDetailResponse'
 components:
   schemas:
+    ImportBookmarksRequest:
+      type: object
+      properties:
+        snapshot:
+          $ref: '#/components/schemas/BookmarkSnapshot'
+        importMode:
+          $ref: '#/components/schemas/EximMode'
+        workspaceName:
+          type: string
+        scopes:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/EximBookmarkScope'
+    BookmarkSnapshot:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 10
+          description: ID of the request
+        created:
+          $ref: '#/components/schemas/OffsetDateTime'
+        bookmarks:
+          type: object
+          nullable: false
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/EximBookmark'
+    EximBookmark:
+      type: object
+      properties:
+        displayName:
+          type: string
+        endpointName:
+          type: string
+        endpointParameters:
+          type: object
+          additionalProperties:
+            type: string
+        query:
+          type: object
+          additionalProperties:
+            type: string
+        fragment:
+          type: string
+        url:
+          type: string
+        productName:
+          type: string
+        appId:
+          type: string
+        scope:
+          $ref: '#/components/schemas/EximBookmarkScope'
+    EximBookmarkScope:
+      type: string
+      enum:
+        - PRIVATE
+        - PUBLIC
+    EximMode:
+      type: string
+      enum:
+        - APPEND
+        - OVERWRITE
+    ExportBookmarksRequest:
+      type: object
+      required:
+        - scopes
+      properties:
+        workspaceName:
+          type: string
+        scopes:
+          type: array
+          items:
+            $ref: '#/components/schemas/EximBookmarkScope'
     BookmarkReorderRequest:
       type: object
       properties:
@@ -257,7 +356,7 @@ components:
         appId:
           type: string
         scope:
-          type: string
+          $ref: '#/components/schemas/BookmarkScope'
         pageNumber:
           format: int32
           description: The number of page.
@@ -273,8 +372,6 @@ components:
       required:
         - id
         - displayName
-        - productName
-        - appId
         - scope
         - workspaceName
         - position
@@ -302,8 +399,12 @@ components:
           additionalProperties:
             type: string
         query:
+          type: object
+          additionalProperties:
+            type: string
+        fragment:
           type: string
-        hash:
+        url:
           type: string
         userId:
           type: string
@@ -314,10 +415,7 @@ components:
         appId:
           type: string
         scope:
-          type: string
-          enum:
-            - PRIVATE
-            - PUBLIC
+          $ref: '#/components/schemas/BookmarkScope'
         position:
           type: integer
           format: int32
@@ -347,9 +445,7 @@ components:
     CreateBookmark:
       required:
         - displayName
-        - endpointName
         - workspaceName
-        - productName
         - scope
         - position
       type: object
@@ -363,8 +459,12 @@ components:
           additionalProperties:
             type: string
         query:
+          type: object
+          additionalProperties:
+            type: string
+        fragment:
           type: string
-        hash:
+        url:
           type: string
         userId:
           type: string
@@ -375,10 +475,7 @@ components:
         appId:
           type: string
         scope:
-          type: string
-          enum:
-            - PRIVATE
-            - PUBLIC
+          $ref: '#/components/schemas/BookmarkScope'
         position:
           type: integer
           format: int32
@@ -400,6 +497,29 @@ components:
           format: int32
         id:
           type: string
+        endpointName:
+          type: string
+        endpointParameters:
+          type: object
+          additionalProperties:
+            type: string
+        scope:
+          $ref: '#/components/schemas/BookmarkScope'
+        query:
+          type: object
+          additionalProperties:
+            type: string
+        fragment:
+          type: string
+        url:
+          type: string
+        userId:
+          type: string
+    BookmarkScope:
+      type: string
+      enum:
+        - PRIVATE
+        - PUBLIC
     ProblemDetailResponse:
       type: object
       properties:

@@ -1,96 +1,343 @@
 {
-  "BOOKMARKS_CREATE_UPDATE": {
-    "UPDATE": {
-      "SUCCESS": "Update successful",
-      "FAILED": "Update failed",
-      "ERROR": "Update failed",
-      "FORM": {
-        "SAVE": "Save",
-        "CANCEL": "Cancel"
-      },
-      "HEADER": "Update Bookmark",
-      "HEADER_READONLY": "View bookmark"
+  "ACTIONS": {
+    "LABEL": "Actions",
+    "TOOLTIP": "Actions for the data of the table row",
+    "CONFIRMATION": {
+      "NO": "No",
+      "YES": "Yes",
+      "NO.TOOLTIP": "Cancel the action",
+      "YES.TOOLTIP": "Proceed with the action"
     },
+    "CONFIGURE": {
+      "LABEL": "Configuration",
+      "TOOLTIP": "Configure Bookmarks"
+    },
+    "COPY": {
+      "LABEL": "Copy",
+      "TOOLTIP": "Create a new Bookmark with this data"
+    },
+    "CREATE": {
+      "LABEL": "Create",
+      "TOOLTIP": "Create a new URL Bookmark"
+    },
+    "DELETE": {
+      "LABEL": "Delete",
+      "TOOLTIP": "Delete the Bookmark",
+      "MESSAGE": {
+        "TEXT": "Do you want to delete the following Bookmark?",
+        "OK": "The Bookmark was deleted",
+        "NOK": "An error has occurred. The Bookmark was not deleted."
+      }
+    },
+    "EDIT": {
+      "LABEL": "Edit",
+      "TOOLTIP": "Edit the Bookmark properties",
+      "UP": "Move the Bookmark up",
+      "DOWN": "Move the Bookmark down",
+      "MESSAGE": {
+        "OK": "The Bookmark was changed successfully",
+        "NOK": "An error has occurred. The Bookmark was not changed."
+      }
+    },
+    "EXPORT": {
+      "LABEL": "Export",
+      "TOOLTIP": "Export and download the Bookmarks in JSON format",
+      "MESSAGE": {
+        "OK": "The Bookmarks were successfully exported.",
+        "NOK": "An error has occurred. The Bookmarks could not be exported."
+      }
+    },
+    "IMPORT": {
+      "LABEL": "Import",
+      "CHOOSE": "Choose file",
+      "UPLOAD": "Upload file",
+      "TOOLTIP": "Upload Bookmarks in JSON format",
+      "MESSAGE": {
+        "OK": "The Bookmarks were successfully imported.",
+        "NOK": "An error has occurred. The Bookmarks could not be imported."
+      }
+    },
+    "NAVIGATION": {
+      "CLOSE": "Close",
+      "CLOSE.TOOLTIP": "Close dialog",
+      "CLOSE_WITHOUT_SAVE": "Close dialog without saving",
+      "BACK": "Back",
+      "BACK.TOOLTIP": "Previous page",
+      "GOTO": "Navigate to Bookmark"
+    },
+    "SEARCH": {
+      "ERROR": "Data not available",
+      "NO_DATA": "No Data",
+      "OF": "of",
+      "RELOAD": "Reload data",
+      "FILTER": {
+        "LABEL": "Filter",
+        "TOOLTIP": "Filter by Name",
+        "RESET": "Clear Filter"
+      },
+      "MESSAGE": {
+        "NO_RESULTS": "Search returned no results",
+        "SEARCH_FAILED": "Search failed"
+      }
+    },
+    "SORT": {
+      "LABEL": "Sorting",
+      "TOOLTIP": "Change the order of Bookmarks"
+    },
+    "VIEW": {
+      "LABEL": "View"
+    },
+    "CANCEL": "Cancel",
+    "LOADING": "...is loading",
+    "SAVE": "Save",
+    "TOOLTIPS": {
+      "CANCEL": "Cancel action",
+      "SAVE": "Save changes",
+      "SAVE_AND_CLOSE": "Save changes and close dialog"
+    }
+  },
+  "BREADCRUMBS": {
+    "CONFIGURE": "Configure"
+  },
+  "INTERNAL": {
+    "HEADER": "Internal",
+    "TOOLTIP": "Internal properties",
+    "CREATION_DATE": "Created on",
+    "CREATION_USER": "Created by",
+    "MODIFICATION_DATE": "Changed on",
+    "MODIFICATION_USER": "Changed by",
+    "TOOLTIPS": {
+      "CREATION_DATE": "Timestamp of the creation",
+      "CREATION_USER": "ID of the user of the creation",
+      "MODIFICATION_DATE": "Timestamp of the last change",
+      "MODIFICATION_USER": "ID of the user of the last change"
+    }
+  },
+  "DIALOG": {
+    "OVERVIEW": {
+      "HEADER": "My Bookmarks",
+      "SUBHEADER": "List of My Bookmarks"
+    },
+    "CONFIGURE": {
+      "HEADER": "Configure Bookmarks",
+      "SUBHEADER": "Manage my Bookmarks"
+    },
+    "DETAIL": {
+      "COPY.HEADER": "Create Bookmark",
+      "CREATE.HEADER": "Create Bookmark",
+      "DELETE.HEADER": "Delete Bookmark",
+      "EDIT.HEADER": "Edit Bookmark",
+      "VIEW.HEADER": "Bookmark Details",
+      "TAB": {
+        "PROPS": "Properties",
+        "INTERN": "Internal",
+        "TOOLTIPS": {
+          "PROPS": "Base properties of the Bookmark",
+          "INTERN": "Internal Properties"
+        }
+      },
+      "CHARACTERS": "Still remaining characters"
+    },
+    "DATAVIEW": {
+      "FILTER": "Filter",
+      "FILTER_TOOLTIP": "Filtering ...",
+      "FILTER_BY": "Filter by ",
+      "FILTER_CLEAR": "Clear Filter",
+      "FILTER_PLACEHOLDER": "Filter"
+    }
+  },
+  "BOOKMARK": {
+    "DISPLAY_NAME": "Name",
+    "POSITION": "Position",
+    "PRODUCT": "Application",
+    "APP_ID": "App ID",
+    "ENDPOINT": "Endpoint Name",
+    "ENDPOINT_PARAMETER": "Endpoint Bookmark",
+    "QUERY": "Query",
+    "FRAGMENT": "Fragment",
+    "SCOPE": "Scope",
+    "SCOPES": {
+      "ALL": "All",
+      "PRIVATE": "Private",
+      "PUBLIC": "Public",
+      "TOOLTIPS": {
+        "PRIVATE": "My Bookmarks",
+        "PUBLIC": "Bookmarks for all Workspace User"
+      }
+    },
+    "URL": "URL",
+    "URL_SEARCH": "URL",
+    "TOOLTIPS": {
+      "DISPLAY_NAME": "This name is used in list view.",
+      "POSITION": "Position in list view",
+      "PRODUCT": "Target Application",
+      "APP_ID": "App ID",
+      "SCOPE_IS_PUBLIC": "If checked, the Bookmark is visible to everyone in the workspace (public).",
+      "ENDPOINT": "The name of the app endpoint that the Bookmark points to.",
+      "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
+      "QUERY": "Additional information that can be further processed on the server or client side.",
+      "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
+      "TYPE_URL": "Static URL to target maybe also outside of the Workspace",
+      "TYPE_PRODUCT": "URL to endpoint of an Application within the current Workspace",
+      "URL": "Complete URL to be used 1:1",
+      "URL_SEARCH": "Final URL which is used as target link"
+    }
+  },
+  "BOOKMARK_DETAIL": {
     "CREATE": {
       "SUCCESS": "Bookmark was created successfully.",
       "ERROR": "Bookmark couldn't be created."
     },
-    "FORM": {
-      "DISPLAY_NAME": "Display Name"
+    "EDIT": {
+      "FAILED": "Update failed",
+      "ERROR": "Update failed",
+      "SUCCESS": "Update successful"
+    },
+    "VIEW": {
+      "HEADER": "Bookmark Details"
+    },
+    "TAB": {
+      "PROPS": "Properties",
+      "TARGET": "Application",
+      "ENDPOINT": "Endpoint",
+      "PARAMS": "Parameter",
+      "INTERN": "Internal",
+      "TOOLTIPS": {
+        "PROPS": "Base properties of the Bookmark",
+        "TARGET": "Target Application and App",
+        "ENDPOINT": "The Endpoint targeted by the Bookmark and its parameters.",
+        "PARAMS": "Additional parameters added to the path",
+        "INTERN": "Internal Properties"
+      }
     }
   },
-  "BOOKMARKS_DELETE": {
+  "BOOKMARK_DELETE": {
     "HEADER": "Delete Bookmark",
-    "MESSAGE": "Do you want to delete this bookmark?",
-    "MESSAGE_INFO": "This action cannot be undone!",
-    "CONFIRM": "Yes",
-    "CANCEL": "No",
-    "SUCCESS": "Bookmark deleted successfully",
-    "ERROR": "Could not delete bookmark"
+    "MESSAGE": "Do you want to delete this Bookmark?",
+    "INFO": "This action cannot be undone!",
+    "ERROR": "Bookmark could not be deleted",
+    "SUCCESS": "Bookmark deleted successfully"
   },
-  "BOOKMARKS_SEARCH": {
-    "HEADER": "My Bookmarks",
-    "SORTING_OPTIONS": {
-      "DISPLAY_NAME": "Display Name"
-    },
-    "SUB_HEADER": "View and manage my bookmarks.",
-    "EMPTY_RESULTS": "No results.",
-    "BREADCRUMB": "Search",
-    "HEADER_ACTIONS": {
-      "EXPORT_ALL": "Export"
-    },
-    "CARD_ACTIONS": {
-      "DELETE": "Delete bookmark",
-      "VISIT": "Go to bookmark"
-    },
-    "ERROR_MESSAGES": {
-      "SEARCH_RESULTS_LOADING_FAILED": "Loading search results failed."
-    },
-    "INPUT_PLACEHOLDER": "Filter",
-    "INPUT_TOOLTIP": "Filter by display name",
-    "INPUT_RESET_TOOLTIP": "Reset filter"
+  "BOOKMARK_EXPORT": {
+    "HEADER": "Export Bookmarks",
+    "INFO": "Select the areas whose Bookmarks you want to export.",
+    "SCOPE_PRIVATE": "Export the own Bookmarks",
+    "SCOPE_PUBLIC": "Export the public Bookmarks",
+    "ERROR": "Export failed",
+    "SUCCESS": "Bookmarks successfully exported"
   },
-  "BOOKMARK_TYPES": {
-    "ALL": "All",
-    "PRIVATE": "Private",
-    "PUBLIC": "Public"
+  "BOOKMARK_IMPORT": {
+    "HEADER": "Import Bookmarks",
+    "INFO": "After importing, you will find all imported Bookmarks in your private area.",
+    "ERROR": "Import failed",
+    "SUCCESS": "Bookmarks successfully imported",
+    "MODE": {
+      "INFO": "How to import the Bookmarks?",
+      "APPEND": "Add Bookmarks",
+      "OVERWRITE": "Replace existing Bookmarks"
+    },
+    "SCOPE": {
+      "INFO": "Which Bookmarks to import?",
+      "PRIVATE": "My Bookmarks",
+      "PUBLIC": "Public Bookmarks"
+    },
+    "SNAPSHOT": {
+      "DATE": "Created on",
+      "DATE.TOOLTIP": "The time at which the file was created."
+    },
+    "TABS": {
+      "IMPORT": "Import",
+      "CONTENT": "File Content",
+      "TOOLTIPS": {
+        "IMPORT": "Manage the import",
+        "CONTENT": "List the content of the read file"
+      }
+    }
+  },
+  "BOOKMARK_SORT": {
+    "HEADER": "Sort Bookmarks",
+    "LIST": "Bookmarks",
+    "ERROR": "Sorting failed",
+    "SUCCESS": "Sorting successfully changed"
   },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
-      "BUTTON": {
-        "TOOLTIP": {
-          "ADD": "Add bookmark",
-          "UPDATE": "Edit bookmark",
-          "LOADING": "Loading bookmark"
-        }
+      "ACTION": {
+        "CREATE": "Add Bookmark",
+        "EDIT": "Edit Bookmark",
+        "LOADING": "Loading Bookmark"
       },
       "DIALOG": {
-        "HEADER_CREATE": "Add bookmark",
-        "HEADER_UPDATE": "Edit bookmark",
+        "HEADER_CREATE": "Add Bookmark",
+        "HEADER_EDIT": "Edit Bookmark",
         "NO_ENDPOINT_CONFIGURED_TITLE": "Bookmark creation is currently not enabled for this page.",
-        "NO_ENDPOINT_CONFIGURED_MESSAGE": "Please contact an administrator. At this time your can only create a bookmark for the applications homepage ({{mfeBaseUrl}}).",
-        "NO_ENDPOINT_CONFIGURED_CONFIRM_BUTTON": "Close",
+        "NO_ENDPOINT_CONFIGURED_MESSAGE": "Please contact an administrator. At this time your can only create a Bookmark for the applications homepage ({{mfeBaseUrl}}).",
         "CREATE_ACTIONS": {
-          "CANCEL":  "Cancel",
-          "SAVE":  "Save"
+          "CANCEL": "Cancel",
+          "SAVE": "Save"
         },
-        "UPDATE_ACTIONS": {
-          "CANCEL": "Remove bookmark",
-          "SAVE":  "Save"
+        "EDIT_ACTIONS": {
+          "CANCEL": "Delete",
+          "SAVE": "Save"
         }
       }
     },
     "BOOKMARK_LIST": {
       "TITLE": "Bookmarks",
       "TABS": {
-        "PRIVATE": "My bookmarks",
-        "PUBLIC": "Additional links",
+        "PRIVATE": "My Bookmarks",
+        "PUBLIC": "Additional Links",
         "PUBLIC_TOOLTIP": "Links that have been provided by your organization."
       },
-      "LOADING_ERROR": "Your bookmarks couldn't be loaded.",
+      "LOADING_ERROR": "Your Bookmarks couldn't be loaded.",
       "LOADING_ERROR_DETAIL": "Please try again later.",
-      "NO_PRIVATE_BOOKMARKS": "You don't have any private bookmarks.",
-      "NO_PRIVATE_BOOKMARKS_DETAIL": "Use the \"Star\" symbol in the topbar, to create a bookmark for the current page."
+      "NO_PRIVATE_BOOKMARKS.STATE": "You don't have Bookmarks.",
+      "NO_PRIVATE_BOOKMARKS.TODO": "Use the \"Star\" symbol in the topbar, to create a Bookmark for the current page."
+    }
+  },
+  "VALIDATION": {
+    "URL_FORMAT": "https://<path-to-page>",
+    "JSON_FORMAT": "{ \"key\": \"value\", ... }",
+    "FORM_INVALID": "The form contains invalid values.",
+    "HINTS": {
+      "FORMAT_URL": "Format: "
+    },
+    "ERRORS": {
+      "NOT_FOUND": "Item to delete not found",
+      "RESULT_WRONG": "DialogResult was not set as expected!",
+      "PARSE_ERROR": "Parse error: The contained structure does not match the expected format.",
+      "INTERNAL_ERROR": "Internal error",
+      "EMPTY_REQUIRED_FIELD": "This field is required.",
+      "MAXIMUM_LENGTH": "Only {{chars}} characters are allowed.",
+      "MINIMUM_LENGTH": "At least {{chars}} characters are required.",
+      "PATTERN_ERROR": "The input does not match the required pattern",
+      "FILETYPE_PATTERN_ERROR": "The file does not match the allowed filetypes: .png, .jpg, .jpeg"
+    }
+  },
+  "EXCEPTIONS": {
+    "HTTP_STATUS_0": {
+      "BOOKMARK": "Unknown problem retrieving Bookmark data - please try again.",
+      "BOOKMARKS": "Unknown problem retrieving Bookmark data - please try again."
+    },
+    "HTTP_STATUS_400": {
+      "BOOKMARK": "Your request could not be processed.",
+      "BOOKMARKS": "Your request could not be processed."
+    },
+    "HTTP_STATUS_401": {
+      "BOOKMARK": "You are not authorized to work on Bookmark.",
+      "BOOKMARKS": "You are not authorized to work on Bookmarks."
+    },
+    "HTTP_STATUS_403": {
+      "BOOKMARK": "You do not have permission to work on Bookmark.",
+      "BOOKMARKS": "You do not have permission to work on Bookmarks."
+    },
+    "HTTP_STATUS_404": {
+      "BOOKMARK": "Bookmark could not be found.",
+      "BOOKMARKS": "Bookmarks could not be found."
+    },
+    "HTTP_STATUS_500": {
+      "BOOKMARK": "Unknown server problem retrieving Bookmark data - please try again.",
+      "BOOKMARKS": "Unknown server problem retrieving Bookmark data - please try again."
     }
   }
 }

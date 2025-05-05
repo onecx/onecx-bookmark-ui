@@ -5,18 +5,15 @@
 tmp
 out-tsc
 reports
-coverage
 
 # dependencies
 node_modules
-src
 
 # profiling files
 chrome-profiler-events*.json
 speed-measure-plugin*.json
 
 # IDEs and editors
-.c9
 .idea
 .project
 .classpath
@@ -24,14 +21,12 @@ speed-measure-plugin*.json
 .settings
 .vscode
 *.launch
-*.sublime-workspace
 
 # misc
 .nx
 .angular
 .eslintcache
 .sass-cache
-.scannerwork
 .husky/_
 .gitlab*
 connect.lock

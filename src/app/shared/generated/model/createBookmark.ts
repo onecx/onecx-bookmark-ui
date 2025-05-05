@@ -8,25 +8,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BookmarkScope } from './bookmarkScope';
 
 
 export interface CreateBookmark { 
     displayName: string;
-    endpointName: string;
+    endpointName?: string;
     endpointParameters?: { [key: string]: string; };
-    query?: string;
-    hash?: string;
+    query?: { [key: string]: string; };
+    fragment?: string;
+    url?: string;
     userId?: string;
     workspaceName: string;
-    productName: string;
+    productName?: string;
     appId?: string;
-    scope: CreateBookmarkScopeEnum;
+    scope: BookmarkScope;
     position: number;
 }
-export enum CreateBookmarkScopeEnum {
-    Private = 'PRIVATE',
-    Public = 'PUBLIC'
-};
 
 
 

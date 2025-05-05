@@ -1,0 +1,18 @@
+<form [formGroup]="formGroup">
+  <span class="p-float-label mt-1" controlErrorAnchor>
+    <input
+      pInputText
+      type="text"
+      id="bm_create_update_form_display_name"
+      class="w-full pt-3 pb-2 text-responsive"
+      formControlName="displayName"
+      aria-labelledby="bm_detail_form_display_name"
+      [pTooltip]="'BOOKMARK.TOOLTIPS.DISPLAY_NAME' | translate"
+      tooltipPosition="top"
+      tooltipEvent="hover"
+    />
+    <label class="ocx-required-label" for="bm_create_update_form_display_name">
+      {{ 'BOOKMARK.DISPLAY_NAME' | translate }}
+    </label>
+  </span>
+</form>

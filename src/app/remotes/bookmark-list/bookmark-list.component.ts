@@ -1,10 +1,14 @@
+import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
-import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
+import { BehaviorSubject, ReplaySubject } from 'rxjs'
+import { RippleModule } from 'primeng/ripple'
+import { TabViewModule } from 'primeng/tabview'
+
 import { AngularAuthModule } from '@onecx/angular-auth'
+import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import {
   AngularRemoteComponentsModule,
@@ -17,12 +21,11 @@ import {
   SlotService
 } from '@onecx/angular-remote-components'
 import { PortalCoreModule, AppConfigService } from '@onecx/portal-integration-angular'
-import { RippleModule } from 'primeng/ripple'
-import { TabViewModule } from 'primeng/tabview'
-import { BehaviorSubject, ReplaySubject } from 'rxjs'
-import { Bookmark, BookmarkScopeEnum } from 'src/app/shared/generated'
+
 import { SharedModule } from 'src/app/shared/shared.module'
+import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+
 import { BookmarkLinksComponent } from './bookmark-links/bookmark-links.component'
 
 export function slotInitializer(slotService: SlotService) {
@@ -70,7 +73,8 @@ export function slotInitializer(slotService: SlotService) {
     BookmarkAPIUtilsService
   ],
   selector: 'app-bookmark-list',
-  templateUrl: './bookmark-list.component.html'
+  templateUrl: './bookmark-list.component.html',
+  styleUrl: './bookmark-list.component.scss'
 })
 export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
   publicBookmarks$ = new BehaviorSubject<Bookmark[]>([])
@@ -101,8 +105,12 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     this.appConfigService.init(config.baseUrl)
     this.bookmarkApiUtils.loadBookmarks(this.handleBookmarkLoadError).subscribe((result) => {
       const bookmarks = result ?? []
-      this.privateBookmarks$.next(bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Private))
-      this.publicBookmarks$.next(bookmarks.filter((bm) => bm.scope === BookmarkScopeEnum.Public))
+      this.privateBookmarks$.next(
+        bookmarks.filter((bm) => bm.scope === BookmarkScope.Private).sort((a, b) => a.position - b.position)
+      )
+      this.publicBookmarks$.next(
+        bookmarks.filter((bm) => bm.scope === BookmarkScope.Public).sort((a, b) => a.position - b.position)
+      )
       this.loading = false
     })
   }
