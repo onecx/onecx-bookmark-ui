@@ -115,6 +115,7 @@
   },
   "DIALOG": {
     "OVERVIEW": {
+      "TITLE": "Hello",
       "HEADER": "My Bookmarks",
       "SUBHEADER": "List of My Bookmarks"
     },

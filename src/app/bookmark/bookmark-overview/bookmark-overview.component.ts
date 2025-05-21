@@ -5,8 +5,10 @@ import { Observable, map, of } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { MenuItem, PrimeIcons } from 'primeng/api'
 
-import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
+import { Workspace } from '@onecx/integration-interface'
+import { AppStateService, UserService, WorkspaceService } from '@onecx/angular-integration-interface'
 import { Action } from '@onecx/portal-integration-angular'
+import { UserProfile } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
@@ -27,6 +29,10 @@ export class BookmarkOverviewComponent implements OnInit {
   public hasEditPermissions = false
   public dockItems$: Observable<MenuItem[]> = of([])
 
+  // data
+  public user$: Observable<UserProfile>
+  public workspace: Workspace | undefined
+
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
     public readonly route: ActivatedRoute,
@@ -34,12 +40,15 @@ export class BookmarkOverviewComponent implements OnInit {
     private readonly store: Store,
     private readonly user: UserService,
     private readonly translate: TranslateService,
+    private readonly appStateService: AppStateService,
     private readonly workspaceService: WorkspaceService
   ) {
+    this.user$ = this.user.profile$.asObservable()
     this.hasEditPermissions = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
   }
 
   public ngOnInit() {
+    this.workspace = this.appStateService.currentWorkspace$.getValue()
     this.prepareDockItems()
     this.onSearch()
   }

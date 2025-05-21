@@ -115,6 +115,7 @@
   },
   "DIALOG": {
     "OVERVIEW": {
+      "TITLE": "Hallo",
       "HEADER": "Meine Lesezeichen",
       "SUBHEADER": "Liste meiner Lesezeichen"
     },
