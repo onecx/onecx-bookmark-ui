@@ -6,6 +6,8 @@ import { WorkspaceService } from '@onecx/angular-integration-interface'
 import { Bookmark } from 'src/app/shared/generated'
 import { limitText } from 'src/app/shared/utils/utils'
 
+import { Product } from '../bookmark-overview.component'
+
 @Component({
   selector: 'app-bookmark-list',
   templateUrl: './bookmark-list.component.html',
@@ -13,6 +15,7 @@ import { limitText } from 'src/app/shared/utils/utils'
 })
 export class BookmarkListComponent {
   @Input() public bookmarks: Bookmark[] = []
+  @Input() public products: Product[] = []
   @Input() public headerKey = ''
   @Input() public isPrivate = false
 
@@ -22,7 +25,7 @@ export class BookmarkListComponent {
 
   constructor(private readonly workspaceService: WorkspaceService) {}
 
-  // get the URL basically used by Bookmark
+  // get the target URL for the Bookmark
   public getUrl(bookmark: Bookmark): Observable<string> | undefined {
     if (bookmark.id && bookmark.productName && bookmark.appId) {
       if (!this.urls[bookmark.id]) {
@@ -37,5 +40,9 @@ export class BookmarkListComponent {
       return this.urls[bookmark.id]
     }
     return undefined
+  }
+
+  public getProductByName(name?: string): Product | undefined {
+    return this.products.find((p) => p.name === name)
   }
 }

@@ -44,11 +44,23 @@
       ></p-message>
     </div>
 
-    <div class="p-6 flex flex-row flex-nowrap column-gap-4">
+    <ng-container *ngIf="isProductComponentDefined$ | async; else noProductsAvailable">
+      <!-- PRODUCTS -->
+      <ocx-slot
+        [name]="slotName"
+        [inputs]="{ dataType: 'products', logEnabled: true, logPrefix: 'bookmark' }"
+        [outputs]="{ products: productsEmitter }"
+      >
+      </ocx-slot>
+    </ng-container>
+    <ng-template #noProductsAvailable> no products </ng-template>
+
+    <div *ngIf="(products$ | async) ?? [] as products" class="p-6 flex flex-row flex-nowrap column-gap-4">
       <!-- PRIVATE -->
       <app-bookmark-list
         headerKey="REMOTES.BOOKMARK_LIST.TABS.PRIVATE"
         [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Private)"
+        [products]="products"
         [isPrivate]="true"
       />
 
@@ -58,6 +70,7 @@
       <app-bookmark-list
         headerKey="REMOTES.BOOKMARK_LIST.TABS.PUBLIC"
         [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Public)"
+        [products]="products"
       />
     </div>
   </div>

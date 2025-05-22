@@ -1,20 +1,26 @@
-import { Component, Inject, LOCALE_ID, OnInit } from '@angular/core'
+import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
-import { Observable, map, of } from 'rxjs'
+import { BehaviorSubject, Observable, map, of } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { MenuItem, PrimeIcons } from 'primeng/api'
 
 import { Workspace } from '@onecx/integration-interface'
+import { Action, UserProfile } from '@onecx/portal-integration-angular'
 import { AppStateService, UserService, WorkspaceService } from '@onecx/angular-integration-interface'
-import { Action } from '@onecx/portal-integration-angular'
-import { UserProfile } from '@onecx/portal-integration-angular'
+import { SlotService } from '@onecx/angular-remote-components'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
 import { BookmarkOverviewViewModel } from './bookmark-overview.viewmodel'
 import { selectBookmarkOverviewViewModel } from './bookmark-overview.selectors'
+
+export type Product = {
+  name: string
+  displayName: string
+  imageUrl?: string
+}
 
 @Component({
   selector: 'app-bookmark-overview',
@@ -32,6 +38,12 @@ export class BookmarkOverviewComponent implements OnInit {
   // data
   public user$: Observable<UserProfile>
   public workspace: Workspace | undefined
+  // slot configuration: get product data
+  public slotName = 'onecx-product-data'
+  public isProductComponentDefined$: Observable<boolean> // check if a component was assigned
+  public products_empty: Product[] = []
+  public products$ = new BehaviorSubject<Product[] | undefined>(undefined) // theme data
+  public productsEmitter = new EventEmitter<Product[]>()
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
@@ -39,16 +51,19 @@ export class BookmarkOverviewComponent implements OnInit {
     private readonly router: Router,
     private readonly store: Store,
     private readonly user: UserService,
+    private readonly slotService: SlotService,
     private readonly translate: TranslateService,
     private readonly appStateService: AppStateService,
     private readonly workspaceService: WorkspaceService
   ) {
     this.user$ = this.user.profile$.asObservable()
+    this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
     this.hasEditPermissions = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
   }
 
   public ngOnInit() {
     this.workspace = this.appStateService.currentWorkspace$.getValue()
+    this.productsEmitter.subscribe(this.products$)
     this.prepareDockItems()
     this.onSearch()
   }
