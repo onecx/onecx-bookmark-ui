@@ -24,9 +24,7 @@
   </div>
 
   <!-- BOOKMARKS -->
-  <div
-    class="absolute top-0 left-0 w-full h-full z-1 overflow-hidden flex flex-row flex-wrap gap-3 sm:gap-5 justify-content-center align-items-center"
-  >
+  <div class="absolute top-0 left-0 w-full h-full z-1 overflow-hidden flex">
     <div *ngIf="vm.loading || vm.exceptionKey">
       <p-message
         *ngIf="vm.loading"
@@ -48,7 +46,7 @@
       <!-- PRODUCTS -->
       <ocx-slot
         [name]="slotName"
-        [inputs]="{ dataType: 'products', logEnabled: true, logPrefix: 'bookmark' }"
+        [inputs]="{ dataType: 'products', logEnabled: false, logPrefix: 'bookmark' }"
         [outputs]="{ products: productsEmitter }"
       >
       </ocx-slot>
@@ -57,7 +55,7 @@
 
     <div
       *ngIf="(products$ | async) ?? [] as products"
-      class="my-6 sm:my-7 md:my-8 lg:my-0 p-0 sm:p-0 flex flex-row flex-nowrap column-gap-0 md:column-gap-2 lg:column-gap-4 row-gap-4 sm:row-gap-3"
+      class="mt-8 sm:my-auto p-0 sm:p-0 flex flex-row flex-nowrap column-gap-0 md:column-gap-2 lg:column-gap-4 row-gap-4 sm:row-gap-3"
     >
       <!-- PRIVATE -->
       <app-bookmark-list
