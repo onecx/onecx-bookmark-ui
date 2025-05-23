@@ -58,7 +58,7 @@ export class BookmarkOverviewComponent implements OnInit {
   ) {
     this.user$ = this.user.profile$.asObservable()
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
-    this.hasEditPermissions = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
+    this.hasEditPermissions = this.user.hasPermission('BOOKMARK#EDIT') ?? this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
   }
 
   public ngOnInit() {

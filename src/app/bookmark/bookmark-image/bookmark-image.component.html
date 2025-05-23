@@ -7,7 +7,7 @@
   *ngIf="bookmark"
   [alt]="bookmark.displayName"
   [ocxSrc]="productLogoUrl ?? (defaultImageUrl$ | async) ?? undefined"
-  [class]="'w-4rem sm:w-5rem lg:w-7rem max-w-4rem sm:max-w-5rem lg:max-w-7rem sm:max-h-6rem h-3rem sm:h-4rem lg:h-6rem image-object ' + (styleClass ? styleClass : '')"
+  [class]="'image-object ' + (styleClass ? styleClass : '')"
   [ngClass]="loading ? 'hidden': ''"
   (error)="onImageError()"
   (load)="onImageLoad()"
