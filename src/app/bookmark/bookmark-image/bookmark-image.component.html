@@ -1,8 +1,12 @@
 <p-skeleton *ngIf="loading" styleClass="max-w-10rem max-h-5rem w-10rem h-5rem"></p-skeleton>
+<!-- 
+  [ocxSrc]="(this.errorImage$ | async) ?? (productLogoBaseURL$ | async) + (bookmark.productName ?? '')"
+  [ocxSrc]="productLogoUrl ?? (this.errorImage$ | async)"
+-->
 <img
   *ngIf="bookmark"
   [alt]="bookmark.displayName"
-  [ocxSrc]="(this.errorImage$ | async) ?? (productLogoBaseURL$ | async) + (bookmark.productName ?? '')"
+  [ocxSrc]="productLogoUrl ?? (defaultImageUrl$ | async) ?? undefined"
   [class]="'max-w-7rem max-h-6rem w-7rem h-6rem image-object ' + (styleClass ? styleClass : '')"
   [ngClass]="loading ? 'hidden': ''"
   (error)="onImageError()"

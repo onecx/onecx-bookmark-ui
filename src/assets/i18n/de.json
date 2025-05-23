@@ -205,8 +205,8 @@
       "INTERN": "Intern",
       "TOOLTIPS": {
         "PROPS": "Basiseigenschaften des Lesezeichens",
-        "TARGET": "Ziel-Applkation und App",
-        "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Lesezeichen",
+        "TARGET": "Zielapplikation und App",
+        "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Parameter.",
         "PARAMS": "Zusätzliche Lesezeichen, die zum Pfad hinzugefügt werden",
         "INTERN": "Interne Eigenschaften"
       }

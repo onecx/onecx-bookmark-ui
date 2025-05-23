@@ -15,12 +15,12 @@ import { Product } from '../bookmark-overview.component'
 })
 export class BookmarkListComponent {
   @Input() public bookmarks: Bookmark[] = []
-  @Input() public products: Product[] = []
+  @Input() public products: Product[] | undefined
   @Input() public headerKey = ''
+  @Input() public loading = false
   @Input() public isPrivate = false
 
   public urls: Record<string, Observable<string>> = {}
-
   public limitText = limitText
 
   constructor(private readonly workspaceService: WorkspaceService) {}
@@ -43,6 +43,6 @@ export class BookmarkListComponent {
   }
 
   public getProductByName(name?: string): Product | undefined {
-    return this.products.find((p) => p.name === name)
+    return this.products?.find((p) => p.name === name)
   }
 }

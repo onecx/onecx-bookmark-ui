@@ -55,12 +55,13 @@
     </ng-container>
     <ng-template #noProductsAvailable> no products </ng-template>
 
-    <div *ngIf="(products$ | async) ?? [] as products" class="p-6 flex flex-row flex-nowrap column-gap-4">
+    <div *ngIf="(products$ | async) ?? [] as products" class="p-5 flex flex-row flex-nowrap column-gap-4">
       <!-- PRIVATE -->
       <app-bookmark-list
         headerKey="REMOTES.BOOKMARK_LIST.TABS.PRIVATE"
         [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Private)"
         [products]="products"
+        [loading]="vm.loading"
         [isPrivate]="true"
       />
 
@@ -71,6 +72,7 @@
         headerKey="REMOTES.BOOKMARK_LIST.TABS.PUBLIC"
         [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Public)"
         [products]="products"
+        [loading]="vm.loading"
       />
     </div>
   </div>

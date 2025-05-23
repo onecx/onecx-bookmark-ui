@@ -1,3 +1,7 @@
+@import '/src/app/_bm-mixins.scss';
+
+@include displaying-text-responsive;
+
 .bookmark-link:hover {
   background: var(--tabview-header-hover-bg);
   border-color: var(--tabview-header-hover-border-color);

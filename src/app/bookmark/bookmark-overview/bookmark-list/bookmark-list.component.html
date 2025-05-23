@@ -1,7 +1,7 @@
 <div class="flex flex-column row-gap-4">
   <h1 class="text-center text-lg">{{ headerKey | translate }}</h1>
 
-  <!-- content -->
+  <!-- BOOKMARKS -->
   <div *ngIf="bookmarks.length > 0" class="flex flex-row flex-wrap gap-5 p-3">
     <a
       *ngFor="let bookmark of bookmarks"
@@ -12,11 +12,12 @@
       [fragment]="bookmark.fragment"
     >
       <app-bookmark-image [bookmark]="bookmark" [product]="getProductByName(bookmark.productName)"></app-bookmark-image>
-      <div>{{ limitText('' + bookmark['displayName'], 30) }}</div>
+      <div class="max-w-14rem text-responsive">{{ bookmark['displayName'] }}</div>
     </a>
   </div>
-  <!-- empty message -->
-  <p-messages *ngIf="bookmarks.length === 0" severity="info">
+
+  <!-- NO BOOKMARKS -->
+  <p-messages *ngIf="!loading && bookmarks.length === 0" severity="info">
     <ng-template pTemplate>
       <div class="flex gap-2 align-items-center">
         <span class="p-message-icon">
