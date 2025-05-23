@@ -1,29 +1,36 @@
-<div class="flex flex-column row-gap-4">
-  <h1 class="text-center text-lg">{{ headerKey | translate }}</h1>
+<div class="flex flex-column row-gap-2 md:row-gap-3 lg:row-gap-4 justify-content-between">
+  <h1 class="m-0 p-0 text-center text-base sm:text-lg">{{ headerKey | translate }}</h1>
 
-  <!-- content -->
-  <div *ngIf="bookmarks.length > 0" class="flex flex-row flex-wrap gap-5 p-3">
+  <!-- BOOKMARKS -->
+  <div *ngIf="bookmarks.length > 0" class="p-2 sm:p-3 md:p-4 flex flex-row flex-wrap gap-2 sm:gap-3 md:gap-5">
     <a
       *ngFor="let bookmark of bookmarks"
       tabindex="0"
-      class="mb-0 card w-16rem h-10rem flex flex-column gap-3 justify-content-between align-items-center hover:bg-gray-200 cursor-pointer"
+      class="mb-0 p-1 sm:p-2 card w-8rem sm:w-10rem lg:w-16rem h-5rem sm:h-7rem lg:h-9rem flex flex-column gap-1 sm:gap-3 justify-content-between align-items-center hover:bg-gray-200 cursor-pointer"
       [routerLink]="getUrl(bookmark) | async"
       [queryParams]="bookmark.query"
       [fragment]="bookmark.fragment"
     >
-      <app-bookmark-image [bookmark]="bookmark"></app-bookmark-image>
-      <div>{{ limitText('' + bookmark['displayName'], 30) }}</div>
+      <app-bookmark-image
+        [bookmark]="bookmark"
+        [product]="getProductByName(bookmark.productName)"
+        styleClass="w-4rem sm:w-5rem lg:w-7rem max-w-4rem sm:max-w-5rem lg:max-w-7rem sm:max-h-6rem h-3rem sm:h-4rem lg:h-6rem image-object border-round-sm"
+      ></app-bookmark-image>
+      <div class="max-w-7rem sm:max-w-9rem lg:max-w-14rem text-xs sm:text-sm lg:text-base text-responsive">
+        {{ bookmark['displayName'] }}
+      </div>
     </a>
   </div>
-  <!-- empty message -->
-  <p-messages *ngIf="bookmarks.length === 0" severity="info">
+
+  <!-- NO BOOKMARKS -->
+  <p-messages *ngIf="!loading && bookmarks.length === 0" severity="info">
     <ng-template pTemplate>
       <div class="flex gap-2 align-items-center">
         <span class="p-message-icon">
           <i class="pi pi-star"></i>
         </span>
         <div class="flex gap-1 flex-column">
-          <span class="p-message-summary"> {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.STATE' | translate }} </span>
+          <span class="p-message-summary">{{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.STATE' | translate }}</span>
           <span *ocxIfPermission="'BOOKMARK#CREATE'" class="p-message-detail m-0">
             {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}
           </span>
