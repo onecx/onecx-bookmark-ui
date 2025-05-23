@@ -25,7 +25,7 @@
 
   <!-- BOOKMARKS -->
   <div
-    class="absolute top-0 left-0 w-full h-full z-1 overflow-hidden flex flex-row flex-wrap gap-5 justify-content-center align-items-center"
+    class="absolute top-0 left-0 w-full h-full z-1 overflow-hidden flex flex-row flex-wrap gap-3 sm:gap-5 justify-content-center align-items-center"
   >
     <div *ngIf="vm.loading || vm.exceptionKey">
       <p-message
@@ -55,7 +55,10 @@
     </ng-container>
     <ng-template #noProductsAvailable> no products </ng-template>
 
-    <div *ngIf="(products$ | async) ?? [] as products" class="p-5 flex flex-row flex-nowrap column-gap-4">
+    <div
+      *ngIf="(products$ | async) ?? [] as products"
+      class="my-6 sm:my-7 md:my-8 lg:my-0 p-0 sm:p-0 flex flex-row flex-nowrap column-gap-0 md:column-gap-2 lg:column-gap-4 row-gap-4 sm:row-gap-3"
+    >
       <!-- PRIVATE -->
       <app-bookmark-list
         headerKey="REMOTES.BOOKMARK_LIST.TABS.PRIVATE"
@@ -65,7 +68,7 @@
         [isPrivate]="true"
       />
 
-      <p-divider layout="vertical" type="solid" styleClass="m-0 p-1"></p-divider>
+      <p-divider layout="vertical" type="solid" styleClass="m-0 p-2"></p-divider>
 
       <!-- PUBLIC -->
       <app-bookmark-list
