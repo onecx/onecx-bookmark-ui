@@ -1,7 +1,25 @@
 <ocx-portal-page permission="BOOKMARK#OVERVIEW" helpArticleId="PAGE_BOOKMARK_OVERVIEW" *ngrxLet="viewModel$ as vm">
-  <!-- DOCK -->
-  <div class="absolute dock-top-right-minimized">
-    <p-dock *ngIf="hasEditPermissions" [model]="dockItems$ | async" [position]="'top'" styleClass="z-2">
+  <!-- PRODUCTS -->
+  <ng-container *ngIf="isProductComponentDefined$ | async">
+    <ocx-slot
+      [name]="slotName"
+      [inputs]="{ dataType: 'products', logEnabled: false, logPrefix: 'bookmark' }"
+      [outputs]="{ products: productsEmitter }"
+    >
+    </ocx-slot>
+  </ng-container>
+  <!-- HEADER -->
+  <div class="relative overflow-hidden">
+    <div class="sm:ml-2 md:ml-3 lg:ml-0 flex flex-column gap-2 sm:gap-3 text-primary">
+      <h1 id="wc_overview_info_title" class="m-0 line-height-1 font-normal text-xl sm:text-2xl md:text-4xl">
+        {{ 'DIALOG.OVERVIEW.TITLE' | translate }} {{ (user$ | async)?.person?.firstName }}
+      </h1>
+      <h2 id="wc_overview_info_workspace" class="m-0 line-height-1 font-normal text-sm sm:text-base">
+        Workspace: {{ workspace?.displayName }}
+      </h2>
+    </div>
+    <!-- dock is absolute positioned -->
+    <p-dock *ngIf="hasEditPermissions" [model]="dockItems$ | async" position="right" styleClass="">
       <ng-template pTemplate="item" let-item>
         <span
           [class]="'text-primary cursor-pointer text-lg sm:text-2xl ' + item.iconClass"
@@ -11,20 +29,9 @@
     </p-dock>
   </div>
 
-  <!-- INFO -->
-  <div class="absolute top-0 left-0 w-full z-1 wc-overview-info">
-    <div class="py-3 sm:py-4 px-3 sm:px-4 md:px-5 flex flex-column gap-2 sm:gap-3 forced">
-      <h1 id="wc_overview_info_title" class="m-0 line-height-1 font-normal text-xl sm:text-2xl md:text-4xl fon">
-        {{ 'DIALOG.OVERVIEW.TITLE' | translate }} {{ (user$ | async)?.person?.firstName }}
-      </h1>
-      <h2 id="wc_overview_info_workspace" class="m-0 line-height-1 font-normal text-sm sm:text-base">
-        Workspace: {{ workspace?.displayName }}
-      </h2>
-    </div>
-  </div>
-
-  <!-- BOOKMARKS -->
-  <div class="absolute top-0 left-0 w-full h-full z-1 overflow-hidden flex">
+  <!-- BOOKMARKS
+       => absolute positioned because screen centered and flex does not work without ceratin height of parent -->
+  <div class="absolute mt-10 sm:mt-6 bookmark-section-centered">
     <div *ngIf="vm.loading || vm.exceptionKey">
       <p-message
         *ngIf="vm.loading"
@@ -42,20 +49,9 @@
       ></p-message>
     </div>
 
-    <ng-container *ngIf="isProductComponentDefined$ | async; else noProductsAvailable">
-      <!-- PRODUCTS -->
-      <ocx-slot
-        [name]="slotName"
-        [inputs]="{ dataType: 'products', logEnabled: false, logPrefix: 'bookmark' }"
-        [outputs]="{ products: productsEmitter }"
-      >
-      </ocx-slot>
-    </ng-container>
-    <ng-template #noProductsAvailable> no products </ng-template>
-
     <div
       *ngIf="(products$ | async) ?? [] as products"
-      class="mt-8 sm:my-auto p-0 sm:p-0 flex flex-row flex-nowrap column-gap-0 md:column-gap-2 lg:column-gap-4 row-gap-4 sm:row-gap-3"
+      class="p-0 sm:p-0 flex flex-row flex-nowrap column-gap-0 row-gap-4 sm:row-gap-3"
     >
       <!-- PRIVATE -->
       <app-bookmark-list
