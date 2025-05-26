@@ -26,7 +26,7 @@ export class BookmarkImageComponent implements OnChanges {
   public productLogoUrl: string | undefined
   private imageLoadCounter = 0
 
-  constructor(appStateService: AppStateService) {
+  constructor(private readonly appStateService: AppStateService) {
     this.errorImage$ = undefined
     this.defaultImageUrl$ = appStateService.currentMfe$.pipe(
       map((mfe) => {
@@ -42,14 +42,12 @@ export class BookmarkImageComponent implements OnChanges {
   }
   public ngOnChanges(changes: SimpleChanges): void {
     if (this.bookmark?.id) {
-      //this.loading = true
-      // console.log('bookmark-image => bookmark', this.bookmark?.id, this.bookmark?.imageUrl)
       if (changes['product'] && !changes['product'].firstChange && this.product) {
-        console.log('bookmark-image => ngOnChanges', this.bookmark?.productName, this.imageLoadCounter)
+        //console.log('bookmark-image => ngOnChanges', this.bookmark?.productName, this.imageLoadCounter)
         this.productLogoUrl = this.product?.imageUrl
         // if default was loaded and product image url exists, then try to get product logos
         if (this.imageLoadCounter === 2 && this.productLogoUrl) {
-          console.log('bookmark-image => product', this.productLogoUrl)
+          //console.log('bookmark-image => product', this.productLogoUrl)
           this.errorImage$ = undefined
           this.loading = true
           this.imageLoadCounter = 0
@@ -72,12 +70,12 @@ export class BookmarkImageComponent implements OnChanges {
   /**
    * Loading order:
    *   0 => load bookmark a) URL b) image
-   *   1 => loaded product URL ( contains URL or image or nothing prepared by RC product data)
+   *   1 => loaded the product URL => prepared by RC product data with existing extern or image URL of the product
    *   2 => loaded default bookmark image
    */
   public onImageError() {
     if (this.loading) {
-      console.log('onImageError => counter', this.bookmark?.id, this.bookmark?.productName, this.imageLoadCounter)
+      //console.log('onImageError => counter', this.bookmark?.id, this.bookmark?.productName, this.imageLoadCounter)
       // load bookmark default logo
       if (this.imageLoadCounter === 1 || (this.imageLoadCounter === 0 && !this.productLogoUrl)) {
         this.errorImage$ = this.defaultImageUrl$
@@ -85,7 +83,7 @@ export class BookmarkImageComponent implements OnChanges {
       }
       // load product logo
       if (this.imageLoadCounter === 0 && this.productLogoUrl) {
-        console.log('             => this.productLogoUrl', this.productLogoUrl)
+        //console.log('             => this.productLogoUrl', this.productLogoUrl)
         this.errorImage$ = of(this.productLogoUrl)
         this.imageLoadCounter = 1
       }

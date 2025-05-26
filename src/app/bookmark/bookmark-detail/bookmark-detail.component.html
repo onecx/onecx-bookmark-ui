@@ -61,11 +61,12 @@
           #selectedFileInputLogo
           (change)="onFileUpload($event, vm.initialBookmark)"
         />
-        <app-bookmark-image
-          id="bm_detail_form_field_logo_image"
-          [bookmark]="convertToBookmark(vm.initialBookmark)"
-          styleClass="max-h-3rem max-w-4rem border-round-sm"
-        ></app-bookmark-image>
+        <img
+          *ngIf="vm.initialBookmark && fetchingLogoUrl"
+          [alt]="vm.initialBookmark.displayName"
+          [ocxSrc]="fetchingLogoUrl"
+          class="w-3rem max-w-3rem max-h-3rem h-3rem border-round-sm"
+        />
         <button
           *ocxIfPermission="'BOOKMARK#EDIT'"
           pButton

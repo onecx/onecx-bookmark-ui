@@ -2,12 +2,6 @@
   *ngIf="loading"
   [styleClass]="(styleClass ? styleClass : 'max-w-8rem max-h-5rem w-8rem h-5rem')"
 ></p-skeleton>
-<!-- 
-  [ocxSrc]="(this.errorImage$ | async) ?? (productLogoBaseURL$ | async) + (bookmark.productName ?? '')"
-  [ocxSrc]="productLogoUrl ?? (this.errorImage$ | async)"
-
-  [ocxSrc]="(this.errorImage$ | async) ?? bookmark.imageUrl ?? (bookmarkImageBaseURL$ | async) ?? productLogoUrl ?? (defaultImageUrl$ | async) ?? undefined"
--->
 <img
   *ngIf="bookmark"
   [alt]="bookmark.displayName"

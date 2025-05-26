@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Location } from '@angular/common'
 import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
-import { BehaviorSubject, filter, Observable } from 'rxjs'
+import { BehaviorSubject, filter, map, Observable } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 import { SlotService } from '@onecx/angular-remote-components'
-import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { Bookmark, BookmarkScope, ImagesInternal, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
@@ -86,7 +87,9 @@ export class BookmarkDetailComponent
   public defaultProduct: Product | undefined
   public formGroup: FormGroup
   public dialogResult: CombinedBookmark | undefined = undefined
+  public bookmarkImageBaseURL$: Observable<string> | undefined
   public fetchingLogoUrl: string | undefined = undefined
+
   // slot configuration: get product data
   public slotName = 'onecx-product-data'
   public isProductComponentDefined$: Observable<boolean> // check if a component was assigned
@@ -95,10 +98,17 @@ export class BookmarkDetailComponent
 
   constructor(
     private readonly user: UserService,
+    private readonly appStateService: AppStateService,
     private readonly slotService: SlotService,
     private readonly msgService: PortalMessageService,
     private readonly imageApi: ImagesInternal
   ) {
+    // bookmark image URL via bookmark BFF
+    this.bookmarkImageBaseURL$ = appStateService.currentMfe$.pipe(
+      map((mfe) => {
+        return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/') + this.vm.initialBookmark?.id
+      })
+    )
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
     // this is the universal form: used for specific URL bookmarks and other bookmarks
     this.formGroup = new FormGroup({
@@ -136,6 +146,8 @@ export class BookmarkDetailComponent
         endpointParams: JSON.stringify(this.vm.initialBookmark?.endpointParameters, undefined, 2),
         query: JSON.stringify(this.vm.initialBookmark?.query, undefined, 2)
       })
+      if (this.vm.initialBookmark?.imageUrl) this.fetchingLogoUrl = this.vm.initialBookmark?.imageUrl
+      else this.prepareImageUrl(this.vm.initialBookmark?.id)
     }
     if (!this.editable || this.vm.changeMode === 'VIEW') {
       this.formGroup.disable()
@@ -246,14 +258,14 @@ export class BookmarkDetailComponent
 
   private saveImage(id: string, files: FileList) {
     const blob = new Blob([files[0]], { type: files[0].type })
-    this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
+    this.prepareImageUrl(undefined) // reset - important to trigger the change in UI
     this.imageApi.uploadImage(id, blob).subscribe(() => {
-      this.prepareImageResponse(id)
+      this.prepareImageUrl(id)
+      this.msgService.info({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
     })
   }
-  private prepareImageResponse(name: string): void {
-    //this.fetchingLogoUrl = bffImageUrl(this.imageApi.configuration.basePath, name)
-    this.msgService.info({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
+  private prepareImageUrl(id?: string): void {
+    this.fetchingLogoUrl = id ? this.imageApi.configuration.basePath + '/images/' + id : undefined
     //this.formGroup.controls['imageUrl'].setValue('')
   }
 
@@ -262,5 +274,10 @@ export class BookmarkDetailComponent
     if (bookmark?.id) {
       this.fetchingLogoUrl = (event.target as HTMLInputElement).value
     }
+  }
+  private prepareUrlPath(url?: string, path?: string): string {
+    if (url && path) return Location.joinWithSlash(url, path)
+    else if (url) return url
+    else return ''
   }
 }
