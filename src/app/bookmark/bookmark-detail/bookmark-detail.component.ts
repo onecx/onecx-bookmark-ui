@@ -5,8 +5,9 @@ import { BehaviorSubject, filter, Observable } from 'rxjs'
 import { UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 import { SlotService } from '@onecx/angular-remote-components'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 
-import { Bookmark, BookmarkScope, CreateBookmark } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope, ImagesInternal, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 // trim the value (string!) of a form control before passes to the control
@@ -82,8 +83,10 @@ export class BookmarkDetailComponent
   }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
+  public defaultProduct: Product | undefined
   public formGroup: FormGroup
   public dialogResult: CombinedBookmark | undefined = undefined
+  public fetchingLogoUrl: string | undefined = undefined
   // slot configuration: get product data
   public slotName = 'onecx-product-data'
   public isProductComponentDefined$: Observable<boolean> // check if a component was assigned
@@ -92,7 +95,9 @@ export class BookmarkDetailComponent
 
   constructor(
     private readonly user: UserService,
-    private readonly slotService: SlotService
+    private readonly slotService: SlotService,
+    private readonly msgService: PortalMessageService,
+    private readonly imageApi: ImagesInternal
   ) {
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
     // this is the universal form: used for specific URL bookmarks and other bookmarks
@@ -109,13 +114,20 @@ export class BookmarkDetailComponent
         updateOn: 'change'
       }),
       fragment: new FormControl(null, [Validators.maxLength(255)]),
-      url: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)])
+      url: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
+      imageUrl: new FormControl(null, [Validators.maxLength(255)])
     })
   }
 
   public ngOnInit() {
     // on open dialog => manage parameter field depends on endpointName content
     if (this.vm.initialBookmark) {
+      this.defaultProduct = {
+        name: this.vm.initialBookmark?.productName ?? '',
+        displayName: this.vm.initialBookmark?.productName ?? '',
+        undeployed: false,
+        applications: []
+      }
       this.productEmitter.subscribe(this.product$)
       this.formGroup.patchValue({
         ...this.vm.initialBookmark,
@@ -196,7 +208,59 @@ export class BookmarkDetailComponent
   }
   public getProductAppDisplayName(appId?: string, product?: Product): string | undefined {
     if (!appId) return undefined
-    if (!product) return appId
+    if (!product || product.applications?.length === 0) return appId
     return product.applications?.find((app) => app.appId === appId)?.appName
+  }
+
+  /**
+   * IMAGE
+   */
+  public onRemoveLogo(bookmark?: CombinedBookmark) {
+    if (bookmark?.id)
+      this.imageApi.deleteImage(bookmark.id).subscribe({
+        next: () => {
+          this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
+        },
+        error: (err) => {
+          console.error('deleteImage', err)
+        }
+      })
+  }
+
+  public onFileUpload(ev: Event, bookmark?: CombinedBookmark): void {
+    if (ev.target && (ev.target as HTMLInputElement).files) {
+      const files = (ev.target as HTMLInputElement).files
+      if (files) {
+        if (files[0].size > 1000000) {
+          this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_SIZE' })
+        } else if (!/^.*.(jpg|jpeg|png)$/.exec(files[0].name)) {
+          this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_FILE_TYPE' })
+        } else if (bookmark?.id) {
+          this.saveImage(bookmark.id, files) // store image
+        }
+      }
+    } else {
+      this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_FILE_MISSING' })
+    }
+  }
+
+  private saveImage(id: string, files: FileList) {
+    const blob = new Blob([files[0]], { type: files[0].type })
+    this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
+    this.imageApi.uploadImage(id, blob).subscribe(() => {
+      this.prepareImageResponse(id)
+    })
+  }
+  private prepareImageResponse(name: string): void {
+    //this.fetchingLogoUrl = bffImageUrl(this.imageApi.configuration.basePath, name)
+    this.msgService.info({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
+    //this.formGroup.controls['imageUrl'].setValue('')
+  }
+
+  // changes on external log URL field: user enters text (change) or paste something
+  public onInputChange(event: Event, bookmark?: CombinedBookmark): void {
+    if (bookmark?.id) {
+      this.fetchingLogoUrl = (event.target as HTMLInputElement).value
+    }
   }
 }

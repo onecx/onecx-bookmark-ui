@@ -52,6 +52,69 @@
           <label class="ocx-required-label" for="bm_detail_form_field_url">{{ 'BOOKMARK.URL' | translate }}</label>
         </span>
       </div>
+      <!-- IMAGE -->
+      <div class="flex flex-row flex-wrap sm:flex-nowrap align-items-center row-gap-2 column-gap-4">
+        <input
+          hidden
+          type="file"
+          accept="image/*"
+          #selectedFileInputLogo
+          (change)="onFileUpload($event, vm.initialBookmark)"
+        />
+        <app-bookmark-image
+          id="bm_detail_form_field_logo_image"
+          [bookmark]="convertToBookmark(vm.initialBookmark)"
+          styleClass="max-h-3rem max-w-4rem border-round-sm"
+        ></app-bookmark-image>
+        <button
+          *ocxIfPermission="'BOOKMARK#EDIT'"
+          pButton
+          id="bm_detail_form_field_remove_logo"
+          icon="pi pi-times"
+          [disabled]="!vm.initialBookmark?.id"
+          class="action-button p-button-icon-only cursor-pointer"
+          (click)="onRemoveLogo(vm.initialBookmark)"
+          [attr.aria-label]="'IMAGE.TOOLTIPS.REMOVE' | translate"
+          [pTooltip]="'IMAGE.TOOLTIPS.REMOVE' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></button>
+        <button
+          *ocxIfPermission="'BOOKMARK#EDIT'"
+          pButton
+          id="bm_detail_form_field_upload_logo"
+          icon="pi pi-upload"
+          class="action-button p-button-icon-only cursor-pointer"
+          (click)="selectedFileInputLogo.click()"
+          [attr.aria-label]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
+          [pTooltip]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></button>
+        <div class="flex flex-column row-gap-1 w-full">
+          <span class="p-float-label">
+            <input
+              pInputText
+              type="text"
+              class="w-full"
+              id="bm_detail_form_field_image_url"
+              formControlName="imageUrl"
+              (input)="onInputChange($event, vm.initialBookmark)"
+              (change)="onInputChange($event, vm.initialBookmark)"
+              [attr.aria-label]="'IMAGE.LOGO_URL' | translate"
+              [pTooltip]="'IMAGE.TOOLTIPS.URL' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
+          </span>
+          <!--label *ngIf="editMode" class="ocx-control-hint block" for="bm_detail_form_field_image_url">
+            {{ ('VALIDATION.HINTS.FORMAT_URL' | translate) + externUrlPattern }}
+          </label -->
+        </div>
+      </div>
+
+      <!-- PUBLIC ? -->
       <p-checkbox
         *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
         id="bm_detail_form_field_is_public"
@@ -76,15 +139,16 @@
     tooltipEvent="hover"
   >
     <div
-      *ngIf="product$ | async as product"
+      *ngIf="((product$ | async) ?? defaultProduct) as product"
       class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4"
     >
-      <app-bookmark-image
-        [bookmark]="convertToBookmark(vm.initialBookmark)"
-        [product]="product"
-        styleClass="w-4rem sm:w-5rem md:w-6rem xl:w-7rem max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem image-object border-round-sm"
-      ></app-bookmark-image>
-      <div class="flex-grow-1 mt-1 mb-2 flex flex-column row-gap-4">
+      <img
+        *ngIf="product.imageUrl"
+        [alt]="product.displayName"
+        [ocxSrc]="product.imageUrl"
+        class="w-4rem sm:w-5rem md:w-6rem xl:w-7rem max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem image-object border-round-sm"
+      />
+      <div class="flex-grow-1 mt-1 flex flex-column row-gap-4">
         <span class="p-float-label">
           <input
             pInputText

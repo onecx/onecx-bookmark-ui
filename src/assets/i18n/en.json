@@ -261,6 +261,23 @@
     "ERROR": "Sorting failed",
     "SUCCESS": "Sorting successfully changed"
   },
+  "IMAGE": {
+    "LOGO_URL": "External Logo URL",
+    "UPLOAD_FAIL": " The file was not uploaded successfully",
+    "UPLOAD_SUCCESS": "The file was uploaded successfully",
+    "CONSTRAINT_FILE_MISSING": "No file selected.",
+    "CONSTRAINT_FILE_TYPE": "The following image formats are accepted: jpg, jpeg, png",
+    "CONSTRAINT_FAILED": "File upload condition check failed:",
+    "CONSTRAINT_NAME": "Please add a Workspace name before uploading a file.",
+    "CONSTRAINT_SIZE": "The image file size exceeds the maximum length of 100,000 bytes.",
+    "TOOLTIPS": {
+      "URL": "As an alternative to uploading, a URL to an image can be specified here.",
+      "IMAGE": "Logo",
+      "PLACEHOLDER": "Logo Placeholder",
+      "REMOVE": "Remove Image",
+      "UPLOAD": "Select and upload image"
+    }
+  },
   "REMOTES": {
     "MANAGE_BOOKMARK": {
       "ACTION": {
