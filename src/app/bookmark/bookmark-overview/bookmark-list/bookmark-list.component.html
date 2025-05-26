@@ -1,10 +1,10 @@
 <div class="flex flex-column justify-content-between">
-  <h1 class="m-0 p-0 text-center text-base sm:text-lg md:text-xl">{{ headerKey | translate }}</h1>
+  <h1 class="m-0 p-0 text-center text-sm sm:text-base md:text-lg md:text-xl">{{ headerKey | translate }}</h1>
 
   <!-- BOOKMARKS -->
   <div
     *ngIf="bookmarks.length > 0"
-    class="p-3 sm:p-4 md:p-5 flex flex-row flex-wrap justify-content-center gap-2 sm:gap-3 md:gap-5"
+    class="pt-2 p-1 sm:p-4 md:p-5 flex flex-row flex-wrap justify-content-center gap-2 sm:gap-3 md:gap-5"
   >
     <a
       *ngFor="let bookmark of bookmarks"

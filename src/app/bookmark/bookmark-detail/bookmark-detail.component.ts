@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
-import { filter } from 'rxjs'
+import { BehaviorSubject, filter, Observable } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
+import { SlotService } from '@onecx/angular-remote-components'
 
-import { BookmarkScope, CreateBookmark } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 // trim the value (string!) of a form control before passes to the control
@@ -44,6 +45,20 @@ export type CombinedBookmark = CreateBookmark & {
   modificationUser?: string
 }
 
+export type Application = {
+  appName: string
+  appId: string
+  undeployed: boolean
+  deprecated: boolean
+}
+export type Product = {
+  name: string
+  displayName: string
+  imageUrl?: string
+  undeployed: boolean
+  applications?: Application[]
+}
+
 @Component({
   selector: 'app-bookmark-detail',
   templateUrl: './bookmark-detail.component.html',
@@ -69,8 +84,17 @@ export class BookmarkDetailComponent
 
   public formGroup: FormGroup
   public dialogResult: CombinedBookmark | undefined = undefined
+  // slot configuration: get product data
+  public slotName = 'onecx-product-data'
+  public isProductComponentDefined$: Observable<boolean> // check if a component was assigned
+  public product$ = new BehaviorSubject<Product | undefined>(undefined) // theme data
+  public productEmitter = new EventEmitter<Product>()
 
-  constructor(private readonly user: UserService) {
+  constructor(
+    private readonly user: UserService,
+    private readonly slotService: SlotService
+  ) {
+    this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
     // this is the universal form: used for specific URL bookmarks and other bookmarks
     this.formGroup = new FormGroup({
       is_public: new FormControl(false),
@@ -92,6 +116,7 @@ export class BookmarkDetailComponent
   public ngOnInit() {
     // on open dialog => manage parameter field depends on endpointName content
     if (this.vm.initialBookmark) {
+      this.productEmitter.subscribe(this.product$)
       this.formGroup.patchValue({
         ...this.vm.initialBookmark,
         is_public: this.vm.initialBookmark.scope === BookmarkScope.Public,
@@ -163,5 +188,15 @@ export class BookmarkDetailComponent
       console.error('Parse error', err)
       this.dialogResult = this.vm.initialBookmark
     }
+  }
+
+  // Helper for loading product image/data
+  public convertToBookmark(cb?: CombinedBookmark): Bookmark | undefined {
+    return cb ? { ...cb, id: cb?.id ?? '' } : undefined
+  }
+  public getProductAppDisplayName(appId?: string, product?: Product): string | undefined {
+    if (!appId) return undefined
+    if (!product) return appId
+    return product.applications?.find((app) => app.appId === appId)?.appName
   }
 }

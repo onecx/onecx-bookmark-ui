@@ -1,3 +1,13 @@
+<!-- PRODUCTS -->
+<ng-container *ngIf="isProductComponentDefined$ | async">
+  <ocx-slot
+    [name]="slotName"
+    [inputs]="{ dataType: 'product', productName: this.vm.initialBookmark?.productName, logEnabled: false, logPrefix: 'bookmark' }"
+    [outputs]="{ product: productEmitter }"
+  >
+  </ocx-slot>
+</ng-container>
+
 <p-tabView [formGroup]="formGroup" errorTailor>
   <p-tabPanel
     [header]="'BOOKMARK_DETAIL.TAB.PROPS' | translate"
@@ -65,9 +75,16 @@
     tooltipPosition="top"
     tooltipEvent="hover"
   >
-    <div class="flex flex-row flex-wrap column-gap-4 row-gap-2">
-      <!--app-bookmark-image [bookmark]="bookmark" [product]="getProductByName(bookmark.productName)"></app-bookmark-image-->
-      <div class="mt-1 mb-2 flex flex-column row-gap-4">
+    <div
+      *ngIf="product$ | async as product"
+      class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4"
+    >
+      <app-bookmark-image
+        [bookmark]="convertToBookmark(vm.initialBookmark)"
+        [product]="product"
+        styleClass="w-4rem sm:w-5rem md:w-6rem xl:w-7rem max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem image-object border-round-sm"
+      ></app-bookmark-image>
+      <div class="flex-grow-1 mt-1 mb-2 flex flex-column row-gap-4">
         <span class="p-float-label">
           <input
             pInputText
@@ -75,8 +92,8 @@
             readonly
             [disabled]="true"
             id="bm_detail_form_field_product"
-            class="w-full pt-3 pb-2"
-            [value]="vm.initialBookmark?.productName"
+            class="w-full pt-3 pb-2 text-responsive"
+            [value]="product.displayName"
             [attr.aria-label]="'BOOKMARK.PRODUCT' | translate"
             [pTooltip]="'BOOKMARK.TOOLTIPS.PRODUCT' | translate"
             tooltipPosition="top"
@@ -89,9 +106,9 @@
             pInputText
             type="text"
             id="bm_detail_form_field_app_id"
-            class="w-full pt-3 pb-2"
+            class="w-full pt-3 pb-2 text-responsive"
             [disabled]="true"
-            [value]="vm.initialBookmark?.appId"
+            [value]="getProductAppDisplayName(vm.initialBookmark?.appId, product)"
             [attr.aria-label]="'BOOKMARK.APP_ID' | translate"
             [pTooltip]="'BOOKMARK.TOOLTIPS.APP_ID' | translate"
             tooltipPosition="top"
@@ -266,7 +283,7 @@
             pInputText
             type="text"
             id="bm_detail_form_field_modification_date"
-            class="w-full sm:w-13rem pt-3 pb-2"
+            class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
             [disabled]="true"
             [value]="vm.initialBookmark?.modificationDate ? (vm.initialBookmark?.modificationDate | date: dateFormat) : ''"
             [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_DATE' | translate"

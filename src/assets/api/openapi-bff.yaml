@@ -259,8 +259,92 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
+  /images/{refId}:
+    post:
+      x-onecx:
+        permissions:
+          bookmark:
+            - write
+      tags:
+        - imagesInternal
+      description: Upload Images
+      parameters:
+        - name: refId
+          in: path
+          required: true
+          schema:
+            type: string
+      operationId: uploadImage
+      requestBody:
+        required: true
+        content:
+          image/*:
+            schema:
+              type: string
+              format: binary
+      responses:
+        "201":
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageInfo'
+        "400":
+          description: Bad Request
+    get:
+      x-onecx:
+        permissions:
+          bookmark:
+            - read
+      tags:
+        - imagesInternal
+      description: Get Image by id
+      operationId: getImage
+      parameters:
+        - name: refId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            image/*:
+              schema:
+                type: string
+                format: binary
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetailResponse'
+    delete:
+      x-onecx:
+        permissions:
+          bookmark:
+            - delete
+      tags:
+        - imagesInternal
+      description: delete Image
+      operationId: deleteImage
+      parameters:
+        - name: refId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: No content
 components:
   schemas:
+    ImageInfo:
+      type: object
+      properties:
+        id:
+          type: string
     ImportBookmarksRequest:
       type: object
       properties:
@@ -316,6 +400,18 @@ components:
           type: string
         scope:
           $ref: '#/components/schemas/EximBookmarkScope'
+        imageUrl:
+          type: string
+        image:
+          $ref: '#/components/schemas/Image'
+    Image:
+      type: object
+      properties:
+        imageData:
+          type: string
+          format: byte
+        mimeType:
+          type: string
     EximBookmarkScope:
       type: string
       enum:
@@ -419,6 +515,8 @@ components:
         position:
           type: integer
           format: int32
+        imageUrl:
+          type: string
     BookmarkPageResult:
       type: object
       properties:
@@ -479,6 +577,8 @@ components:
         position:
           type: integer
           format: int32
+        imageUrl:
+          type: string
     UpdateBookmark:
       required:
         - displayName
@@ -514,6 +614,8 @@ components:
         url:
           type: string
         userId:
+          type: string
+        imageUrl:
           type: string
     BookmarkScope:
       type: string
