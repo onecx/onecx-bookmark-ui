@@ -6,7 +6,7 @@
   *ngIf="bookmark"
   [alt]="bookmark.displayName"
   [ocxSrc]="(this.errorImage$ | async) ?? bookmark.imageUrl ?? (bookmarkImageBaseURL$ | async) ?? undefined"
-  [class]="'image-object ' + (styleClass ? styleClass : '')"
+  [class]="'image-object  border-round-sm ' + (styleClass ? styleClass : '')"
   [ngClass]="loading ? 'hidden' : ''"
   (error)="onImageError()"
   (load)="onImageLoad()"
