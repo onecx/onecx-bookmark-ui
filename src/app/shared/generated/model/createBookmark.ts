@@ -24,6 +24,7 @@ export interface CreateBookmark {
     appId?: string;
     scope: BookmarkScope;
     position: number;
+    imageUrl?: string;
 }
 
 

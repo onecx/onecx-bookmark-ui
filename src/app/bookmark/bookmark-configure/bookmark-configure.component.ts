@@ -108,6 +108,13 @@ export class BookmarkConfigureComponent implements OnInit {
     const perm = 'BOOKMARK#' + (scope === BookmarkScope.Public ? 'ADMIN_' : '') + 'EDIT'
     return [
       {
+        labelKey: 'ACTIONS.NAVIGATION.BACK',
+        titleKey: 'ACTIONS.NAVIGATION.BACK.TOOLTIP',
+        icon: PrimeIcons.ARROW_LEFT,
+        show: 'always',
+        actionCallback: () => this.onBack()
+      },
+      {
         labelKey: 'ACTIONS.SORT.LABEL',
         titleKey: 'ACTIONS.SORT.TOOLTIP',
         icon: PrimeIcons.SORT,
@@ -119,7 +126,7 @@ export class BookmarkConfigureComponent implements OnInit {
         labelKey: 'ACTIONS.EXPORT.LABEL',
         titleKey: 'ACTIONS.EXPORT.TOOLTIP',
         icon: PrimeIcons.DOWNLOAD,
-        show: 'always',
+        show: 'asOverflow',
         permission: 'BOOKMARK#EXPORT',
         actionCallback: () => this.onExport()
       },
@@ -127,7 +134,7 @@ export class BookmarkConfigureComponent implements OnInit {
         labelKey: 'ACTIONS.IMPORT.LABEL',
         titleKey: 'ACTIONS.IMPORT.TOOLTIP',
         icon: PrimeIcons.UPLOAD,
-        show: 'always',
+        show: 'asOverflow',
         permission: 'BOOKMARK#IMPORT',
         actionCallback: () => this.onImport()
       },
@@ -145,20 +152,23 @@ export class BookmarkConfigureComponent implements OnInit {
   /**
    * UI Events
    */
-  public onSearch() {
+  public onBack(): void {
+    this.router.navigate(['../'], { relativeTo: this.route })
+  }
+  public onSearch(): void {
     this.store.dispatch(BookmarkConfigureActions.search())
   }
-  public onExport() {
+  public onExport(): void {
     this.store.dispatch(BookmarkConfigureActions.exportBookmarks())
   }
-  public onImport() {
+  public onImport(): void {
     this.store.dispatch(BookmarkConfigureActions.importBookmarks())
   }
-  public onSortDialog() {
+  public onSortDialog(): void {
     this.store.dispatch(BookmarkConfigureActions.openSortingDialog())
   }
 
-  public onColumnsChange(activeIds: string[]) {
+  public onColumnsChange(activeIds: string[]): void {
     this.filteredColumns = activeIds.map((id) => bookmarkColumns.find((col) => col.field === id)) as Column[]
   }
   public onQuickFilterChange(scopeQuickFilter: string): void {

@@ -3,11 +3,12 @@
   <ng-container *ngIf="isProductComponentDefined$ | async">
     <ocx-slot
       [name]="slotName"
-      [inputs]="{ dataType: 'products', logEnabled: false, logPrefix: 'bookmark' }"
+      [inputs]="{ dataType: 'products', logEnabled: false, logPrefix: 'bookmarks' }"
       [outputs]="{ products: productsEmitter }"
     >
     </ocx-slot>
   </ng-container>
+
   <!-- HEADER -->
   <div class="relative overflow-hidden">
     <div class="sm:ml-2 md:ml-3 lg:ml-0 flex flex-column gap-2 sm:gap-3 text-primary">
@@ -17,6 +18,21 @@
       <h2 id="wc_overview_info_workspace" class="m-0 line-height-1 font-normal text-sm sm:text-base">
         Workspace: {{ workspace?.displayName }}
       </h2>
+
+      <div *ngIf="vm.loading || vm.exceptionKey" class="mt-4">
+        <p-message
+          *ngIf="vm.loading"
+          id="bm_overview_message_loading"
+          severity="info"
+          [text]="'ACTIONS.LOADING' | translate"
+        ></p-message>
+        <p-message
+          *ngIf="vm.exceptionKey"
+          id="bm_overview_message_error"
+          severity="error"
+          [text]="vm.exceptionKey! | translate"
+        ></p-message>
+      </div>
     </div>
     <!-- dock is absolute positioned -->
     <p-dock *ngIf="hasEditPermissions" [model]="dockItems$ | async" position="right" styleClass="">
@@ -30,28 +46,11 @@
   </div>
 
   <!-- BOOKMARKS
-       => absolute positioned because screen centered and flex does not work without ceratin height of parent -->
-  <div class="absolute mt-10 sm:mt-6 bookmark-section-centered">
-    <div *ngIf="vm.loading || vm.exceptionKey">
-      <p-message
-        *ngIf="vm.loading"
-        id="bm_overview_message_loading"
-        severity="info"
-        styleClass="m-3"
-        [text]="'ACTIONS.LOADING' | translate"
-      ></p-message>
-      <p-message
-        *ngIf="vm.exceptionKey"
-        id="bm_overview_message_error"
-        severity="error"
-        styleClass="m-3"
-        [text]="vm.exceptionKey! | translate"
-      ></p-message>
-    </div>
-
+       => absolute positioned because screen centered and flex does not work without certain height of parent -->
+  <div class="sm:absolute mt-4 sm:mt-6 sm:bookmark-section-centered">
     <div
-      *ngIf="(products$ | async) ?? [] as products"
-      class="w-11 mx-auto flex flex-row flex-nowrap column-gap-0 row-gap-4 sm:row-gap-3"
+      *ngIf="!vm.loading && !vm.exceptionKey && ((products$ | async) ?? []) as products"
+      class="sm:w-11 mx-auto flex flex-row flex-nowrap column-gap-0 row-gap-4 sm:row-gap-3"
     >
       <!-- PRIVATE -->
       <app-bookmark-list

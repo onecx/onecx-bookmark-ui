@@ -30,6 +30,7 @@ export interface Bookmark {
     appId?: string;
     scope: BookmarkScope;
     position: number;
+    imageUrl?: string;
 }
 
 

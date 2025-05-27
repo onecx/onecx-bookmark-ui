@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges } from '@angular/core'
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
 import { Location } from '@angular/common'
-import { map, Observable } from 'rxjs'
+import { map, Observable, of } from 'rxjs'
 
 import { AppStateService } from '@onecx/angular-integration-interface'
 
@@ -20,12 +20,14 @@ export class BookmarkImageComponent implements OnChanges {
   @Input() public styleClass: string | undefined
 
   public defaultImageUrl$: Observable<string>
-  public bookmarkImageBaseURL$: Observable<string | undefined>
+  public bookmarkImageBaseURL$: Observable<string> | undefined
   public errorImage$: Observable<string> | undefined
   public loading = true
   public productLogoUrl: string | undefined
+  private imageLoadCounter = 0
 
-  constructor(appStateService: AppStateService) {
+  constructor(private readonly appStateService: AppStateService) {
+    this.errorImage$ = undefined
     this.defaultImageUrl$ = appStateService.currentMfe$.pipe(
       map((mfe) => {
         return this.prepareUrlPath(mfe.remoteBaseUrl, environment.DEFAULT_LOGO_PATH)
@@ -34,14 +36,24 @@ export class BookmarkImageComponent implements OnChanges {
     // bookmark image URL via bookmark BFF
     this.bookmarkImageBaseURL$ = appStateService.currentMfe$.pipe(
       map((mfe) => {
-        return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/product/')
+        return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/') + this.bookmark?.id
       })
     )
   }
-  public ngOnChanges(): void {
-    if (this.product) {
-      this.productLogoUrl = this.product?.imageUrl
-      console.log('bookmark-image', this.product, this.productLogoUrl)
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (this.bookmark?.id) {
+      if (changes['product'] && !changes['product'].firstChange && this.product) {
+        //console.log('bookmark-image => ngOnChanges', this.bookmark?.productName, this.imageLoadCounter)
+        this.productLogoUrl = this.product?.imageUrl
+        // if default was loaded and product image url exists, then try to get product logos
+        if (this.imageLoadCounter === 2 && this.productLogoUrl) {
+          //console.log('bookmark-image => product', this.productLogoUrl)
+          this.errorImage$ = undefined
+          this.loading = true
+          this.imageLoadCounter = 0
+          this.onImageError()
+        }
+      }
     }
   }
 
@@ -55,7 +67,26 @@ export class BookmarkImageComponent implements OnChanges {
     this.loading = false
   }
 
+  /**
+   * Loading order:
+   *   0 => load bookmark a) URL b) image
+   *   1 => loaded the product URL => prepared by RC product data with existing extern or image URL of the product
+   *   2 => loaded default bookmark image
+   */
   public onImageError() {
-    this.errorImage$ = this.defaultImageUrl$
+    if (this.loading) {
+      //console.log('onImageError => counter', this.bookmark?.id, this.bookmark?.productName, this.imageLoadCounter)
+      // load bookmark default logo
+      if (this.imageLoadCounter === 1 || (this.imageLoadCounter === 0 && !this.productLogoUrl)) {
+        this.errorImage$ = this.defaultImageUrl$
+        this.imageLoadCounter = 2
+      }
+      // load product logo
+      if (this.imageLoadCounter === 0 && this.productLogoUrl) {
+        //console.log('             => this.productLogoUrl', this.productLogoUrl)
+        this.errorImage$ = of(this.productLogoUrl)
+        this.imageLoadCounter = 1
+      }
+    }
   }
 }

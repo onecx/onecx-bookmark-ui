@@ -9,6 +9,7 @@
  * Do not edit the class manually.
  */
 import { EximBookmarkScope } from './eximBookmarkScope';
+import { Image } from './image';
 
 
 export interface EximBookmark { 
@@ -21,6 +22,8 @@ export interface EximBookmark {
     productName?: string;
     appId?: string;
     scope?: EximBookmarkScope;
+    imageUrl?: string;
+    image?: Image;
 }
 
 

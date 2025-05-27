@@ -14,8 +14,6 @@
   margin-bottom: 1rem !important;
 }
 
-// correct dialog created by portal dialog service => no footer section is used
-.p-dialog .p-dialog-content {
-  border-bottom-right-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
+.p-dialog .p-dialog-footer button {
+  margin: 0;
 }
