@@ -5,3 +5,7 @@
 @include readable-disabled-form-controls;
 @include tabview-reduce-padding;
 @include tabview-fix-color-selected-tab;
+
+.image-object {
+  object-fit: scale-down;
+}

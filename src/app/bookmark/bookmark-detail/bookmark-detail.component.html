@@ -1,3 +1,13 @@
+<!-- PRODUCTS -->
+<ng-container *ngIf="isProductComponentDefined$ | async">
+  <ocx-slot
+    [name]="slotName"
+    [inputs]="{ dataType: 'product', productName: this.vm.initialBookmark?.productName, logEnabled: false, logPrefix: 'bookmark' }"
+    [outputs]="{ product: productEmitter }"
+  >
+  </ocx-slot>
+</ng-container>
+
 <p-tabView [formGroup]="formGroup" errorTailor>
   <p-tabPanel
     [header]="'BOOKMARK_DETAIL.TAB.PROPS' | translate"
@@ -42,6 +52,71 @@
           <label class="ocx-required-label" for="bm_detail_form_field_url">{{ 'BOOKMARK.URL' | translate }}</label>
         </span>
       </div>
+      <!-- IMAGE -->
+      <div class="flex flex-row flex-wrap sm:flex-nowrap align-items-center row-gap-2 column-gap-4">
+        <input
+          hidden
+          type="file"
+          accept="image/*"
+          #selectedFileInputLogo
+          (change)="onFileUpload($event, vm.initialBookmark)"
+        />
+        <img
+          *ngIf="vm.initialBookmark && fetchingLogoUrl && !onBookmarkImageLoadError"
+          [alt]="vm.initialBookmark.displayName"
+          [ocxSrc]="fetchingLogoUrl"
+          class="max-w-3rem max-h-3rem border-round-sm image-object"
+          (error)="onBookmarkImageLoadError = true"
+        />
+        <button
+          *ocxIfPermission="'BOOKMARK#EDIT'"
+          pButton
+          id="bm_detail_form_field_remove_logo"
+          icon="pi pi-times"
+          [disabled]="!vm.initialBookmark?.id || onBookmarkImageLoadError || formGroup.get('imageUrl')?.value"
+          class="ml-1 action-button p-button-icon-only cursor-pointer"
+          (click)="onRemoveLogo(vm.initialBookmark)"
+          [attr.aria-label]="'IMAGE.TOOLTIPS.REMOVE' | translate"
+          [pTooltip]="'IMAGE.TOOLTIPS.REMOVE' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></button>
+        <button
+          *ocxIfPermission="'BOOKMARK#EDIT'"
+          pButton
+          id="bm_detail_form_field_upload_logo"
+          icon="pi pi-upload"
+          class="action-button p-button-icon-only cursor-pointer"
+          (click)="selectedFileInputLogo.click()"
+          [attr.aria-label]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
+          [pTooltip]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></button>
+        <div class="flex flex-column row-gap-1 w-full">
+          <span class="p-float-label">
+            <input
+              pInputText
+              type="text"
+              class="w-full"
+              id="bm_detail_form_field_image_url"
+              formControlName="imageUrl"
+              (input)="onInputChange($event, vm.initialBookmark)"
+              (change)="onInputChange($event, vm.initialBookmark)"
+              [attr.aria-label]="'IMAGE.LOGO_URL' | translate"
+              [pTooltip]="'IMAGE.TOOLTIPS.URL' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
+          </span>
+          <label *ngIf="vm.changeMode !== 'VIEW'" class="ocx-control-hint block" for="bm_detail_form_field_image_url">
+            {{ ('VALIDATION.HINTS.FORMAT_URL' | translate) + externUrlPattern }}
+          </label>
+        </div>
+      </div>
+
+      <!-- PUBLIC ? -->
       <p-checkbox
         *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
         id="bm_detail_form_field_is_public"
@@ -65,9 +140,18 @@
     tooltipPosition="top"
     tooltipEvent="hover"
   >
-    <div class="flex flex-row flex-wrap column-gap-4 row-gap-2">
-      <!--app-bookmark-image [bookmark]="bookmark" [product]="getProductByName(bookmark.productName)"></app-bookmark-image-->
-      <div class="mt-1 mb-2 flex flex-column row-gap-4">
+    <div
+      *ngIf="((product$ | async) ?? defaultProduct) as product"
+      class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4"
+    >
+      <img
+        *ngIf="product.imageUrl && !onProductImageLoadError"
+        [alt]="product.displayName"
+        [ocxSrc]="product.imageUrl"
+        class="max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem image-object border-round-sm"
+        (error)="onProductImageLoadError = true"
+      />
+      <div class="flex-grow-1 mt-1 flex flex-column row-gap-4">
         <span class="p-float-label">
           <input
             pInputText
@@ -75,8 +159,8 @@
             readonly
             [disabled]="true"
             id="bm_detail_form_field_product"
-            class="w-full pt-3 pb-2"
-            [value]="vm.initialBookmark?.productName"
+            class="w-full pt-3 pb-2 text-responsive"
+            [value]="product.displayName"
             [attr.aria-label]="'BOOKMARK.PRODUCT' | translate"
             [pTooltip]="'BOOKMARK.TOOLTIPS.PRODUCT' | translate"
             tooltipPosition="top"
@@ -89,9 +173,9 @@
             pInputText
             type="text"
             id="bm_detail_form_field_app_id"
-            class="w-full pt-3 pb-2"
+            class="w-full pt-3 pb-2 text-responsive"
             [disabled]="true"
-            [value]="vm.initialBookmark?.appId"
+            [value]="getProductAppDisplayName(vm.initialBookmark?.appId, product)"
             [attr.aria-label]="'BOOKMARK.APP_ID' | translate"
             [pTooltip]="'BOOKMARK.TOOLTIPS.APP_ID' | translate"
             tooltipPosition="top"
@@ -266,7 +350,7 @@
             pInputText
             type="text"
             id="bm_detail_form_field_modification_date"
-            class="w-full sm:w-13rem pt-3 pb-2"
+            class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
             [disabled]="true"
             [value]="vm.initialBookmark?.modificationDate ? (vm.initialBookmark?.modificationDate | date: dateFormat) : ''"
             [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_DATE' | translate"

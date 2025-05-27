@@ -23,6 +23,7 @@ export interface UpdateBookmark {
     fragment?: string;
     url?: string;
     userId?: string;
+    imageUrl?: string;
 }
 
 

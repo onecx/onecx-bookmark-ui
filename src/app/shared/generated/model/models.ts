@@ -9,6 +9,8 @@ export * from './eximBookmark';
 export * from './eximBookmarkScope';
 export * from './eximMode';
 export * from './exportBookmarksRequest';
+export * from './image';
+export * from './imageInfo';
 export * from './importBookmarksRequest';
 export * from './problemDetailInvalidParam';
 export * from './problemDetailParam';
