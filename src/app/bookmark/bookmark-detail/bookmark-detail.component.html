@@ -73,7 +73,7 @@
           pButton
           id="bm_detail_form_field_remove_logo"
           icon="pi pi-times"
-          [disabled]="!vm.initialBookmark?.id || onBookmarkImageLoadError || formGroup.get('imageUrl')?.value"
+          [disabled]="!vm.initialBookmark?.id || onBookmarkImageLoadError"
           class="ml-1 action-button p-button-icon-only cursor-pointer"
           (click)="onRemoveLogo(vm.initialBookmark)"
           [attr.aria-label]="'IMAGE.TOOLTIPS.REMOVE' | translate"
@@ -93,12 +93,13 @@
           tooltipPosition="top"
           tooltipEvent="hover"
         ></button>
-        <div class="flex flex-column row-gap-1 w-full">
+        <div class="flex flex-column w-full">
           <span class="p-float-label">
-            <input
-              pInputText
-              type="text"
+            <textarea
               class="w-full"
+              pInputTextarea
+              autoresize="true"
+              rows="2"
               id="bm_detail_form_field_image_url"
               formControlName="imageUrl"
               (input)="onInputChange($event, vm.initialBookmark)"
@@ -107,7 +108,7 @@
               [pTooltip]="'IMAGE.TOOLTIPS.URL' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
-            />
+            ></textarea>
             <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
           </span>
           <label *ngIf="vm.changeMode !== 'VIEW'" class="ocx-control-hint block" for="bm_detail_form_field_image_url">
