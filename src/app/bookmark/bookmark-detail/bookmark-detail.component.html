@@ -62,18 +62,19 @@
           (change)="onFileUpload($event, vm.initialBookmark)"
         />
         <img
-          *ngIf="vm.initialBookmark && fetchingLogoUrl"
+          *ngIf="vm.initialBookmark && fetchingLogoUrl && !onBookmarkImageLoadError"
           [alt]="vm.initialBookmark.displayName"
           [ocxSrc]="fetchingLogoUrl"
           class="w-3rem max-w-3rem max-h-3rem h-3rem border-round-sm"
+          (error)="onBookmarkImageLoadError = true"
         />
         <button
           *ocxIfPermission="'BOOKMARK#EDIT'"
           pButton
           id="bm_detail_form_field_remove_logo"
           icon="pi pi-times"
-          [disabled]="!vm.initialBookmark?.id"
-          class="action-button p-button-icon-only cursor-pointer"
+          [disabled]="!vm.initialBookmark?.id || onBookmarkImageLoadError || formGroup.get('imageUrl')?.value"
+          class="ml-1 action-button p-button-icon-only cursor-pointer"
           (click)="onRemoveLogo(vm.initialBookmark)"
           [attr.aria-label]="'IMAGE.TOOLTIPS.REMOVE' | translate"
           [pTooltip]="'IMAGE.TOOLTIPS.REMOVE' | translate"
@@ -109,9 +110,9 @@
             />
             <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
           </span>
-          <!--label *ngIf="editMode" class="ocx-control-hint block" for="bm_detail_form_field_image_url">
+          <label *ngIf="vm.changeMode !== 'VIEW'" class="ocx-control-hint block" for="bm_detail_form_field_image_url">
             {{ ('VALIDATION.HINTS.FORMAT_URL' | translate) + externUrlPattern }}
-          </label -->
+          </label>
         </div>
       </div>
 
@@ -144,10 +145,11 @@
       class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4"
     >
       <img
-        *ngIf="product.imageUrl"
+        *ngIf="product.imageUrl && !onProductImageLoadError"
         [alt]="product.displayName"
         [ocxSrc]="product.imageUrl"
         class="w-4rem sm:w-5rem md:w-6rem xl:w-7rem max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem image-object border-round-sm"
+        (error)="onProductImageLoadError = true"
       />
       <div class="flex-grow-1 mt-1 flex flex-column row-gap-4">
         <span class="p-float-label">

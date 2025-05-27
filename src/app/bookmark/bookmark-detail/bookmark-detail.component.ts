@@ -3,10 +3,9 @@ import { Location } from '@angular/common'
 import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
 import { BehaviorSubject, filter, map, Observable } from 'rxjs'
 
-import { UserService } from '@onecx/angular-integration-interface'
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 import { SlotService } from '@onecx/angular-remote-components'
-import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
+import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScope, ImagesInternal, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
@@ -89,6 +88,9 @@ export class BookmarkDetailComponent
   public dialogResult: CombinedBookmark | undefined = undefined
   public bookmarkImageBaseURL$: Observable<string> | undefined
   public fetchingLogoUrl: string | undefined = undefined
+  public externUrlPattern = 'http(s)://path-to-image'
+  public onProductImageLoadError = false
+  public onBookmarkImageLoadError = false
 
   // slot configuration: get product data
   public slotName = 'onecx-product-data'
@@ -206,6 +208,7 @@ export class BookmarkDetailComponent
         position: bookmark.position ?? 0,
         scope: this.formGroup.controls['is_public'].value ? BookmarkScope.Public : BookmarkScope.Private,
         url: this.formGroup.controls['url'].value,
+        imageUrl: result.imageUrl === '' ? undefined : result.imageUrl,
         workspaceName: this.workspaceName
       }
     } catch (err) {
@@ -232,6 +235,8 @@ export class BookmarkDetailComponent
       this.imageApi.deleteImage(bookmark.id).subscribe({
         next: () => {
           this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
+          this.onBookmarkImageLoadError = true // disable remove button
+          this.msgService.info({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
         },
         error: (err) => {
           console.error('deleteImage', err)
@@ -258,7 +263,8 @@ export class BookmarkDetailComponent
 
   private saveImage(id: string, files: FileList) {
     const blob = new Blob([files[0]], { type: files[0].type })
-    this.prepareImageUrl(undefined) // reset - important to trigger the change in UI
+    this.prepareImageUrl() // reset - important to trigger the change in UI
+    this.onBookmarkImageLoadError = false
     this.imageApi.uploadImage(id, blob).subscribe(() => {
       this.prepareImageUrl(id)
       this.msgService.info({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
@@ -266,13 +272,13 @@ export class BookmarkDetailComponent
   }
   private prepareImageUrl(id?: string): void {
     this.fetchingLogoUrl = id ? this.imageApi.configuration.basePath + '/images/' + id : undefined
-    //this.formGroup.controls['imageUrl'].setValue('')
   }
 
   // changes on external log URL field: user enters text (change) or paste something
   public onInputChange(event: Event, bookmark?: CombinedBookmark): void {
-    if (bookmark?.id) {
+    if (bookmark?.id && (event.target as HTMLInputElement).value) {
       this.fetchingLogoUrl = (event.target as HTMLInputElement).value
+      if (this.fetchingLogoUrl === '') this.fetchingLogoUrl = undefined
     }
   }
   private prepareUrlPath(url?: string, path?: string): string {
