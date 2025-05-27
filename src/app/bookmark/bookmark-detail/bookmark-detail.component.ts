@@ -284,9 +284,9 @@ export class BookmarkDetailComponent
       this.onBookmarkImageLoadError = false
       this.fetchingLogoUrl = (event.target as HTMLInputElement).value
       if (this.fetchingLogoUrl === '') this.fetchingLogoUrl = undefined
-      console.log('onInputChange', this.fetchingLogoUrl)
     }
   }
+
   private prepareUrlPath(url?: string, path?: string): string {
     if (url && path) return Location.joinWithSlash(url, path)
     else if (url) return url
