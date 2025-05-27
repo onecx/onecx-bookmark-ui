@@ -13,7 +13,11 @@ export const bookmarkOverviewReducer = createReducer(
   initialState,
   on(
     BookmarkOverviewActions.bookmarkSearchResultsReceived,
-    (state: BookmarkOverviewState, { results }): BookmarkOverviewState => ({ ...state, results, loading: false })
+    (state: BookmarkOverviewState, { results }): BookmarkOverviewState => ({
+      ...state,
+      results,
+      loading: false
+    })
   ),
   on(
     BookmarkOverviewActions.bookmarkSearchFailed,

@@ -65,7 +65,7 @@
           *ngIf="vm.initialBookmark && fetchingLogoUrl && !onBookmarkImageLoadError"
           [alt]="vm.initialBookmark.displayName"
           [ocxSrc]="fetchingLogoUrl"
-          class="w-3rem max-w-3rem max-h-3rem h-3rem border-round-sm"
+          class="max-w-3rem max-h-3rem border-round-sm image-object"
           (error)="onBookmarkImageLoadError = true"
         />
         <button
@@ -148,7 +148,7 @@
         *ngIf="product.imageUrl && !onProductImageLoadError"
         [alt]="product.displayName"
         [ocxSrc]="product.imageUrl"
-        class="w-4rem sm:w-5rem md:w-6rem xl:w-7rem max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem image-object border-round-sm"
+        class="max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem image-object border-round-sm"
         (error)="onProductImageLoadError = true"
       />
       <div class="flex-grow-1 mt-1 flex flex-column row-gap-4">
