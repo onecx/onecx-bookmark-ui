@@ -310,8 +310,8 @@
       },
       "LOADING_ERROR": "Ihre Lesezeichen konnten nicht geladen werden.",
       "LOADING_ERROR_DETAIL": "Bitte versuchen Sie es in Kürze erneut.",
-      "NO_PRIVATE_BOOKMARKS.STATE": "Keine Lesezeichen angelegt.",
-      "NO_PRIVATE_BOOKMARKS.TODO": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die aktuelle Seite zu erstellen."
+      "NO_PRIVATE_BOOKMARKS.STATE": "Keine Lesezeichen angelegt",
+      "NO_PRIVATE_BOOKMARKS.TODO": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die jeweils aktuelle Seite zu erstellen."
     }
   },
   "VALIDATION": {
