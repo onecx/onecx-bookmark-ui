@@ -61,15 +61,17 @@
         [isPrivate]="true"
       />
 
-      <p-divider layout="vertical" type="solid" styleClass="m-0 p-2"></p-divider>
+      <ng-container *ngIf="onFilterBookmarksByScope(vm.results, BookmarkScope.Public).length > 0">
+        <p-divider layout="vertical" type="solid" styleClass="m-0 p-2"></p-divider>
 
-      <!-- PUBLIC -->
-      <app-bookmark-list
-        headerKey="REMOTES.BOOKMARK_LIST.TABS.PUBLIC"
-        [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Public)"
-        [products]="products"
-        [loading]="vm.loading"
-      />
+        <!-- PUBLIC -->
+        <app-bookmark-list
+          headerKey="REMOTES.BOOKMARK_LIST.TABS.PUBLIC"
+          [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Public)"
+          [products]="products"
+          [loading]="vm.loading"
+        />
+      </ng-container>
     </div>
   </div>
 </ocx-portal-page>
