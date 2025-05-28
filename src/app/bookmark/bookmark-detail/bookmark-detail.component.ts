@@ -232,16 +232,20 @@ export class BookmarkDetailComponent
    */
   public onRemoveLogo(bookmark?: CombinedBookmark) {
     if (bookmark?.id)
-      this.imageApi.deleteImage(bookmark.id).subscribe({
-        next: () => {
-          this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
-          this.onBookmarkImageLoadError = true // disable remove button
-          this.msgService.info({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
-        },
-        error: (err) => {
-          console.error('deleteImage', err)
-        }
-      })
+      if (this.formGroup.get('imageUrl')?.value) {
+        this.formGroup.get('imageUrl')?.setValue(null)
+        this.prepareImageUrl(this.vm.initialBookmark?.id)
+      } else
+        this.imageApi.deleteImage(bookmark.id).subscribe({
+          next: () => {
+            this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
+            this.onBookmarkImageLoadError = true // disable remove button
+            this.msgService.info({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
+          },
+          error: (err) => {
+            console.error('deleteImage', err)
+          }
+        })
   }
 
   public onFileUpload(ev: Event, bookmark?: CombinedBookmark): void {
@@ -277,10 +281,12 @@ export class BookmarkDetailComponent
   // changes on external log URL field: user enters text (change) or paste something
   public onInputChange(event: Event, bookmark?: CombinedBookmark): void {
     if (bookmark?.id && (event.target as HTMLInputElement).value) {
+      this.onBookmarkImageLoadError = false
       this.fetchingLogoUrl = (event.target as HTMLInputElement).value
       if (this.fetchingLogoUrl === '') this.fetchingLogoUrl = undefined
     }
   }
+
   private prepareUrlPath(url?: string, path?: string): string {
     if (url && path) return Location.joinWithSlash(url, path)
     else if (url) return url
