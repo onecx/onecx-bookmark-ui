@@ -159,8 +159,8 @@
     "SCOPE": "Bereich",
     "SCOPES": {
       "ALL": "Alle",
-      "PRIVATE": "Privat",
-      "PUBLIC": "Öffentlich",
+      "PRIVATE": "Meine",
+      "PUBLIC": "Workspace",
       "TOOLTIPS": {
         "PRIVATE": "Meine Lesezeichen",
         "PUBLIC": "Lesezeichen für alle Workspace Benutzer"
@@ -223,13 +223,13 @@
     "HEADER": "Lesezeichen exportieren",
     "INFO": "Wählen Sie die Bereiche deren Lesezeichen exportiert werden sollen.",
     "SCOPE_PRIVATE": "Die eigenen Lesezeichen exportieren",
-    "SCOPE_PUBLIC": "Die öffentlichen Lesezeichen exportieren",
+    "SCOPE_PUBLIC": "Die Workspace Lesezeichen exportieren",
     "ERROR": "Export fehlgeschlagen",
     "SUCCESS": "Lesezeichen erfolgreich exportiert"
   },
   "BOOKMARK_IMPORT": {
     "HEADER": "Lesezeichen importieren",
-    "INFO": "Nach dem Import finden Sie alle importierten Lesezeichen in ihrem privaten Bereich.",
+    "INFO": "Nach dem Import finden Sie alle importierten Lesezeichen in ihrem Bereich.",
     "ERROR": "Import fehlgeschlagen",
     "SUCCESS": "Lesezeichen erfolgreich importiert",
     "MODE": {
@@ -305,8 +305,8 @@
       "TITLE": "Lesezeichen",
       "TABS": {
         "PRIVATE": "Meine Lesezeichen",
-        "PUBLIC": "Weitere Links",
-        "PUBLIC_TOOLTIP": "Links die durch Ihre Organisation bereitgestellt wurden."
+        "PUBLIC": "Workspace Links",
+        "PUBLIC_TOOLTIP": "Links die durch den Workspace bereitgestellt wurden."
       },
       "LOADING_ERROR": "Ihre Lesezeichen konnten nicht geladen werden.",
       "LOADING_ERROR_DETAIL": "Bitte versuchen Sie es in Kürze erneut.",
