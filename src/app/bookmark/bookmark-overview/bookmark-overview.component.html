@@ -47,10 +47,10 @@
 
   <!-- BOOKMARKS
        => absolute positioned because screen centered and flex does not work without certain height of parent -->
-  <div class="sm:absolute mt-4 sm:mt-6 sm:bookmark-section-centered">
+  <div class="md:absolute mt-4 md:mt-6 md:bookmark-section-centered">
     <div
       *ngIf="!vm.loading && !vm.exceptionKey && ((products$ | async) ?? []) as products"
-      class="sm:w-11 mx-auto flex flex-row flex-nowrap column-gap-0 row-gap-4 sm:row-gap-3"
+      class="md:w-11 mx-auto flex flex-row flex-nowrap column-gap-0 row-gap-4 sm:row-gap-3"
     >
       <!-- PRIVATE -->
       <app-bookmark-list
@@ -62,7 +62,7 @@
       />
 
       <ng-container *ngIf="onFilterBookmarksByScope(vm.results, BookmarkScope.Public).length > 0">
-        <p-divider layout="vertical" type="solid" styleClass="m-0 p-2"></p-divider>
+        <p-divider layout="vertical" type="solid" styleClass="hidden m-0 p-2"></p-divider>
 
         <!-- PUBLIC -->
         <app-bookmark-list

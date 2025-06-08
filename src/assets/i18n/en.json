@@ -159,8 +159,8 @@
     "SCOPE": "Scope",
     "SCOPES": {
       "ALL": "All",
-      "PRIVATE": "Private",
-      "PUBLIC": "Public",
+      "PRIVATE": "My",
+      "PUBLIC": "Workspace",
       "TOOLTIPS": {
         "PRIVATE": "My Bookmarks",
         "PUBLIC": "Bookmarks for all Workspace User"
@@ -229,7 +229,7 @@
   },
   "BOOKMARK_IMPORT": {
     "HEADER": "Import Bookmarks",
-    "INFO": "After importing, you will find all imported Bookmarks in your private area.",
+    "INFO": "After importing, you will find all imported Bookmarks in your area.",
     "ERROR": "Import failed",
     "SUCCESS": "Bookmarks successfully imported",
     "MODE": {
@@ -305,8 +305,8 @@
       "TITLE": "Bookmarks",
       "TABS": {
         "PRIVATE": "My Bookmarks",
-        "PUBLIC": "Additional Links",
-        "PUBLIC_TOOLTIP": "Links that have been provided by your organization."
+        "PUBLIC": "Workspace Links",
+        "PUBLIC_TOOLTIP": "Links that have been provided by the Workspace."
       },
       "LOADING_ERROR": "Your Bookmarks couldn't be loaded.",
       "LOADING_ERROR_DETAIL": "Please try again later",

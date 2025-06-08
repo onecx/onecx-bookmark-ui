@@ -4,8 +4,8 @@
 @include displaying-text-responsive;
 
 :host ::ng-deep {
-  @media screen and (min-width: 575px) {
-    .sm\:bookmark-section-centered {
+  @media screen and (min-width: 768px) {
+    .md\:bookmark-section-centered {
       margin: 0;
       top: 50%;
       left: 50%;
