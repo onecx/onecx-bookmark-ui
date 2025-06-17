@@ -1,13 +1,16 @@
+import { APP_INITIALIZER, importProvidersFrom } from '@angular/core'
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideRouter } from '@angular/router'
-import { APP_INITIALIZER, importProvidersFrom } from '@angular/core'
+
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { bootstrapRemoteComponent } from '@onecx/angular-webcomponents'
+import { UserService } from '@onecx/angular-integration-interface'
+import { providePortalDialogService } from '@onecx/portal-integration-angular'
+
 import { environment } from 'src/environments/environment'
 import { OneCXBookmarkListComponent } from './bookmark-list.component'
-import { providePortalDialogService, UserService } from '@onecx/portal-integration-angular'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 function userProfileInitializer(userService: UserService) {
   return async () => {

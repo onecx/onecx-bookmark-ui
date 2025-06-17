@@ -7,13 +7,9 @@ import { PrimeIcons, SelectItem } from 'primeng/api'
 import { Table } from 'primeng/table'
 
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
-import {
-  Action,
-  Column,
-  DataAction,
-  DataSortDirection,
-  DataViewControlTranslations
-} from '@onecx/portal-integration-angular'
+import { Action } from '@onecx/angular-accelerator'
+import { DataAction } from '@onecx/angular-accelerator'
+import { Column, DataSortDirection, DataViewControlTranslations } from '@onecx/portal-integration-angular'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { limitText } from 'src/app/shared/utils/utils'

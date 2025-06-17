@@ -4,8 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { Action } from '@ngrx/store'
 import { catchError, map, mergeMap, of, tap, withLatestFrom } from 'rxjs'
 
-import { AppStateService, UserService } from '@onecx/angular-integration-interface'
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
 import { Bookmark, BookmarkScope, BookmarksInternal, BookmarkSearchCriteria } from 'src/app/shared/generated'
 
