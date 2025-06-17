@@ -6,7 +6,8 @@ import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { BreadcrumbService } from '@onecx/angular-accelerator'
+import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { BookmarkCreateUpdateComponent } from './bookmark-create-update.component'
 

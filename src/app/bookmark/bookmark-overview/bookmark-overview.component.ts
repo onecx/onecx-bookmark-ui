@@ -5,8 +5,8 @@ import { BehaviorSubject, Observable, map, of } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { MenuItem, PrimeIcons } from 'primeng/api'
 
-import { Workspace } from '@onecx/integration-interface'
-import { Action, UserProfile } from '@onecx/portal-integration-angular'
+import { UserProfile, Workspace } from '@onecx/integration-interface'
+import { Action } from '@onecx/angular-accelerator'
 import { AppStateService, UserService, WorkspaceService } from '@onecx/angular-integration-interface'
 import { SlotService } from '@onecx/angular-remote-components'
 

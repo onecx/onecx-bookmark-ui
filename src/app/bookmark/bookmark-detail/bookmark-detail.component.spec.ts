@@ -8,7 +8,8 @@ import { LetDirective } from '@ngrx/component'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TabViewModule } from 'primeng/tabview'
 
-import { BreadcrumbService, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { BreadcrumbService } from '@onecx/angular-accelerator'
+import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { BookmarkDetailComponent } from './bookmark-detail.component'
 

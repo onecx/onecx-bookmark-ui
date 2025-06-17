@@ -5,8 +5,8 @@ import { Action, Store } from '@ngrx/store'
 import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
 import FileSaver from 'file-saver'
 
-import { AppStateService, UserService } from '@onecx/angular-integration-interface'
-import { DialogState, PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { DialogState, PortalDialogService } from '@onecx/portal-integration-angular'
 
 import * as actton from 'src/app/shared/utils/actionButtons'
 import {

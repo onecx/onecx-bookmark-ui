@@ -1,4 +1,4 @@
-import { DataTableColumn } from '@onecx/portal-integration-angular'
+import { DataTableColumn } from '@onecx/angular-accelerator'
 
 import { Bookmark } from 'src/app/shared/generated'
 

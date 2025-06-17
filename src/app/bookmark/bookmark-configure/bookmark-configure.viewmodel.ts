@@ -1,4 +1,4 @@
-import { DataTableColumn, RowListGridData } from '@onecx/portal-integration-angular'
+import { DataTableColumn, RowListGridData } from '@onecx/angular-accelerator'
 
 export interface BookmarkConfigureViewModel {
   columns: DataTableColumn[]
