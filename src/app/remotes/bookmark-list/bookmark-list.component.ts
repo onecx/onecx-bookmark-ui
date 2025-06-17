@@ -8,8 +8,6 @@ import { RippleModule } from 'primeng/ripple'
 import { TabViewModule } from 'primeng/tabview'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
-import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import {
   AngularRemoteComponentsModule,
   BASE_URL,
@@ -20,7 +18,10 @@ import {
   SLOT_SERVICE,
   SlotService
 } from '@onecx/angular-remote-components'
-import { PortalCoreModule, AppConfigService } from '@onecx/portal-integration-angular'
+
+import { AppConfigService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
+import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'

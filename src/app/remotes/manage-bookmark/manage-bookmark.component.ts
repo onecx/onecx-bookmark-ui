@@ -22,7 +22,12 @@ import {
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
-import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import {
+  AppConfigService,
+  AppStateService,
+  PortalMessageService,
+  UserService
+} from '@onecx/angular-integration-interface'
 import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 import {
   AngularRemoteComponentsModule,
@@ -39,8 +44,7 @@ import {
   PortalCoreModule,
   PortalDialogConfig,
   PortalDialogService,
-  providePortalDialogService,
-  AppConfigService
+  providePortalDialogService
 } from '@onecx/portal-integration-angular'
 
 import { Bookmark, CreateBookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
