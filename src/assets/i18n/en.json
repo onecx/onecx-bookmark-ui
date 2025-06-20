@@ -166,6 +166,7 @@
         "PUBLIC": "Bookmarks for all Workspace User"
       }
     },
+    "SCOPE_IS_PUBLIC": "Available for Workspace",
     "URL": "URL",
     "URL_SEARCH": "URL",
     "TOOLTIPS": {

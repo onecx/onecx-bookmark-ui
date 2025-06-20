@@ -12,8 +12,8 @@ import * as actton from 'src/app/shared/utils/actionButtons'
 import {
   Bookmark,
   BookmarkScope,
-  BookmarksInternal,
-  BookmarkExportImport,
+  BookmarksInternalAPIService,
+  BookmarkExportImportAPIService,
   BookmarkSearchCriteria,
   CreateBookmark,
   UpdateBookmark,
@@ -27,9 +27,9 @@ import { BookmarkConfigureActions, ActionErrorType } from './bookmark-configure.
 import { bookmarkSearchSelectors, selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
 import { BookmarkDetailComponent, CombinedBookmark } from '../bookmark-detail/bookmark-detail.component'
 import { BookmarkDeleteComponent } from '../bookmark-delete/bookmark-delete.component'
-import { BookmarkSortComponent } from '../bookmark-sort/bookmark-sort.component'
 import { BookmarkExportComponent } from '../bookmark-export/bookmark-export.component'
 import { BookmarkImportComponent } from '../bookmark-import/bookmark-import.component'
+import { BookmarkSortComponent } from '../bookmark-sort/bookmark-sort.component'
 
 @Injectable()
 export class BookmarkConfigureEffects {
@@ -42,8 +42,8 @@ export class BookmarkConfigureEffects {
     private readonly appStateService: AppStateService,
     private readonly portalDialogService: PortalDialogService,
     private readonly messageService: PortalMessageService,
-    private readonly bookmarksService: BookmarksInternal,
-    private readonly eximService: BookmarkExportImport
+    private readonly bookmarksService: BookmarksInternalAPIService,
+    private readonly eximService: BookmarkExportImportAPIService
   ) {}
 
   private dateFormat(lang: string) {
@@ -92,7 +92,7 @@ export class BookmarkConfigureEffects {
     let criteria: BookmarkSearchCriteria = { workspaceName: workspaceName }
     // Normal user must see only his own bookmarks
     if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) criteria = { ...criteria, scope: BookmarkScope.Private }
-    return this.bookmarksService.searchBookmarksByCriteria(criteria).pipe(
+    return this.bookmarksService.searchBookmarksByCriteria({ bookmarkSearchCriteria: criteria }).pipe(
       map(({ stream, totalElements }) =>
         BookmarkConfigureActions.bookmarkSearchResultsReceived({
           results: stream?.sort(this.sortByPosition) ?? [],
@@ -158,7 +158,7 @@ export class BookmarkConfigureEffects {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         // execute
-        return this.eximService.exportBookmarks(dialogResult?.result).pipe(
+        return this.eximService.exportBookmarks({ exportBookmarksRequest: dialogResult?.result }).pipe(
           map((snapshot) => {
             const workspaceJson = JSON.stringify(snapshot, null, 2)
             FileSaver.saveAs(
@@ -212,7 +212,7 @@ export class BookmarkConfigureEffects {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
         }
         // execute
-        return this.eximService.importBookmarks(dialogResult?.result).pipe(
+        return this.eximService.importBookmarks({ importBookmarksRequest: dialogResult?.result }).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
             return BookmarkConfigureActions.importBookmarksSucceeded()
@@ -260,12 +260,14 @@ export class BookmarkConfigureEffects {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         // execute
-        return this.bookmarksService.updateBookmarksOrder({ bookmarks: dialogResult?.result }).pipe(
-          map(() => {
-            this.messageService.success({ summaryKey: 'BOOKMARK_SORT.SUCCESS' })
-            return BookmarkConfigureActions.sortBookmarksSucceeded()
-          })
-        )
+        return this.bookmarksService
+          .updateBookmarksOrder({ bookmarkReorderRequest: { bookmarks: dialogResult?.result } })
+          .pipe(
+            map(() => {
+              this.messageService.success({ summaryKey: 'BOOKMARK_SORT.SUCCESS' })
+              return BookmarkConfigureActions.sortBookmarksSucceeded()
+            })
+          )
       }),
       catchError((error) => {
         return of(BookmarkConfigureActions.sortBookmarksFailed({ status: error.status, errorText: error.message }))
@@ -338,7 +340,10 @@ export class BookmarkConfigureEffects {
         }
         // execute
         return this.bookmarksService
-          .updateBookmark((dialogResult.result as Bookmark).id, dialogResult.result as UpdateBookmark)
+          .updateBookmark({
+            id: (dialogResult.result as Bookmark).id,
+            updateBookmark: dialogResult.result as UpdateBookmark
+          })
           .pipe(
             map(() => {
               this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
@@ -392,7 +397,7 @@ export class BookmarkConfigureEffects {
         }
         // execute
         const item = { ...dialogResult.result } as CreateBookmark
-        return this.bookmarksService.createNewBookmark(item).pipe(
+        return this.bookmarksService.createNewBookmark({ createBookmark: item }).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS' })
             return BookmarkConfigureActions.createBookmarkSucceeded()
@@ -456,7 +461,7 @@ export class BookmarkConfigureEffects {
         }
         // execute
         const item = { ...dialogResult.result } as CreateBookmark
-        return this.bookmarksService.createNewBookmark(item).pipe(
+        return this.bookmarksService.createNewBookmark({ createBookmark: item }).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS' })
             return BookmarkConfigureActions.createBookmarkSucceeded()
@@ -509,7 +514,7 @@ export class BookmarkConfigureEffects {
           throw new Error('VALIDATION.ERRORS.NOT_FOUND') // error message
         }
         // execute
-        return this.bookmarksService.deleteBookmarkById(itemToDelete.id).pipe(
+        return this.bookmarksService.deleteBookmarkById({ id: itemToDelete.id }).pipe(
           map(() => {
             this.messageService.success({ summaryKey: 'BOOKMARK_DELETE.SUCCESS' })
             return BookmarkConfigureActions.deleteBookmarkSucceeded()

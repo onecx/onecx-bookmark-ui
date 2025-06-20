@@ -1,10 +1,8 @@
 import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { FormsModule } from '@angular/forms'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
-import { RippleModule } from 'primeng/ripple'
 import { TabViewModule } from 'primeng/tabview'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
@@ -23,7 +21,6 @@ import { AppConfigService, PortalMessageService, UserService } from '@onecx/angu
 import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
 
@@ -40,9 +37,6 @@ export function slotInitializer(slotService: SlotService) {
     AngularRemoteComponentsModule,
     BookmarkLinksComponent,
     CommonModule,
-    FormsModule,
-    SharedModule,
-    RippleModule,
     PortalCoreModule,
     TranslateModule,
     TabViewModule

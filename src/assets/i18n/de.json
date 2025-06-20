@@ -166,6 +166,7 @@
         "PUBLIC": "Lesezeichen für alle Workspace Benutzer"
       }
     },
+    "SCOPE_IS_PUBLIC": "Für Workspace verfügbar",
     "URL": "URL",
     "URL_SEARCH": "URL",
     "TOOLTIPS": {
@@ -176,7 +177,7 @@
       "SCOPE_IS_PUBLIC": "Wenn markiert, dann ist das Lesezeichen für alle im Workspace sichtbar.",
       "ENDPOINT": "Der Name des, mit dem Lesezeichen angesteuerten, Endpunkts der App.",
       "ENDPOINT_PARAMETER": "Ein spezieller Lesezeichen des Endpunkts dem ein Wert zugeordnet werden kann.",
-      "QUERY": "Zusätzliche Informationen die server- oder clientseitig weiterverarbeitet werden können.",
+      "QUERY": "Zusätzliche Informationen die server- oder clientseitig verarbeitet werden können.",
       "FRAGMENT": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
       "TYPE_URL": "Feste URL zu einem Ziel ggf. auch ausserhalb des Workspaces",
       "TYPE_PRODUCT": "URL zu einem Endpunkt einer Applikation im aktuellen Workspace",
@@ -207,7 +208,7 @@
         "PROPS": "Basiseigenschaften des Lesezeichens",
         "TARGET": "Zielapplikation und App",
         "ENDPOINT": "Der mit dem Lesezeichen angesteuerte Endpunkt der App und seine Parameter.",
-        "PARAMS": "Zusätzliche Lesezeichen, die zum Pfad hinzugefügt werden",
+        "PARAMS": "Zusätzliche Parameter die zur URL dazugefügt werden können",
         "INTERN": "Interne Eigenschaften"
       }
     }

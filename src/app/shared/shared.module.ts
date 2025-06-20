@@ -12,6 +12,7 @@ import { InputTextModule } from 'primeng/inputtext'
 import { InputTextareaModule } from 'primeng/inputtextarea'
 import { OrderListModule } from 'primeng/orderlist'
 import { RadioButtonModule } from 'primeng/radiobutton'
+import { RippleModule } from 'primeng/ripple'
 import { SkeletonModule } from 'primeng/skeleton'
 import { TabViewModule } from 'primeng/tabview'
 import { TooltipModule } from 'primeng/tooltip'
@@ -32,6 +33,7 @@ import { LabelResolver } from 'src/app/shared/utils/label.resolver'
     OrderListModule,
     RadioButtonModule,
     ReactiveFormsModule,
+    RippleModule,
     SkeletonModule,
     TabViewModule,
     TooltipModule,
@@ -46,9 +48,10 @@ import { LabelResolver } from 'src/app/shared/utils/label.resolver'
     InputGroupModule,
     InputTextModule,
     InputTextareaModule,
+    OrderListModule,
     RadioButtonModule,
     ReactiveFormsModule,
-    OrderListModule,
+    RippleModule,
     SkeletonModule,
     TabViewModule,
     TooltipModule,

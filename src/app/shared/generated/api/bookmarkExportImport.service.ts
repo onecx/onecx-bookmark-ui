@@ -31,11 +31,19 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface ExportBookmarksRequestParams {
+    exportBookmarksRequest: ExportBookmarksRequest;
+}
+
+export interface ImportBookmarksRequestParams {
+    importBookmarksRequest: ImportBookmarksRequest;
+}
+
 
 @Injectable({
   providedIn: 'any'
 })
-export class BookmarkExportImport {
+export class BookmarkExportImportAPIService {
 
     protected basePath = 'http://onecx-bookmark-bff:8080';
     public defaultHeaders = new HttpHeaders();
@@ -99,14 +107,15 @@ export class BookmarkExportImport {
 
     /**
      * Export bookmarks by workspace name and scopes
-     * @param exportBookmarksRequest 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public exportBookmarks(exportBookmarksRequest: ExportBookmarksRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<BookmarkSnapshot>;
-    public exportBookmarks(exportBookmarksRequest: ExportBookmarksRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<BookmarkSnapshot>>;
-    public exportBookmarks(exportBookmarksRequest: ExportBookmarksRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<BookmarkSnapshot>>;
-    public exportBookmarks(exportBookmarksRequest: ExportBookmarksRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public exportBookmarks(requestParameters?: ExportBookmarksRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BookmarkSnapshot>;
+    public exportBookmarks(requestParameters?: ExportBookmarksRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BookmarkSnapshot>>;
+    public exportBookmarks(requestParameters?: ExportBookmarksRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BookmarkSnapshot>>;
+    public exportBookmarks(requestParameters?: ExportBookmarksRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const exportBookmarksRequest = requestParameters?.exportBookmarksRequest;
         if (exportBookmarksRequest === null || exportBookmarksRequest === undefined) {
             throw new Error('Required parameter exportBookmarksRequest was null or undefined when calling exportBookmarks.');
         }
@@ -128,6 +137,11 @@ export class BookmarkExportImport {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -160,6 +174,7 @@ export class BookmarkExportImport {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -167,14 +182,15 @@ export class BookmarkExportImport {
 
     /**
      * Import bookmarks
-     * @param importBookmarksRequest 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public importBookmarks(importBookmarksRequest: ImportBookmarksRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public importBookmarks(requestParameters?: ImportBookmarksRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public importBookmarks(requestParameters?: ImportBookmarksRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public importBookmarks(requestParameters?: ImportBookmarksRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public importBookmarks(requestParameters?: ImportBookmarksRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const importBookmarksRequest = requestParameters?.importBookmarksRequest;
         if (importBookmarksRequest === null || importBookmarksRequest === undefined) {
             throw new Error('Required parameter importBookmarksRequest was null or undefined when calling importBookmarks.');
         }
@@ -196,6 +212,11 @@ export class BookmarkExportImport {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -228,6 +249,7 @@ export class BookmarkExportImport {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );

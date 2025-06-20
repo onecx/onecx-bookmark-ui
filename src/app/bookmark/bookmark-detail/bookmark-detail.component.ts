@@ -7,7 +7,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScope, ImagesInternal, CreateBookmark } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 // trim the value (string!) of a form control before passes to the control
@@ -103,7 +103,7 @@ export class BookmarkDetailComponent
     private readonly appStateService: AppStateService,
     private readonly slotService: SlotService,
     private readonly msgService: PortalMessageService,
-    private readonly imageApi: ImagesInternal
+    private readonly imageApi: ImagesInternalAPIService
   ) {
     // bookmark image URL via bookmark BFF
     this.bookmarkImageBaseURL$ = appStateService.currentMfe$.pipe(
@@ -236,7 +236,7 @@ export class BookmarkDetailComponent
         this.formGroup.get('imageUrl')?.setValue(null)
         this.prepareImageUrl(this.vm.initialBookmark?.id)
       } else
-        this.imageApi.deleteImage(bookmark.id).subscribe({
+        this.imageApi.deleteImage({ refId: bookmark.id }).subscribe({
           next: () => {
             this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
             this.onBookmarkImageLoadError = true // disable remove button
@@ -269,7 +269,7 @@ export class BookmarkDetailComponent
     const blob = new Blob([files[0]], { type: files[0].type })
     this.prepareImageUrl() // reset - important to trigger the change in UI
     this.onBookmarkImageLoadError = false
-    this.imageApi.uploadImage(id, blob).subscribe(() => {
+    this.imageApi.uploadImage({ refId: id, body: blob }).subscribe(() => {
       this.prepareImageUrl(id)
       this.msgService.info({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
     })

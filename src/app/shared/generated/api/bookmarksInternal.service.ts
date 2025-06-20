@@ -35,11 +35,36 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface CreateNewBookmarkRequestParams {
+    createBookmark: CreateBookmark;
+}
+
+export interface DeleteBookmarkByIdRequestParams {
+    id: string;
+}
+
+export interface SearchBookmarksByCriteriaRequestParams {
+    bookmarkSearchCriteria: BookmarkSearchCriteria;
+}
+
+export interface SearchUserBookmarksByCriteriaRequestParams {
+    bookmarkSearchCriteria: BookmarkSearchCriteria;
+}
+
+export interface UpdateBookmarkRequestParams {
+    id: string;
+    updateBookmark: UpdateBookmark;
+}
+
+export interface UpdateBookmarksOrderRequestParams {
+    bookmarkReorderRequest: BookmarkReorderRequest;
+}
+
 
 @Injectable({
   providedIn: 'any'
 })
-export class BookmarksInternal {
+export class BookmarksInternalAPIService {
 
     protected basePath = 'http://onecx-bookmark-bff:8080';
     public defaultHeaders = new HttpHeaders();
@@ -103,14 +128,15 @@ export class BookmarksInternal {
 
     /**
      * create bookmark item
-     * @param createBookmark 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createNewBookmark(createBookmark: CreateBookmark, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public createNewBookmark(createBookmark: CreateBookmark, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public createNewBookmark(createBookmark: CreateBookmark, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public createNewBookmark(createBookmark: CreateBookmark, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public createNewBookmark(requestParameters?: CreateNewBookmarkRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public createNewBookmark(requestParameters?: CreateNewBookmarkRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public createNewBookmark(requestParameters?: CreateNewBookmarkRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public createNewBookmark(requestParameters?: CreateNewBookmarkRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const createBookmark = requestParameters?.createBookmark;
         if (createBookmark === null || createBookmark === undefined) {
             throw new Error('Required parameter createBookmark was null or undefined when calling createNewBookmark.');
         }
@@ -132,6 +158,11 @@ export class BookmarksInternal {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -164,6 +195,7 @@ export class BookmarksInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -171,14 +203,15 @@ export class BookmarksInternal {
 
     /**
      * Delete a bookmark by id
-     * @param id 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteBookmarkById(id: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deleteBookmarkById(id: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteBookmarkById(id: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteBookmarkById(id: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public deleteBookmarkById(requestParameters?: DeleteBookmarkByIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteBookmarkById(requestParameters?: DeleteBookmarkByIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteBookmarkById(requestParameters?: DeleteBookmarkByIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteBookmarkById(requestParameters?: DeleteBookmarkByIdRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteBookmarkById.');
         }
@@ -202,6 +235,11 @@ export class BookmarksInternal {
             localVarHttpContext = new HttpContext();
         }
 
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -222,6 +260,7 @@ export class BookmarksInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -229,14 +268,15 @@ export class BookmarksInternal {
 
     /**
      * search bookmarks by criteria
-     * @param bookmarkSearchCriteria 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<BookmarkPageResult>;
-    public searchBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<BookmarkPageResult>>;
-    public searchBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<BookmarkPageResult>>;
-    public searchBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public searchBookmarksByCriteria(requestParameters?: SearchBookmarksByCriteriaRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BookmarkPageResult>;
+    public searchBookmarksByCriteria(requestParameters?: SearchBookmarksByCriteriaRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BookmarkPageResult>>;
+    public searchBookmarksByCriteria(requestParameters?: SearchBookmarksByCriteriaRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BookmarkPageResult>>;
+    public searchBookmarksByCriteria(requestParameters?: SearchBookmarksByCriteriaRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bookmarkSearchCriteria = requestParameters?.bookmarkSearchCriteria;
         if (bookmarkSearchCriteria === null || bookmarkSearchCriteria === undefined) {
             throw new Error('Required parameter bookmarkSearchCriteria was null or undefined when calling searchBookmarksByCriteria.');
         }
@@ -258,6 +298,11 @@ export class BookmarksInternal {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -290,6 +335,7 @@ export class BookmarksInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -297,14 +343,15 @@ export class BookmarksInternal {
 
     /**
      * search user bookmarks by criteria
-     * @param bookmarkSearchCriteria 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public searchUserBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<BookmarkPageResult>;
-    public searchUserBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<BookmarkPageResult>>;
-    public searchUserBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<BookmarkPageResult>>;
-    public searchUserBookmarksByCriteria(bookmarkSearchCriteria: BookmarkSearchCriteria, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public searchUserBookmarksByCriteria(requestParameters?: SearchUserBookmarksByCriteriaRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<BookmarkPageResult>;
+    public searchUserBookmarksByCriteria(requestParameters?: SearchUserBookmarksByCriteriaRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<BookmarkPageResult>>;
+    public searchUserBookmarksByCriteria(requestParameters?: SearchUserBookmarksByCriteriaRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<BookmarkPageResult>>;
+    public searchUserBookmarksByCriteria(requestParameters?: SearchUserBookmarksByCriteriaRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bookmarkSearchCriteria = requestParameters?.bookmarkSearchCriteria;
         if (bookmarkSearchCriteria === null || bookmarkSearchCriteria === undefined) {
             throw new Error('Required parameter bookmarkSearchCriteria was null or undefined when calling searchUserBookmarksByCriteria.');
         }
@@ -326,6 +373,11 @@ export class BookmarksInternal {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -358,6 +410,7 @@ export class BookmarksInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -365,18 +418,19 @@ export class BookmarksInternal {
 
     /**
      * Update a bookmark\&#39;s displayName
-     * @param id 
-     * @param updateBookmark 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateBookmark(id: string, updateBookmark: UpdateBookmark, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public updateBookmark(id: string, updateBookmark: UpdateBookmark, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public updateBookmark(id: string, updateBookmark: UpdateBookmark, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public updateBookmark(id: string, updateBookmark: UpdateBookmark, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public updateBookmark(requestParameters?: UpdateBookmarkRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public updateBookmark(requestParameters?: UpdateBookmarkRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public updateBookmark(requestParameters?: UpdateBookmarkRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public updateBookmark(requestParameters?: UpdateBookmarkRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const id = requestParameters?.id;
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateBookmark.');
         }
+        const updateBookmark = requestParameters?.updateBookmark;
         if (updateBookmark === null || updateBookmark === undefined) {
             throw new Error('Required parameter updateBookmark was null or undefined when calling updateBookmark.');
         }
@@ -398,6 +452,11 @@ export class BookmarksInternal {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -430,6 +489,7 @@ export class BookmarksInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -437,14 +497,15 @@ export class BookmarksInternal {
 
     /**
      * update order of bookmarks
-     * @param bookmarkReorderRequest 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateBookmarksOrder(bookmarkReorderRequest: BookmarkReorderRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public updateBookmarksOrder(bookmarkReorderRequest: BookmarkReorderRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public updateBookmarksOrder(bookmarkReorderRequest: BookmarkReorderRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public updateBookmarksOrder(bookmarkReorderRequest: BookmarkReorderRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public updateBookmarksOrder(requestParameters?: UpdateBookmarksOrderRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public updateBookmarksOrder(requestParameters?: UpdateBookmarksOrderRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public updateBookmarksOrder(requestParameters?: UpdateBookmarksOrderRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public updateBookmarksOrder(requestParameters?: UpdateBookmarksOrderRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const bookmarkReorderRequest = requestParameters?.bookmarkReorderRequest;
         if (bookmarkReorderRequest === null || bookmarkReorderRequest === undefined) {
             throw new Error('Required parameter bookmarkReorderRequest was null or undefined when calling updateBookmarksOrder.');
         }
@@ -466,6 +527,11 @@ export class BookmarksInternal {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -498,6 +564,7 @@ export class BookmarksInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );

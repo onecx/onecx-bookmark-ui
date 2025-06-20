@@ -5,13 +5,13 @@ import { catchError, map, mergeMap, Observable, of, retry, tap } from 'rxjs'
 import { MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 
-import { BookmarksInternal, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
+import { BookmarksInternalAPIService, Configuration, CreateBookmark, UpdateBookmark } from '../generated'
 import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'any' })
 export class BookmarkAPIUtilsService {
   constructor(
-    private readonly bookmarkService: BookmarksInternal,
+    private readonly bookmarkService: BookmarksInternalAPIService,
     private readonly messageService: PortalMessageService,
     private readonly appStateService: AppStateService
   ) {}
@@ -26,9 +26,11 @@ export class BookmarkAPIUtilsService {
     return obs.pipe(
       mergeMap(([currentWorkspace, currentMfe]) => {
         return this.bookmarkService.searchUserBookmarksByCriteria({
-          workspaceName: currentWorkspace.workspaceName,
-          productName: currentMfe.productName,
-          appId: currentMfe.appId
+          bookmarkSearchCriteria: {
+            workspaceName: currentWorkspace.workspaceName,
+            productName: currentMfe.productName,
+            appId: currentMfe.appId
+          }
         })
       }),
       map((res) => res.stream ?? []),
@@ -47,7 +49,9 @@ export class BookmarkAPIUtilsService {
     return this.appStateService.currentWorkspace$.pipe(
       mergeMap((workspace) => {
         return this.bookmarkService.searchBookmarksByCriteria({
-          workspaceName: workspace.workspaceName
+          bookmarkSearchCriteria: {
+            workspaceName: workspace.workspaceName
+          }
         })
       }),
       map((res) => res.stream ?? []),
@@ -62,8 +66,8 @@ export class BookmarkAPIUtilsService {
     )
   }
 
-  createNewBookmark(createBookmark: CreateBookmark) {
-    return this.bookmarkService.createNewBookmark(createBookmark).pipe(
+  createNewBookmark(cb: CreateBookmark) {
+    return this.bookmarkService.createNewBookmark({ createBookmark: cb }).pipe(
       tap(() => {
         this.messageService.success({
           summaryKey: 'BOOKMARK_DETAIL.CREATE.SUCCESS'
@@ -79,7 +83,7 @@ export class BookmarkAPIUtilsService {
   }
 
   deleteBookmarkById(bookmarkId: string) {
-    return this.bookmarkService.deleteBookmarkById(bookmarkId).pipe(
+    return this.bookmarkService.deleteBookmarkById({ id: bookmarkId }).pipe(
       tap(() => {
         this.messageService.success({
           summaryKey: 'BOOKMARK_DELETE.SUCCESS'
@@ -94,8 +98,8 @@ export class BookmarkAPIUtilsService {
     )
   }
 
-  editBookmark(bookmarkId: string, updatedBookmark: UpdateBookmark) {
-    return this.bookmarkService.updateBookmark(bookmarkId, updatedBookmark).pipe(
+  editBookmark(bookmarkId: string, ub: UpdateBookmark) {
+    return this.bookmarkService.updateBookmark({ id: bookmarkId, updateBookmark: ub }).pipe(
       tap(() => {
         this.messageService.success({
           summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS'

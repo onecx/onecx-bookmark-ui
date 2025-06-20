@@ -6,11 +6,10 @@ import { Observable, map } from 'rxjs'
 import { WorkspaceService } from '@onecx/angular-integration-interface'
 
 import { Bookmark } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   standalone: true,
-  imports: [CommonModule, SharedModule, RouterModule],
+  imports: [CommonModule, RouterModule],
   selector: 'app-bookmark-links',
   templateUrl: './bookmark-links.component.html',
   styleUrl: './bookmark-links.component.scss'
