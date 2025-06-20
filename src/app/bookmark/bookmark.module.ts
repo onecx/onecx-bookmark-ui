@@ -41,12 +41,12 @@ import { BookmarkSortComponent } from './bookmark-sort/bookmark-sort.component'
   imports: [
     CommonModule,
     DividerModule,
+    EffectsModule.forFeature([BookmarkConfigureEffects, BookmarkOverviewEffects]),
     LetDirective,
     PortalCoreModule.forMicroFrontend(),
     RouterModule.forChild(addInitializeModuleGuard(routes)),
     SharedModule,
-    StoreModule.forFeature(bookmarkFeature),
-    EffectsModule.forFeature([BookmarkConfigureEffects, BookmarkOverviewEffects])
+    StoreModule.forFeature(bookmarkFeature)
   ]
 })
 export class BookmarkModule {}

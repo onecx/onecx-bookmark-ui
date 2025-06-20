@@ -34,9 +34,11 @@ export const commonImports = [CommonModule, BrowserModule, BrowserAnimationsModu
   declarations: [AppComponent],
   imports: [
     ...commonImports,
-    KeycloakAuthModule,
     AppRoutingModule,
+    EffectsModule.forRoot([]),
+    KeycloakAuthModule,
     LetDirective,
+    PortalCoreModule.forRoot('onecx-bookmark-ui'),
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({
@@ -46,15 +48,12 @@ export const commonImports = [CommonModule, BrowserModule, BrowserAnimationsModu
       trace: false,
       traceLimit: 75
     }),
-    EffectsModule.forRoot([]),
-    PortalCoreModule.forRoot('onecx-bookmark-ui'),
     TranslateModule.forRoot({
       extend: true,
       loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] }
     })
   ],
   providers: [
-    providePortalDialogService(),
     { provide: APP_CONFIG, useValue: environment },
     {
       provide: Configuration,
@@ -67,7 +66,8 @@ export const commonImports = [CommonModule, BrowserModule, BrowserAnimationsModu
       multi: true,
       deps: [UserService, TranslateService]
     },
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    providePortalDialogService()
   ],
   bootstrap: [AppComponent]
 })

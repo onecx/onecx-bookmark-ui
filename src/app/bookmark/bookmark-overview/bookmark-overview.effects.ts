@@ -6,7 +6,7 @@ import { catchError, map, mergeMap, of, tap, withLatestFrom } from 'rxjs'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
-import { Bookmark, BookmarkScope, BookmarksInternal, BookmarkSearchCriteria } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope, BookmarksInternalAPIService, BookmarkSearchCriteria } from 'src/app/shared/generated'
 
 import { BookmarkOverviewActions, ActionErrorType } from './bookmark-overview.actions'
 
@@ -21,7 +21,7 @@ export class BookmarkOverviewEffects {
     private readonly user: UserService,
     private readonly appStateService: AppStateService,
     private readonly messageService: PortalMessageService,
-    private readonly bookmarksService: BookmarksInternal
+    private readonly bookmarksService: BookmarksInternalAPIService
   ) {}
 
   private buildExceptionKey(status: string): string {
@@ -59,7 +59,7 @@ export class BookmarkOverviewEffects {
     let criteria: BookmarkSearchCriteria = { workspaceName: workspaceName }
     // Normal user must see only his own bookmarks
     if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) criteria = { ...criteria, scope: BookmarkScope.Private }
-    return this.bookmarksService.searchBookmarksByCriteria(criteria).pipe(
+    return this.bookmarksService.searchBookmarksByCriteria({ bookmarkSearchCriteria: criteria }).pipe(
       map(({ stream, totalElements }) =>
         BookmarkOverviewActions.bookmarkSearchResultsReceived({
           results: stream?.sort(this.sortByPosition) ?? [],

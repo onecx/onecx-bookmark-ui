@@ -27,11 +27,28 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
+export interface DeleteImageRequestParams {
+    refId: string;
+}
+
+export interface GetImageRequestParams {
+    refId: string;
+}
+
+export interface GetProductLogoRequestParams {
+    productName: string;
+}
+
+export interface UploadImageRequestParams {
+    refId: string;
+    body: Blob;
+}
+
 
 @Injectable({
   providedIn: 'any'
 })
-export class ImagesInternal {
+export class ImagesInternalAPIService {
 
     protected basePath = 'http://onecx-bookmark-bff:8080';
     public defaultHeaders = new HttpHeaders();
@@ -95,14 +112,15 @@ export class ImagesInternal {
 
     /**
      * delete Image
-     * @param refId 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteImage(refId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any>;
-    public deleteImage(refId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteImage(refId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteImage(refId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext}): Observable<any> {
+    public deleteImage(requestParameters?: DeleteImageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any>;
+    public deleteImage(requestParameters?: DeleteImageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<any>>;
+    public deleteImage(requestParameters?: DeleteImageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<any>>;
+    public deleteImage(requestParameters?: DeleteImageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined, context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const refId = requestParameters?.refId;
         if (refId === null || refId === undefined) {
             throw new Error('Required parameter refId was null or undefined when calling deleteImage.');
         }
@@ -125,6 +143,11 @@ export class ImagesInternal {
             localVarHttpContext = new HttpContext();
         }
 
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {
@@ -145,6 +168,7 @@ export class ImagesInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -152,14 +176,15 @@ export class ImagesInternal {
 
     /**
      * Get Image by id
-     * @param refId 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getImage(refId: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<Blob>;
-    public getImage(refId: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<HttpResponse<Blob>>;
-    public getImage(refId: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<HttpEvent<Blob>>;
-    public getImage(refId: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<any> {
+    public getImage(requestParameters?: GetImageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getImage(requestParameters?: GetImageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getImage(requestParameters?: GetImageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getImage(requestParameters?: GetImageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const refId = requestParameters?.refId;
         if (refId === null || refId === undefined) {
             throw new Error('Required parameter refId was null or undefined when calling getImage.');
         }
@@ -184,6 +209,11 @@ export class ImagesInternal {
             localVarHttpContext = new HttpContext();
         }
 
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
 
         let localVarPath = `/images/${this.configuration.encodeParam({name: "refId", value: refId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
@@ -193,6 +223,7 @@ export class ImagesInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -200,14 +231,15 @@ export class ImagesInternal {
 
     /**
      * Get product logo by name
-     * @param productName 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProductLogo(productName: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<Blob>;
-    public getProductLogo(productName: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<HttpResponse<Blob>>;
-    public getProductLogo(productName: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<HttpEvent<Blob>>;
-    public getProductLogo(productName: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext}): Observable<any> {
+    public getProductLogo(requestParameters?: GetProductLogoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Blob>;
+    public getProductLogo(requestParameters?: GetProductLogoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Blob>>;
+    public getProductLogo(requestParameters?: GetProductLogoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Blob>>;
+    public getProductLogo(requestParameters?: GetProductLogoRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/*' | 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const productName = requestParameters?.productName;
         if (productName === null || productName === undefined) {
             throw new Error('Required parameter productName was null or undefined when calling getProductLogo.');
         }
@@ -232,6 +264,11 @@ export class ImagesInternal {
             localVarHttpContext = new HttpContext();
         }
 
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
+        }
+
 
         let localVarPath = `/images/product/${this.configuration.encodeParam({name: "productName", value: productName, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
@@ -241,6 +278,7 @@ export class ImagesInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
@@ -248,18 +286,19 @@ export class ImagesInternal {
 
     /**
      * Upload Images
-     * @param refId 
-     * @param body 
+     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public uploadImage(refId: string, body: Blob, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<ImageInfo>;
-    public uploadImage(refId: string, body: Blob, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<ImageInfo>>;
-    public uploadImage(refId: string, body: Blob, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<ImageInfo>>;
-    public uploadImage(refId: string, body: Blob, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+    public uploadImage(requestParameters?: UploadImageRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<ImageInfo>;
+    public uploadImage(requestParameters?: UploadImageRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<ImageInfo>>;
+    public uploadImage(requestParameters?: UploadImageRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<ImageInfo>>;
+    public uploadImage(requestParameters?: UploadImageRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        const refId = requestParameters?.refId;
         if (refId === null || refId === undefined) {
             throw new Error('Required parameter refId was null or undefined when calling uploadImage.');
         }
+        const body = requestParameters?.body;
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling uploadImage.');
         }
@@ -281,6 +320,11 @@ export class ImagesInternal {
         let localVarHttpContext: HttpContext | undefined = options && options.context;
         if (localVarHttpContext === undefined) {
             localVarHttpContext = new HttpContext();
+        }
+
+        let localVarTransferCache: boolean | undefined = options && options.transferCache;
+        if (localVarTransferCache === undefined) {
+            localVarTransferCache = true;
         }
 
 
@@ -313,6 +357,7 @@ export class ImagesInternal {
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
                 observe: observe,
+                transferCache: localVarTransferCache,
                 reportProgress: reportProgress
             }
         );
