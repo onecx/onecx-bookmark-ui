@@ -59,7 +59,7 @@ export class BookmarkConfigureComponent implements OnInit {
     this.filteredColumns = bookmarkColumns.filter((a) => a.active === true)
     this.viewModel$.subscribe({
       next: (vm) => {
-        const a = vm?.results?.filter((b) => b['scope'] === this.quickFilterValue)
+        const a = vm.results.filter((b) => b['scope'] === this.quickFilterValue)
         this.pageActions = this.preparePageActions(a.length > 1, this.quickFilterValue)
       }
     })

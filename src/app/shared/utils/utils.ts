@@ -53,7 +53,7 @@ export function dropDownSortItemsByLabel(a: SelectItem, b: SelectItem): number {
 }
 export function dropDownGetLabelByValue(ddArray: SelectItem[], val: string): string | undefined {
   const a: any = ddArray.find((item: SelectItem) => {
-    return item?.value == val
+    return item.value == val
   })
   return a.label
 }

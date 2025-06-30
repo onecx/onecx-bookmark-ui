@@ -7,7 +7,7 @@ import {
 } from '@onecx/angular-accelerator/testing'
 
 export class BookmarkConfigureHarness extends ComponentHarness {
-  static readonly hostSelector = 'app-bookmark-search'
+  static readonly hostSelector = 'app-bookmark-configure'
 
   getHeader = this.locatorFor(PageHeaderHarness)
   getSearchResults = this.locatorFor(InteractiveDataViewHarness)

@@ -8,7 +8,8 @@ import {
   forceFormValidation,
   dropDownSortItemsByLabel,
   dropDownGetLabelByValue,
-  sortByLocale
+  sortByLocale,
+  getCurrentDateTime
 } from './utils'
 
 describe('util functions', () => {
@@ -105,6 +106,22 @@ describe('util functions', () => {
       const sortedStrings = strings.sort(sortByLocale)
 
       expect(sortedStrings[0]).toEqual('str1')
+    })
+  })
+
+  describe('getCurrentDateTime', () => {
+    beforeAll(() => {
+      jest.useFakeTimers()
+      jest.setSystemTime(new Date('2025-06-30T14:05:09'))
+    })
+
+    afterAll(() => {
+      jest.useRealTimers()
+    })
+
+    it('should return formatted current date and time', () => {
+      const result = getCurrentDateTime()
+      expect(result).toBe('2025-06-30_140509')
     })
   })
 })

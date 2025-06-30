@@ -213,7 +213,7 @@
                     {{ limitText(rowData[col.field], 100) }}
                   </a>
                 </div>
-                <!-- OneCX product bookmark -->
+                <!-- OneCX   bookmark -->
                 <div *ngIf="col.field === 'url' && !rowData['url']" class="text-ellipsis-2-lines">
                   <a
                     [routerLink]="getUrl(rowData) | async"

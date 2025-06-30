@@ -176,7 +176,7 @@
             id="bm_detail_form_field_app_id"
             class="w-full pt-3 pb-2 text-responsive"
             [disabled]="true"
-            [value]="getProductAppDisplayName(vm.initialBookmark?.appId, product)"
+            [value]="getProductAppDisplayName(product, vm.initialBookmark?.appId)"
             [attr.aria-label]="'BOOKMARK.APP_ID' | translate"
             [pTooltip]="'BOOKMARK.TOOLTIPS.APP_ID' | translate"
             tooltipPosition="top"
