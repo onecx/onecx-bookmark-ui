@@ -43,11 +43,9 @@ export class BookmarkImageComponent implements OnChanges {
   public ngOnChanges(changes: SimpleChanges): void {
     if (this.bookmark?.id) {
       if (changes['product'] && !changes['product'].firstChange && this.product) {
-        //console.log('bookmark-image => ngOnChanges', this.bookmark?.productName, this.imageLoadCounter)
         this.productLogoUrl = this.product?.imageUrl
         // if default was loaded and product image url exists, then try to get product logos
         if (this.imageLoadCounter === 2 && this.productLogoUrl) {
-          //console.log('bookmark-image => product', this.productLogoUrl)
           this.errorImage$ = undefined
           this.loading = true
           this.imageLoadCounter = 0
@@ -75,7 +73,6 @@ export class BookmarkImageComponent implements OnChanges {
    */
   public onImageError() {
     if (this.loading) {
-      //console.log('onImageError => counter', this.bookmark?.id, this.bookmark?.productName, this.imageLoadCounter)
       // load bookmark default logo
       if (this.imageLoadCounter === 1 || (this.imageLoadCounter === 0 && !this.productLogoUrl)) {
         this.errorImage$ = this.defaultImageUrl$
@@ -83,7 +80,6 @@ export class BookmarkImageComponent implements OnChanges {
       }
       // load product logo
       if (this.imageLoadCounter === 0 && this.productLogoUrl) {
-        //console.log('             => this.productLogoUrl', this.productLogoUrl)
         this.errorImage$ = of(this.productLogoUrl)
         this.imageLoadCounter = 1
       }

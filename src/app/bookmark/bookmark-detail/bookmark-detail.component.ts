@@ -7,7 +7,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
-import { Bookmark, BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
+import { BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 // trim the value (string!) of a form control before passes to the control
@@ -135,8 +135,8 @@ export class BookmarkDetailComponent
     // on open dialog => manage parameter field depends on endpointName content
     if (this.vm.initialBookmark) {
       this.defaultProduct = {
-        name: this.vm.initialBookmark?.productName ?? '',
-        displayName: this.vm.initialBookmark?.productName ?? '',
+        name: this.vm.initialBookmark.productName ?? '',
+        displayName: this.vm.initialBookmark.productName ?? '',
         undeployed: false,
         applications: []
       }
@@ -145,11 +145,11 @@ export class BookmarkDetailComponent
         ...this.vm.initialBookmark,
         is_public: this.vm.initialBookmark.scope === BookmarkScope.Public,
         // use a temporary key field for displaying JSON format
-        endpointParams: JSON.stringify(this.vm.initialBookmark?.endpointParameters, undefined, 2),
-        query: JSON.stringify(this.vm.initialBookmark?.query, undefined, 2)
+        endpointParams: JSON.stringify(this.vm.initialBookmark.endpointParameters, undefined, 2),
+        query: JSON.stringify(this.vm.initialBookmark.query, undefined, 2)
       })
-      if (this.vm.initialBookmark?.imageUrl) this.fetchingLogoUrl = this.vm.initialBookmark?.imageUrl
-      else this.prepareImageUrl(this.vm.initialBookmark?.id)
+      if (this.vm.initialBookmark.imageUrl) this.fetchingLogoUrl = this.vm.initialBookmark.imageUrl
+      else this.prepareImageUrl(this.vm.initialBookmark.id)
     }
     if (!this.editable || this.vm.changeMode === 'VIEW') {
       this.formGroup.disable()
@@ -217,13 +217,8 @@ export class BookmarkDetailComponent
     }
   }
 
-  // Helper for loading product image/data
-  public convertToBookmark(cb?: CombinedBookmark): Bookmark | undefined {
-    return cb ? { ...cb, id: cb?.id ?? '' } : undefined
-  }
-  public getProductAppDisplayName(appId?: string, product?: Product): string | undefined {
+  public getProductAppDisplayName(product: Product, appId?: string): string | undefined {
     if (!appId) return undefined
-    if (!product || product.applications?.length === 0) return appId
     return product.applications?.find((app) => app.appId === appId)?.appName
   }
 
@@ -283,13 +278,11 @@ export class BookmarkDetailComponent
     if (bookmark?.id && (event.target as HTMLInputElement).value) {
       this.onBookmarkImageLoadError = false
       this.fetchingLogoUrl = (event.target as HTMLInputElement).value
-      if (this.fetchingLogoUrl === '') this.fetchingLogoUrl = undefined
     }
   }
 
   private prepareUrlPath(url?: string, path?: string): string {
     if (url && path) return Location.joinWithSlash(url, path)
-    else if (url) return url
     else return ''
   }
 }

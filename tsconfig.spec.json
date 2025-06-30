@@ -5,7 +5,7 @@
     "declaration": false,
     "module": "commonjs",
     "types": ["jest", "node"],
-    "target": "ES2022",
+    "target": "es2016",
     "useDefineForClassFields": false
   },
   "files": ["src/test-setup.ts"],
