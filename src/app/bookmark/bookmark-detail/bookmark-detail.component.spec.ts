@@ -682,7 +682,7 @@ describe('BookmarkDetailComponent', () => {
       0: file,
       length: 1,
       item: (index: number) => file
-    } as FileList
+    } as any
 
     ;(component as any).msgService = { info: jest.fn() }
     const infoSpy = jest.spyOn((component as any).msgService, 'info')
