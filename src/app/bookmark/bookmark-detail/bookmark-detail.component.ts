@@ -21,18 +21,20 @@ DefaultValueAccessor.prototype.registerOnChange = function (fn) {
 
 export function JsonValidator(): ValidatorFn {
   return (control: AbstractControl): { [key: string]: any } | null => {
-    let isValid = false
+    if (!control.value) return null
+    let isValid = true
+    let ex: any // sonar
     const value = control.value as string
     if (!value || value === '' || value === '{}') isValid = true
-    else {
-      const pattern = /:\s*(["{].*["}])\s*[,}]/
-      isValid = pattern.test(value)
-    }
-    if (isValid) {
-      return null // Validation passes
-    } else {
-      return { pattern: true } // Validation fails
-    }
+    else
+      try {
+        // control.value is a JavaScript object but in JSON syntax!
+        JSON.parse(value) // is JSON?
+      } catch (e: any) {
+        ex = e.toString() // get first line with message, exclude stacktrace
+        isValid = false
+      }
+    return isValid ? null : { pattern: true, error: ex }
   }
 }
 
@@ -118,11 +120,11 @@ export class BookmarkDetailComponent
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
       endpointName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
       endpointParams: new FormControl(null, {
-        validators: Validators.compose([JsonValidator(), Validators.maxLength(255)]),
+        validators: Validators.compose([JsonValidator(), Validators.maxLength(1000)]),
         updateOn: 'change'
       }),
       query: new FormControl(null, {
-        validators: Validators.compose([JsonValidator(), Validators.maxLength(255)]),
+        validators: Validators.compose([JsonValidator(), Validators.maxLength(1000)]),
         updateOn: 'change'
       }),
       fragment: new FormControl(null, [Validators.maxLength(255)]),
@@ -212,7 +214,7 @@ export class BookmarkDetailComponent
         workspaceName: this.workspaceName
       }
     } catch (err) {
-      console.error('Parse error', err)
+      console.error(err)
       this.dialogResult = this.vm.initialBookmark
     }
   }
@@ -235,10 +237,11 @@ export class BookmarkDetailComponent
           next: () => {
             this.fetchingLogoUrl = undefined // reset - important to trigger the change in UI
             this.onBookmarkImageLoadError = true // disable remove button
-            this.msgService.info({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
+            this.msgService.success({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
           },
           error: (err) => {
             console.error('deleteImage', err)
+            this.msgService.error({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
           }
         })
   }
@@ -247,6 +250,7 @@ export class BookmarkDetailComponent
     if (ev.target && (ev.target as HTMLInputElement).files) {
       const files = (ev.target as HTMLInputElement).files
       if (files) {
+        // get parameter value: TODO
         if (files[0].size > 1000000) {
           this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_SIZE' })
         } else if (!/^.*.(jpg|jpeg|png)$/.exec(files[0].name)) {
@@ -264,9 +268,20 @@ export class BookmarkDetailComponent
     const blob = new Blob([files[0]], { type: files[0].type })
     this.prepareImageUrl() // reset - important to trigger the change in UI
     this.onBookmarkImageLoadError = false
-    this.imageApi.uploadImage({ refId: id, body: blob }).subscribe(() => {
-      this.prepareImageUrl(id)
-      this.msgService.info({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
+    this.imageApi.uploadImage({ refId: id, body: blob }).subscribe({
+      next: () => {
+        this.prepareImageUrl(id)
+        this.msgService.success({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
+      },
+      error: (err) => {
+        this.onBookmarkImageLoadError = true
+        this.msgService.error({
+          summaryKey: 'IMAGE.UPLOAD_FAIL',
+          detailKey: 'IMAGE.' + err.error?.errorCode,
+          detailParameters: err.error?.invalidParams[0]
+        })
+        console.error('uploadImage', err)
+      }
     })
   }
   private prepareImageUrl(id?: string): void {

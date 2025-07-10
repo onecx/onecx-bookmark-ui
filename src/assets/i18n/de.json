@@ -264,9 +264,11 @@
   },
   "IMAGE": {
     "LOGO_URL": "Externe Logo URL",
-    "UPLOAD_FAIL": "Die Datei wurde nicht erfolgreich hochgeladen.",
+    "UPLOAD_FAIL": "Die Datei konnte nicht hochgeladen werden.",
     "UPLOAD_SUCCESS": "Die Datei wurde erfolgreich hochgeladen.",
+    "REMOVE_FAIL": "Die Datei konnte nicht gelöscht werden.",
     "REMOVE_SUCCESS": "Die Datei wurde erfolgreich gelöscht.",
+    "CONSTRAINT_VIOLATIONS": "{{name}}: {{message}}",
     "CONSTRAINT_FILE_MISSING": "Keine Datei ausgewählt.",
     "CONSTRAINT_FILE_TYPE": "Die folgenden Bildformate werden akzeptiert: jpg, jpeg, png",
     "CONSTRAINT_FAILED": "Bedingung zum Hochladen nicht erfüllt:",

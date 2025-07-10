@@ -639,6 +639,7 @@ describe('BookmarkDetailComponent', () => {
       detailKey: 'IMAGE.CONSTRAINT_FILE_TYPE'
     })
   })
+
   it('should call saveImage if file is valid ', () => {
     const file = new File([''], 'test.jpg', { type: 'image/jpeg' })
     Object.defineProperty(file, 'size', { value: 100 }) // gültige Größe
@@ -663,6 +664,7 @@ describe('BookmarkDetailComponent', () => {
 
     expect(saveSpy).toHaveBeenCalledWith('123', input.files)
   })
+
   it('should show error if no file is present ', () => {
     const event = { target: null } as Event
 
@@ -676,6 +678,7 @@ describe('BookmarkDetailComponent', () => {
       detailKey: 'IMAGE.CONSTRAINT_FILE_MISSING'
     })
   })
+
   it('should upload image and show success message (direct call)', () => {
     const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
     const fileList = {
@@ -700,6 +703,7 @@ describe('BookmarkDetailComponent', () => {
       summaryKey: 'IMAGE.UPLOAD_SUCCESS'
     })
   })
+
   it('should set fetchingLogoUrl and reset error if input has value ', () => {
     const input = document.createElement('input')
     input.value = 'https://example.com/logo.png'
