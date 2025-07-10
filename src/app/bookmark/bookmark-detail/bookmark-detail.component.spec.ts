@@ -687,8 +687,8 @@ describe('BookmarkDetailComponent', () => {
       item: (index: number) => file
     } as any
 
-    ;(component as any).msgService = { info: jest.fn() }
-    const infoSpy = jest.spyOn((component as any).msgService, 'info')
+    ;(component as any).msgService = { success: jest.fn() }
+    const messageSpy = jest.spyOn((component as any).msgService, 'success')
 
     ;(component as any).prepareImageUrl = jest.fn()
     ;(component as any).imageApi = {
@@ -699,9 +699,7 @@ describe('BookmarkDetailComponent', () => {
     expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
     expect((component as any).prepareImageUrl).toHaveBeenCalledWith('123')
     expect(component.onBookmarkImageLoadError).toBe(false)
-    expect(infoSpy).toHaveBeenCalledWith({
-      summaryKey: 'IMAGE.UPLOAD_SUCCESS'
-    })
+    expect(messageSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
   })
 
   it('should set fetchingLogoUrl and reset error if input has value ', () => {
