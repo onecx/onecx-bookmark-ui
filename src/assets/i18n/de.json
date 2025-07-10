@@ -179,7 +179,7 @@
       "ENDPOINT_PARAMETER": "Ein spezieller Lesezeichen des Endpunkts dem ein Wert zugeordnet werden kann.",
       "QUERY": "Zusätzliche Informationen die server- oder clientseitig verarbeitet werden können.",
       "FRAGMENT": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
-      "TYPE_URL": "Feste URL zu einem Ziel ggf. auch ausserhalb des Workspaces",
+      "TYPE_URL": "URL zu einem Ziel ggf. auch ausserhalb des Workspaces. Wird in separatem TAB geladen.",
       "TYPE_PRODUCT": "URL zu einem Endpunkt einer Applikation im aktuellen Workspace",
       "URL": "Komplette URL, die 1:1 benutzt wird",
       "URL_SEARCH": "Finale URL die als Link benutzt wird"
