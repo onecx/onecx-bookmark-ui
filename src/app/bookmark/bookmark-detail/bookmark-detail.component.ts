@@ -25,8 +25,7 @@ export function JsonValidator(): ValidatorFn {
     let isValid = true
     let ex: any // sonar
     const value = control.value as string
-    if (!value || value === '' || value === '{}') isValid = true
-    else
+    if (value && value !== '' && value !== '{}')
       try {
         // control.value is a JavaScript object but in JSON syntax!
         JSON.parse(value) // is JSON?
@@ -250,7 +249,7 @@ export class BookmarkDetailComponent
     if (ev.target && (ev.target as HTMLInputElement).files) {
       const files = (ev.target as HTMLInputElement).files
       if (files) {
-        // get parameter value: TODO
+        // get parameter value
         if (files[0].size > 1000000) {
           this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_SIZE' })
         } else if (!/^.*.(jpg|jpeg|png)$/.exec(files[0].name)) {
