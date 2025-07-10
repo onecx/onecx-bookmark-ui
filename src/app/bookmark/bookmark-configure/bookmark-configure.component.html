@@ -203,23 +203,23 @@
                   tooltipPosition="top"
                   tooltipEvent="hover"
                 ></span>
-                <!-- URL bookmark -->
-                <div *ngIf="col.field === 'url' && rowData['url']" class="text-ellipsis-2-lines">
+                <div class="text-ellipsis-2-lines">
+                  <!-- URL bookmark -->
                   <a
+                    *ngIf="rowData['url']"
+                    class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
                     [href]="rowData[col.field]"
                     target="_blank"
-                    class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
                   >
                     {{ limitText(rowData[col.field], 100) }}
                   </a>
-                </div>
-                <!-- OneCX   bookmark -->
-                <div *ngIf="col.field === 'url' && !rowData['url']" class="text-ellipsis-2-lines">
+                  <!-- OneCX product bookmark -->
                   <a
+                    *ngIf="!rowData['url']"
+                    class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
                     [routerLink]="getUrl(rowData) | async"
                     [queryParams]="rowData.query"
                     [fragment]="rowData.fragment"
-                    class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
                   >
                     {{ limitText(prepareUrlBookmarkLink(getUrl(rowData) | async, rowData), 100) }}
                   </a>

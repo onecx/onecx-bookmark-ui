@@ -179,7 +179,7 @@
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
       "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
-      "TYPE_URL": "Static URL to target maybe also outside of the Workspace",
+      "TYPE_URL": "Static URL to target maybe also outside of the Workspace. Loaded in separate TAB",
       "TYPE_PRODUCT": "URL to endpoint of an Application within the current Workspace",
       "URL": "Complete URL to be used 1:1",
       "URL_SEARCH": "Final URL which is used as target link"
