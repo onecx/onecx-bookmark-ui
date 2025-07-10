@@ -702,7 +702,7 @@ describe('BookmarkDetailComponent', () => {
     expect(messageSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
   })
 
-  it('should upload image and show error message (direct call)', () => {
+  it('should upload image and show error message - if server error message exist', () => {
     const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
     const fileList = {
       0: file,
@@ -737,6 +737,34 @@ describe('BookmarkDetailComponent', () => {
     })
     expect(console.error).toHaveBeenCalledTimes(1)
     expect(component.onBookmarkImageLoadError).toBe(true)
+  })
+
+  it('should upload image and show error message - if server error message not exist', () => {
+    const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
+    const fileList = {
+      0: file,
+      length: 100,
+      item: (index: number) => file
+    } as any
+
+    ;(component as any).msgService = { error: jest.fn() }
+    const messageSpy = jest.spyOn((component as any).msgService, 'error')
+    const serverError = {
+      errorCode: 'CONSTRAINT_VIOLATIONS'
+    }
+    const errorResponse = { status: 400, statusText: 'error', error: serverError }
+    ;(component as any).prepareImageUrl = jest.fn()
+    ;(component as any).imageApi = {
+      uploadImage: jest.fn().mockReturnValue(throwError(() => errorResponse))
+    }
+    ;(component as any).saveImage('123', fileList)
+
+    expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
+    expect(messageSpy).toHaveBeenCalledWith({
+      summaryKey: 'IMAGE.UPLOAD_FAIL',
+      detailKey: 'IMAGE.CONSTRAINT_VIOLATIONS',
+      detailParameters: undefined
+    })
   })
 
   it('should set fetchingLogoUrl and reset error if input has value ', () => {
