@@ -639,7 +639,8 @@ describe('BookmarkDetailComponent', () => {
       detailKey: 'IMAGE.CONSTRAINT_FILE_TYPE'
     })
   })
-  it('should call saveImage if file is valid ', () => {
+
+  it('should save image if file is valid ', () => {
     const file = new File([''], 'test.jpg', { type: 'image/jpeg' })
     Object.defineProperty(file, 'size', { value: 100 }) // gültige Größe
 
@@ -663,6 +664,7 @@ describe('BookmarkDetailComponent', () => {
 
     expect(saveSpy).toHaveBeenCalledWith('123', input.files)
   })
+
   it('should show error if no file is present ', () => {
     const event = { target: null } as Event
 
@@ -676,6 +678,7 @@ describe('BookmarkDetailComponent', () => {
       detailKey: 'IMAGE.CONSTRAINT_FILE_MISSING'
     })
   })
+
   it('should upload image and show success message (direct call)', () => {
     const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
     const fileList = {
@@ -684,8 +687,8 @@ describe('BookmarkDetailComponent', () => {
       item: (index: number) => file
     } as any
 
-    ;(component as any).msgService = { info: jest.fn() }
-    const infoSpy = jest.spyOn((component as any).msgService, 'info')
+    ;(component as any).msgService = { success: jest.fn() }
+    const messageSpy = jest.spyOn((component as any).msgService, 'success')
 
     ;(component as any).prepareImageUrl = jest.fn()
     ;(component as any).imageApi = {
@@ -696,10 +699,71 @@ describe('BookmarkDetailComponent', () => {
     expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
     expect((component as any).prepareImageUrl).toHaveBeenCalledWith('123')
     expect(component.onBookmarkImageLoadError).toBe(false)
-    expect(infoSpy).toHaveBeenCalledWith({
-      summaryKey: 'IMAGE.UPLOAD_SUCCESS'
+    expect(messageSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
+  })
+
+  it('should upload image and show error message - if server error message exist', () => {
+    const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
+    const fileList = {
+      0: file,
+      length: 100,
+      item: (index: number) => file
+    } as any
+
+    ;(component as any).msgService = { error: jest.fn() }
+    const messageSpy = jest.spyOn((component as any).msgService, 'error')
+    const serverError = {
+      errorCode: 'CONSTRAINT_VIOLATIONS',
+      invalidParams: [
+        {
+          name: 'uploadImage.contentLength',
+          message: 'Parameter: bookmark-image-size  Boundaries: 1 Bytes - 10000 Bytes'
+        }
+      ]
+    }
+    const errorResponse = { status: 400, statusText: 'error', error: serverError }
+    jest.spyOn(console, 'error').mockImplementation()
+    ;(component as any).prepareImageUrl = jest.fn()
+    ;(component as any).imageApi = {
+      uploadImage: jest.fn().mockReturnValue(throwError(() => errorResponse))
+    }
+    ;(component as any).saveImage('123', fileList)
+
+    expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
+    expect(messageSpy).toHaveBeenCalledWith({
+      summaryKey: 'IMAGE.UPLOAD_FAIL',
+      detailKey: 'IMAGE.' + errorResponse.error?.errorCode,
+      detailParameters: errorResponse.error?.invalidParams[0]
+    })
+    expect(console.error).toHaveBeenCalledTimes(1)
+    expect(component.onBookmarkImageLoadError).toBe(true)
+  })
+
+  it('should upload image and show error message - if server error message not exist', () => {
+    const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
+    const fileList = {
+      0: file,
+      length: 100,
+      item: (index: number) => file
+    } as any
+
+    ;(component as any).msgService = { error: jest.fn() }
+    const messageSpy = jest.spyOn((component as any).msgService, 'error')
+    const errorResponse = { status: 400, statusText: 'error' }
+    ;(component as any).prepareImageUrl = jest.fn()
+    ;(component as any).imageApi = {
+      uploadImage: jest.fn().mockReturnValue(throwError(() => errorResponse))
+    }
+    ;(component as any).saveImage('123', fileList)
+
+    expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
+    expect(messageSpy).toHaveBeenCalledWith({
+      summaryKey: 'IMAGE.UPLOAD_FAIL',
+      detailKey: undefined,
+      detailParameters: undefined
     })
   })
+
   it('should set fetchingLogoUrl and reset error if input has value ', () => {
     const input = document.createElement('input')
     input.value = 'https://example.com/logo.png'

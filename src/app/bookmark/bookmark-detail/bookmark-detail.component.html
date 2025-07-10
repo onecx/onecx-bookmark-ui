@@ -211,24 +211,39 @@
         <label for="bm_detail_form_field_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
       </span>
       <div>
-        <div controlErrorAnchor>
-          <span class="p-float-label">
-            <textarea
-              class="w-full"
-              pInputTextarea
-              autoresize="true"
-              rows="3"
-              id="bm_detail_form_field_endpoint_parameter"
-              formControlName="endpointParams"
-              [attr.aria-label]="'BOOKMARK.ENDPOINT_PARAMETER' | translate"
-              [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT_PARAMETER' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            ></textarea>
-            <label for="bm_detail_form_field_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
-          </span>
+        <span class="p-float-label" controlErrorAnchor>
+          <p-badge
+            severity="primary"
+            [value]="1000 - EndpointParameterObject.value.length"
+            class="z-1 text-badge-right"
+            [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
+            [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          />
+          <textarea
+            #EndpointParameterObject
+            pInputTextarea
+            class="w-full"
+            autoresize="true"
+            rows="3"
+            id="bm_detail_form_field_endpoint_parameter"
+            formControlName="endpointParams"
+            [attr.aria-label]="'BOOKMARK.ENDPOINT_PARAMETER' | translate"
+            [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT_PARAMETER' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          ></textarea>
+          <label for="bm_detail_form_field_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
           <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
-        </div>
+        </span>
+        <label
+          *ngIf="formGroup.get('endpointParams')?.errors"
+          class="block control-error"
+          for="bm_detail_form_field_endpoint_parameter"
+        >
+          {{ formGroup.get('endpointParams')?.errors?.['error'] }}
+        </label>
       </div>
     </div>
   </p-tabPanel>
@@ -264,25 +279,35 @@
         </div>
       </div>
       <div>
-        <div controlErrorAnchor>
-          <span class="p-float-label">
-            <textarea
-              #query
-              class="w-full"
-              pInputTextarea
-              autoresize="true"
-              rows="3"
-              id="bm_detail_form_field_query"
-              formControlName="query"
-              [attr.aria-label]="'BOOKMARK.QUERY' | translate"
-              [pTooltip]="'BOOKMARK.TOOLTIPS.QUERY' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            ></textarea>
-            <label for="bm_detail_form_field_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
-          </span>
+        <span class="p-float-label" controlErrorAnchor>
+          <p-badge
+            severity="primary"
+            [value]="1000 - QueryObject.value.length"
+            class="z-1 text-badge-right"
+            [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
+            [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          />
+          <textarea
+            #QueryObject
+            class="w-full"
+            pInputTextarea
+            autoresize="true"
+            rows="3"
+            id="bm_detail_form_field_query"
+            formControlName="query"
+            [attr.aria-label]="'BOOKMARK.QUERY' | translate"
+            [pTooltip]="'BOOKMARK.TOOLTIPS.QUERY' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          ></textarea>
+          <label for="bm_detail_form_field_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
           <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
-        </div>
+        </span>
+        <label *ngIf="formGroup.get('query')?.errors" class="block control-error" for="bm_detail_form_field_query">
+          {{ formGroup.get('query')?.errors?.['error'] }}
+        </label>
       </div>
       <span class="p-float-label">
         <textarea
