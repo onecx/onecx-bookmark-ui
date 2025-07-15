@@ -219,7 +219,7 @@ export class BookmarkDetailComponent
   }
 
   public getProductAppDisplayName(product: Product, appId?: string): string | undefined {
-    if (!product) return appId
+    if (product.applications?.length === 0) return appId
     if (!appId) return undefined
     return product.applications?.find((app) => app.appId === appId)?.appName
   }
