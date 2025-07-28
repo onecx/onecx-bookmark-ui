@@ -46,7 +46,7 @@
   </div>
 
   <!-- BOOKMARKS
-       => absolute positioned because screen centered and flex does not work without certain height of parent -->
+       => absolute positioned because screen centered and flex needs a height dimension of parent -->
   <div class="xl:absolute mt-4 md:mt-6 xl:area-centered">
     <div
       *ngIf="!vm.loading && !vm.exceptionKey && ((products$ | async) ?? []) as products"
