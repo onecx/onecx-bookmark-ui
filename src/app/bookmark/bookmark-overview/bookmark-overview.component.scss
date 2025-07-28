@@ -4,8 +4,15 @@
 @include displaying-text-responsive;
 
 :host ::ng-deep {
-  @media screen and (min-width: 768px) {
-    .md\:bookmark-section-centered {
+  .area-centered {
+    margin: 0;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+  }
+  @media screen and (min-width: 1200px) {
+    .xl\:area-centered {
       margin: 0;
       top: 50%;
       left: 50%;
