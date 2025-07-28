@@ -1,5 +1,13 @@
 <div class="flex flex-column justify-content-between">
-  <h1 class="m-0 p-0 text-center text-base md:text-lg md:text-xl">{{ headerKey | translate }}</h1>
+  <h1
+    class="m-0 p-0 text-center text-base md:text-lg md:text-xl"
+    [ariaLabel]="('BOOKMARK.SCOPES.TOOLTIPS.' + (isPrivate ? 'PRIVATE' : 'PUBLIC'))| translate"
+    [pTooltip]="('BOOKMARK.SCOPES.TOOLTIPS.' + (isPrivate ? 'PRIVATE' : 'PUBLIC'))| translate"
+    tooltipPosition="top"
+    tooltipEvent="hover"
+  >
+    {{ headerKey | translate }}
+  </h1>
 
   <!-- BOOKMARKS -->
   <div

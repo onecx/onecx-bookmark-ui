@@ -11,14 +11,13 @@
 
   <!-- HEADER -->
   <div class="relative overflow-hidden">
-    <div class="sm:ml-2 md:ml-3 xl:ml-0 flex flex-column gap-2 sm:gap-3 text-primary">
+    <div class="sm:ml-2 lg:ml-3 flex flex-column row-gap-2 sm:row-gap-3 text-primary">
       <h1 id="wc_overview_info_title" class="m-0 line-height-1 font-normal text-xl sm:text-2xl md:text-4xl">
         {{ 'DIALOG.OVERVIEW.TITLE' | translate }} {{ (user$ | async)?.person?.firstName }}
       </h1>
       <h2 id="wc_overview_info_workspace" class="m-0 line-height-1 font-normal text-sm sm:text-base">
         Workspace: {{ workspace?.displayName }}
       </h2>
-
       <div *ngIf="vm.loading || vm.exceptionKey" class="mt-4">
         <p-message
           *ngIf="vm.loading"
@@ -47,7 +46,7 @@
 
   <!-- BOOKMARKS
        => absolute positioned because screen centered and flex needs a height dimension of parent -->
-  <div class="xl:absolute mt-4 md:mt-6 xl:area-centered">
+  <div class="xl:absolute my-4 lg:my-6 xl:area-centered">
     <div
       *ngIf="!vm.loading && !vm.exceptionKey && ((products$ | async) ?? []) as products"
       class="xl:w-11 mx-auto flex flex-row flex-nowrap column-gap-0 xl:column-gap-3 row-gap-4 sm:row-gap-3"
