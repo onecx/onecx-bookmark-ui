@@ -15,9 +15,9 @@
       <h1 id="wc_overview_info_title" class="m-0 line-height-1 font-normal text-xl sm:text-2xl md:text-4xl">
         {{ 'DIALOG.OVERVIEW.TITLE' | translate }} {{ (user$ | async)?.person?.firstName }}
       </h1>
-      <h2 id="wc_overview_info_workspace" class="m-0 line-height-1 font-normal text-sm sm:text-base">
+      <div id="wc_overview_info_workspace" class="m-0 line-height-1 font-normal text-sm sm:text-base">
         Workspace: {{ workspace?.displayName }}
-      </h2>
+      </div>
       <div *ngIf="vm.loading || vm.exceptionKey" class="mt-4">
         <p-message
           *ngIf="vm.loading"
