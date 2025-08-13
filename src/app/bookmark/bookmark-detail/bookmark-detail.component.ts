@@ -4,7 +4,12 @@ import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validato
 import { BehaviorSubject, filter, map, Observable } from 'rxjs'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import {
+  AppStateService,
+  //ParametersService,
+  PortalMessageService,
+  UserService
+} from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
 import { BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
@@ -98,10 +103,12 @@ export class BookmarkDetailComponent
   public isProductComponentDefined$: Observable<boolean> // check if a component was assigned
   public product$ = new BehaviorSubject<Product | undefined>(undefined) // theme data
   public productEmitter = new EventEmitter<Product>()
+  public size: any
 
   constructor(
     private readonly user: UserService,
     private readonly appStateService: AppStateService,
+    //private readonly parameterService: ParametersService,
     private readonly slotService: SlotService,
     private readonly msgService: PortalMessageService,
     private readonly imageApi: ImagesInternalAPIService
@@ -131,8 +138,15 @@ export class BookmarkDetailComponent
       imageUrl: new FormControl(null, [Validators.maxLength(255)])
     })
   }
-
+  /*
+  async getParameter(param: string) {
+    this.size = await this.parameterService.get(param, 1000)
+    console.log('size', this.size)
+  }
+*/
   public ngOnInit() {
+    //  this.getParameter('bookmark-image-size')
+
     // on open dialog => manage parameter field depends on endpointName content
     if (this.vm.initialBookmark) {
       this.defaultProduct = {

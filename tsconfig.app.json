@@ -1,7 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": []
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "inlineSources": true
   },
   "files": [
     "src/main.ts",
