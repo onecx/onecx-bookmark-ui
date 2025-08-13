@@ -1,6 +1,8 @@
-import { APP_INITIALIZER, DoBootstrap, Injector, isDevMode, NgModule } from '@angular/core'
+import { APP_INITIALIZER, DoBootstrap, Injector, NgModule, isDevMode } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { Router, RouterModule } from '@angular/router'
+import { BrowserModule } from '@angular/platform-browser'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouterModule, Router } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { Actions, EffectsModule, EffectSources, EffectsRunner } from '@ngrx/effects'
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
@@ -8,17 +10,17 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
+import { createTranslateLoader, provideTranslationPathFromMeta } from '@onecx/angular-utils'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
-import { createTranslateLoader, TRANSLATION_PATH, translationPathFactory } from '@onecx/angular-utils'
 import { addInitializeModuleGuard, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
-import { PortalCoreModule, PortalMissingTranslationHandler } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
+import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { Configuration } from './shared/generated'
-import { SharedModule } from './shared/shared.module'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
+
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { routes } from './app-routing.module'
-import { commonImports } from './app.module'
 import { metaReducers, reducers } from './app.reducers'
 
 // Workaround for the following issue:
@@ -29,20 +31,19 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
 @NgModule({
   declarations: [AppEntrypointComponent],
   imports: [
-    ...commonImports,
+    AngularAuthModule,
+    BrowserModule,
+    BrowserAnimationsModule,
     PortalCoreModule.forMicroFrontend(),
     RouterModule.forRoot(addInitializeModuleGuard(routes)),
     TranslateModule.forRoot({
-      extend: true,
-      isolate: false,
+      isolate: true,
       loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
-        useClass: PortalMissingTranslationHandler
+        useClass: AngularAcceleratorMissingTranslationHandler
       }
     }),
-    SharedModule,
-    AngularAuthModule,
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effectProvidersForWorkaround),
     StoreRouterConnectingModule.forRoot(),
@@ -54,30 +55,22 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       traceLimit: 75 // maximum stack trace frames to be stored (in case trace option was provided as true)
     })
   ],
-  exports: [],
   providers: [
-    {
-      provide: Configuration,
-      useFactory: apiConfigProvider,
-      deps: [ConfigurationService, AppStateService]
-    },
+    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
     {
       provide: APP_INITIALIZER,
       useFactory: initializeRouter,
       multi: true,
       deps: [Router, AppStateService]
     },
-    {
-      provide: TRANSLATION_PATH,
-      useFactory: (appStateService: AppStateService) => translationPathFactory('assets/i18n/')(appStateService),
-      multi: true,
-      deps: [AppStateService]
-    },
+    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class OneCXBookmarkModule implements DoBootstrap {
-  constructor(private readonly injector: Injector) {}
+  constructor(private readonly injector: Injector) {
+    console.info('OneCX Bookmark Module constructor')
+  }
 
   ngDoBootstrap(): void {
     createAppEntrypoint(AppEntrypointComponent, 'ocx-bookmark-component', this.injector)
