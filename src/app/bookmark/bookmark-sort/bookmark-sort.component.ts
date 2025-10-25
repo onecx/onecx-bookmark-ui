@@ -22,7 +22,8 @@ export class BookmarkSortComponent
   public limitText = limitText
 
   ocxDialogButtonClicked() {
-    this.dialogResult?.forEach((b, i) => (this.dialogResult[i] = { ...b, position: i + 1 }))
+    // sonar does not like forEach
+    for (const { b, i } of this.dialogResult.map((b, i) => ({ b, i }))) b.position = i + 1
   }
 
   ngOnInit() {

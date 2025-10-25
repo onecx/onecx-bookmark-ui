@@ -242,10 +242,11 @@ export class BookmarkDetailComponent
    * IMAGE
    */
   public onRemoveLogo(bookmark?: CombinedBookmark) {
-    if (bookmark?.id)
-      if (this.formGroup.get('imageUrl')?.value) {
-        this.formGroup.get('imageUrl')?.setValue(null)
-        this.prepareImageUrl(this.vm.initialBookmark?.id)
+    const formField = this.formGroup.get('imageUrl')
+    if (bookmark?.id && formField)
+      if (formField.value) {
+        formField.setValue(null)
+        this.prepareImageUrl(bookmark.id)
       } else
         this.imageApi.deleteImage({ refId: bookmark.id }).subscribe({
           next: () => {
@@ -261,7 +262,7 @@ export class BookmarkDetailComponent
   }
 
   public onFileUpload(ev: Event, bookmark?: CombinedBookmark): void {
-    if (ev.target && (ev.target as HTMLInputElement).files) {
+    if (ev.target && (ev.target as HTMLInputElement).files && bookmark) {
       const files = (ev.target as HTMLInputElement).files
       if (files) {
         // get parameter value
@@ -269,7 +270,7 @@ export class BookmarkDetailComponent
           this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_SIZE' })
         } else if (!/^.*.(jpg|jpeg|png)$/.exec(files[0].name)) {
           this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_FILE_TYPE' })
-        } else if (bookmark?.id) {
+        } else if (bookmark.id) {
           this.saveImage(bookmark.id, files) // store image
         }
       }
@@ -292,7 +293,7 @@ export class BookmarkDetailComponent
         this.msgService.error({
           summaryKey: 'IMAGE.UPLOAD_FAIL',
           detailKey: err.error?.errorCode ? 'IMAGE.' + err.error.errorCode : undefined,
-          detailParameters: err.error?.invalidParams ? err.error?.invalidParams[0] : undefined
+          detailParameters: err.error?.invalidParams[0]
         })
         console.error('uploadImage', err)
       }

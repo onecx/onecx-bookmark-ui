@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+import { Component } from '@angular/core'
 import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -108,20 +109,32 @@ describe('BookmarkDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy()
   })
-  it('should return appName for matching appId', () => {
-    const product = {
-      applications: [{ appId: 'app1', appName: 'My App', deprecated: false, undeployed: false }]
-    } as Product
 
-    const result = component.getProductAppDisplayName(product, 'app1')
-    expect(result).toBe('My App')
-  })
+  describe('getProductAppDisplayName', () => {
+    it('should return appName for matching appId', () => {
+      const product = {
+        applications: [{ appId: 'app1', appName: 'My App', deprecated: false, undeployed: false }]
+      } as Product
 
-  it('should return undefined if applications are undefined', () => {
-    const product = {} as Product
+      const result = component.getProductAppDisplayName(product, 'app1')
+      expect(result).toBe('My App')
+    })
 
-    const result = component.getProductAppDisplayName(product, 'app1')
-    expect(result).toBeUndefined()
+    it('should return undefined if no app id', () => {
+      const product = {
+        applications: [{ appId: 'app1', appName: 'My App', deprecated: false, undeployed: false }]
+      } as Product
+
+      const result = component.getProductAppDisplayName(product)
+      expect(result).toBeUndefined()
+    })
+
+    it('should return undefined if applications are undefined', () => {
+      const product = {} as Product
+
+      const result = component.getProductAppDisplayName(product, 'app1')
+      expect(result).toBeUndefined()
+    })
   })
 
   it('should build the correct image URL', fakeAsync(() => {
@@ -437,6 +450,7 @@ describe('BookmarkDetailComponent', () => {
 
     expect(component).toBeTruthy()
   }))
+
   it('should remove logo on button click => image', fakeAsync(() => {
     jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(of({}))
 
@@ -797,5 +811,44 @@ describe('BookmarkDetailComponent', () => {
 
     expect(component.fetchingLogoUrl).toBeUndefined()
     expect(component.onBookmarkImageLoadError).toBe(true)
+  })
+})
+
+/*****************************************************************************
+ * Test modification of built-in Angular class registerOnChange at top of the file
+ */
+@Component({
+  template: `<input type="text" [(ngModel)]="value" />`
+})
+class TestComponent {
+  value: any = ''
+}
+
+describe('DefaultValueAccessor prototype modification', () => {
+  let component: TestComponent
+  let fixture: ComponentFixture<TestComponent>
+  let inputElement: HTMLInputElement
+
+  function initTestComponent(): void {
+    fixture = TestBed.createComponent(TestComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [TestComponent],
+      imports: [FormsModule]
+    }).compileComponents()
+
+    initTestComponent()
+    inputElement = fixture.nativeElement.querySelector('input')
+  })
+
+  it('should trim the value on model change: value is of type string', () => {
+    inputElement.value = '  test  '
+    inputElement.dispatchEvent(new Event('input'))
+
+    expect(component.value).toBe('test')
   })
 })

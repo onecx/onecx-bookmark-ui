@@ -151,9 +151,9 @@
     "DISPLAY_NAME": "Name",
     "POSITION": "Position",
     "PRODUCT": "Application",
-    "APP_ID": "App ID",
+    "APP_ID": "App",
     "ENDPOINT": "Endpoint Name",
-    "ENDPOINT_PARAMETER": "Endpoint Bookmark",
+    "ENDPOINT_PARAMETER": "Parameter",
     "QUERY": "Query",
     "FRAGMENT": "Fragment",
     "SCOPE": "Scope",
@@ -174,7 +174,7 @@
       "POSITION": "Position in list view",
       "PRODUCT": "Target Application",
       "APP_ID": "App ID",
-      "SCOPE_IS_PUBLIC": "If checked, the Bookmark is visible to everyone in the workspace (public).",
+      "SCOPE_IS_PUBLIC": "If checked, the Bookmark is visible to everyone in the workspace.",
       "ENDPOINT": "The name of the app endpoint that the Bookmark points to.",
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
       "QUERY": "Additional information that can be further processed on the server or client side.",
@@ -224,7 +224,7 @@
     "HEADER": "Export Bookmarks",
     "INFO": "Select the areas whose Bookmarks you want to export.",
     "SCOPE_PRIVATE": "Export the own Bookmarks",
-    "SCOPE_PUBLIC": "Export the public Bookmarks",
+    "SCOPE_PUBLIC": "Export the Workspace Bookmarks",
     "ERROR": "Export failed",
     "SUCCESS": "Bookmarks successfully exported"
   },
@@ -241,7 +241,7 @@
     "SCOPE": {
       "INFO": "Which Bookmarks to import?",
       "PRIVATE": "My Bookmarks",
-      "PUBLIC": "Public Bookmarks"
+      "PUBLIC": "Workspace Bookmarks"
     },
     "SNAPSHOT": {
       "DATE": "Created on",

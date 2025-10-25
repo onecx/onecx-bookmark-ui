@@ -2,7 +2,12 @@
 <ng-container *ngIf="isProductComponentDefined$ | async">
   <ocx-slot
     [name]="slotName"
-    [inputs]="{ dataType: 'product', productName: this.vm.initialBookmark?.productName, logEnabled: false, logPrefix: 'bookmark' }"
+    [inputs]="{
+      dataType: 'product',
+      productName: this.vm.initialBookmark?.productName,
+      logEnabled: false,
+      logPrefix: 'bookmark'
+    }"
     [outputs]="{ product: productEmitter }"
   >
   </ocx-slot>
@@ -142,7 +147,7 @@
     tooltipEvent="hover"
   >
     <div
-      *ngIf="((product$ | async) ?? defaultProduct) as product"
+      *ngIf="(product$ | async) ?? defaultProduct as product"
       class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4"
     >
       <img
@@ -310,7 +315,17 @@
         </label>
       </div>
       <span class="p-float-label">
+        <p-badge
+          severity="primary"
+          [value]="1000 - FragmentObject.value.length"
+          class="z-1 text-badge-right"
+          [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
+          [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
         <textarea
+          #FragmentObject
           class="w-full"
           pInputTextarea
           autoresize="true"
@@ -378,7 +393,9 @@
             id="bm_detail_form_field_modification_date"
             class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
             [disabled]="true"
-            [value]="vm.initialBookmark?.modificationDate ? (vm.initialBookmark?.modificationDate | date: dateFormat) : ''"
+            [value]="
+              vm.initialBookmark?.modificationDate ? (vm.initialBookmark?.modificationDate | date: dateFormat) : ''
+            "
             [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_DATE' | translate"
             tooltipPosition="top"
             tooltipEvent="hover"
