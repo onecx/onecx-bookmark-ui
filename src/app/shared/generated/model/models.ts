@@ -11,7 +11,6 @@ export * from './eximMode';
 export * from './exportBookmarksRequest';
 export * from './image';
 export * from './imageInfo';
-export * from './importBookmarksRequest';
 export * from './problemDetailInvalidParam';
 export * from './problemDetailParam';
 export * from './problemDetailResponse';

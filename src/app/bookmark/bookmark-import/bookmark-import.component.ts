@@ -4,7 +4,8 @@ import { FileSelectEvent, FileUpload } from 'primeng/fileupload'
 
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
-import { BookmarkSnapshot, EximBookmarkScope, EximMode, ImportBookmarksRequest } from 'src/app/shared/generated'
+import { BookmarkSnapshot, EximBookmarkScope, EximMode, ExportBookmarksRequest } from 'src/app/shared/generated'
+import { ImportBookmarkData } from '../bookmark-configure/bookmark-configure.effects'
 
 export type ImportError = {
   name: string
@@ -24,7 +25,7 @@ export type ImportError = {
 export class BookmarkImportComponent
   implements
     DialogPrimaryButtonDisabled,
-    DialogResult<ImportBookmarksRequest | undefined>,
+    DialogResult<ExportBookmarksRequest | undefined>,
     DialogButtonClicked<BookmarkImportComponent>
 {
   @Input() public workspaceName = ''
@@ -33,7 +34,7 @@ export class BookmarkImportComponent
 
   @ViewChild(FileUpload) fileUploader: FileUpload | undefined
 
-  public dialogResult: ImportBookmarksRequest | undefined = undefined
+  public dialogResult: ImportBookmarkData | undefined = undefined
   public importError: ImportError | undefined = undefined
   public snapshot: BookmarkSnapshot | undefined = undefined
   public mode: EximMode = EximMode.Append

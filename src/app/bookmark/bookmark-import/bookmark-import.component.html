@@ -30,7 +30,7 @@
       ></p-message>
 
       <div *ngIf="snapshot !== undefined" class="mt-2 flex flex-column row-gap-4">
-        <div class="flex flex-column row-gap-1">
+        <div class="flex flex-column row-gap-2">
           <div>{{ 'BOOKMARK_IMPORT.MODE.INFO' | translate }}</div>
           <div class="mt-1 flex flex-row justify-content-center align-items-center column-gap-6">
             <div class="flex flex-row align-items-center column-gap-2">
@@ -63,7 +63,7 @@
             </div>
           </div>
         </div>
-        <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="flex flex-column row-gap-2">
+        <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="flex flex-column row-gap-3">
           <div>{{ 'BOOKMARK_IMPORT.SCOPE.INFO' | translate }}</div>
           <div class="flex flex-row justify-content-center align-items-center column-gap-6">
             <p-checkbox
@@ -121,7 +121,7 @@
           id="bm_import_snapshot_date"
           class="pt-3 pb-2 text-responsive"
           [disabled]="true"
-          [value]="snapshot?.created | date : dateFormat"
+          [value]="snapshot?.created | date: dateFormat"
           [attr.aria-label]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
           [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.DATE.TOOLTIP' | translate"
           tooltipPosition="top"
@@ -135,16 +135,16 @@
         class="flex flex-row justify-content-center align-items-start column-gap-5"
       >
         <div class="flex flex-column">
-          <div class="font-bold text-sm">{{ 'BOOKMARK.SCOPES.PRIVATE' | translate }}</div>
-          <div class="m-0 py-1 pl-2 text-sm">
+          <div class="font-bold">{{ 'BOOKMARK.SCOPES.PRIVATE' | translate }}</div>
+          <div class="m-0 py-1 pl-2">
             <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PRIVATE']">
               {{ item.displayName }}
             </div>
           </div>
         </div>
         <div class="flex flex-column">
-          <div class="font-bold text-sm">{{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}</div>
-          <div class="m-0 py-1 pl-2 text-sm">
+          <div class="font-bold">{{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}</div>
+          <div class="m-0 py-1 pl-2">
             <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PUBLIC']">
               {{ item.displayName }}
             </div>

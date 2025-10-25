@@ -151,9 +151,9 @@
     "DISPLAY_NAME": "Name",
     "POSITION": "Position",
     "PRODUCT": "Applikation",
-    "APP_ID": "App ID",
+    "APP_ID": "App",
     "ENDPOINT": "Endpunktname",
-    "ENDPOINT_PARAMETER": "Endpunktparameter",
+    "ENDPOINT_PARAMETER": "Parameter",
     "QUERY": "Query",
     "FRAGMENT": "Fragment",
     "SCOPE": "Bereich",
@@ -241,7 +241,7 @@
     "SCOPE": {
       "INFO": "Welche Lesezeichen sollen importiert werden?",
       "PRIVATE": "Meine Lesezeichen",
-      "PUBLIC": "Öffentliche Lesezeichen"
+      "PUBLIC": "Workspace Lesezeichen"
     },
     "SNAPSHOT": {
       "DATE": "Erstellt am",
