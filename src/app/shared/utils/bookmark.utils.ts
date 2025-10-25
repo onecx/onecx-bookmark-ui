@@ -112,7 +112,7 @@ export function matchesEndpointPathPattern(applicationPath: string, endpointPath
         return '([^/]+)'
       } else {
         // Escape special regex characters in normal segments
-        return segment.replace(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+        return segment.replaceAll(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
       }
     })
     .join('\\/')

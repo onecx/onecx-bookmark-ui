@@ -99,7 +99,6 @@ export class BookmarkConfigureComponent implements OnInit {
       )
   }
   private preparePageActions(dataExists: boolean, scope: BookmarkScope): Action[] {
-    //  if (!dataExists) return []
     const perm = 'BOOKMARK#' + (scope === BookmarkScope.Public ? 'ADMIN_' : '') + 'EDIT'
     return [
       {

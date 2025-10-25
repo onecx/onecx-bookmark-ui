@@ -28,7 +28,6 @@ export class BookmarkListComponent {
   // get the target URL for the Bookmark
   public getUrl(bookmark: Bookmark): Observable<string> | undefined {
     if (bookmark.id && bookmark.productName && bookmark.appId) {
-      //if (!this.urls[bookmark.id]) {
       if (!Object.keys(this.urls).includes(bookmark.id)) {
         this.urls[bookmark.id] = this.workspaceService
           .getUrl(bookmark.productName, bookmark.appId, bookmark.endpointName, bookmark.endpointParameters)
