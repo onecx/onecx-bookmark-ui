@@ -1,5 +1,6 @@
 @import '/src/app/_bm-mixins.scss';
 
+@include card-badges;
 @include displaying-text-responsive;
 
 .bookmark-link:hover {

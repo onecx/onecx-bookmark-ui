@@ -27,6 +27,20 @@ export const bookmarkColumns: ExtendedColumn[] = [
     sort: true
   },
   {
+    field: 'external',
+    header: 'EXTERNAL.CONFIG',
+    active: true,
+    translationPrefix: 'BOOKMARK',
+    css: 'text-center'
+  },
+  {
+    field: 'target',
+    header: 'TARGET.CONFIG',
+    active: true,
+    translationPrefix: 'BOOKMARK',
+    css: 'text-center'
+  },
+  {
     field: 'url',
     header: 'URL_SEARCH',
     active: true,

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, Observable, map, of } from 'rxjs'
 import { Store } from '@ngrx/store'
@@ -7,7 +6,7 @@ import { MenuItem, PrimeIcons } from 'primeng/api'
 
 import { UserProfile, Workspace } from '@onecx/integration-interface'
 import { Action } from '@onecx/angular-accelerator'
-import { AppStateService, UserService, WorkspaceService } from '@onecx/angular-integration-interface'
+import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { SlotService } from '@onecx/angular-remote-components'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -47,14 +46,11 @@ export class BookmarkOverviewComponent implements OnInit {
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
-    public readonly route: ActivatedRoute,
-    private readonly router: Router,
     private readonly store: Store,
     private readonly user: UserService,
     private readonly slotService: SlotService,
     private readonly translate: TranslateService,
-    private readonly appStateService: AppStateService,
-    private readonly workspaceService: WorkspaceService
+    private readonly appStateService: AppStateService
   ) {
     this.user$ = this.user.profile$.asObservable()
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)

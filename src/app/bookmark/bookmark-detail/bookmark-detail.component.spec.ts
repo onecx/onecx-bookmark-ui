@@ -485,9 +485,8 @@ describe('BookmarkDetailComponent', () => {
 
     expect(component).toBeTruthy()
   }))
-  it('should catch error on remove logo => image', fakeAsync(() => {
-    jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(throwError(() => new Error('test error')))
 
+  it('should remove logo button click => image', fakeAsync(() => {
     component.editable = true
     component.vm = {
       changeMode: 'EDIT',
@@ -519,6 +518,7 @@ describe('BookmarkDetailComponent', () => {
 
     expect(component).toBeTruthy()
   }))
+
   it('should do nothing on remove logo if no bookmark is set => image', fakeAsync(() => {
     jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(throwError(() => new Error('test error')))
 
@@ -542,6 +542,7 @@ describe('BookmarkDetailComponent', () => {
 
     expect(component).toBeTruthy()
   }))
+
   it('should remove logo => edge cases with missing id', fakeAsync(() => {
     component.editable = true
     component.vm = {

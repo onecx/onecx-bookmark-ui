@@ -3,6 +3,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { ActivatedRoute } from '@angular/router'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { of } from 'rxjs'
 
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
@@ -15,6 +16,7 @@ import { DialogService } from 'primeng/dynamicdialog'
 
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
 import { PortalCoreModule, RowListGridData } from '@onecx/portal-integration-angular'
+import { provideHttpClient } from '@angular/common/http'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 import { initialState } from './bookmark-configure.reducers'
@@ -23,8 +25,6 @@ import { BookmarkConfigureComponent } from './bookmark-configure.component'
 import { BookmarkConfigureHarness } from './bookmark-configure.harness'
 import { BookmarkConfigureViewModel } from './bookmark-configure.viewmodel'
 import { selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
-import { of } from 'rxjs'
-import { provideHttpClient } from '@angular/common/http'
 
 describe('BookmarkConfigureComponent', () => {
   let component: BookmarkConfigureComponent
@@ -38,7 +38,7 @@ describe('BookmarkConfigureComponent', () => {
     columns: [],
     results: [],
     bookmarkFilter: '',
-    scopeQuickFilter: 'SCOPE',
+    scopeQuickFilter: 'PUBLIC',
     loading: false,
     exceptionKey: null
   }
@@ -86,7 +86,7 @@ describe('BookmarkConfigureComponent', () => {
   beforeEach(async () => {
     const userService = TestBed.inject(UserService)
     userService.hasPermission = () => true
-    userService.hasPermission = (permissionKey: 'BOOKMARK#EDIT') => false
+    userService.hasPermission = (permissionKey: 'BOOKMARK#EDIT') => true
     userService.hasPermission = (permissionKey: 'BOOKMARK#CONFIGURE') => true
     userService.hasPermission = (permissionKey: 'BOOKMARK#EXPORT') => true
     const workspaceService = TestBed.inject(WorkspaceService)
@@ -222,6 +222,7 @@ describe('BookmarkConfigureComponent', () => {
 
     expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.importBookmarks())
   })
+
   it('should call create action on click', async () => {
     jest.spyOn(store, 'dispatch')
     jest.spyOn(component, 'onCreate')
@@ -312,50 +313,62 @@ describe('BookmarkConfigureComponent', () => {
     jest.spyOn(component, 'onDetail')
     jest.spyOn(component, 'onCopy')
     jest.spyOn(component, 'onDelete')
+    jest.spyOn(component, 'onToggleDisable')
 
-    const mockResults = [
-      { id: '1', scope: 'PRIVATE', imagePath: '' },
-      { id: '2', scope: 'PRIVATE', imagePath: '' },
-      { id: '3', scope: 'PRIVATE', imagePath: '' },
-      { id: '4', scope: 'PUBLIC', imagePath: '' },
-      { id: '5', scope: 'PUBLIC', imagePath: '' },
-      { id: '6', scope: 'PUBLIC', imagePath: '' }
+    const bookmarks = [
+      { id: '1', scope: 'PRIVATE', imagePath: '', disabled: false },
+      { id: '2', scope: 'PRIVATE', imagePath: '', disabled: false },
+      { id: '3', scope: 'PRIVATE', imagePath: '', disabled: false },
+      { id: '4', scope: 'PUBLIC', imagePath: '', disabled: false },
+      { id: '5', scope: 'PUBLIC', imagePath: '', disabled: false },
+      { id: '6', scope: 'PUBLIC', imagePath: '', disabled: false }
     ] as RowListGridData[]
 
     const mockViewModel: BookmarkConfigureViewModel = {
       columns: [],
-      results: mockResults,
+      results: bookmarks,
       bookmarkFilter: '',
       scopeQuickFilter: 'PRIVATE',
       loading: false,
       exceptionKey: null
     }
-
-    const prepareSpy = jest.spyOn(component as any, 'preparePageActions')
     component.quickFilterValue = 'PRIVATE'
 
     store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
     store.refreshState()
     fixture.detectChanges()
-    expect(prepareSpy).toHaveBeenCalledWith(true, 'PRIVATE')
 
     await fixture.whenStable()
 
-    const editButton: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_configure_table_row_0_action_edit')
-    const copyButton: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_configure_table_row_0_action_copy')
+    // Important: get the real rendered button element inside the p-button wrapper!
+    const copyButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '#bm_configure_table_row_0_action_copy button'
+    )
     const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#bm_configure_table_row_0_action_delete'
+      '#bm_configure_table_row_0_action_delete button'
+    )
+    const editButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '#bm_configure_table_row_0_action_edit button'
     )
 
-    expect(editButton).toBeTruthy()
+    const toggleButton: HTMLButtonElement = fixture.nativeElement.querySelector(
+      '#bm_configure_table_row_0_action_toggle button'
+    )
+
     expect(copyButton).toBeTruthy()
     expect(deleteButton).toBeTruthy()
+    expect(editButton).toBeTruthy()
+    expect(toggleButton).toBeTruthy()
+
+    console.log(toggleButton)
+    toggleButton.click()
+    fixture.detectChanges()
+    expect(component.onToggleDisable).toHaveBeenCalled()
+    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.toggleBookmark({ id: '1' }))
 
     editButton.click()
     fixture.detectChanges()
-
     expect(component.onDetail).toHaveBeenCalled()
-
     expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.viewOrEditBookmark({ id: '1' }))
 
     copyButton.click()

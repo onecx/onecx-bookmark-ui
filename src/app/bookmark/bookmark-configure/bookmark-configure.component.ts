@@ -176,6 +176,9 @@ export class BookmarkConfigureComponent implements OnInit {
     this.dataTable?.filterGlobal(event, 'contains')
   }
 
+  public onToggleDisable(data: Bookmark): void {
+    this.store.dispatch(BookmarkConfigureActions.toggleBookmark({ id: data.id }))
+  }
   public onDetail(data: Bookmark): void {
     this.store.dispatch(BookmarkConfigureActions.viewOrEditBookmark({ id: data.id }))
   }

@@ -94,16 +94,8 @@
             </p-checkbox>
           </div>
         </div>
-        <p-message
-          *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
-          id="bm_import_info"
-          class="mt-2"
-          severity="info"
-          [text]="'BOOKMARK_IMPORT.INFO' | translate"
-        ></p-message>
       </div>
     </div>
-    <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'" class="my-2"></div>
   </p-tabPanel>
 
   <p-tabPanel

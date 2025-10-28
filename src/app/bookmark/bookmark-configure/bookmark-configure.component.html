@@ -122,77 +122,113 @@
           <!-- actions -->
           <td pFrozenColumn class="align-items-center border-right-1 text-center white-space-nowrap">
             @if (canEdit(rowData.scope)) {
-              <button
-                pbutton
+              <p-button
+                *ocxIfPermission="'BOOKMARK#EDIT'"
                 type="button"
+                pRipple
+                [text]="true"
+                [plain]="true"
+                [rounded]="true"
+                [icon]="'pi pi-' + (rowData['disabled'] ? 'minus' : 'check') + '-circle'"
+                [severity]="rowData['disabled'] ? 'danger' : 'success'"
+                [id]="'bm_configure_table_row_' + i + '_action_toggle'"
+                (onClick)="onToggleDisable(rowData)"
+                [ariaLabel]="'BOOKMARK.' + (rowData['disabled'] ? 'DISABLED' : 'ENABLED') | translate"
+                [pTooltip]="'BOOKMARK.' + (rowData['disabled'] ? 'DISABLED' : 'ENABLED') | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <p-button
+                *ocxIfPermission="'BOOKMARK#EDIT'"
+                type="button"
+                pRipple
+                [text]="true"
+                [plain]="true"
+                [rounded]="true"
+                [icon]="'pi pi-pencil'"
                 [id]="'bm_configure_table_row_' + i + '_action_edit'"
-                class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
-                (click)="onDetail(rowData)"
-                (keydown.enter)="onDetail(rowData)"
-                (keydown.space)="onDetail(rowData)"
-                [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
+                (onClick)="onDetail(rowData)"
+                [ariaLabel]="'ACTIONS.EDIT.LABEL' | translate"
                 [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
-              >
-                <span class="font-medium p-button-icon pi pi-pencil" aria-hidden="true"></span>
-              </button>
+              />
             } @else {
-              <button
+              <p-button
                 *ocxIfPermission="'BOOKMARK#VIEW'"
-                pbutton
                 type="button"
-                class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
+                pRipple
+                [text]="true"
+                [plain]="true"
+                [rounded]="true"
+                [icon]="'pi pi-eye'"
                 [id]="'bm_configure_table_row_' + i + '_action_view'"
-                (click)="onDetail(rowData)"
-                (keydown.enter)="onDetail(rowData)"
-                (keydown.space)="onDetail(rowData)"
-                [attr.aria-label]="'ACTIONS.VIEW.LABEL' | translate"
+                (onClick)="onDetail(rowData)"
+                [ariaLabel]="'ACTIONS.VIEW.LABEL' | translate"
                 [pTooltip]="'ACTIONS.VIEW.LABEL' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
-              >
-                <span class="font-medium p-button-icon pi pi-eye" aria-hidden="true"></span>
-              </button>
+              />
             }
-            <button
+            <p-button
               *ocxIfPermission="'BOOKMARK#CREATE'"
-              pbutton
               type="button"
-              class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
+              pRipple
+              [text]="true"
+              [plain]="true"
+              [rounded]="true"
+              [icon]="'pi pi-copy'"
               [id]="'bm_configure_table_row_' + i + '_action_copy'"
-              (click)="onCopy(rowData)"
-              (keydown.enter)="onCopy(rowData)"
-              (keydown.space)="onCopy(rowData)"
-              [attr.aria-label]="'ACTIONS.COPY.LABEL' | translate"
+              (onClick)="onCopy(rowData)"
+              [ariaLabel]="'ACTIONS.COPY.LABEL' | translate"
               [pTooltip]="'ACTIONS.COPY.LABEL' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
-            >
-              <span class="font-medium p-button-icon pi pi-copy" aria-hidden="true"></span>
-            </button>
-            <button
+            />
+            <p-button
               *ngIf="canDelete(rowData.scope)"
-              pbutton
               type="button"
+              pRipple
+              [text]="true"
+              [plain]="true"
+              [rounded]="true"
+              [icon]="'pi pi-trash'"
+              [severity]="'danger'"
               [id]="'bm_configure_table_row_' + i + '_action_delete'"
-              class="p-button-rounded font-medium p-button-text p-button p-component p-button-icon-only"
-              (click)="onDelete(rowData)"
-              (keydown.enter)="onDelete(rowData)"
-              (keydown.space)="onDelete(rowData)"
-              [attr.aria-label]="'ACTIONS.DELETE.LABEL' | translate"
+              (onClick)="onDelete(rowData)"
+              [ariaLabel]="'ACTIONS.DELETE.LABEL' | translate"
               [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
-            >
-              <span class="danger-action-text font-medium p-button-icon pi pi-trash" aria-hidden="true"></span>
-            </button>
+            />
           </td>
           <td *ngFor="let col of columns" [id]="'bm_configure_table_row_' + i + '_' + col.field" [class]="col.css">
             <!-- needs a div due to manage ellipsis -->
             <ng-container *ngIf="col.field === 'position'">{{ rowData[col.field] }}</ng-container>
             <div *ngIf="col.limit" class="text-ellipsis-2-lines">{{ rowData[col.field] }}</div>
 
+            <ng-container *ngIf="col.field === 'external'">
+              <div
+                *ngIf="rowData.external"
+                [id]="'bm_configure_table_row_' + i + '_' + col.field_value"
+                class="pi pi-link"
+                [attr.aria-label]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></div>
+            </ng-container>
+            <ng-container *ngIf="col.field === 'target'">
+              <div
+                *ngIf="rowData.target === '_blank'"
+                [id]="'bm_configure_table_row_' + i + '_' + col.field_value"
+                class="pi pi-external-link"
+                [attr.aria-label]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></div>
+            </ng-container>
             <ng-container *ngIf="col.field === 'url'">
               <div class="flex flex-row column-gap-2 align-items-center">
                 <span
@@ -204,25 +240,27 @@
                   tooltipEvent="hover"
                 ></span>
                 <div class="text-ellipsis-2-lines">
-                  <!-- URL bookmark -->
-                  <a
-                    *ngIf="rowData['url']"
-                    class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
-                    [href]="rowData[col.field]"
-                    target="_blank"
-                  >
-                    {{ limitText(rowData[col.field], 100) }}
-                  </a>
-                  <!-- OneCX product bookmark -->
-                  <a
-                    *ngIf="!rowData['url']"
-                    class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
-                    [routerLink]="getUrl(rowData) | async"
-                    [queryParams]="rowData.query"
-                    [fragment]="rowData.fragment"
-                  >
-                    {{ limitText(prepareUrlBookmarkLink(getUrl(rowData) | async, rowData), 100) }}
-                  </a>
+                  @if (rowData['url']) {
+                    <!-- complete URL bookmark (external?) -->
+                    <a
+                      class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
+                      [href]="rowData[col.field]"
+                      [target]="rowData['target']"
+                    >
+                      {{ limitText(rowData[col.field], 100) }}
+                    </a>
+                  } @else {
+                    <!-- OneCX product bookmark using endpoint-->
+                    <a
+                      class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
+                      [routerLink]="getUrl(rowData) | async"
+                      [queryParams]="rowData.query"
+                      [fragment]="rowData.fragment"
+                      [target]="rowData['target']"
+                    >
+                      {{ limitText(prepareUrlBookmarkLink(getUrl(rowData) | async, rowData), 100) }}
+                    </a>
+                  }
                 </div>
               </div>
             </ng-container>

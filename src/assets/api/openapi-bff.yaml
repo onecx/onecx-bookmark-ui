@@ -404,6 +404,13 @@ components:
           type: string
         image:
           $ref: '#/components/schemas/Image'
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     Image:
       type: object
       properties:
@@ -517,6 +524,13 @@ components:
           format: int32
         imageUrl:
           type: string
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     BookmarkPageResult:
       type: object
       properties:
@@ -579,6 +593,13 @@ components:
           format: int32
         imageUrl:
           type: string
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     UpdateBookmark:
       required:
         - displayName
@@ -617,6 +638,13 @@ components:
           type: string
         imageUrl:
           type: string
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     BookmarkScope:
       type: string
       enum:
@@ -637,6 +665,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProblemDetailInvalidParam'
+    Target:
+      type: string
+      enum:
+        - _self
+        - _blank
     ProblemDetailParam:
       type: object
       properties:
