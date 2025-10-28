@@ -8,8 +8,8 @@
       pButton
       (click)="onOpenBookmarkDialog()"
       (keydown.enter.t)="onOpenBookmarkDialog()"
-      [attr.aria-label]="('REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE')) | translate"
-      [pTooltip]="('REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE')) | translate"
+      [attr.aria-label]="'REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE') | translate"
+      [pTooltip]="'REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE') | translate"
       tooltipPosition="bottom"
       tooltipEvent="hover"
     >
