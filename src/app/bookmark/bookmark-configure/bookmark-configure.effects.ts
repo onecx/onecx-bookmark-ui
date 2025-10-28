@@ -311,21 +311,20 @@ export class BookmarkConfigureEffects {
         }
       }),
       switchMap((data) => {
-        // execute
         if (!data.bookmark)
           return of(BookmarkConfigureActions.editBookmarkFailed({ status: '', errorText: 'Missing Bookmark' }))
-        else
-          return this.bookmarksService
-            .updateBookmark({
-              id: data.bookmark?.id,
-              updateBookmark: { ...data.bookmark, disabled: !data.bookmark.disabled } as UpdateBookmark
+        // execute
+        return this.bookmarksService
+          .updateBookmark({
+            id: data.bookmark?.id,
+            updateBookmark: { ...data.bookmark, disabled: !data.bookmark.disabled } as UpdateBookmark
+          })
+          .pipe(
+            map(() => {
+              this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
+              return BookmarkConfigureActions.editBookmarkSucceeded()
             })
-            .pipe(
-              map(() => {
-                this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
-                return BookmarkConfigureActions.editBookmarkSucceeded()
-              })
-            )
+          )
       }),
       catchError((error) => {
         return of(BookmarkConfigureActions.editBookmarkFailed({ status: error.status, errorText: error.message }))
