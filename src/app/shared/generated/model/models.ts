@@ -14,4 +14,5 @@ export * from './imageInfo';
 export * from './problemDetailInvalidParam';
 export * from './problemDetailParam';
 export * from './problemDetailResponse';
+export * from './target';
 export * from './updateBookmark';

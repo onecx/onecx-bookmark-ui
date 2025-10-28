@@ -27,6 +27,7 @@ model/models.ts
 model/problemDetailInvalidParam.ts
 model/problemDetailParam.ts
 model/problemDetailResponse.ts
+model/target.ts
 model/updateBookmark.ts
 param.ts
 variables.ts

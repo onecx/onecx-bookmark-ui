@@ -8,6 +8,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Target } from './target';
 import { EximBookmarkScope } from './eximBookmarkScope';
 import { Image } from './image';
 
@@ -24,6 +25,9 @@ export interface EximBookmark {
     scope?: EximBookmarkScope;
     imageUrl?: string;
     image?: Image;
+    external?: boolean;
+    target?: Target;
+    disabled?: boolean;
 }
 
 

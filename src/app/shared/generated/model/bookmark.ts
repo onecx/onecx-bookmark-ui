@@ -9,6 +9,7 @@
  * Do not edit the class manually.
  */
 import { BookmarkScope } from './bookmarkScope';
+import { Target } from './target';
 
 
 export interface Bookmark { 
@@ -31,6 +32,9 @@ export interface Bookmark {
     scope: BookmarkScope;
     position: number;
     imageUrl?: string;
+    external?: boolean;
+    target?: Target;
+    disabled?: boolean;
 }
 
 
