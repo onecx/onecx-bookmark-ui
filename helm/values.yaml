@@ -41,10 +41,12 @@ app:
     parameter:
       enabled: true
       spec:
-        name: max-image-size
-        displayName: "Maximum Image Size"
-        description: "Limit the maximum size of uploaded images"
-        value: 100000
+        parameters:
+          default:
+            max-image-size:
+              displayName: "Maximum Image Size"
+              description: "Limit the maximum size of uploaded images"
+              value: 100000
     # Permission
     permission:
       enabled: true
