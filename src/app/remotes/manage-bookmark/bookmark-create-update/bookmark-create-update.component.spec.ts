@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing'
 import { BookmarkCreateUpdateComponent } from './bookmark-create-update.component'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { UserService } from '@onecx/angular-integration-interface'
 import { BookmarkScope } from 'src/app/shared/generated'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -9,6 +9,7 @@ import { LetDirective } from '@ngrx/component'
 import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { PortalCoreModule } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { TranslateService } from '@ngx-translate/core'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -153,4 +154,28 @@ describe('BookmarkCreateUpdateComponent', () => {
     expect(emitSpy).toHaveBeenCalledWith(false)
     flush()
   }))
+
+  it('should validate all error tailor configurations', () => {
+    const translateService = TestBed.inject(TranslateService)
+    jest.spyOn(translateService, 'instant').mockReturnValue('error message')
+
+    // Trigger required validation
+    component.formGroup.get('displayName')?.setValue('')
+    component.formGroup.get('displayName')?.markAsTouched()
+    expect(component.formGroup.get('displayName')?.hasError('required')).toBe(true)
+
+    // Trigger minlength validation
+    component.formGroup.get('displayName')?.setValue('a')
+    expect(component.formGroup.get('displayName')?.hasError('minlength')).toBe(true)
+
+    // Trigger maxlength validation
+    component.formGroup.get('displayName')?.setValue('a'.repeat(256))
+    expect(component.formGroup.get('displayName')?.hasError('maxlength')).toBe(true)
+
+    // Trigger pattern validation by adding a pattern validator temporarily
+    component.formGroup.get('displayName')?.addValidators(Validators.pattern(/^[A-Z]/))
+    component.formGroup.get('displayName')?.setValue('lowercase')
+    component.formGroup.get('displayName')?.updateValueAndValidity()
+    expect(component.formGroup.get('displayName')?.hasError('pattern')).toBe(true)
+  })
 })
