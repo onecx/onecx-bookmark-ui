@@ -36,6 +36,7 @@ export const BookmarkConfigureActions = createActionGroup({
     // detail: copy
     'Copy bookmark': props<{ id: number | string }>(),
     // detail: edit, view
+    'Toggle Bookmark': props<{ id: number | string }>(),
     'View or edit Bookmark': props<{ id: number | string }>(),
     'Edit bookmark cancelled': emptyProps(),
     'Edit bookmark succeeded': emptyProps(),

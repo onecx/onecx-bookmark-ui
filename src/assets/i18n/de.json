@@ -151,11 +151,17 @@
     "DISPLAY_NAME": "Name",
     "POSITION": "Position",
     "PRODUCT": "Applikation",
-    "APP_ID": "App ID",
+    "APP_ID": "App",
     "ENDPOINT": "Endpunktname",
-    "ENDPOINT_PARAMETER": "Endpunktparameter",
+    "ENDPOINT_PARAMETER": "Parameter",
     "QUERY": "Query",
     "FRAGMENT": "Fragment",
+    "ENABLED": "Aktiviert (sichtbar)",
+    "DISABLED": "Deaktiviert",
+    "EXTERNAL": "Externer Link",
+    "EXTERNAL.CONFIG": "X",
+    "TARGET": "In neuem TAB öffnen",
+    "TARGET.CONFIG": "T",
     "SCOPE": "Bereich",
     "SCOPES": {
       "ALL": "Alle",
@@ -177,6 +183,11 @@
       "SCOPE_IS_PUBLIC": "Wenn markiert, dann ist das Lesezeichen für alle im Workspace sichtbar.",
       "ENDPOINT": "Der Name des, mit dem Lesezeichen angesteuerten, Endpunkts der App.",
       "ENDPOINT_PARAMETER": "Ein spezieller Lesezeichen des Endpunkts dem ein Wert zugeordnet werden kann.",
+      "DISABLED": "Wenn gesetzt, dann wird der Bookmark nicht angezeigt",
+      "EXTERNAL": "Wenn gesetzt, dann wird die OneCX Shell verlassen.",
+      "EXTERNAL.CONFIG": "Die OneCX Shell wird verlassen.",
+      "TARGET": "Wenn gesetzt, dann wird das Ziel in einem neuen TAB geöffnet.",
+      "TARGET.CONFIG": "Das Ziel wird in einem neuen TAB geöffnet.",
       "QUERY": "Zusätzliche Informationen die server- oder clientseitig verarbeitet werden können.",
       "FRAGMENT": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
       "TYPE_URL": "URL zu einem Ziel ggf. auch ausserhalb des Workspaces. Wird in separatem TAB geladen.",
@@ -241,7 +252,7 @@
     "SCOPE": {
       "INFO": "Welche Lesezeichen sollen importiert werden?",
       "PRIVATE": "Meine Lesezeichen",
-      "PUBLIC": "Öffentliche Lesezeichen"
+      "PUBLIC": "Workspace Lesezeichen"
     },
     "SNAPSHOT": {
       "DATE": "Erstellt am",

@@ -10,8 +10,8 @@
  */
 
 
-export interface Image { 
-    imageData?: string;
-    mimeType?: string;
+export enum Target {
+    Self = '_self',
+    Blank = '_blank'
 }
 

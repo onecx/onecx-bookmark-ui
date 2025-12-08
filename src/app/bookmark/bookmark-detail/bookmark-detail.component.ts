@@ -4,7 +4,12 @@ import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validato
 import { BehaviorSubject, filter, map, Observable } from 'rxjs'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import {
+  AppStateService,
+  //ParametersService,
+  PortalMessageService,
+  UserService
+} from '@onecx/angular-integration-interface'
 import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
 
 import { BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
@@ -98,10 +103,12 @@ export class BookmarkDetailComponent
   public isProductComponentDefined$: Observable<boolean> // check if a component was assigned
   public product$ = new BehaviorSubject<Product | undefined>(undefined) // theme data
   public productEmitter = new EventEmitter<Product>()
+  public size: any
 
   constructor(
     private readonly user: UserService,
     private readonly appStateService: AppStateService,
+    //private readonly parameterService: ParametersService,
     private readonly slotService: SlotService,
     private readonly msgService: PortalMessageService,
     private readonly imageApi: ImagesInternalAPIService
@@ -116,6 +123,9 @@ export class BookmarkDetailComponent
     // this is the universal form: used for specific URL bookmarks and other bookmarks
     this.formGroup = new FormGroup({
       is_public: new FormControl(false),
+      disabled: new FormControl<boolean>(false),
+      external: new FormControl<boolean>(false),
+      target: new FormControl(null),
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)]),
       endpointName: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
       endpointParams: new FormControl(null, {
@@ -131,8 +141,15 @@ export class BookmarkDetailComponent
       imageUrl: new FormControl(null, [Validators.maxLength(255)])
     })
   }
-
+  /*
+  async getParameter(param: string) {
+    this.size = await this.parameterService.get(param, 1000)
+    console.log('size', this.size)
+  }
+*/
   public ngOnInit() {
+    //  this.getParameter('bookmark-image-size')
+
     // on open dialog => manage parameter field depends on endpointName content
     if (this.vm.initialBookmark) {
       this.defaultProduct = {
@@ -228,10 +245,11 @@ export class BookmarkDetailComponent
    * IMAGE
    */
   public onRemoveLogo(bookmark?: CombinedBookmark) {
-    if (bookmark?.id)
-      if (this.formGroup.get('imageUrl')?.value) {
-        this.formGroup.get('imageUrl')?.setValue(null)
-        this.prepareImageUrl(this.vm.initialBookmark?.id)
+    const formField = this.formGroup.get('imageUrl')
+    if (bookmark?.id && formField)
+      if (formField.value) {
+        formField.setValue(null)
+        this.prepareImageUrl(bookmark.id)
       } else
         this.imageApi.deleteImage({ refId: bookmark.id }).subscribe({
           next: () => {
@@ -247,7 +265,7 @@ export class BookmarkDetailComponent
   }
 
   public onFileUpload(ev: Event, bookmark?: CombinedBookmark): void {
-    if (ev.target && (ev.target as HTMLInputElement).files) {
+    if (ev.target && (ev.target as HTMLInputElement).files && bookmark) {
       const files = (ev.target as HTMLInputElement).files
       if (files) {
         // get parameter value
@@ -255,7 +273,7 @@ export class BookmarkDetailComponent
           this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_SIZE' })
         } else if (!/^.*.(jpg|jpeg|png)$/.exec(files[0].name)) {
           this.msgService.error({ summaryKey: 'IMAGE.CONSTRAINT_FAILED', detailKey: 'IMAGE.CONSTRAINT_FILE_TYPE' })
-        } else if (bookmark?.id) {
+        } else if (bookmark.id) {
           this.saveImage(bookmark.id, files) // store image
         }
       }
@@ -278,7 +296,7 @@ export class BookmarkDetailComponent
         this.msgService.error({
           summaryKey: 'IMAGE.UPLOAD_FAIL',
           detailKey: err.error?.errorCode ? 'IMAGE.' + err.error.errorCode : undefined,
-          detailParameters: err.error?.invalidParams ? err.error?.invalidParams[0] : undefined
+          detailParameters: err.error?.invalidParams[0]
         })
         console.error('uploadImage', err)
       }

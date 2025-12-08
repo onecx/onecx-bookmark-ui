@@ -8,18 +8,18 @@
       pButton
       (click)="onOpenBookmarkDialog()"
       (keydown.enter.t)="onOpenBookmarkDialog()"
-      [attr.aria-label]="('REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE')) | translate"
-      [pTooltip]="('REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE')) | translate"
+      [attr.aria-label]="'REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE') | translate"
+      [pTooltip]="'REMOTES.MANAGE_BOOKMARK.ACTION.' + ((isBookmarked$ | async) ? 'EDIT' : 'CREATE') | translate"
       tooltipPosition="bottom"
       tooltipEvent="hover"
     >
       <i
         *ngIf="isBookmarked$ | async; else notBookmarked"
-        id="ocx_topbar_action_manage-bookmark_icon"
+        id="ocx_topbar_action_manage-bookmark_icon_bookmarked"
         class="pi pi-star-fill fs-xlarge"
       ></i>
       <ng-template #notBookmarked>
-        <i id="ocx_topbar_action_manage-bookmark_icon" class="pi pi-star fs-xlarge"></i>
+        <i id="ocx_topbar_action_manage-bookmark_icon_not_bookmarked" class="pi pi-star fs-xlarge"></i>
       </ng-template>
     </button>
     <ng-template #loading>

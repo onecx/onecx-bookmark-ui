@@ -19,7 +19,8 @@ import {
   UpdateBookmark,
   EximBookmarkScope,
   ExportBookmarksRequest,
-  ImportBookmarksRequest
+  BookmarkSnapshot,
+  EximMode
 } from 'src/app/shared/generated'
 import { getCurrentDateTime } from 'src/app/shared/utils/utils'
 
@@ -31,6 +32,12 @@ import { BookmarkExportComponent } from '../bookmark-export/bookmark-export.comp
 import { BookmarkImportComponent } from '../bookmark-import/bookmark-import.component'
 import { BookmarkSortComponent } from '../bookmark-sort/bookmark-sort.component'
 
+export type ImportBookmarkData = {
+  workspaceName: string
+  scopes: Array<EximBookmarkScope>
+  snapshot: BookmarkSnapshot | undefined
+  importMode: EximMode
+}
 @Injectable()
 export class BookmarkConfigureEffects {
   private context = 'BOOKMARK'
@@ -186,7 +193,7 @@ export class BookmarkConfigureEffects {
       withLatestFrom(this.appStateService.currentWorkspace$.asObservable(), this.user.lang$.asObservable()),
       mergeMap(([, { workspaceName }, lang]) => {
         // select file
-        return this.portalDialogService.openDialog<ImportBookmarksRequest | undefined>(
+        return this.portalDialogService.openDialog<ImportBookmarkData | undefined>(
           'BOOKMARK_IMPORT.HEADER',
           {
             type: BookmarkImportComponent,
@@ -212,12 +219,19 @@ export class BookmarkConfigureEffects {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
         }
         // execute
-        return this.eximService.importBookmarks({ importBookmarksRequest: dialogResult?.result }).pipe(
-          map(() => {
-            this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
-            return BookmarkConfigureActions.importBookmarksSucceeded()
+        return this.eximService
+          .importBookmarks({
+            workspaceName: dialogResult?.result.workspaceName,
+            bookmarkSnapshot: dialogResult?.result.snapshot,
+            importMode: dialogResult?.result.importMode,
+            scopes: dialogResult?.result.scopes
           })
-        )
+          .pipe(
+            map(() => {
+              this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
+              return BookmarkConfigureActions.importBookmarksSucceeded()
+            })
+          )
       }),
       catchError((error) => {
         return of(BookmarkConfigureActions.importBookmarksFailed({ status: error.status, errorText: error.message }))
@@ -271,6 +285,49 @@ export class BookmarkConfigureEffects {
       }),
       catchError((error) => {
         return of(BookmarkConfigureActions.sortBookmarksFailed({ status: error.status, errorText: error.message }))
+      })
+    )
+  })
+
+  /**
+   * DETAIL => displaying & editing
+   */
+  toggleBookmark$ = createEffect(() => {
+    this.context = 'BOOKMARK'
+    return this.actions$.pipe(
+      ofType(BookmarkConfigureActions.toggleBookmark),
+      withLatestFrom(
+        this.appStateService.currentWorkspace$.asObservable(),
+        this.user.profile$.asObservable(),
+        this.user.lang$.asObservable(),
+        this.store.select(bookmarkSearchSelectors.selectResults)
+      ),
+      map(([action, { workspaceName }, profile, lang, results]) => {
+        return {
+          bookmark: results.find((item) => item.id === action.id),
+          workspaceName: workspaceName,
+          userId: profile.userId,
+          lang: lang
+        }
+      }),
+      switchMap((data) => {
+        if (!data.bookmark)
+          return of(BookmarkConfigureActions.editBookmarkFailed({ status: '', errorText: 'Missing Bookmark' }))
+        // execute
+        return this.bookmarksService
+          .updateBookmark({
+            id: data.bookmark?.id,
+            updateBookmark: { ...data.bookmark, disabled: !data.bookmark.disabled } as UpdateBookmark
+          })
+          .pipe(
+            map(() => {
+              this.messageService.success({ summaryKey: 'BOOKMARK_DETAIL.EDIT.SUCCESS' })
+              return BookmarkConfigureActions.editBookmarkSucceeded()
+            })
+          )
+      }),
+      catchError((error) => {
+        return of(BookmarkConfigureActions.editBookmarkFailed({ status: error.status, errorText: error.message }))
       })
     )
   })
@@ -494,8 +551,11 @@ export class BookmarkConfigureEffects {
             actton.noButton,
             {
               modal: true,
+              width: '450px',
               draggable: true,
               resizable: true,
+              closeOnEscape: true,
+              closeAriaLabel: 'ACTIONS.NAVIGATION.CLOSE.TOOLTIP',
               autoFocusButton: 'secondary'
             }
           )

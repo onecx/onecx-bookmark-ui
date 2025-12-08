@@ -99,7 +99,6 @@ export class BookmarkConfigureComponent implements OnInit {
       )
   }
   private preparePageActions(dataExists: boolean, scope: BookmarkScope): Action[] {
-    if (!dataExists) return []
     const perm = 'BOOKMARK#' + (scope === BookmarkScope.Public ? 'ADMIN_' : '') + 'EDIT'
     return [
       {
@@ -115,6 +114,8 @@ export class BookmarkConfigureComponent implements OnInit {
         icon: PrimeIcons.SORT,
         show: 'always',
         permission: perm,
+        conditional: true,
+        showCondition: dataExists,
         actionCallback: () => this.onSortDialog()
       },
       {
@@ -123,6 +124,8 @@ export class BookmarkConfigureComponent implements OnInit {
         icon: PrimeIcons.DOWNLOAD,
         show: 'asOverflow',
         permission: 'BOOKMARK#EXPORT',
+        conditional: true,
+        showCondition: dataExists,
         actionCallback: () => this.onExport()
       },
       {
@@ -173,6 +176,9 @@ export class BookmarkConfigureComponent implements OnInit {
     this.dataTable?.filterGlobal(event, 'contains')
   }
 
+  public onToggleDisable(data: Bookmark): void {
+    this.store.dispatch(BookmarkConfigureActions.toggleBookmark({ id: data.id }))
+  }
   public onDetail(data: Bookmark): void {
     this.store.dispatch(BookmarkConfigureActions.viewOrEditBookmark({ id: data.id }))
   }

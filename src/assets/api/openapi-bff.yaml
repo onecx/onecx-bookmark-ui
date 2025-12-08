@@ -1,18 +1,15 @@
 openapi: 3.0.0
 info:
   title: onecx-bookmark-bff
-  description: Backend-For-Frontend (BFF) service for onecx bookmark. With this API you can manage bookmarks in your portal.
+  description: Backend-For-Frontend (BFF) service for onecx-bookmark. This API provides endpoints to manage Bookmarks
   version: 1.0.0
-  contact:
-    email: "tkit_dev@1000kit.org"
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: "http://onecx-bookmark-bff:8080"
 tags:
   - name: bookmarksInternal
+    description: Managing Bookmarks
   - name: imagesInternal
+    description: Managing Bookmark Images
 paths:
   /bookmarks:
     post:
@@ -22,7 +19,7 @@ paths:
             - write
       tags:
         - bookmarksInternal
-      description: create bookmark item
+      description: Create a new bookmark item
       operationId: createNewBookmark
       requestBody:
         required: true
@@ -32,7 +29,7 @@ paths:
               $ref: '#/components/schemas/CreateBookmark'
       responses:
         '201':
-          description: Bookmark created
+          description: Bookmark created successfully
         '400':
           description: Bad request
           content:
@@ -47,7 +44,7 @@ paths:
             - read
       tags:
         - bookmarksInternal
-      description: search bookmarks by criteria
+      description: Search for bookmarks by criteria
       operationId: searchBookmarksByCriteria
       requestBody:
         required: true
@@ -57,7 +54,7 @@ paths:
               $ref: '#/components/schemas/BookmarkSearchCriteria'
       responses:
         '200':
-          description: A list of bookmarks
+          description: Bookmark search results retrieved successfully
           content:
             application/json:
               schema:
@@ -76,7 +73,7 @@ paths:
             - read
       tags:
         - bookmarksInternal
-      description: search user bookmarks by criteria
+      description: Search for bookmarks of the requesting user by criteria
       operationId: searchUserBookmarksByCriteria
       requestBody:
         required: true
@@ -86,7 +83,7 @@ paths:
               $ref: '#/components/schemas/BookmarkSearchCriteria'
       responses:
         '200':
-          description: A list of bookmarks
+          description: Bookmark search results retrieved successfully
           content:
             application/json:
               schema:
@@ -105,7 +102,7 @@ paths:
             - write
       tags:
         - bookmarksInternal
-      description: Update a bookmark's displayName
+      description: Update a bookmark by its id
       operationId: updateBookmark
       parameters:
         - name: id
@@ -121,7 +118,7 @@ paths:
               $ref: '#/components/schemas/UpdateBookmark'
       responses:
         "204":
-          description: Bookmark updated
+          description: Bookmark updated successfully
         "400":
           description: Bad request
           content:
@@ -137,7 +134,7 @@ paths:
             - delete
       tags:
         - bookmarksInternal
-      description: Delete a bookmark by id
+      description: Delete a bookmark by its id
       operationId: deleteBookmarkById
       parameters:
         - name: id
@@ -147,9 +144,9 @@ paths:
             type: string
       responses:
         "204":
-          description: No Content
+          description: Bookmark deleted successfully
         "400":
-          description: Internal Server Error
+          description: Bad request
           content:
             application/json:
               schema:
@@ -162,7 +159,7 @@ paths:
             - write
       tags:
         - bookmarksInternal
-      description: update order of bookmarks
+      description: Update the order of bookmarks
       operationId: updateBookmarksOrder
       requestBody:
         required: true
@@ -172,9 +169,9 @@ paths:
               $ref: '#/components/schemas/BookmarkReorderRequest'
       responses:
         "200":
-          description: UPDATED
+          description: Bookmark reordered successfully
         "400":
-          description: BAD REQUEST
+          description: Bad request
           content:
             application/json:
               schema:
@@ -197,14 +194,14 @@ paths:
               $ref: '#/components/schemas/ExportBookmarksRequest'
       responses:
         "200":
-          description: OK
+          description: Bookmarks exported successfully
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BookmarkSnapshot'
         "404":
-          description: No bookmarks found
-  /bookmarks/import:
+          description: Bookmarks not found
+  /bookmarks/{workspaceName}/import:
     post:
       x-onecx:
         permissions:
@@ -214,15 +211,32 @@ paths:
         - bookmarkExportImport
       description: Import bookmarks
       operationId: importBookmarks
+      parameters:
+        - in: path
+          name: workspaceName
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: importMode
+          schema:
+            $ref: '#/components/schemas/EximMode'
+        - in: query
+          name: scopes
+          schema:
+            type: array
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/EximBookmarkScope'
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ImportBookmarksRequest'
+              $ref: '#/components/schemas/BookmarkSnapshot'
       responses:
         "200":
-          description: Import successful
+          description: Bookmarks imported successfully
         "400":
           description: Bad request
           content:
@@ -237,7 +251,7 @@ paths:
             - read
       tags:
         - imagesInternal
-      description: Get product logo by name
+      description: Get a product logo by its name
       operationId: getProductLogo
       parameters:
         - name: productName
@@ -247,7 +261,7 @@ paths:
             type: string
       responses:
         "200":
-          description: OK
+          description: Product logo retrieved successfully
           content:
             image/*:
               schema:
@@ -267,7 +281,7 @@ paths:
             - write
       tags:
         - imagesInternal
-      description: Upload Images
+      description: Upload an image by its reference id
       parameters:
         - name: refId
           in: path
@@ -284,7 +298,7 @@ paths:
               format: binary
       responses:
         "201":
-          description: CREATED
+          description: Image uploaded successfully
           content:
             application/json:
               schema:
@@ -298,7 +312,7 @@ paths:
             - read
       tags:
         - imagesInternal
-      description: Get Image by id
+      description: Get an image by its reference id
       operationId: getImage
       parameters:
         - name: refId
@@ -308,7 +322,7 @@ paths:
             type: string
       responses:
         "200":
-          description: OK
+          description: Image retrieved successfully
           content:
             image/*:
               schema:
@@ -327,7 +341,7 @@ paths:
             - delete
       tags:
         - imagesInternal
-      description: delete Image
+      description: Delete an image by its reference id
       operationId: deleteImage
       parameters:
         - name: refId
@@ -337,7 +351,7 @@ paths:
             type: string
       responses:
         "204":
-          description: No content
+          description: Image deleted successfully
 components:
   schemas:
     ImageInfo:
@@ -345,20 +359,6 @@ components:
       properties:
         id:
           type: string
-    ImportBookmarksRequest:
-      type: object
-      properties:
-        snapshot:
-          $ref: '#/components/schemas/BookmarkSnapshot'
-        importMode:
-          $ref: '#/components/schemas/EximMode'
-        workspaceName:
-          type: string
-        scopes:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/EximBookmarkScope'
     BookmarkSnapshot:
       type: object
       properties:
@@ -404,6 +404,13 @@ components:
           type: string
         image:
           $ref: '#/components/schemas/Image'
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     Image:
       type: object
       properties:
@@ -517,6 +524,13 @@ components:
           format: int32
         imageUrl:
           type: string
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     BookmarkPageResult:
       type: object
       properties:
@@ -579,6 +593,13 @@ components:
           format: int32
         imageUrl:
           type: string
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     UpdateBookmark:
       required:
         - displayName
@@ -617,6 +638,13 @@ components:
           type: string
         imageUrl:
           type: string
+        external:
+          type: boolean
+        target:
+          $ref: '#/components/schemas/Target'
+        disabled:
+          type: boolean
+          default: false
     BookmarkScope:
       type: string
       enum:
@@ -637,6 +665,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProblemDetailInvalidParam'
+    Target:
+      type: string
+      enum:
+        - _self
+        - _blank
     ProblemDetailParam:
       type: object
       properties:
