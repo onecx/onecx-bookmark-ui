@@ -279,7 +279,6 @@
     "UPLOAD_SUCCESS": "Die Datei wurde erfolgreich hochgeladen.",
     "REMOVE_FAIL": "Die Datei konnte nicht gelöscht werden.",
     "REMOVE_SUCCESS": "Die Datei wurde erfolgreich gelöscht.",
-    "CONSTRAINT_VIOLATIONS": "{{name}}: {{message}}",
     "CONSTRAINT_FILE_MISSING": "Keine Datei ausgewählt.",
     "CONSTRAINT_FILE_TYPE": "Die folgenden Bildformate werden akzeptiert: jpg, jpeg, png",
     "CONSTRAINT_FAILED": "Bedingung zum Hochladen nicht erfüllt:",
@@ -348,6 +347,10 @@
     }
   },
   "EXCEPTIONS": {
+    "IMAGE": {
+      "VALIDATION_EXCEPTION": "Während der Validierung ist ein Fehler aufgetreten.",
+      "CONSTRAINT_VIOLATIONS": "{{name}}: {{message}}"
+    },
     "HTTP_STATUS_0": {
       "BOOKMARK": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal.",
       "BOOKMARKS": "Unbekanntes Problem beim Abrufen von Lesezeichen - bitte versuchen Sie es noch einmal."

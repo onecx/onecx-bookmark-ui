@@ -411,6 +411,9 @@ components:
         disabled:
           type: boolean
           default: false
+        position:
+          type: integer
+          format: int32
     Image:
       type: object
       properties:
