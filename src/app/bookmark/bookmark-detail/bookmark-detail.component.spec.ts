@@ -414,433 +414,437 @@ describe('BookmarkDetailComponent', () => {
     expect(component).toBeTruthy()
   }))
 
-  it('should remove logo on button click => imageUrl', fakeAsync(() => {
-    // jest.spyOn(ImagesInternalAPIService, 'deleteImage')
+  describe('remove logo', () => {
+    it('should remove logo on button click => imageUrl', fakeAsync(() => {
+      component.editable = true
+      component.vm = {
+        changeMode: 'EDIT',
+        initialBookmark: {
+          displayName: 'b1',
+          workspaceName: 'w1',
+          scope: BookmarkScope.Public,
+          imageUrl: 'test',
+          url: 'abc',
+          id: '1',
+          position: 0
+        },
+        permissions: []
+      }
+      component.ngOnInit()
+      component.formGroup.get('displayName')?.setValue('Valid Name')
+      component.formGroup.get('endpointName')?.setValue('ep')
+      component.formGroup.get('fragment')?.setValue('fragment')
+      component.formGroup.get('url')?.setValue('https://example.com')
+      component.formGroup.get('is_public')?.setValue(true)
+      component.formGroup.get('imageUrl')?.setValue('testValue')
 
-    component.editable = true
-    component.vm = {
-      changeMode: 'EDIT',
-      initialBookmark: {
-        displayName: 'b1',
-        workspaceName: 'w1',
+      component.formGroup.updateValueAndValidity()
+      tick()
+      fixture.detectChanges()
+
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
+      expect(button).toBeTruthy()
+      button.click()
+      fixture.detectChanges()
+
+      expect(component).toBeTruthy()
+    }))
+
+    it('should remove logo on button click => image', fakeAsync(() => {
+      jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(of({}))
+
+      component.editable = true
+      component.vm = {
+        changeMode: 'EDIT',
+        initialBookmark: {
+          displayName: 'b1',
+          workspaceName: 'w1',
+          scope: BookmarkScope.Public,
+          url: 'abc',
+          id: '1',
+          position: 0
+        },
+        permissions: []
+      }
+      component.ngOnInit()
+      component.formGroup.get('displayName')?.setValue('Valid Name')
+      component.formGroup.get('endpointName')?.setValue('ep')
+      component.formGroup.get('fragment')?.setValue('fragment')
+      component.formGroup.get('url')?.setValue('https://example.com')
+      component.formGroup.get('is_public')?.setValue(true)
+
+      component.formGroup.updateValueAndValidity()
+      tick()
+      fixture.detectChanges()
+
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
+      expect(button).toBeTruthy()
+      button.click()
+      fixture.detectChanges()
+
+      expect(component).toBeTruthy()
+    }))
+
+    it('should handle error when deleting image', fakeAsync(() => {
+      const errorResponse = { status: 500, statusText: 'Server Error' }
+      jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(throwError(() => errorResponse))
+      jest.spyOn(console, 'error').mockImplementation()
+      const errorSpy = jest.spyOn((component as any).msgService, 'error')
+
+      component.editable = true
+      component.vm = {
+        changeMode: 'EDIT',
+        initialBookmark: {
+          displayName: 'b1',
+          workspaceName: 'w1',
+          scope: BookmarkScope.Public,
+          url: 'abc',
+          id: '1',
+          position: 0
+        },
+        permissions: []
+      }
+      component.ngOnInit()
+
+      component.onRemoveLogo(component.vm.initialBookmark)
+      tick()
+
+      expect(console.error).toHaveBeenCalledWith('deleteImage', errorResponse)
+      expect(errorSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
+    }))
+
+    it('should remove logo button click => image', fakeAsync(() => {
+      component.editable = true
+      component.vm = {
+        changeMode: 'EDIT',
+        initialBookmark: {
+          displayName: 'b1',
+          workspaceName: 'w1',
+          scope: BookmarkScope.Public,
+          url: 'abc',
+          id: '1',
+          position: 0
+        },
+        permissions: []
+      }
+      component.ngOnInit()
+      component.formGroup.get('displayName')?.setValue('Valid Name')
+      component.formGroup.get('endpointName')?.setValue('ep')
+      component.formGroup.get('fragment')?.setValue('fragment')
+      component.formGroup.get('url')?.setValue('https://example.com')
+      component.formGroup.get('is_public')?.setValue(true)
+
+      component.formGroup.updateValueAndValidity()
+      tick()
+      fixture.detectChanges()
+
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
+      expect(button).toBeTruthy()
+      button.click()
+      fixture.detectChanges()
+
+      expect(component).toBeTruthy()
+    }))
+
+    it('should do nothing on remove logo if no bookmark is set => image', fakeAsync(() => {
+      jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(throwError(() => new Error('test error')))
+
+      component.editable = true
+      component.vm = {
+        changeMode: 'EDIT',
+        permissions: []
+      } as any as BookmarkDetailViewModel
+      component.ngOnInit()
+      component.formGroup.get('displayName')?.setValue('Valid Name')
+      component.formGroup.get('endpointName')?.setValue('ep')
+      component.formGroup.get('fragment')?.setValue('fragment')
+      component.formGroup.get('url')?.setValue('https://example.com')
+      component.formGroup.get('is_public')?.setValue(true)
+      component.formGroup.get('image_url')?.setValue('someURL')
+      component.formGroup.updateValueAndValidity()
+      tick()
+      fixture.detectChanges()
+      component.onRemoveLogo()
+      fixture.detectChanges()
+
+      expect(component).toBeTruthy()
+    }))
+
+    it('should remove logo => edge cases with missing id', fakeAsync(() => {
+      component.editable = true
+      component.vm = {
+        changeMode: 'EDIT',
+        initialBookmark: {
+          displayName: 'b1',
+          workspaceName: 'w1',
+          scope: BookmarkScope.Public,
+          url: 'abc',
+          position: 0
+        },
+        permissions: []
+      }
+      fixture.detectChanges()
+
+      component.ngOnInit()
+      component.formGroup.get('displayName')?.setValue('Valid Name')
+      component.formGroup.get('endpointName')?.setValue('ep')
+      component.formGroup.get('fragment')?.setValue('fragment')
+      component.formGroup.get('url')?.setValue('https://example.com')
+      component.formGroup.get('is_public')?.setValue(true)
+
+      component.formGroup.updateValueAndValidity()
+      tick()
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
+      expect(button).toBeTruthy()
+      button.click()
+      fixture.detectChanges()
+      expect(component).toBeTruthy()
+    }))
+
+    it('should remove logo => edge cases with missing bookmark ', fakeAsync(() => {
+      component.editable = true
+      component.vm = {
+        changeMode: 'EDIT',
+        initialBookmark: {} as any,
+        permissions: []
+      }
+      fixture.detectChanges()
+      component.ngOnInit()
+      component.formGroup.get('displayName')?.setValue('Valid Name')
+      component.formGroup.get('endpointName')?.setValue('ep')
+      component.formGroup.get('fragment')?.setValue('fragment')
+      component.formGroup.get('url')?.setValue('https://example.com')
+      component.formGroup.get('is_public')?.setValue(true)
+      component.formGroup.get('image_url')?.setValue('https://example.com')
+
+      component.formGroup.updateValueAndValidity()
+      tick()
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
+      expect(button).toBeTruthy()
+      button.click()
+      fixture.detectChanges()
+      expect(component).toBeTruthy()
+    }))
+  })
+
+  describe('file upload', () => {
+    it('should show error if file is too large (direct call)', () => {
+      const file = new File([''], 'test.jpg', { type: 'image/jpeg' })
+      Object.defineProperty(file, 'size', { value: 1000001 })
+
+      const input = document.createElement('input')
+      Object.defineProperty(input, 'files', {
+        value: [file],
+        writable: false
+      })
+
+      const event = { target: input } as unknown as Event
+
+      ;(component as any).msgService = { error: jest.fn() }
+      const errorSpy = jest.spyOn((component as any).msgService, 'error')
+
+      component.onFileUpload(event, {
+        id: '123',
+        displayName: '',
+        position: 0,
         scope: BookmarkScope.Public,
-        imageUrl: 'test',
-        url: 'abc',
-        id: '1',
-        position: 0
-      },
-      permissions: []
-    }
-    component.ngOnInit()
-    component.formGroup.get('displayName')?.setValue('Valid Name')
-    component.formGroup.get('endpointName')?.setValue('ep')
-    component.formGroup.get('fragment')?.setValue('fragment')
-    component.formGroup.get('url')?.setValue('https://example.com')
-    component.formGroup.get('is_public')?.setValue(true)
-    component.formGroup.get('imageUrl')?.setValue('testValue')
+        workspaceName: '1'
+      })
 
-    component.formGroup.updateValueAndValidity()
-    tick()
-    fixture.detectChanges()
+      expect(errorSpy).toHaveBeenCalledWith({
+        summaryKey: 'IMAGE.CONSTRAINT_FAILED',
+        detailKey: 'IMAGE.CONSTRAINT_SIZE'
+      })
+    })
 
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
-    expect(button).toBeTruthy()
-    button.click()
-    fixture.detectChanges()
+    it('should show error if file type is invalid ', () => {
+      const file = new File([''], 'test.txt', { type: 'text/plain' })
+      Object.defineProperty(file, 'size', { value: 100 }) // gültige Größe
 
-    expect(component).toBeTruthy()
-  }))
+      const input = document.createElement('input')
+      Object.defineProperty(input, 'files', {
+        value: [file],
+        writable: false
+      })
 
-  it('should remove logo on button click => image', fakeAsync(() => {
-    jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(of({}))
+      const event = { target: input } as unknown as Event
 
-    component.editable = true
-    component.vm = {
-      changeMode: 'EDIT',
-      initialBookmark: {
-        displayName: 'b1',
-        workspaceName: 'w1',
+      ;(component as any).msgService = { error: jest.fn() }
+      const errorSpy = jest.spyOn((component as any).msgService, 'error')
+
+      component.onFileUpload(event, {
+        id: '123',
+        displayName: '',
+        position: 0,
         scope: BookmarkScope.Public,
-        url: 'abc',
-        id: '1',
-        position: 0
-      },
-      permissions: []
-    }
-    component.ngOnInit()
-    component.formGroup.get('displayName')?.setValue('Valid Name')
-    component.formGroup.get('endpointName')?.setValue('ep')
-    component.formGroup.get('fragment')?.setValue('fragment')
-    component.formGroup.get('url')?.setValue('https://example.com')
-    component.formGroup.get('is_public')?.setValue(true)
+        workspaceName: '1'
+      })
 
-    component.formGroup.updateValueAndValidity()
-    tick()
-    fixture.detectChanges()
+      expect(errorSpy).toHaveBeenCalledWith({
+        summaryKey: 'IMAGE.CONSTRAINT_FAILED',
+        detailKey: 'IMAGE.CONSTRAINT_FILE_TYPE'
+      })
+    })
 
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
-    expect(button).toBeTruthy()
-    button.click()
-    fixture.detectChanges()
+    it('should save image if file is valid ', () => {
+      const file = new File([''], 'test.jpg', { type: 'image/jpeg' })
+      Object.defineProperty(file, 'size', { value: 100 }) // gültige Größe
 
-    expect(component).toBeTruthy()
-  }))
+      const input = document.createElement('input')
+      Object.defineProperty(input, 'files', {
+        value: [file],
+        writable: false
+      })
 
-  it('should handle error when deleting image', fakeAsync(() => {
-    const errorResponse = { status: 500, statusText: 'Server Error' }
-    jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(throwError(() => errorResponse))
-    jest.spyOn(console, 'error').mockImplementation()
-    const errorSpy = jest.spyOn((component as any).msgService, 'error')
+      const event = { target: input } as unknown as Event
 
-    component.editable = true
-    component.vm = {
-      changeMode: 'EDIT',
-      initialBookmark: {
-        displayName: 'b1',
-        workspaceName: 'w1',
+      const saveSpy = jest.spyOn(component as any, 'saveImage')
+
+      component.onFileUpload(event, {
+        id: '123',
+        displayName: '',
+        position: 0,
         scope: BookmarkScope.Public,
-        url: 'abc',
-        id: '1',
-        position: 0
-      },
-      permissions: []
-    }
-    component.ngOnInit()
+        workspaceName: '1'
+      })
 
-    component.onRemoveLogo(component.vm.initialBookmark)
-    tick()
+      expect(saveSpy).toHaveBeenCalledWith('123', input.files)
+    })
 
-    expect(console.error).toHaveBeenCalledWith('deleteImage', errorResponse)
-    expect(errorSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
-  }))
+    it('should show error if no file is present ', () => {
+      const event = { target: null } as Event
 
-  it('should remove logo button click => image', fakeAsync(() => {
-    component.editable = true
-    component.vm = {
-      changeMode: 'EDIT',
-      initialBookmark: {
-        displayName: 'b1',
-        workspaceName: 'w1',
+      ;(component as any).msgService = { error: jest.fn() }
+      const errorSpy = jest.spyOn((component as any).msgService, 'error')
+
+      component.onFileUpload(event)
+
+      expect(errorSpy).toHaveBeenCalledWith({
+        summaryKey: 'IMAGE.CONSTRAINT_FAILED',
+        detailKey: 'IMAGE.CONSTRAINT_FILE_MISSING'
+      })
+    })
+
+    it('should upload image and show success message (direct call)', () => {
+      const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
+      const fileList = {
+        0: file,
+        length: 1,
+        item: (index: number) => file
+      } as any
+
+      ;(component as any).msgService = { success: jest.fn() }
+      const messageSpy = jest.spyOn((component as any).msgService, 'success')
+
+      ;(component as any).prepareImageUrl = jest.fn()
+      ;(component as any).imageApi = {
+        uploadImage: jest.fn().mockReturnValue(of({}))
+      }
+      ;(component as any).saveImage('123', fileList)
+
+      expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
+      expect((component as any).prepareImageUrl).toHaveBeenCalledWith('123')
+      expect(component.onBookmarkImageLoadError).toBe(false)
+      expect(messageSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
+    })
+
+    it('should upload image and show error message - if server error exist', () => {
+      const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
+      const fileList = {
+        0: file,
+        length: 100,
+        item: (index: number) => file
+      } as any
+
+      ;(component as any).msgService = { error: jest.fn() }
+      const messageSpy = jest.spyOn((component as any).msgService, 'error')
+      const serverError = {
+        errorCode: 'CONSTRAINT_VIOLATIONS',
+        invalidParams: [
+          {
+            name: 'uploadImage.contentLength',
+            message: 'Parameter: bookmark-image-size  Boundaries: 1 Bytes - 10000 Bytes'
+          }
+        ]
+      }
+      const errorResponse = { status: 400, statusText: 'error', error: serverError }
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+      consoleErrorSpy.mockClear()
+      ;(component as any).prepareImageUrl = jest.fn()
+      ;(component as any).imageApi = {
+        uploadImage: jest.fn().mockReturnValue(throwError(() => errorResponse))
+      }
+      ;(component as any).saveImage('123', fileList)
+
+      expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
+      expect(messageSpy).toHaveBeenCalledWith({
+        summaryKey: 'IMAGE.UPLOAD_FAIL',
+        detailKey: 'EXCEPTIONS.IMAGE.' + errorResponse.error?.errorCode,
+        detailParameters: errorResponse.error?.invalidParams[0]
+      })
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
+      expect(component.onBookmarkImageLoadError).toBe(true)
+    })
+
+    it('should upload image and show error message - if no error code was provided', () => {
+      const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
+      const fileList = {
+        0: file,
+        length: 100,
+        item: (index: number) => file
+      } as any
+
+      ;(component as any).msgService = { error: jest.fn() }
+      const messageSpy = jest.spyOn((component as any).msgService, 'error')
+      const errorResponse = { status: 400, statusText: 'error' }
+      ;(component as any).prepareImageUrl = jest.fn()
+      ;(component as any).imageApi = {
+        uploadImage: jest.fn().mockReturnValue(throwError(() => errorResponse))
+      }
+      ;(component as any).saveImage('123', fileList)
+
+      expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
+      expect(messageSpy).toHaveBeenCalledWith({
+        summaryKey: 'IMAGE.UPLOAD_FAIL',
+        detailKey: undefined,
+        detailParameters: undefined
+      })
+    })
+
+    it('should set fetchingLogoUrl and reset error if input has value ', () => {
+      const input = document.createElement('input')
+      input.value = 'https://example.com/logo.png'
+
+      const event = { target: input } as unknown as Event
+
+      component.onBookmarkImageLoadError = true
+
+      component.onInputChange(event, {
+        id: '123',
+        displayName: '',
+        position: 0,
         scope: BookmarkScope.Public,
-        url: 'abc',
-        id: '1',
-        position: 0
-      },
-      permissions: []
-    }
-    component.ngOnInit()
-    component.formGroup.get('displayName')?.setValue('Valid Name')
-    component.formGroup.get('endpointName')?.setValue('ep')
-    component.formGroup.get('fragment')?.setValue('fragment')
-    component.formGroup.get('url')?.setValue('https://example.com')
-    component.formGroup.get('is_public')?.setValue(true)
+        workspaceName: '1'
+      })
 
-    component.formGroup.updateValueAndValidity()
-    tick()
-    fixture.detectChanges()
-
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
-    expect(button).toBeTruthy()
-    button.click()
-    fixture.detectChanges()
-
-    expect(component).toBeTruthy()
-  }))
-
-  it('should do nothing on remove logo if no bookmark is set => image', fakeAsync(() => {
-    jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(throwError(() => new Error('test error')))
-
-    component.editable = true
-    component.vm = {
-      changeMode: 'EDIT',
-      permissions: []
-    } as any as BookmarkDetailViewModel
-    component.ngOnInit()
-    component.formGroup.get('displayName')?.setValue('Valid Name')
-    component.formGroup.get('endpointName')?.setValue('ep')
-    component.formGroup.get('fragment')?.setValue('fragment')
-    component.formGroup.get('url')?.setValue('https://example.com')
-    component.formGroup.get('is_public')?.setValue(true)
-    component.formGroup.get('image_url')?.setValue('someURL')
-    component.formGroup.updateValueAndValidity()
-    tick()
-    fixture.detectChanges()
-    component.onRemoveLogo()
-    fixture.detectChanges()
-
-    expect(component).toBeTruthy()
-  }))
-
-  it('should remove logo => edge cases with missing id', fakeAsync(() => {
-    component.editable = true
-    component.vm = {
-      changeMode: 'EDIT',
-      initialBookmark: {
-        displayName: 'b1',
-        workspaceName: 'w1',
-        scope: BookmarkScope.Public,
-        url: 'abc',
-        position: 0
-      },
-      permissions: []
-    }
-    fixture.detectChanges()
-
-    component.ngOnInit()
-    component.formGroup.get('displayName')?.setValue('Valid Name')
-    component.formGroup.get('endpointName')?.setValue('ep')
-    component.formGroup.get('fragment')?.setValue('fragment')
-    component.formGroup.get('url')?.setValue('https://example.com')
-    component.formGroup.get('is_public')?.setValue(true)
-
-    component.formGroup.updateValueAndValidity()
-    tick()
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
-    expect(button).toBeTruthy()
-    button.click()
-    fixture.detectChanges()
-    expect(component).toBeTruthy()
-  }))
-
-  it('should remove logo => edge cases with missing bookmark ', fakeAsync(() => {
-    component.editable = true
-    component.vm = {
-      changeMode: 'EDIT',
-      initialBookmark: {} as any,
-      permissions: []
-    }
-    fixture.detectChanges()
-    component.ngOnInit()
-    component.formGroup.get('displayName')?.setValue('Valid Name')
-    component.formGroup.get('endpointName')?.setValue('ep')
-    component.formGroup.get('fragment')?.setValue('fragment')
-    component.formGroup.get('url')?.setValue('https://example.com')
-    component.formGroup.get('is_public')?.setValue(true)
-    component.formGroup.get('image_url')?.setValue('https://example.com')
-
-    component.formGroup.updateValueAndValidity()
-    tick()
-    const button: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_detail_form_field_remove_logo')
-    expect(button).toBeTruthy()
-    button.click()
-    fixture.detectChanges()
-    expect(component).toBeTruthy()
-  }))
-  it('should show error if file is too large (direct call)', () => {
-    const file = new File([''], 'test.jpg', { type: 'image/jpeg' })
-    Object.defineProperty(file, 'size', { value: 1000001 })
-
-    const input = document.createElement('input')
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false
+      expect(component.onBookmarkImageLoadError).toBe(false)
+      expect(component.fetchingLogoUrl).toBe('https://example.com/logo.png')
     })
 
-    const event = { target: input } as unknown as Event
+    it('should do nothing if no bookmark is provided', () => {
+      const input = document.createElement('input')
+      input.value = 'https://example.com/logo.png'
 
-    ;(component as any).msgService = { error: jest.fn() }
-    const errorSpy = jest.spyOn((component as any).msgService, 'error')
+      const event = { target: input } as unknown as Event
 
-    component.onFileUpload(event, {
-      id: '123',
-      displayName: '',
-      position: 0,
-      scope: BookmarkScope.Public,
-      workspaceName: '1'
+      component.fetchingLogoUrl = undefined
+      component.onBookmarkImageLoadError = true
+
+      component.onInputChange(event)
+
+      expect(component.fetchingLogoUrl).toBeUndefined()
+      expect(component.onBookmarkImageLoadError).toBe(true)
     })
-
-    expect(errorSpy).toHaveBeenCalledWith({
-      summaryKey: 'IMAGE.CONSTRAINT_FAILED',
-      detailKey: 'IMAGE.CONSTRAINT_SIZE'
-    })
-  })
-  it('should show error if file type is invalid ', () => {
-    const file = new File([''], 'test.txt', { type: 'text/plain' })
-    Object.defineProperty(file, 'size', { value: 100 }) // gültige Größe
-
-    const input = document.createElement('input')
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false
-    })
-
-    const event = { target: input } as unknown as Event
-
-    ;(component as any).msgService = { error: jest.fn() }
-    const errorSpy = jest.spyOn((component as any).msgService, 'error')
-
-    component.onFileUpload(event, {
-      id: '123',
-      displayName: '',
-      position: 0,
-      scope: BookmarkScope.Public,
-      workspaceName: '1'
-    })
-
-    expect(errorSpy).toHaveBeenCalledWith({
-      summaryKey: 'IMAGE.CONSTRAINT_FAILED',
-      detailKey: 'IMAGE.CONSTRAINT_FILE_TYPE'
-    })
-  })
-
-  it('should save image if file is valid ', () => {
-    const file = new File([''], 'test.jpg', { type: 'image/jpeg' })
-    Object.defineProperty(file, 'size', { value: 100 }) // gültige Größe
-
-    const input = document.createElement('input')
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false
-    })
-
-    const event = { target: input } as unknown as Event
-
-    const saveSpy = jest.spyOn(component as any, 'saveImage')
-
-    component.onFileUpload(event, {
-      id: '123',
-      displayName: '',
-      position: 0,
-      scope: BookmarkScope.Public,
-      workspaceName: '1'
-    })
-
-    expect(saveSpy).toHaveBeenCalledWith('123', input.files)
-  })
-
-  it('should show error if no file is present ', () => {
-    const event = { target: null } as Event
-
-    ;(component as any).msgService = { error: jest.fn() }
-    const errorSpy = jest.spyOn((component as any).msgService, 'error')
-
-    component.onFileUpload(event)
-
-    expect(errorSpy).toHaveBeenCalledWith({
-      summaryKey: 'IMAGE.CONSTRAINT_FAILED',
-      detailKey: 'IMAGE.CONSTRAINT_FILE_MISSING'
-    })
-  })
-
-  it('should upload image and show success message (direct call)', () => {
-    const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
-    const fileList = {
-      0: file,
-      length: 1,
-      item: (index: number) => file
-    } as any
-
-    ;(component as any).msgService = { success: jest.fn() }
-    const messageSpy = jest.spyOn((component as any).msgService, 'success')
-
-    ;(component as any).prepareImageUrl = jest.fn()
-    ;(component as any).imageApi = {
-      uploadImage: jest.fn().mockReturnValue(of({}))
-    }
-    ;(component as any).saveImage('123', fileList)
-
-    expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
-    expect((component as any).prepareImageUrl).toHaveBeenCalledWith('123')
-    expect(component.onBookmarkImageLoadError).toBe(false)
-    expect(messageSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.UPLOAD_SUCCESS' })
-  })
-
-  it('should upload image and show error message - if server error message exist', () => {
-    const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
-    const fileList = {
-      0: file,
-      length: 100,
-      item: (index: number) => file
-    } as any
-
-    ;(component as any).msgService = { error: jest.fn() }
-    const messageSpy = jest.spyOn((component as any).msgService, 'error')
-    const serverError = {
-      errorCode: 'CONSTRAINT_VIOLATIONS',
-      invalidParams: [
-        {
-          name: 'uploadImage.contentLength',
-          message: 'Parameter: bookmark-image-size  Boundaries: 1 Bytes - 10000 Bytes'
-        }
-      ]
-    }
-    const errorResponse = { status: 400, statusText: 'error', error: serverError }
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
-    consoleErrorSpy.mockClear()
-    ;(component as any).prepareImageUrl = jest.fn()
-    ;(component as any).imageApi = {
-      uploadImage: jest.fn().mockReturnValue(throwError(() => errorResponse))
-    }
-    ;(component as any).saveImage('123', fileList)
-
-    expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
-    expect(messageSpy).toHaveBeenCalledWith({
-      summaryKey: 'IMAGE.UPLOAD_FAIL',
-      detailKey: 'IMAGE.' + errorResponse.error?.errorCode,
-      detailParameters: errorResponse.error?.invalidParams[0]
-    })
-    expect(consoleErrorSpy).toHaveBeenCalledTimes(1)
-    expect(component.onBookmarkImageLoadError).toBe(true)
-  })
-
-  it('should upload image and show error message - if server error message not exist', () => {
-    const file = new File(['data'], 'test.jpg', { type: 'image/jpeg' })
-    const fileList = {
-      0: file,
-      length: 100,
-      item: (index: number) => file
-    } as any
-
-    ;(component as any).msgService = { error: jest.fn() }
-    const messageSpy = jest.spyOn((component as any).msgService, 'error')
-    const errorResponse = { status: 400, statusText: 'error' }
-    ;(component as any).prepareImageUrl = jest.fn()
-    ;(component as any).imageApi = {
-      uploadImage: jest.fn().mockReturnValue(throwError(() => errorResponse))
-    }
-    ;(component as any).saveImage('123', fileList)
-
-    expect((component as any).imageApi.uploadImage).toHaveBeenCalled()
-    expect(messageSpy).toHaveBeenCalledWith({
-      summaryKey: 'IMAGE.UPLOAD_FAIL',
-      detailKey: undefined,
-      detailParameters: undefined
-    })
-  })
-
-  it('should set fetchingLogoUrl and reset error if input has value ', () => {
-    const input = document.createElement('input')
-    input.value = 'https://example.com/logo.png'
-
-    const event = { target: input } as unknown as Event
-
-    component.onBookmarkImageLoadError = true
-
-    component.onInputChange(event, {
-      id: '123',
-      displayName: '',
-      position: 0,
-      scope: BookmarkScope.Public,
-      workspaceName: '1'
-    })
-
-    expect(component.onBookmarkImageLoadError).toBe(false)
-    expect(component.fetchingLogoUrl).toBe('https://example.com/logo.png')
-  })
-
-  it('should do nothing if no bookmark is provided', () => {
-    const input = document.createElement('input')
-    input.value = 'https://example.com/logo.png'
-
-    const event = { target: input } as unknown as Event
-
-    component.fetchingLogoUrl = undefined
-    component.onBookmarkImageLoadError = true
-
-    component.onInputChange(event)
-
-    expect(component.fetchingLogoUrl).toBeUndefined()
-    expect(component.onBookmarkImageLoadError).toBe(true)
   })
 })
 

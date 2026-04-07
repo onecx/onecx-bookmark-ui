@@ -1,4 +1,4 @@
 {
-  "compact": false,
+  "compact": true,
   "presets": ["latest", "react", "stage-0"]
 }

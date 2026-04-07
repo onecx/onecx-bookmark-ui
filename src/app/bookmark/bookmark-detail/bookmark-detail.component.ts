@@ -295,7 +295,7 @@ export class BookmarkDetailComponent
         this.onBookmarkImageLoadError = true
         this.msgService.error({
           summaryKey: 'IMAGE.UPLOAD_FAIL',
-          detailKey: err.error?.errorCode ? 'IMAGE.' + err.error.errorCode : undefined,
+          detailKey: err.error?.errorCode ? 'EXCEPTIONS.IMAGE.' + err.error.errorCode : undefined,
           detailParameters: err.error?.invalidParams[0]
         })
         console.error('uploadImage', err)

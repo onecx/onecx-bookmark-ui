@@ -279,7 +279,6 @@
     "UPLOAD_SUCCESS": "The file was successfully uploaded.",
     "REMOVE_FAIL": "The file could not be removed.",
     "REMOVE_SUCCESS": "The file was successfully removed.",
-    "CONSTRAINT_VIOLATIONS": "{{name}}: {{message}}",
     "CONSTRAINT_FILE_MISSING": "No file selected.",
     "CONSTRAINT_FILE_TYPE": "The following image formats are accepted: jpg, jpeg, png",
     "CONSTRAINT_FAILED": "File upload condition check failed:",
@@ -348,6 +347,10 @@
     }
   },
   "EXCEPTIONS": {
+    "IMAGE": {
+      "VALIDATION_EXCEPTION": "An error occurred during image validation.",
+      "CONSTRAINT_VIOLATIONS": "{{name}}: {{message}}"
+    },
     "HTTP_STATUS_0": {
       "BOOKMARK": "Unknown problem retrieving Bookmark data - please try again.",
       "BOOKMARKS": "Unknown problem retrieving Bookmark data - please try again."

@@ -28,6 +28,7 @@ export interface EximBookmark {
     external?: boolean;
     target?: Target;
     disabled?: boolean;
+    position?: number;
 }
 
 
