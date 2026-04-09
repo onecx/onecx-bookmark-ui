@@ -6,12 +6,12 @@ import { BehaviorSubject, ReplaySubject, of } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PortalCoreModule } from '@onecx/portal-integration-angular'
-import { BASE_URL, RemoteComponentConfig, SLOT_SERVICE } from '@onecx/angular-remote-components'
+import { BASE_URL, RemoteComponentConfig, SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 import { AppConfigService, UserService } from '@onecx/angular-integration-interface'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
-import { OneCXBookmarkListComponent } from './bookmark-list.component'
+import { OneCXBookmarkListComponent, slotInitializer } from './bookmark-list.component'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -67,11 +67,7 @@ describe('OneCXBookmarkListComponent', () => {
           en: require('./src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        { provide: UserService, useValue: userServiceMock }
-      ]
+      providers: [provideHttpClient(), provideHttpClientTesting(), { provide: UserService, useValue: userServiceMock }]
     })
       .overrideComponent(OneCXBookmarkListComponent, {
         set: {
@@ -104,6 +100,21 @@ describe('OneCXBookmarkListComponent', () => {
     expect(component.loading).toBe(true)
     expect(component.bookmarkLoadingError).toBe(false)
     expect(component.permissions).toEqual([])
+  })
+
+  describe('initialize slot', () => {
+    let slotService: jest.Mocked<SlotService>
+
+    beforeEach(() => {
+      slotService = { init: jest.fn().mockReturnValue(Promise.resolve()) } as unknown as jest.Mocked<SlotService>
+    })
+
+    it('should call SlotService.init', () => {
+      const initializer = slotInitializer(slotService)
+      initializer()
+
+      expect(slotService.init).toHaveBeenCalled()
+    })
   })
 
   describe('ocxInitRemoteComponent', () => {
@@ -160,6 +171,22 @@ describe('OneCXBookmarkListComponent', () => {
       const publicBookmarks = component.publicBookmarks$.getValue()
       expect(publicBookmarks.length).toBe(1)
       expect(publicBookmarks[0].displayName).toBe('Public B1')
+    })
+
+    it('should sort multiple public bookmarks by position', () => {
+      bookmarkApiUtilsMock.loadBookmarks.mockReturnValue(
+        of([
+          { id: '4', displayName: 'Public B2', workspaceName: 'ws', scope: BookmarkScope.Public, position: 2 },
+          { id: '5', displayName: 'Public B1', workspaceName: 'ws', scope: BookmarkScope.Public, position: 1 }
+        ])
+      )
+      initializeComponent()
+
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+
+      const publicBookmarks = component.publicBookmarks$.getValue()
+      expect(publicBookmarks[0].displayName).toBe('Public B1')
+      expect(publicBookmarks[1].displayName).toBe('Public B2')
     })
 
     it('should set loading to false after bookmarks are loaded', () => {
