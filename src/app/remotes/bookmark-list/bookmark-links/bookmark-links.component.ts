@@ -8,11 +8,11 @@ import { WorkspaceService } from '@onecx/angular-integration-interface'
 import { Bookmark } from 'src/app/shared/generated'
 
 @Component({
-  standalone: true,
-  imports: [CommonModule, RouterModule],
   selector: 'app-bookmark-links',
   templateUrl: './bookmark-links.component.html',
-  styleUrl: './bookmark-links.component.scss'
+  styleUrls: ['./bookmark-links.component.scss'],
+  standalone: true,
+  imports: [CommonModule, RouterModule]
 })
 export class BookmarkLinksComponent {
   urls: Record<string, Observable<string>> = {}
