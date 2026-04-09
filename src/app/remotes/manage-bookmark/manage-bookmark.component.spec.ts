@@ -287,6 +287,7 @@ describe('OneCXManageBookmarkComponent', () => {
 
   describe('onOpenBookmarkDialog', () => {
     it('should open a dialog when called', () => {
+      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of(undefined) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([]))
       initializeComponent()
@@ -294,6 +295,7 @@ describe('OneCXManageBookmarkComponent', () => {
 
       component.onOpenBookmarkDialog()
 
+      // eslint-disable-next-line deprecation/deprecation
       expect(portalDialogServiceMock.openDialog).toHaveBeenCalled()
     })
 
@@ -301,6 +303,7 @@ describe('OneCXManageBookmarkComponent', () => {
       const bookmark = { id: '1', displayName: 'B1', workspaceName: 'ws', scope: BookmarkScope.Private, position: 0 }
       // root path is always bookmarkable, which lets the create/edit path execute
       appStateServiceMock.currentPage$.next({ path: '/app' })
+      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
       bookmarkApiUtilsMock.createNewBookmark.mockReturnValue(of(bookmark) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
