@@ -9,10 +9,12 @@ import 'jest-preset-angular/setup-jest'
 
 /* fixes a bug with jsdom: ignoring this error message in log */
 const originalConsoleError = console.error
+type Err = { message: string }
 console.error = (message, ...optionalParams) => {
   try {
-    if (message && message.indexOf('Error: Could not parse CSS stylesheet') > -1) return
+    if (message?.includes('Error: Could not parse CSS stylesheet')) return
   } catch (err) {
+    (err as Err).message = `Error in console.error`
     return
   }
   originalConsoleError(message, ...optionalParams)
