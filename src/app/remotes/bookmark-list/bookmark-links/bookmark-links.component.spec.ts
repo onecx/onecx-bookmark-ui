@@ -128,10 +128,11 @@ describe('BookmarkLinksComponent', () => {
         position: 0
       })
 
-      result!.subscribe((url) => {
-        expect(url).toBe('/resolved/url')
-        done()
-      })
+      if (result)
+        result.subscribe((url) => {
+          expect(url).toBe('/resolved/url')
+          done()
+        })
     })
   })
 
