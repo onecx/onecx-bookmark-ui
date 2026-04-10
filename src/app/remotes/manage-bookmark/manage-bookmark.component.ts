@@ -225,13 +225,11 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
             }
             return this.editBookmark(dialogResultBookmark)
           }
+          // istanbul ignore next
           return of(undefined)
         }),
         filter((data) => data !== undefined),
         mergeMap((result) => {
-          if (result === undefined) {
-            return of(undefined)
-          }
           return this.bookmarkApiUtils.loadBookmarksForApp(this.commonObs$, this.handleBookmarkLoadError)
         }),
         filter((result) => result !== undefined),

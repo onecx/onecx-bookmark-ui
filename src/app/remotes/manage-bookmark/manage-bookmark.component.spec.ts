@@ -237,6 +237,16 @@ describe('OneCXManageBookmarkComponent', () => {
         done()
       })
     })
+
+    it('should emit false when isPageBookmarkable throws an error', (done) => {
+      appStateServiceMock.currentWorkspace$.error(new Error('workspace error'))
+      initializeComponent()
+
+      component.isBookmarkable$.subscribe((val) => {
+        expect(val).toBe(false)
+        done()
+      })
+    })
   })
 
   describe('isBookmarked$', () => {
@@ -249,12 +259,72 @@ describe('OneCXManageBookmarkComponent', () => {
         done()
       })
     })
+
+    it('should emit true when a matching bookmark exists', (done) => {
+      const bookmark = {
+        id: '1',
+        displayName: 'B1',
+        workspaceName: 'ws',
+        scope: BookmarkScope.Private,
+        position: 0,
+        productName: 'product',
+        appId: 'app'
+      }
+      appStateServiceMock.currentPage$.next({ path: '/app' })
+      initializeComponent()
+      component.bookmarks$.next([bookmark])
+
+      component.isBookmarked$.subscribe((val) => {
+        expect(val).toBe(true)
+        done()
+      })
+    })
+
+    it('should emit false when commonObs$ throws an error', (done) => {
+      appStateServiceMock.currentWorkspace$.error(new Error('error'))
+      initializeComponent()
+
+      component.isBookmarked$.subscribe((val) => {
+        expect(val).toBe(false)
+        done()
+      })
+    })
   })
 
   describe('currentBookmark$', () => {
     it('should emit undefined when bookmarks$ is undefined', (done) => {
       initializeComponent()
       component.bookmarks$.next(undefined)
+
+      component.currentBookmark$.subscribe((val) => {
+        expect(val).toBeUndefined()
+        done()
+      })
+    })
+
+    it('should emit matching bookmark when found', (done) => {
+      const bookmark = {
+        id: '1',
+        displayName: 'B1',
+        workspaceName: 'ws',
+        scope: BookmarkScope.Private,
+        position: 0,
+        productName: 'product',
+        appId: 'app'
+      }
+      appStateServiceMock.currentPage$.next({ path: '/app' })
+      initializeComponent()
+      component.bookmarks$.next([bookmark])
+
+      component.currentBookmark$.subscribe((val) => {
+        expect(val).toEqual(bookmark)
+        done()
+      })
+    })
+
+    it('should emit undefined when commonObs$ throws an error', (done) => {
+      appStateServiceMock.currentWorkspace$.error(new Error('error'))
+      initializeComponent()
 
       component.currentBookmark$.subscribe((val) => {
         expect(val).toBeUndefined()
@@ -283,6 +353,16 @@ describe('OneCXManageBookmarkComponent', () => {
         done()
       })
     })
+
+    it('should emit undefined when commonObs$ throws an error', (done) => {
+      appStateServiceMock.currentWorkspace$.error(new Error('error'))
+      initializeComponent()
+
+      component.endpointForCurrentPage$.subscribe((val) => {
+        expect(val).toBeUndefined()
+        done()
+      })
+    })
   })
 
   describe('onOpenBookmarkDialog', () => {
@@ -299,9 +379,44 @@ describe('OneCXManageBookmarkComponent', () => {
       expect(portalDialogServiceMock.openDialog).toHaveBeenCalled()
     })
 
-    it('should reload bookmarks after a successful dialog result', () => {
+    it('should do nothing when page is not bookmarkable and dialog returns null', () => {
+      appStateServiceMock.currentPage$.next({ path: '/unrelated' })
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of(null) as any)
+      initializeComponent()
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+
+      component.onOpenBookmarkDialog()
+
+      expect(bookmarkApiUtilsMock.createNewBookmark).not.toHaveBeenCalled()
+    })
+
+    it('should do nothing when page is not bookmarkable and primary button is clicked', () => {
+      appStateServiceMock.currentPage$.next({ path: '/unrelated' })
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
+      initializeComponent()
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+
+      component.onOpenBookmarkDialog()
+
+      expect(bookmarkApiUtilsMock.createNewBookmark).not.toHaveBeenCalled()
+    })
+
+    it('should cancel create when secondary button clicked and page is bookmarkable but not bookmarked', () => {
+      appStateServiceMock.currentPage$.next({ path: '/app' })
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
+      initializeComponent()
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+
+      component.onOpenBookmarkDialog()
+
+      expect(bookmarkApiUtilsMock.createNewBookmark).not.toHaveBeenCalled()
+    })
+
+    it('should reload bookmarks after a successful create dialog result', () => {
       const bookmark = { id: '1', displayName: 'B1', workspaceName: 'ws', scope: BookmarkScope.Private, position: 0 }
-      // root path is always bookmarkable, which lets the create/edit path execute
       appStateServiceMock.currentPage$.next({ path: '/app' })
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
@@ -313,6 +428,108 @@ describe('OneCXManageBookmarkComponent', () => {
       component.onOpenBookmarkDialog()
 
       expect(bookmarkApiUtilsMock.loadBookmarksForApp).toHaveBeenCalledTimes(2)
+    })
+
+    it('should create bookmark with endpoint parameters when workspace has a matching endpoint', () => {
+      const endpoint = { name: 'detail', path: '/detail/{id}' }
+      appStateServiceMock.currentWorkspace$.next({
+        workspaceName: 'ws',
+        routes: [{ appId: 'app', productName: 'product', endpoints: [endpoint] }]
+      })
+      appStateServiceMock.currentPage$.next({ path: '/app/detail/123' })
+      const bookmark = { id: '1', displayName: 'B1', workspaceName: 'ws', scope: BookmarkScope.Private, position: 0 }
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
+      bookmarkApiUtilsMock.createNewBookmark.mockReturnValue(of(bookmark) as any)
+      bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
+      initializeComponent()
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+
+      component.onOpenBookmarkDialog()
+
+      expect(bookmarkApiUtilsMock.createNewBookmark).toHaveBeenCalledWith(
+        expect.objectContaining({ endpointName: 'detail', endpointParameters: { id: '123' } })
+      )
+    })
+
+    it('should edit bookmark when primary button clicked and page is already bookmarked', () => {
+      const bookmark = {
+        id: '1',
+        displayName: 'B1',
+        workspaceName: 'ws',
+        scope: BookmarkScope.Private,
+        position: 0,
+        productName: 'product',
+        appId: 'app',
+        modificationCount: 1
+      }
+      appStateServiceMock.currentPage$.next({ path: '/app' })
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
+      bookmarkApiUtilsMock.editBookmark.mockReturnValue(of(undefined) as any)
+      bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
+      initializeComponent()
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+      component.bookmarks$.next([bookmark])
+
+      component.onOpenBookmarkDialog()
+
+      expect(bookmarkApiUtilsMock.editBookmark).toHaveBeenCalledWith(
+        '1',
+        expect.objectContaining({ id: '1', displayName: 'B1', modificationCount: 1 })
+      )
+    })
+
+    it('should default position and modificationCount to 0 when undefined on edit', () => {
+      const bookmark = {
+        id: '2',
+        displayName: 'B2',
+        workspaceName: 'ws',
+        scope: BookmarkScope.Private,
+        position: undefined as unknown as number,
+        productName: 'product',
+        appId: 'app',
+        modificationCount: undefined
+      }
+      appStateServiceMock.currentPage$.next({ path: '/app' })
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
+      bookmarkApiUtilsMock.editBookmark.mockReturnValue(of(undefined) as any)
+      bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
+      initializeComponent()
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+      component.bookmarks$.next([bookmark])
+
+      component.onOpenBookmarkDialog()
+
+      expect(bookmarkApiUtilsMock.editBookmark).toHaveBeenCalledWith(
+        '2',
+        expect.objectContaining({ position: 0, modificationCount: 0 })
+      )
+    })
+
+    it('should delete bookmark when secondary button clicked and page is already bookmarked', () => {
+      const bookmark = {
+        id: '1',
+        displayName: 'B1',
+        workspaceName: 'ws',
+        scope: BookmarkScope.Private,
+        position: 0,
+        productName: 'product',
+        appId: 'app'
+      }
+      appStateServiceMock.currentPage$.next({ path: '/app' })
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: bookmark }) as any)
+      bookmarkApiUtilsMock.deleteBookmarkById.mockReturnValue(of(undefined) as any)
+      bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([]))
+      initializeComponent()
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+      component.bookmarks$.next([bookmark])
+
+      component.onOpenBookmarkDialog()
+
+      expect(bookmarkApiUtilsMock.deleteBookmarkById).toHaveBeenCalledWith('1')
     })
   })
 })

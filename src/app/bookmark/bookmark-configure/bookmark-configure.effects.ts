@@ -161,11 +161,11 @@ export class BookmarkConfigureEffects {
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkConfigureActions.exportBookmarksCancelled())
         // wrong result
-        if (!dialogResult?.result || dialogResult?.result.scopes.length === 0) {
+        if (!dialogResult.result || dialogResult.result.scopes.length === 0) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         // execute
-        return this.eximService.exportBookmarks({ exportBookmarksRequest: dialogResult?.result }).pipe(
+        return this.eximService.exportBookmarks({ exportBookmarksRequest: dialogResult.result }).pipe(
           map((snapshot) => {
             const workspaceJson = JSON.stringify(snapshot, null, 2)
             FileSaver.saveAs(
@@ -215,16 +215,16 @@ export class BookmarkConfigureEffects {
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkConfigureActions.importBookmarksCancelled())
         // wrong result
-        if (!dialogResult?.result?.snapshot) {
+        if (!dialogResult.result || !dialogResult.result.snapshot) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
         }
         // execute
         return this.eximService
           .importBookmarks({
-            workspaceName: dialogResult?.result.workspaceName,
-            bookmarkSnapshot: dialogResult?.result.snapshot,
-            importMode: dialogResult?.result.importMode,
-            scopes: dialogResult?.result.scopes
+            workspaceName: dialogResult.result.workspaceName,
+            bookmarkSnapshot: dialogResult.result.snapshot,
+            importMode: dialogResult.result.importMode,
+            scopes: dialogResult.result.scopes
           })
           .pipe(
             map(() => {
@@ -270,12 +270,12 @@ export class BookmarkConfigureEffects {
       switchMap((dialogResult) => {
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkConfigureActions.sortBookmarksCancelled())
-        if (!dialogResult?.result || dialogResult?.result.length === 0) {
+        if (!dialogResult.result || dialogResult.result.length === 0) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         // execute
         return this.bookmarksService
-          .updateBookmarksOrder({ bookmarkReorderRequest: { bookmarks: dialogResult?.result } })
+          .updateBookmarksOrder({ bookmarkReorderRequest: { bookmarks: dialogResult.result } })
           .pipe(
             map(() => {
               this.messageService.success({ summaryKey: 'BOOKMARK_SORT.SUCCESS' })
@@ -311,12 +311,12 @@ export class BookmarkConfigureEffects {
         }
       }),
       switchMap((data) => {
-        if (!data.bookmark)
+        if (!data.bookmark || !data.bookmark.id)
           return of(BookmarkConfigureActions.editBookmarkFailed({ status: '', errorText: 'Missing Bookmark' }))
         // execute
         return this.bookmarksService
           .updateBookmark({
-            id: data.bookmark?.id,
+            id: data.bookmark.id,
             updateBookmark: { ...data.bookmark, disabled: !data.bookmark.disabled } as UpdateBookmark
           })
           .pipe(
@@ -392,7 +392,7 @@ export class BookmarkConfigureEffects {
         ) {
           return of(BookmarkConfigureActions.editBookmarkCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         // execute
@@ -449,7 +449,7 @@ export class BookmarkConfigureEffects {
         if (!dialogResult || dialogResult.button === 'secondary') {
           return of(BookmarkConfigureActions.createBookmarkCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         // execute
@@ -513,7 +513,7 @@ export class BookmarkConfigureEffects {
         if (!dialogResult || dialogResult.button === 'secondary') {
           return of(BookmarkConfigureActions.createBookmarkCancelled())
         }
-        if (!dialogResult?.result) {
+        if (!dialogResult.result) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG') // error message
         }
         // execute
@@ -633,7 +633,8 @@ export class BookmarkConfigureEffects {
           if (e) {
             console.error('displayError:', action)
             const error = action as ActionErrorType // convert due to access the props
-            const text = error.errorText?.includes('VALIDATION.ERRORS') ? error.errorText : undefined
+            let text: string | undefined = ''
+            if (error.errorText) text = error.errorText.includes('VALIDATION.ERRORS') ? error.errorText : undefined
             this.messageService.error({
               summaryKey: e.key,
               detailKey: error.status ? this.buildExceptionKey(error.status) : text
