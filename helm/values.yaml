@@ -18,6 +18,9 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-bookmark
           tagName: ocx-bookmark-component
+          endpoints:
+            - name: bookmark-configure
+              path: /configure
         manage-bookmark:
           exposedModule: ./OneCXManageBookmarkComponent
           description: "Create and Delete User Bookmarks"

@@ -28,7 +28,7 @@ export class BookmarkSortComponent
 
   ngOnInit() {
     this.dialogResult = this.cast2UpdateBookmark(this.vm.initialBookmarks)
-    this.dialogResult?.sort(this.sortByPosition)
+    this.dialogResult.sort(this.sortByPosition)
     // wait a moment for initialization to activate the primary button
     setTimeout(() => {
       this.primaryButtonEnabled.emit(true)
