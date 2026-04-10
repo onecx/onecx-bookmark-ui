@@ -105,6 +105,12 @@ describe('BookmarkOverviewComponent', () => {
       expect(component.hasEditPermissions).toBe(true)
     })
 
+    it('should fall back to ADMIN_EDIT permission when EDIT permission returns null', () => {
+      userServiceMock.hasPermission = jest.fn().mockReturnValueOnce(null).mockReturnValueOnce(false)
+      const newFixture = TestBed.createComponent(BookmarkOverviewComponent)
+      expect(newFixture.componentInstance.hasEditPermissions).toBe(false)
+    })
+
     it('should initialize isProductComponentDefined$ via SlotService', (done) => {
       component.isProductComponentDefined$.subscribe((val) => {
         expect(val).toBe(false)
