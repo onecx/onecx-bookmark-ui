@@ -357,6 +357,18 @@ describe('BookmarkConfigureEffects', () => {
       })
     })
 
+    it('should dispatch importBookmarksFailed when result is null', (done) => {
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: null }) as any)
+
+      actions$.next(BookmarkConfigureActions.importBookmarks())
+
+      effects.importBookmarks$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.importBookmarksFailed.type)
+        done()
+      })
+    })
+
     it('should import bookmarks and dispatch success', (done) => {
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
@@ -517,6 +529,20 @@ describe('BookmarkConfigureEffects', () => {
   })
 
   describe('viewOrEditBookmark$', () => {
+    it('should open dialog in view mode when bookmark not found (canEdit returns false)', (done) => {
+      userServiceMock.hasPermission.mockReturnValue(false)
+      // secondary + canEdit(undefined)=false → does not cancel → result undefined → throws
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
+
+      actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'non-existent' }))
+
+      effects.viewOrEditBookmark$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.editBookmarkFailed.type)
+        done()
+      })
+    })
+
     it('should cancel when secondary button clicked and bookmark is editable', (done) => {
       userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#EDIT')
       // eslint-disable-next-line deprecation/deprecation
@@ -536,6 +562,19 @@ describe('BookmarkConfigureEffects', () => {
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bm1 }) as any)
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-1' }))
+
+      effects.viewOrEditBookmark$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.editBookmarkCancelled.type)
+        done()
+      })
+    })
+
+    it('should cancel when primary clicked with all permissions but bookmark not found', (done) => {
+      userServiceMock.hasPermission.mockReturnValue(true)
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
+
+      actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'non-existent' }))
 
       effects.viewOrEditBookmark$.subscribe((action) => {
         expect(action.type).toBe(BookmarkConfigureActions.editBookmarkCancelled.type)
