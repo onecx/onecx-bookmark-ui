@@ -41,15 +41,6 @@ export class BookmarkOverviewEffects {
       })
     )
   })
-  refreshSearch$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(),
-      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
-      mergeMap(([, { workspaceName }]) => {
-        return this.performSearch(workspaceName)
-      })
-    )
-  })
 
   /**
    * Bookmark Search in context of current workspace

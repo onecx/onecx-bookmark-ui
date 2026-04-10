@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { CommonModule } from '@angular/common'
-import { FormsModule } from '@angular/forms'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { FormsModule } from '@angular/forms'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 
