@@ -215,7 +215,7 @@ export class BookmarkConfigureEffects {
         if (!dialogResult || dialogResult.button === 'secondary')
           return of(BookmarkConfigureActions.importBookmarksCancelled())
         // wrong result
-        if (!dialogResult.result || !dialogResult.result.snapshot) {
+        if (!dialogResult.result?.snapshot) {
           throw new Error('VALIDATION.ERRORS.RESULT_WRONG')
         }
         // execute
@@ -311,7 +311,7 @@ export class BookmarkConfigureEffects {
         }
       }),
       switchMap((data) => {
-        if (!data.bookmark || !data.bookmark.id)
+        if (!data.bookmark?.id)
           return of(BookmarkConfigureActions.editBookmarkFailed({ status: '', errorText: 'Missing Bookmark' }))
         // execute
         return this.bookmarksService
