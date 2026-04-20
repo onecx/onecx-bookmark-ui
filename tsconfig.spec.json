@@ -9,6 +9,6 @@
     "useDefineForClassFields": false
   },
   "files": ["src/test-setup.ts"],
-  "exclude": ["src/app/shared/generated", "node_modules"],
+  "exclude": ["src/app/shared/generated", "node_modules", "dist", "src/app/bookmark/bookmark.*.ts"],
   "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }
