@@ -360,7 +360,6 @@ describe('BookmarkConfigureComponent', () => {
     expect(editButton).toBeTruthy()
     expect(toggleButton).toBeTruthy()
 
-    console.log(toggleButton)
     toggleButton.click()
     fixture.detectChanges()
     expect(component.onToggleDisable).toHaveBeenCalled()

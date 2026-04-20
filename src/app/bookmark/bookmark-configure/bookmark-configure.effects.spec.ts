@@ -236,6 +236,39 @@ describe('BookmarkConfigureEffects', () => {
         done()
       })
     })
+
+    it('should trigger another search when editBookmarkSucceeded is dispatched', (done) => {
+      bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(of({ stream: [], totalElements: 0 }) as any)
+
+      actions$.next(BookmarkConfigureActions.editBookmarkSucceeded())
+
+      effects.refreshSearch$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.bookmarkSearchResultsReceived.type)
+        done()
+      })
+    })
+
+    it('should trigger another search when deleteBookmarkSucceeded is dispatched', (done) => {
+      bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(of({ stream: [], totalElements: 0 }) as any)
+
+      actions$.next(BookmarkConfigureActions.deleteBookmarkSucceeded())
+
+      effects.refreshSearch$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.bookmarkSearchResultsReceived.type)
+        done()
+      })
+    })
+
+    it('should trigger another search when importBookmarksSucceeded is dispatched', (done) => {
+      bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(of({ stream: [], totalElements: 0 }) as any)
+
+      actions$.next(BookmarkConfigureActions.importBookmarksSucceeded())
+
+      effects.refreshSearch$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.bookmarkSearchResultsReceived.type)
+        done()
+      })
+    })
   })
 
   describe('exportBookmarks$', () => {
@@ -405,6 +438,26 @@ describe('BookmarkConfigureEffects', () => {
         expect(portalDialogServiceMock.openDialog).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining({ inputs: expect.objectContaining({ dateFormat: 'dd.MM.yyyy HH:mm:ss' }) }),
+          expect.anything(),
+          expect.anything(),
+          expect.anything()
+        )
+        done()
+      })
+    })
+
+    it('should pass en date format when user language is en', (done) => {
+      userServiceMock.lang$.next('en')
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
+
+      actions$.next(BookmarkConfigureActions.importBookmarks())
+
+      effects.importBookmarks$.subscribe(() => {
+        // eslint-disable-next-line deprecation/deprecation
+        expect(portalDialogServiceMock.openDialog).toHaveBeenCalledWith(
+          expect.anything(),
+          expect.objectContaining({ inputs: expect.objectContaining({ dateFormat: 'M/d/yy, hh:mm:ss a' }) }),
           expect.anything(),
           expect.anything(),
           expect.anything()
@@ -624,6 +677,34 @@ describe('BookmarkConfigureEffects', () => {
         done()
       })
     })
+
+    it('should cancel when secondary button clicked and public bookmark is editable by admin', (done) => {
+      userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#ADMIN_EDIT')
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: bmPublic }) as any)
+
+      actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-pub' }))
+
+      effects.viewOrEditBookmark$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.editBookmarkCancelled.type)
+        done()
+      })
+    })
+
+    it('should update public bookmark and dispatch editBookmarkSucceeded when admin edits', (done) => {
+      userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#ADMIN_EDIT')
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bmPublic } }) as any)
+      bookmarksServiceMock.updateBookmark.mockReturnValue(of(undefined) as any)
+
+      actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-pub' }))
+
+      effects.viewOrEditBookmark$.subscribe((action) => {
+        expect(messageServiceMock.success).toHaveBeenCalled()
+        expect(action.type).toBe(BookmarkConfigureActions.editBookmarkSucceeded.type)
+        done()
+      })
+    })
   })
 
   describe('createBookmark$', () => {
@@ -722,6 +803,21 @@ describe('BookmarkConfigureEffects', () => {
         done()
       })
     })
+
+    it('should dispatch createBookmarkFailed on api error', (done) => {
+      // eslint-disable-next-line deprecation/deprecation
+      portalDialogServiceMock.openDialog.mockReturnValue(
+        of({ button: 'primary', result: { displayName: 'Copy', scope: BookmarkScope.Private } }) as any
+      )
+      bookmarksServiceMock.createNewBookmark.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+
+      actions$.next(BookmarkConfigureActions.copyBookmark({ id: 'bm-1' }))
+
+      effects.copyBookmark$.subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.createBookmarkFailed.type)
+        done()
+      })
+    })
   })
 
   describe('deleteBookmark$', () => {
@@ -793,6 +889,56 @@ describe('BookmarkConfigureEffects', () => {
 
       expect(messageServiceMock.error).toHaveBeenCalledWith(
         expect.objectContaining({ summaryKey: 'BOOKMARK_EXPORT.ERROR' })
+      )
+    })
+
+    it('should call messageService.error when importBookmarksFailed is dispatched', () => {
+      actions$.next(BookmarkConfigureActions.importBookmarksFailed({ status: '500', errorText: 'Error' }))
+
+      effects.displayError$.subscribe()
+
+      expect(messageServiceMock.error).toHaveBeenCalledWith(
+        expect.objectContaining({ summaryKey: 'BOOKMARK_IMPORT.ERROR' })
+      )
+    })
+
+    it('should call messageService.error when sortBookmarksFailed is dispatched', () => {
+      actions$.next(BookmarkConfigureActions.sortBookmarksFailed({ status: '500', errorText: 'Error' }))
+
+      effects.displayError$.subscribe()
+
+      expect(messageServiceMock.error).toHaveBeenCalledWith(
+        expect.objectContaining({ summaryKey: 'BOOKMARK_SORT.ERROR' })
+      )
+    })
+
+    it('should call messageService.error when createBookmarkFailed is dispatched', () => {
+      actions$.next(BookmarkConfigureActions.createBookmarkFailed({ status: '500', errorText: 'Error' }))
+
+      effects.displayError$.subscribe()
+
+      expect(messageServiceMock.error).toHaveBeenCalledWith(
+        expect.objectContaining({ summaryKey: 'BOOKMARK_DETAIL.CREATE.ERROR' })
+      )
+    })
+
+    it('should call messageService.error when editBookmarkFailed is dispatched', () => {
+      actions$.next(BookmarkConfigureActions.editBookmarkFailed({ status: '500', errorText: 'Error' }))
+
+      effects.displayError$.subscribe()
+
+      expect(messageServiceMock.error).toHaveBeenCalledWith(
+        expect.objectContaining({ summaryKey: 'BOOKMARK_DETAIL.EDIT.ERROR' })
+      )
+    })
+
+    it('should call messageService.error when deleteBookmarkFailed is dispatched', () => {
+      actions$.next(BookmarkConfigureActions.deleteBookmarkFailed({ status: '500', errorText: 'Error' }))
+
+      effects.displayError$.subscribe()
+
+      expect(messageServiceMock.error).toHaveBeenCalledWith(
+        expect.objectContaining({ summaryKey: 'BOOKMARK_DELETE.ERROR' })
       )
     })
 
