@@ -101,7 +101,7 @@ export class BookmarkDetailComponent
   // slot configuration: get product data
   public slotName = 'onecx-product-data'
   public isProductComponentDefined$: Observable<boolean> // check if a component was assigned
-  public product$ = new BehaviorSubject<Product | undefined>(undefined) // theme data
+  public product$ = new BehaviorSubject<Product | undefined>(undefined) // product data
   public productEmitter = new EventEmitter<Product>()
   public size: any
 
