@@ -20,7 +20,8 @@ export type ImportError = {
 @Component({
   selector: 'app-bookmark-import',
   templateUrl: './bookmark-import.component.html',
-  styleUrl: './bookmark-import.component.scss'
+  styleUrl: './bookmark-import.component.scss',
+  standalone: false
 })
 export class BookmarkImportComponent
   implements

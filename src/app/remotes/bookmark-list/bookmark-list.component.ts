@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
+import { Component, Inject, Input, inject, provideAppInitializer } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
@@ -28,7 +28,6 @@ export function slotInitializer(slotService: SlotService) {
 }
 
 @Component({
-  standalone: true,
   imports: [
     AngularAuthModule,
     AngularRemoteComponentsModule,
@@ -43,12 +42,10 @@ export function slotInitializer(slotService: SlotService) {
       provide: BASE_URL,
       useValue: new ReplaySubject<string>(1)
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: slotInitializer,
-      deps: [SLOT_SERVICE],
-      multi: true
-    },
+    provideAppInitializer(() => {
+      const initializerFn = slotInitializer(inject(SLOT_SERVICE))
+      return initializerFn()
+    }),
     {
       provide: SLOT_SERVICE,
       useExisting: SlotService

@@ -10,7 +10,8 @@ import { BookmarkSortViewModel } from './bookmark-sort.viewmodel'
 @Component({
   selector: 'app-bookmark-sort',
   templateUrl: './bookmark-sort.component.html',
-  styleUrls: ['./bookmark-sort.component.scss']
+  styleUrls: ['./bookmark-sort.component.scss'],
+  standalone: false
 })
 export class BookmarkSortComponent
   implements DialogResult<UpdateBookmark[] | undefined>, DialogButtonClicked<BookmarkSortComponent>, OnInit

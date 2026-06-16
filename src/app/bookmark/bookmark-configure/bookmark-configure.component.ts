@@ -30,7 +30,8 @@ export type ExtendedSelectItem = SelectItem & { title_key: string }
 @Component({
   selector: 'app-bookmark-configure',
   templateUrl: './bookmark-configure.component.html',
-  styleUrls: ['./bookmark-configure.component.scss']
+  styleUrls: ['./bookmark-configure.component.scss'],
+  standalone: false
 })
 export class BookmarkConfigureComponent implements OnInit {
   // data

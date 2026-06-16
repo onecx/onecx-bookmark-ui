@@ -11,7 +11,8 @@ import { Product } from '../bookmark-overview.component'
 @Component({
   selector: 'app-bookmark-list',
   templateUrl: './bookmark-list.component.html',
-  styleUrl: './bookmark-list.component.scss'
+  styleUrl: './bookmark-list.component.scss',
+  standalone: false
 })
 export class BookmarkListComponent {
   @Input() public bookmarks: Bookmark[] = []

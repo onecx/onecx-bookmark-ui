@@ -12,7 +12,8 @@ import { Product } from '../bookmark-overview/bookmark-overview.component'
 @Component({
   selector: 'app-bookmark-image',
   templateUrl: './bookmark-image.component.html',
-  styleUrls: ['./bookmark-image.component.scss']
+  styleUrls: ['./bookmark-image.component.scss'],
+  standalone: false
 })
 export class BookmarkImageComponent implements OnChanges {
   @Input() public bookmark: Bookmark | undefined

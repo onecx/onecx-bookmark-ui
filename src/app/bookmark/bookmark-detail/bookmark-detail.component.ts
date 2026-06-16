@@ -69,7 +69,8 @@ export type Product = {
 @Component({
   selector: 'app-bookmark-detail',
   templateUrl: './bookmark-detail.component.html',
-  styleUrls: ['./bookmark-detail.component.scss']
+  styleUrls: ['./bookmark-detail.component.scss'],
+  standalone: false
 })
 export class BookmarkDetailComponent
   implements

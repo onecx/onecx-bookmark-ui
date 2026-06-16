@@ -24,7 +24,8 @@ export type Product = {
 @Component({
   selector: 'app-bookmark-overview',
   templateUrl: './bookmark-overview.component.html',
-  styleUrls: ['./bookmark-overview.component.scss']
+  styleUrls: ['./bookmark-overview.component.scss'],
+  standalone: false
 })
 export class BookmarkOverviewComponent implements OnInit {
   // data

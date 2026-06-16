@@ -5,7 +5,8 @@ import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 @Component({
   selector: 'app-bookmark-delete',
   templateUrl: './bookmark-delete.component.html',
-  styleUrl: './bookmark-delete.component.scss'
+  styleUrl: './bookmark-delete.component.scss',
+  standalone: false
 })
 export class BookmarkDeleteComponent {
   @Input() public bookmark: Bookmark | undefined

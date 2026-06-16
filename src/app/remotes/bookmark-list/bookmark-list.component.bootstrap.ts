@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, importProvidersFrom } from '@angular/core'
+import { importProvidersFrom, inject, provideAppInitializer } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -45,10 +45,8 @@ bootstrapRemoteComponent(OneCXBookmarkListComponent, 'ocx-bookmark-list-componen
       useClass: AngularAcceleratorMissingTranslationHandler
     }
   }),
-  {
-    provide: APP_INITIALIZER,
-    useFactory: userProfileInitializer,
-    deps: [UserService],
-    multi: true
-  }
+  provideAppInitializer(() => {
+    const initializerFn = userProfileInitializer(inject(UserService))
+    return initializerFn()
+  })
 ])

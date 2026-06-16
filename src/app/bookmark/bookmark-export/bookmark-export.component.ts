@@ -7,7 +7,8 @@ import { ExportBookmarksRequest, EximBookmarkScope } from 'src/app/shared/genera
 @Component({
   selector: 'app-bookmark-export',
   templateUrl: './bookmark-export.component.html',
-  styleUrl: './bookmark-export.component.scss'
+  styleUrl: './bookmark-export.component.scss',
+  standalone: false
 })
 export class BookmarkExportComponent
   implements

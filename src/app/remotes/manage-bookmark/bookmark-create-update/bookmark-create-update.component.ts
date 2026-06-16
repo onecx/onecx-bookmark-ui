@@ -15,7 +15,6 @@ import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmodel'
 
 @Component({
-  standalone: true,
   selector: 'app-bookmark-create-update',
   templateUrl: './bookmark-create-update.component.html',
   styleUrls: ['./bookmark-create-update.component.scss'],

@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, DoBootstrap, Injector, NgModule, isDevMode } from '@angular/core'
+import { DoBootstrap, Injector, NgModule, isDevMode, inject, provideAppInitializer } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -57,12 +57,10 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
   ],
   providers: [
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeRouter,
-      multi: true,
-      deps: [Router, AppStateService]
-    },
+    provideAppInitializer(() => {
+      const initializerFn = initializeRouter(inject(Router), inject(AppStateService))
+      return initializerFn()
+    }),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideHttpClient(withInterceptorsFromDi())
   ]

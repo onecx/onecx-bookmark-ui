@@ -11,7 +11,6 @@ import { Bookmark } from 'src/app/shared/generated'
   selector: 'app-bookmark-links',
   templateUrl: './bookmark-links.component.html',
   styleUrls: ['./bookmark-links.component.scss'],
-  standalone: true,
   imports: [CommonModule, RouterModule]
 })
 export class BookmarkLinksComponent {
