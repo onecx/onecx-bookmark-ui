@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkImportComponent } from './bookmark-import.component'
 import { EximBookmarkScope, EximMode } from 'src/app/shared/generated'
@@ -25,7 +25,7 @@ describe('BookmarkImportComponent', () => {
         CommonModule,
         FormsModule,
         FileUploadModule,
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

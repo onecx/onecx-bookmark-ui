@@ -70,7 +70,7 @@
   </div>
 
   <!-- NO BOOKMARKS -->
-  <p-messages *ngIf="!loading && bookmarks.length === 0" severity="info">
+  <p-message *ngIf="!loading && bookmarks.length === 0" severity="info">
     <ng-template pTemplate>
       <div class="flex gap-2 align-items-center">
         <span class="p-message-icon">
@@ -84,5 +84,5 @@
         </div>
       </div>
     </ng-template>
-  </p-messages>
+  </p-message>
 </div>

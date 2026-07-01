@@ -7,7 +7,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { BreadcrumbService } from '@onecx/angular-accelerator'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TranslateService } from '@ngx-translate/core'
 
@@ -34,7 +34,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         FormsModule,
         ReactiveFormsModule,
         LetDirective,

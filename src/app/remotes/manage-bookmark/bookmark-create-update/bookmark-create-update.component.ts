@@ -8,7 +8,7 @@ import { InputTextModule } from 'primeng/inputtext'
 import { TooltipModule } from 'primeng/tooltip'
 
 import { UserService } from '@onecx/angular-integration-interface'
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 

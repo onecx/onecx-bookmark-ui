@@ -6,7 +6,8 @@ import { catchError, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'r
 import FileSaver from 'file-saver'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { DialogState, PortalDialogService } from '@onecx/portal-integration-angular'
+import { PortalDialogService } from '@onecx/angular-accelerator'
+import { DialogState } from '@onecx/angular-accelerator'
 
 import * as actton from 'src/app/shared/utils/actionButtons'
 import {

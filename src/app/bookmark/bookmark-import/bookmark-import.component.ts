@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { TranslateService } from '@ngx-translate/core'
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload'
 
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
 
 import { BookmarkSnapshot, EximBookmarkScope, EximMode, ExportBookmarksRequest } from 'src/app/shared/generated'
 import { ImportBookmarkData } from '../bookmark-configure/bookmark-configure.effects'

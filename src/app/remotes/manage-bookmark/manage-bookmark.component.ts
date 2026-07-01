@@ -4,6 +4,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 import { RippleModule } from 'primeng/ripple'
 import { DynamicDialogModule } from 'primeng/dynamicdialog'
+import { ButtonModule } from 'primeng/button'
+import { TooltipModule } from 'primeng/tooltip'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import {
   BehaviorSubject,
@@ -29,20 +31,19 @@ import {
 import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 import {
   AngularRemoteComponentsModule,
-  BASE_URL,
   ocxRemoteComponent,
   ocxRemoteWebcomponent,
-  RemoteComponentConfig,
   SLOT_SERVICE,
   SlotService
 } from '@onecx/angular-remote-components'
 import {
   ButtonDialogButtonDetails,
-  PortalCoreModule,
+  AngularAcceleratorModule,
   PortalDialogConfig,
   PortalDialogService,
   providePortalDialogService
-} from '@onecx/portal-integration-angular'
+} from '@onecx/angular-accelerator'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { Bookmark, CreateBookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
 import { extractPathAfter, mapPathSegmentsToPathParameters } from 'src/app/shared/utils/path.utils'
@@ -52,30 +53,24 @@ import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.s
 import { BookmarkCreateUpdateComponent } from './bookmark-create-update/bookmark-create-update.component'
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
 
-export function slotInitializer(slotService: SlotService) {
-  return () => slotService.init()
-}
-
 @Component({
   imports: [
     AngularAuthModule,
     AngularRemoteComponentsModule,
     CommonModule,
     RippleModule,
-    PortalCoreModule,
+    AngularAcceleratorModule,
     ProgressSpinnerModule,
     TranslateModule,
-    DynamicDialogModule
+    DynamicDialogModule,
+    ButtonModule,
+    TooltipModule
   ],
   providers: [
     {
-      provide: BASE_URL,
+      provide: REMOTE_COMPONENT_CONFIG,
       useValue: new ReplaySubject<string>(1)
     },
-    provideAppInitializer(() => {
-      const initializerFn = slotInitializer(inject(SLOT_SERVICE))
-      return initializerFn()
-    }),
     {
       provide: SLOT_SERVICE,
       useExisting: SlotService
@@ -107,13 +102,14 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   constructor(
-    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    @Inject(REMOTE_COMPONENT_CONFIG) private readonly baseUrl: ReplaySubject<string>,
     private readonly appConfigService: AppConfigService,
     private readonly appStateService: AppStateService,
     private readonly userService: UserService,
     private readonly translateService: TranslateService,
     private readonly portalDialogService: PortalDialogService,
-    private readonly bookmarkApiUtils: BookmarkAPIUtilsService
+    private readonly bookmarkApiUtils: BookmarkAPIUtilsService,
+    private readonly slotService: SlotService
   ) {
     this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
 
@@ -166,6 +162,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     this.bookmarkApiUtils.loadBookmarksForApp(this.commonObs$, this.handleBookmarkLoadError).subscribe((result) => {
       this.bookmarks$.next(result)
     })
+    this.slotService.init()
   }
 
   onOpenBookmarkDialog(): void {

@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { startsWith } from '@onecx/angular-webcomponents'
-import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
+import { provideTranslationConnectionService } from '@onecx/angular-utils'
 
 export const routes: Routes = [
   {
@@ -13,7 +13,8 @@ export const routes: Routes = [
 ]
 
 @NgModule({
-  imports: [RouterModule.forRoot(addInitializeModuleGuard(routes)), TranslateModule],
+  imports: [RouterModule.forRoot(routes), TranslateModule],
+  providers: [provideTranslationConnectionService()],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

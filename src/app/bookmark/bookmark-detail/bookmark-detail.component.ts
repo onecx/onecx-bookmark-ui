@@ -10,7 +10,7 @@ import {
   PortalMessageService,
   UserService
 } from '@onecx/angular-integration-interface'
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
 
 import { BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'

@@ -9,7 +9,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { PortalCoreModule, PortalDialogService } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule, PortalDialogService} from '@onecx/angular-accelerator'
 
 import {
   Bookmark,
@@ -83,7 +83,7 @@ describe('BookmarkConfigureEffects', () => {
 
     await TestBed.configureTestingModule({
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

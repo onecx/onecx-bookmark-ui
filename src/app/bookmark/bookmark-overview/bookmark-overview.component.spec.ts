@@ -13,7 +13,7 @@ import { ofType } from '@ngrx/effects'
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { SlotService } from '@onecx/angular-remote-components'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkOverviewComponent } from './bookmark-overview.component'
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
@@ -47,7 +47,7 @@ describe('BookmarkOverviewComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
         StoreModule.forRoot({}),
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

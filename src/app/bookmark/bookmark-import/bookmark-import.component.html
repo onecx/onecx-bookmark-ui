@@ -72,26 +72,30 @@
               (onChange)="onScopeChange()"
               [(ngModel)]="private"
               [binary]="true"
-              [label]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
               [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
               [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             >
             </p-checkbox>
+            <label for="bm_export_field_private">
+                  {{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}
+                </label>
             <p-checkbox
               id="bm_export_field_public"
               class=""
               (onChange)="onScopeChange()"
               [(ngModel)]="public"
               [binary]="true"
-              [label]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
               [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
               [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             >
             </p-checkbox>
+            <label for="bm_export_field_public">
+                  {{ 'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate }}
+                </label>
           </div>
         </div>
       </div>

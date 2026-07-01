@@ -9,7 +9,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
 
 import { WorkspaceService } from '@onecx/angular-integration-interface'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkListComponent } from './bookmark-list.component'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -46,7 +46,7 @@ describe('BookmarkListComponent', () => {
       imports: [
         CommonModule,
         RouterModule.forRoot([]),
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

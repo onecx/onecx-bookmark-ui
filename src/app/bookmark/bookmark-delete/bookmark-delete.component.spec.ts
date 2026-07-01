@@ -5,10 +5,9 @@ import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
-
 import { BookmarkDeleteComponent } from './bookmark-delete.component'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 describe('BookmarkDeleteComponent', () => {
   let component: BookmarkDeleteComponent
@@ -19,7 +18,7 @@ describe('BookmarkDeleteComponent', () => {
       declarations: [BookmarkDeleteComponent],
       imports: [
         CommonModule,
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

@@ -8,7 +8,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { AppStateService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkImageComponent } from './bookmark-image.component'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -37,7 +37,7 @@ describe('BookmarkImageComponent', () => {
       declarations: [BookmarkImageComponent],
       imports: [
         CommonModule,
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 
-import { DialogButtonClicked, DialogResult } from '@onecx/portal-integration-angular'
+import { DialogButtonClicked, DialogResult } from '@onecx/angular-accelerator'
 
 import { Bookmark, UpdateBookmark } from 'src/app/shared/generated'
 import { limitText } from 'src/app/shared/utils/utils'

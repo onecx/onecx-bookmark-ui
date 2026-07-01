@@ -7,7 +7,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { CheckboxModule } from 'primeng/checkbox'
 
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkExportComponent } from './bookmark-export.component'
 import { EximBookmarkScope } from 'src/app/shared/generated'
@@ -23,7 +23,7 @@ describe('BookmarkExportComponent', () => {
         CommonModule,
         FormsModule,
         CheckboxModule,
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

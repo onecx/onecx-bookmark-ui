@@ -9,7 +9,7 @@ import { provideMockActions } from '@ngrx/effects/testing'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarksInternalAPIService } from 'src/app/shared/generated'
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
@@ -33,7 +33,7 @@ describe('BookmarkOverviewEffects', () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterModule.forRoot([]),
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

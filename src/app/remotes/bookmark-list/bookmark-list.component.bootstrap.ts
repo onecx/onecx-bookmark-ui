@@ -8,10 +8,9 @@ import { TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { bootstrapRemoteComponent } from '@onecx/angular-webcomponents'
 import { UserService } from '@onecx/angular-integration-interface'
-import { providePortalDialogService } from '@onecx/portal-integration-angular'
-import { provideTranslationPathFromMeta, createTranslateLoader } from '@onecx/angular-utils'
+import { provideTranslationPathFromMeta, createTranslateLoader, provideThemeConfig } from '@onecx/angular-utils'
 import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
-import { AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
+import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
 
 import { environment } from 'src/environments/environment'
 import { OneCXBookmarkListComponent } from './bookmark-list.component'
@@ -26,6 +25,7 @@ bootstrapRemoteComponent(OneCXBookmarkListComponent, 'ocx-bookmark-list-componen
   provideHttpClient(withInterceptorsFromDi()),
   providePortalDialogService(),
   importProvidersFrom(AngularAuthModule, BrowserModule, BrowserAnimationsModule),
+  provideThemeConfig(),
   provideRouter([
     {
       path: '**',

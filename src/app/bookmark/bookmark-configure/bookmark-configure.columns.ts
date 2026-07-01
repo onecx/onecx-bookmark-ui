@@ -1,6 +1,8 @@
-import { Column } from '@onecx/portal-integration-angular'
-
-export type ExtendedColumn = Column & {
+export type ExtendedColumn = {
+  field: string
+  header: string
+  active?: boolean
+  translationPrefix?: string
   hasFilter?: boolean
   isDate?: boolean
   isDropdown?: boolean

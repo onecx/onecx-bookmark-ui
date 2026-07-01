@@ -12,10 +12,9 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createTranslateLoader, provideTranslationPathFromMeta } from '@onecx/angular-utils'
+import { createTranslateLoader, provideTranslationPathFromMeta, provideThemeConfig } from '@onecx/angular-utils'
 import { APP_CONFIG, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
-import { AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
-import { PortalCoreModule, providePortalDialogService } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
 
 import { Configuration } from './shared/generated'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
@@ -25,9 +24,15 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { metaReducers, reducers } from './app.reducers'
 
+import {
+  StandaloneShellModule,
+  provideStandaloneProviders
+} from '@onecx/angular-standalone-shell';
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
+    StandaloneShellModule,
     CommonModule,
     AppRoutingModule,
     BrowserModule,
@@ -35,7 +40,6 @@ import { metaReducers, reducers } from './app.reducers'
     EffectsModule.forRoot([]),
     AngularAuthModule,
     LetDirective,
-    PortalCoreModule.forRoot('onecx-bookmark-ui'),
     StoreRouterConnectingModule.forRoot(),
     StoreModule.forRoot(reducers, { metaReducers }),
     StoreDevtoolsModule.instrument({
@@ -55,6 +59,8 @@ import { metaReducers, reducers } from './app.reducers'
     })
   ],
   providers: [
+    provideStandaloneProviders(),
+    provideThemeConfig(),
     { provide: APP_CONFIG, useValue: environment },
     {
       provide: Configuration,

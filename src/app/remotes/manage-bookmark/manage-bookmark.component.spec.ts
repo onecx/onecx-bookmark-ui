@@ -5,14 +5,15 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { BehaviorSubject, of, ReplaySubject } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { PortalCoreModule, PortalDialogService } from '@onecx/portal-integration-angular'
-import { BASE_URL, RemoteComponentConfig, SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
+import { PortalDialogService, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 import {
   AppConfigService,
   AppStateService,
   PortalMessageService,
   UserService
 } from '@onecx/angular-integration-interface'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
@@ -84,7 +85,7 @@ describe('OneCXManageBookmarkComponent', () => {
     await TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
@@ -100,7 +101,7 @@ describe('OneCXManageBookmarkComponent', () => {
       .overrideComponent(OneCXManageBookmarkComponent, {
         set: {
           providers: [
-            { provide: BASE_URL, useValue: baseUrlSubject },
+            { provide: REMOTE_COMPONENT_CONFIG, useValue: baseUrlSubject },
             { provide: BookmarkAPIUtilsService, useValue: bookmarkApiUtilsMock },
             { provide: AppConfigService, useValue: appConfigServiceMock },
             { provide: PortalDialogService, useValue: portalDialogServiceMock },
