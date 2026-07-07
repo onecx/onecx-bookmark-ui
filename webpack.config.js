@@ -25,9 +25,7 @@ const modifyMaterialPlugin = new ModifySourcePlugin({
     {
       test: (module) => {
         return (
-          module.resource &&
-          (module.resource.includes('@angular/material') ||
-            module.resource.includes('@angular/cdk'))
+          module.resource && (module.resource.includes('@angular/material') || module.resource.includes('@angular/cdk'))
         )
       },
       operations: [

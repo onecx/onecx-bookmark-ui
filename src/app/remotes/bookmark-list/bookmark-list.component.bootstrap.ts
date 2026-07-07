@@ -4,11 +4,18 @@ import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideRouter } from '@angular/router'
 import { TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core'
+import { ReplaySubject } from 'rxjs'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { bootstrapRemoteComponent } from '@onecx/angular-webcomponents'
 import { UserService } from '@onecx/angular-integration-interface'
-import { provideTranslationPathFromMeta, createTranslateLoader, provideThemeConfig } from '@onecx/angular-utils'
+import {
+  provideTranslationPathFromMeta,
+  createTranslateLoader,
+  provideThemeConfig,
+  REMOTE_COMPONENT_CONFIG,
+  RemoteComponentConfig
+} from '@onecx/angular-utils'
 import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
 import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
 
@@ -22,6 +29,10 @@ function userProfileInitializer(userService: UserService) {
 }
 
 bootstrapRemoteComponent(OneCXBookmarkListComponent, 'ocx-bookmark-list-component', environment.production, [
+  {
+    provide: REMOTE_COMPONENT_CONFIG,
+    useValue: new ReplaySubject<RemoteComponentConfig>(1)
+  },
   provideHttpClient(withInterceptorsFromDi()),
   providePortalDialogService(),
   importProvidersFrom(AngularAuthModule, BrowserModule, BrowserAnimationsModule),

@@ -1,4 +1,4 @@
-import { Component, Inject, Input, inject, provideAppInitializer } from '@angular/core'
+import { Component, Inject, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
@@ -40,8 +40,8 @@ import {
   ButtonDialogButtonDetails,
   AngularAcceleratorModule,
   PortalDialogConfig,
-  PortalDialogService,
-  providePortalDialogService
+  providePortalDialogService,
+  PortalDialogService
 } from '@onecx/angular-accelerator'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
@@ -67,10 +67,6 @@ import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dial
     TooltipModule
   ],
   providers: [
-    {
-      provide: REMOTE_COMPONENT_CONFIG,
-      useValue: new ReplaySubject<string>(1)
-    },
     {
       provide: SLOT_SERVICE,
       useExisting: SlotService
@@ -102,7 +98,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   constructor(
-    @Inject(REMOTE_COMPONENT_CONFIG) private readonly baseUrl: ReplaySubject<string>,
+    @Inject(REMOTE_COMPONENT_CONFIG) private readonly remoteComponentConfig: ReplaySubject<RemoteComponentConfig>,
     private readonly appConfigService: AppConfigService,
     private readonly appStateService: AppStateService,
     private readonly userService: UserService,
@@ -155,7 +151,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {
-    this.baseUrl.next(config.baseUrl)
+    this.remoteComponentConfig.next(config)
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
     this.appConfigService.init(config.baseUrl)

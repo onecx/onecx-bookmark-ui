@@ -85,10 +85,7 @@ describe('BookmarkConfigureComponent', () => {
 
   beforeEach(async () => {
     const userService = TestBed.inject(UserService)
-    userService.hasPermission = () => true
-    userService.hasPermission = (permissionKey: 'BOOKMARK#EDIT') => true
-    userService.hasPermission = (permissionKey: 'BOOKMARK#CONFIGURE') => true
-    userService.hasPermission = (permissionKey: 'BOOKMARK#EXPORT') => true
+    userService.hasPermission = () => Promise.resolve(true)
     const workspaceService = TestBed.inject(WorkspaceService)
     workspaceService.getUrl = () => of('someUrl')
     const translateService = TestBed.inject(TranslateService)
@@ -542,7 +539,7 @@ describe('BookmarkConfigureComponent - no permission testcase', () => {
 
   beforeEach(async () => {
     const userService = TestBed.inject(UserService)
-    userService.hasPermission = () => false
+    userService.hasPermission = () => Promise.resolve(false)
 
     const translateService = TestBed.inject(TranslateService)
     translateService.use('en')

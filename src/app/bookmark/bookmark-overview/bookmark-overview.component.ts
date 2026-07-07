@@ -32,7 +32,7 @@ export class BookmarkOverviewComponent implements OnInit {
   public viewModel$: Observable<BookmarkOverviewViewModel> = this.store.select(selectBookmarkOverviewViewModel)
   public pageActions: Action[] = []
   public BookmarkScope = BookmarkScope
-  public hasEditPermissions = false
+  public hasEditPermissions$: Observable<boolean>
   public dockItems$: Observable<MenuItem[]> = of([])
 
   // data
@@ -55,7 +55,9 @@ export class BookmarkOverviewComponent implements OnInit {
   ) {
     this.user$ = this.user.profile$.asObservable()
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
-    this.hasEditPermissions = this.user.hasPermission('BOOKMARK#EDIT') ?? this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
+    this.hasEditPermissions$ = this.user
+      .getPermissions()
+      .pipe(map((permissions) => permissions.includes('BOOKMARK#EDIT') || permissions.includes('BOOKMARK#ADMIN_EDIT')))
   }
 
   public ngOnInit() {

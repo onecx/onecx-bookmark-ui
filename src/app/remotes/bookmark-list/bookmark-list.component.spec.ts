@@ -32,7 +32,7 @@ describe('OneCXBookmarkListComponent', () => {
   let component: OneCXBookmarkListComponent
   let fixture: ComponentFixture<OneCXBookmarkListComponent>
 
-  let baseUrlSubject: ReplaySubject<string>
+  let baseUrlSubject: ReplaySubject<RemoteComponentConfig>
   let bookmarkApiUtilsMock: jest.Mocked<Pick<BookmarkAPIUtilsService, 'overwriteBaseURL' | 'loadBookmarks'>>
   let appConfigServiceMock: jest.Mocked<Pick<AppConfigService, 'init'>>
   let userServiceMock: { lang$: BehaviorSubject<string> }
@@ -51,7 +51,7 @@ describe('OneCXBookmarkListComponent', () => {
   }
 
   beforeEach(async () => {
-    baseUrlSubject = new ReplaySubject<string>(1)
+    baseUrlSubject = new ReplaySubject<RemoteComponentConfig>(1)
     bookmarkApiUtilsMock = {
       overwriteBaseURL: jest.fn(),
       loadBookmarks: jest.fn().mockReturnValue(of(mockBookmarks))

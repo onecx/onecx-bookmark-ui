@@ -48,6 +48,10 @@ export class BookmarkConfigureComponent implements OnInit {
   public bookmarkColumns = bookmarkColumns
   public limitText = limitText
   public editable = false
+  private permEdit = false
+  private permAdminEdit = false
+  private permDelete = false
+  private permAdminDelete = false
   public quickFilterItems$: Observable<SelectItem[]> | undefined
 
   @ViewChild('dataTable', { static: false }) dataTable: Table | undefined
@@ -66,7 +70,6 @@ export class BookmarkConfigureComponent implements OnInit {
     private readonly translate: TranslateService,
     private readonly workspaceService: WorkspaceService
   ) {
-    this.editable = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
     this.filteredColumns = bookmarkColumns.filter((a) => a.active === true)
     this.syncInteractiveColumns()
     this.viewModel$.subscribe({
@@ -78,22 +81,34 @@ export class BookmarkConfigureComponent implements OnInit {
   }
 
   public ngOnInit() {
+    this.resolvePermissions()
     this.onSearch()
+  }
+
+  private resolvePermissions(): void {
+    Promise.all([
+      this.user.hasPermission('BOOKMARK#EDIT'),
+      this.user.hasPermission('BOOKMARK#ADMIN_EDIT'),
+      this.user.hasPermission('BOOKMARK#DELETE'),
+      this.user.hasPermission('BOOKMARK#ADMIN_DELETE')
+    ]).then(([permEdit, permAdminEdit, permDelete, permAdminDelete]) => {
+      this.permEdit = permEdit
+      this.permAdminEdit = permAdminEdit
+      this.permDelete = permDelete
+      this.permAdminDelete = permAdminDelete
+      this.editable = permEdit || permAdminEdit
+    })
   }
 
   /**
    * DIALOG preparation
    */
   public canEdit(scope: BookmarkScope): boolean {
-    return (
-      (scope === BookmarkScope.Public && this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) ||
-      (scope === BookmarkScope.Private && this.user.hasPermission('BOOKMARK#EDIT'))
-    )
+    return (scope === BookmarkScope.Public && this.permAdminEdit) || (scope === BookmarkScope.Private && this.permEdit)
   }
   public canDelete(scope: BookmarkScope): boolean {
     return (
-      (scope === BookmarkScope.Public && this.user.hasPermission('BOOKMARK#ADMIN_DELETE')) ||
-      (scope === BookmarkScope.Private && this.user.hasPermission('BOOKMARK#DELETE'))
+      (scope === BookmarkScope.Public && this.permAdminDelete) || (scope === BookmarkScope.Private && this.permDelete)
     )
   }
 

@@ -50,7 +50,7 @@ describe('BookmarkCreateUpdateComponent', () => {
       ]
     }).compileComponents()
     userService = TestBed.inject(UserService)
-    userService.hasPermission = () => true
+    userService.hasPermission = () => Promise.resolve(true)
     fixture = TestBed.createComponent(BookmarkCreateUpdateComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -60,7 +60,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should disable form if no permission', () => {
+  it('should disable form if no permission', fakeAsync(() => {
     component.vm = {
       initialBookmark: { displayName: 'Test', scope: BookmarkScope.Private, id: 'a', position: 0, workspaceName: 'w1' },
       permissions: [],
@@ -68,10 +68,11 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
+    tick()
     expect(component.formGroup.disabled).toBe(true)
-  })
+  }))
 
-  it('should enable form if permission exists', () => {
+  it('should enable form if permission exists', fakeAsync(() => {
     component.vm = {
       initialBookmark: { displayName: 'Test', scope: BookmarkScope.Private, id: 'a', position: 0, workspaceName: 'w1' },
       permissions: ['BOOKMARK#CREATE'],
@@ -79,10 +80,11 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
+    tick()
     expect(component.formGroup.enabled).toBe(true)
-  })
+  }))
 
-  it('should disable form if bookmark is public', () => {
+  it('should disable form if bookmark is public', fakeAsync(() => {
     component.vm = {
       initialBookmark: { displayName: 'Test', scope: BookmarkScope.Public, id: 'a', position: 0, workspaceName: 'w1' },
       permissions: ['BOOKMARK#CREATE'],
@@ -90,8 +92,9 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
+    tick()
     expect(component.formGroup.disabled).toBe(true)
-  })
+  }))
 
   it('should emit dialog result on button click', () => {
     component.vm = {
@@ -119,6 +122,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
+    tick()
     component.formGroup.setValue({ displayName: 'Valid Name' })
     tick()
     expect(emitSpy).toHaveBeenCalledWith(true)

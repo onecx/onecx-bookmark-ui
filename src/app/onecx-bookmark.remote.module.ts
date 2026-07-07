@@ -10,7 +10,7 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createTranslateLoader, provideTranslationPathFromMeta } from '@onecx/angular-utils'
+import { createTranslateLoader, provideTranslationPathFromMeta, providePermissionService } from '@onecx/angular-utils'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule, AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
@@ -61,6 +61,7 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       return initializerFn()
     }),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
+    providePermissionService(),
     provideHttpClient(withInterceptorsFromDi())
   ]
 })

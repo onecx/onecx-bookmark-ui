@@ -12,7 +12,12 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createTranslateLoader, provideTranslationPathFromMeta, provideThemeConfig } from '@onecx/angular-utils'
+import {
+  createTranslateLoader,
+  provideTranslationPathFromMeta,
+  provideThemeConfig,
+  providePermissionService
+} from '@onecx/angular-utils'
 import { APP_CONFIG, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
 
@@ -24,10 +29,7 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { metaReducers, reducers } from './app.reducers'
 
-import {
-  StandaloneShellModule,
-  provideStandaloneProviders
-} from '@onecx/angular-standalone-shell';
+import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
 
 @NgModule({
   declarations: [AppComponent],
@@ -59,6 +61,7 @@ import {
     })
   ],
   providers: [
+    providePermissionService(),
     provideStandaloneProviders(),
     provideThemeConfig(),
     { provide: APP_CONFIG, useValue: environment },

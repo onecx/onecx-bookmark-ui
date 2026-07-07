@@ -35,7 +35,7 @@ describe('BookmarkOverviewComponent', () => {
   let store: MockStore<Store>
   let appStateMock: AppStateServiceMock
   let slotServiceMock: jest.Mocked<Pick<SlotService, 'isSomeComponentDefinedForSlot'>>
-  let userServiceMock: jest.Mocked<Pick<UserService, 'hasPermission' | 'profile$'>>
+  let userServiceMock: jest.Mocked<Pick<UserService, 'getPermissions' | 'profile$'>>
 
   beforeEach(async () => {
     slotServiceMock = {
@@ -85,9 +85,9 @@ describe('BookmarkOverviewComponent', () => {
     store.refreshState()
 
     userServiceMock = TestBed.inject(UserService) as unknown as jest.Mocked<
-      Pick<UserService, 'hasPermission' | 'profile$'>
+      Pick<UserService, 'getPermissions' | 'profile$'>
     >
-    userServiceMock.hasPermission = jest.fn().mockReturnValue(true)
+    userServiceMock.getPermissions = jest.fn().mockReturnValue(of(['BOOKMARK#EDIT']))
 
     fixture = TestBed.createComponent(BookmarkOverviewComponent)
     component = fixture.componentInstance
@@ -103,14 +103,29 @@ describe('BookmarkOverviewComponent', () => {
       expect(component.BookmarkScope).toBe(BookmarkScope)
     })
 
-    it('should set hasEditPermissions based on user permissions', () => {
-      expect(component.hasEditPermissions).toBe(true)
+    it('should set hasEditPermissions based on user permissions', (done) => {
+      component.hasEditPermissions$.subscribe((val) => {
+        expect(val).toBe(true)
+        done()
+      })
     })
 
-    it('should fall back to ADMIN_EDIT permission when EDIT permission returns null', () => {
-      userServiceMock.hasPermission = jest.fn().mockReturnValueOnce(null).mockReturnValueOnce(false)
+    it('should fall back to ADMIN_EDIT permission when EDIT permission is missing', (done) => {
+      userServiceMock.getPermissions = jest.fn().mockReturnValue(of(['BOOKMARK#ADMIN_EDIT']))
       const newFixture = TestBed.createComponent(BookmarkOverviewComponent)
-      expect(newFixture.componentInstance.hasEditPermissions).toBe(false)
+      newFixture.componentInstance.hasEditPermissions$.subscribe((val) => {
+        expect(val).toBe(true)
+        done()
+      })
+    })
+
+    it('should not have edit permissions when no relevant permission is granted', (done) => {
+      userServiceMock.getPermissions = jest.fn().mockReturnValue(of([]))
+      const newFixture = TestBed.createComponent(BookmarkOverviewComponent)
+      newFixture.componentInstance.hasEditPermissions$.subscribe((val) => {
+        expect(val).toBe(false)
+        done()
+      })
     })
 
     it('should initialize isProductComponentDefined$ via SlotService', (done) => {

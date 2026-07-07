@@ -42,10 +42,6 @@ export function slotInitializer(slotService: SlotService) {
   ],
   providers: [
     {
-      provide: REMOTE_COMPONENT_CONFIG,
-      useValue: new ReplaySubject<string>(1)
-    },
-    {
       provide: SLOT_SERVICE,
       useExisting: SlotService
     },
@@ -69,7 +65,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
   }
 
   constructor(
-    @Inject(REMOTE_COMPONENT_CONFIG) private readonly baseUrl: ReplaySubject<string>,
+    @Inject(REMOTE_COMPONENT_CONFIG) private readonly remoteComponentConfig: ReplaySubject<RemoteComponentConfig>,
     private readonly appConfigService: AppConfigService,
     private readonly userService: UserService,
     private readonly translateService: TranslateService,
@@ -80,7 +76,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {
-    this.baseUrl.next(config.baseUrl)
+    this.remoteComponentConfig.next(config)
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
     this.appConfigService.init(config.baseUrl)
