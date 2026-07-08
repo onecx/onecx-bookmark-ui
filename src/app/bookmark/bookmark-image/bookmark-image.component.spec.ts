@@ -34,8 +34,8 @@ describe('BookmarkImageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkImageComponent],
       imports: [
+        BookmarkImageComponent,
         CommonModule,
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({

@@ -15,8 +15,8 @@ describe('BookmarkDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkDeleteComponent],
       imports: [
+        BookmarkDeleteComponent,
         CommonModule,
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({

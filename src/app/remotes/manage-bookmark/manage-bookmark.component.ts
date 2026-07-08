@@ -53,6 +53,10 @@ import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.s
 import { BookmarkCreateUpdateComponent } from './bookmark-create-update/bookmark-create-update.component'
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
 
+export function slotInitializer(slotService: SlotService) {
+  return () => slotService.init()
+}
+
 @Component({
   imports: [
     AngularAuthModule,

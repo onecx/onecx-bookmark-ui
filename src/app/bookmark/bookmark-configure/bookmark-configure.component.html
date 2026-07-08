@@ -119,10 +119,11 @@
               type="button"
               pButton
               pRipple
+              [id]="'bm_configure_table_row_' + rowObject.id + '_action_toggle'"
               class="p-button-rounded p-button-text p-button-success"
               icon="pi pi-check-circle"
               (click)="onToggleDisable(rowObject)"
-              [ariaLabel]="'BOOKMARK.ENABLED' | translate"
+              [attr.aria-label]="'BOOKMARK.ENABLED' | translate"
               [pTooltip]="'BOOKMARK.ENABLED' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
@@ -133,10 +134,11 @@
               type="button"
               pButton
               pRipple
+              [id]="'bm_configure_table_row_' + rowObject.id + '_action_toggle'"
               class="p-button-rounded p-button-text p-button-danger"
               icon="pi pi-minus-circle"
               (click)="onToggleDisable(rowObject)"
-              [ariaLabel]="'BOOKMARK.DISABLED' | translate"
+              [attr.aria-label]="'BOOKMARK.DISABLED' | translate"
               [pTooltip]="'BOOKMARK.DISABLED' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
@@ -147,10 +149,11 @@
               type="button"
               pButton
               pRipple
+              [id]="'bm_configure_table_row_' + rowObject.id + '_action_edit'"
               class="p-button-rounded p-button-text"
               icon="pi pi-pencil"
               (click)="onDetail(rowObject)"
-              [ariaLabel]="'ACTIONS.EDIT.LABEL' | translate"
+              [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
               [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
@@ -162,10 +165,11 @@
               type="button"
               pButton
               pRipple
+              [id]="'bm_configure_table_row_' + rowObject.id + '_action_copy'"
               class="p-button-rounded p-button-text"
               icon="pi pi-copy"
               (click)="onCopy(rowObject)"
-              [ariaLabel]="'ACTIONS.COPY.LABEL' | translate"
+              [attr.aria-label]="'ACTIONS.COPY.LABEL' | translate"
               [pTooltip]="'ACTIONS.COPY.LABEL' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
@@ -178,10 +182,11 @@
               type="button"
               pButton
               pRipple
+              [id]="'bm_configure_table_row_' + rowObject.id + '_action_delete'"
               class="p-button-rounded p-button-text p-button-danger"
               icon="pi pi-trash"
               (click)="onDelete(rowObject)"
-              [ariaLabel]="'ACTIONS.DELETE.LABEL' | translate"
+              [attr.aria-label]="'ACTIONS.DELETE.LABEL' | translate"
               [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"

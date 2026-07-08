@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -41,10 +41,10 @@ describe('BookmarkListComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      declarations: [BookmarkListComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkListComponent,
         CommonModule,
+        NoopAnimationsModule,
         RouterModule.forRoot([]),
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({

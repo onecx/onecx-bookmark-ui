@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -43,9 +42,8 @@ describe('BookmarkOverviewComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      declarations: [BookmarkOverviewComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkOverviewComponent,
         StoreModule.forRoot({}),
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
@@ -138,7 +136,8 @@ describe('BookmarkOverviewComponent', () => {
 
   describe('ngOnInit', () => {
     it('should dispatch search action on init', (done) => {
-      store.scannedActions$.pipe(ofType(BookmarkOverviewActions.search)).subscribe(() => {
+      store.scannedActions$.pipe(ofType(BookmarkOverviewActions.search)).subscribe((action) => {
+        expect(action.type).toBe(BookmarkOverviewActions.search.type)
         done()
       })
     })

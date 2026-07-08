@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { TranslateService } from '@ngx-translate/core'
-import { TranslateModule } from '@ngx-translate/core'
+import { TranslateService, TranslateModule } from '@ngx-translate/core'
 import { BehaviorSubject, Observable, map, of, take } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { LetDirective } from '@ngrx/component'
@@ -109,7 +108,7 @@ export class BookmarkOverviewComponent implements OnInit {
               tooltipEvent: 'hover'
             },
             routerLink: 'configure'
-          } as MenuItem
+          }
         ]
       })
     )

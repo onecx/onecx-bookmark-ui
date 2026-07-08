@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -13,15 +12,23 @@ import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { BookmarkImportComponent } from './bookmark-import.component'
 import { EximBookmarkScope, EximMode } from 'src/app/shared/generated'
 
+Object.defineProperty(window, 'ResizeObserver', {
+  writable: true,
+  value: jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+})
+
 describe('BookmarkImportComponent', () => {
   let component: BookmarkImportComponent
   let fixture: ComponentFixture<BookmarkImportComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkImportComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkImportComponent,
         CommonModule,
         FormsModule,
         FileUploadModule,

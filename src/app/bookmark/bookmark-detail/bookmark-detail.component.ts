@@ -1,8 +1,15 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { Location } from '@angular/common'
-import { AbstractControl, DefaultValueAccessor, FormControl, FormGroup, Validators, ValidatorFn } from '@angular/forms'
-import { CommonModule } from '@angular/common'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { CommonModule, Location } from '@angular/common'
+import {
+  AbstractControl,
+  DefaultValueAccessor,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+  ValidatorFn
+} from '@angular/forms'
 import { BehaviorSubject, filter, map, Observable } from 'rxjs'
 import { TranslateModule } from '@ngx-translate/core'
 import { ButtonModule } from 'primeng/button'
@@ -19,7 +26,6 @@ import { FloatLabelModule } from 'primeng/floatlabel'
 import { SelectModule } from 'primeng/select'
 import { RouterModule } from '@angular/router'
 
-import { SlotService } from '@onecx/angular-remote-components'
 import {
   AppStateService,
   //ParametersService,
@@ -33,7 +39,7 @@ import {
   DialogResult
 } from '@onecx/angular-accelerator'
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
+import { AngularRemoteComponentsModule, SlotService } from '@onecx/angular-remote-components'
 
 import { BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
 import { SharedModule } from 'src/app/shared/shared.module'

@@ -121,12 +121,12 @@ describe('OneCXBookmarkListComponent', () => {
   describe('ocxInitRemoteComponent', () => {
     it('should emit the base URL to the subject', () => {
       initializeComponent()
-      let emittedUrl: string | undefined
-      baseUrlSubject.subscribe((url) => (emittedUrl = url))
+      let emittedConfig: RemoteComponentConfig | undefined
+      baseUrlSubject.subscribe((url) => (emittedConfig = url))
 
       component.ocxInitRemoteComponent(remoteComponentConfig)
 
-      expect(emittedUrl).toBe('http://test-base-url')
+      expect(emittedConfig?.baseUrl).toBe('http://test-base-url')
     })
 
     it('should set permissions from config', () => {

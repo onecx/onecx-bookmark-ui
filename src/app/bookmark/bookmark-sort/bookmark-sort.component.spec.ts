@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'
 import { CommonModule } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
@@ -26,9 +25,8 @@ describe('BookmarkSortComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkSortComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkSortComponent,
         CommonModule,
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({

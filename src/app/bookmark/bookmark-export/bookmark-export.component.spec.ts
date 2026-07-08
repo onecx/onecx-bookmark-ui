@@ -18,8 +18,8 @@ describe('BookmarkExportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkExportComponent],
       imports: [
+        BookmarkExportComponent,
         CommonModule,
         FormsModule,
         CheckboxModule,

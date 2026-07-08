@@ -56,7 +56,7 @@ describe('BookmarkOverviewEffects', () => {
     await appStateMock.currentWorkspace$.publish({ workspaceName: 'test-ws' } as any)
 
     userServiceMock = TestBed.inject(UserService) as unknown as jest.Mocked<Pick<UserService, 'hasPermission'>>
-    userServiceMock.hasPermission = jest.fn().mockReturnValue(false)
+    userServiceMock.hasPermission = jest.fn().mockReturnValue(Promise.resolve(false))
     routerMock = { navigate: jest.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true) } as any
   })
 
@@ -93,7 +93,7 @@ describe('BookmarkOverviewEffects', () => {
     })
 
     it('should not add scope to criteria when user has ADMIN_EDIT permission', (done) => {
-      userServiceMock.hasPermission = jest.fn().mockReturnValue(true)
+      userServiceMock.hasPermission = jest.fn().mockReturnValue(Promise.resolve(true))
       bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(of({ stream: [], totalElements: 0 }) as any)
 
       actions$.next(BookmarkOverviewActions.search())
@@ -149,6 +149,26 @@ describe('BookmarkOverviewEffects', () => {
         expect((action as any).exceptionKey).toContain('500')
         done()
       })
+    })
+
+    it('should not emit when workspace has no workspaceName', () => {
+      appStateMock.currentWorkspace$.publish({ workspaceName: '' } as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkOverviewActions.search())
+
+      expect(emittedActions).toHaveLength(0)
+    })
+
+    it('should not emit when workspace is null', () => {
+      appStateMock.currentWorkspace$.publish(null as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkOverviewActions.search())
+
+      expect(emittedActions).toHaveLength(0)
     })
   })
 

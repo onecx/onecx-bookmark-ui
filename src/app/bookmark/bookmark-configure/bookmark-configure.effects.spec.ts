@@ -220,6 +220,26 @@ describe('BookmarkConfigureEffects', () => {
         done()
       })
     })
+
+    it('should not emit when workspace has no workspaceName', () => {
+      appStateMock.currentWorkspace$.publish({ workspaceName: '' } as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkConfigureActions.search())
+
+      expect(emittedActions).toHaveLength(0)
+    })
+
+    it('should not emit when workspace is null', () => {
+      appStateMock.currentWorkspace$.publish(null as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkConfigureActions.search())
+
+      expect(emittedActions).toHaveLength(0)
+    })
   })
 
   describe('refreshSearch$', () => {

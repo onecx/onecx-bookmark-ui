@@ -1,6 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { Location } from '@angular/common'
+import { CommonModule, Location } from '@angular/common'
 import { SkeletonModule } from 'primeng/skeleton'
 import { map, Observable, of } from 'rxjs'
 

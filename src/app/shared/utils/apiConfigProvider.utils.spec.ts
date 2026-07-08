@@ -28,13 +28,13 @@ describe('apiConfigProvider', () => {
   })
 
   it('should return a PortalApiConfiguration instance', () => {
-    const result = apiConfigProvider(configService, appStateService)
+    const result = TestBed.runInInjectionContext(() => apiConfigProvider(configService, appStateService))
     expect(result).toBeInstanceOf(PortalApiConfiguration)
   })
 
   it('should pass the Configuration class to PortalApiConfiguration', () => {
     const spy = jest.spyOn(PortalApiConfiguration.prototype as object, 'constructor' as never)
-    const result = apiConfigProvider(configService, appStateService)
+    const result = TestBed.runInInjectionContext(() => apiConfigProvider(configService, appStateService))
     expect(result).toBeInstanceOf(PortalApiConfiguration)
     spy.mockRestore()
   })
