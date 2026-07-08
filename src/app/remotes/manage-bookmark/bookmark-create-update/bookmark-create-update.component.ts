@@ -5,6 +5,7 @@ import { map } from 'rxjs'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
 import { MessagesModule } from 'primeng/messages'
 import { InputTextModule } from 'primeng/inputtext'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { TooltipModule } from 'primeng/tooltip'
 
 import { UserService } from '@onecx/angular-integration-interface'
@@ -20,6 +21,7 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
   styleUrls: ['./bookmark-create-update.component.scss'],
   imports: [
     errorTailorImports,
+    FloatLabelModule,
     FormsModule,
     InputTextModule,
     MessagesModule,

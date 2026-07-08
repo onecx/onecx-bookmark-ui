@@ -32,8 +32,8 @@ import { metaReducers, reducers } from './app.reducers'
 import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
 
 @NgModule({
-  declarations: [AppComponent],
   imports: [
+    AppComponent,
     StandaloneShellModule,
     CommonModule,
     AppRoutingModule,

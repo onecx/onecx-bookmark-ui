@@ -1,4 +1,4 @@
-@import '/src/app/_bm-mixins.scss';
+@use '/src/app/_bm-mixins.scss' as *;
 
 @include card-badges;
 @include displaying-text-responsive;

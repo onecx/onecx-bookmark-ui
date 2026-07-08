@@ -44,18 +44,16 @@ import { BookmarkSortComponent } from './bookmark-sort/bookmark-sort.component'
 
 @NgModule({
   providers: [providePortalDialogService()],
-  declarations: [
-    BookmarkOverviewComponent,
-    BookmarkListComponent,
-    BookmarkConfigureComponent,
-    BookmarkDetailComponent,
-    BookmarkDeleteComponent,
-    BookmarkExportComponent,
-    BookmarkImportComponent,
-    BookmarkImageComponent,
-    BookmarkSortComponent
-  ],
   imports: [
+    BookmarkConfigureComponent,
+    BookmarkDeleteComponent,
+    BookmarkDetailComponent,
+    BookmarkExportComponent,
+    BookmarkImageComponent,
+    BookmarkImportComponent,
+    BookmarkListComponent,
+    BookmarkOverviewComponent,
+    BookmarkSortComponent,
     AngularAcceleratorModule,
     BadgeModule,
     ButtonModule,

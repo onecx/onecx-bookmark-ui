@@ -1,8 +1,10 @@
 import { Component } from '@angular/core'
+import { StandaloneShellModule } from '@onecx/angular-standalone-shell'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  standalone: false
+  standalone: true,
+  imports: [StandaloneShellModule]
 })
 export class AppComponent {}

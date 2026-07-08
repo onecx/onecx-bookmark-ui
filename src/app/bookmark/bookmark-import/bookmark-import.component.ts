@@ -1,8 +1,24 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core'
+import { TranslateModule } from '@ngx-translate/core'
 import { FileSelectEvent, FileUpload } from 'primeng/fileupload'
+import { ButtonModule } from 'primeng/button'
+import { CheckboxModule } from 'primeng/checkbox'
+import { FileUploadModule } from 'primeng/fileupload'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { MessageModule } from 'primeng/message'
+import { RadioButtonModule } from 'primeng/radiobutton'
+import { TabViewModule } from 'primeng/tabview'
+import { TooltipModule } from 'primeng/tooltip'
 
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
+import {
+  AngularAcceleratorModule,
+  DialogButtonClicked,
+  DialogPrimaryButtonDisabled,
+  DialogResult
+} from '@onecx/angular-accelerator'
 
 import { BookmarkSnapshot, EximBookmarkScope, EximMode, ExportBookmarksRequest } from 'src/app/shared/generated'
 import { ImportBookmarkData } from '../bookmark-configure/bookmark-configure.effects'
@@ -21,7 +37,21 @@ export type ImportError = {
   selector: 'app-bookmark-import',
   templateUrl: './bookmark-import.component.html',
   styleUrl: './bookmark-import.component.scss',
-  standalone: false
+  standalone: true,
+  imports: [
+    AngularAcceleratorModule,
+    ButtonModule,
+    CheckboxModule,
+    CommonModule,
+    FileUploadModule,
+    FloatLabelModule,
+    FormsModule,
+    MessageModule,
+    RadioButtonModule,
+    TabViewModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class BookmarkImportComponent
   implements

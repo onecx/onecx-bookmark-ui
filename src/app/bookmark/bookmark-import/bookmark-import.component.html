@@ -110,7 +110,7 @@
     tooltipEvent="hover"
   >
     <div class="flex flex-column row-gap-4">
-      <span class="flex-grow-1 p-float-label">
+      <p-floatlabel variant="on" class="flex-grow-1 p-float-label">
         <input
           pInputText
           type="text"
@@ -124,7 +124,7 @@
           tooltipEvent="hover"
         />
         <label for="bm_import_snapshot_date">{{ 'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate }}</label>
-      </span>
+      </p-floatlabel>
       <!-- For ADMINs only: Show both lists in parallel -->
       <div
         *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"

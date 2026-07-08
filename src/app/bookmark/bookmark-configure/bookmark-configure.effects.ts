@@ -2,12 +2,11 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
-import { catchError, from, map, mergeMap, of, switchMap, tap, withLatestFrom } from 'rxjs'
+import { catchError, exhaustMap, filter, from, map, mergeMap, of, switchMap, take, tap, withLatestFrom } from 'rxjs'
 import FileSaver from 'file-saver'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { PortalDialogService } from '@onecx/angular-accelerator'
-import { DialogState } from '@onecx/angular-accelerator'
+import { DialogState, PortalDialogService } from '@onecx/angular-accelerator'
 
 import * as actton from 'src/app/shared/utils/actionButtons'
 import {
@@ -69,10 +68,13 @@ export class BookmarkConfigureEffects {
   search$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.search),
-      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
-      mergeMap(([, { workspaceName }]) => {
-        return this.performSearch(workspaceName)
-      })
+      switchMap(() =>
+        this.appStateService.currentWorkspace$.asObservable().pipe(
+          filter((workspace) => !!workspace?.workspaceName),
+          take(1),
+          mergeMap(({ workspaceName }) => this.performSearch(workspaceName))
+        )
+      )
     )
   })
 
@@ -142,7 +144,7 @@ export class BookmarkConfigureEffects {
           isAdmin: permissions.includes('BOOKMARK#ADMIN_EDIT')
         }
       }),
-      mergeMap((data) => {
+      exhaustMap((data) => {
         // no bookmarks to be exported
         if (!data.exist) return of({ button: 'secondary' } as DialogState<ExportBookmarksRequest | undefined>)
         // no ADMIN permission: export PRIVATE bookmarks only
@@ -201,7 +203,7 @@ export class BookmarkConfigureEffects {
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.importBookmarks),
       withLatestFrom(this.appStateService.currentWorkspace$.asObservable(), this.user.lang$.asObservable()),
-      mergeMap(([, { workspaceName }, lang]) => {
+      exhaustMap(([, { workspaceName }, lang]) => {
         // select file
         return this.portalDialogService.openDialog<ImportBookmarkData | undefined>(
           'BOOKMARK_IMPORT.HEADER',
@@ -260,7 +262,7 @@ export class BookmarkConfigureEffects {
       map(([, viewModel]) => {
         return viewModel.results
       }),
-      mergeMap((bookmarks) => {
+      exhaustMap((bookmarks) => {
         return this.portalDialogService.openDialog<UpdateBookmark[] | undefined>(
           'BOOKMARK_SORT.HEADER',
           {
@@ -371,7 +373,7 @@ export class BookmarkConfigureEffects {
           permissions: permissions
         }
       }),
-      mergeMap((data) => {
+      exhaustMap((data) => {
         const editable = canEdit(data.permissions, data.bookmark)
         return this.portalDialogService
           .openDialog<CombinedBookmark | undefined>(
@@ -436,7 +438,7 @@ export class BookmarkConfigureEffects {
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.createBookmark),
       withLatestFrom(this.appStateService.currentWorkspace$.asObservable(), this.user.profile$.asObservable()),
-      mergeMap(([, { workspaceName }, profile]) => {
+      exhaustMap(([, { workspaceName }, profile]) => {
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.CREATE.HEADER`,
           {
@@ -500,7 +502,7 @@ export class BookmarkConfigureEffects {
           userId: profile.userId
         }
       }),
-      mergeMap((data) => {
+      exhaustMap((data) => {
         return this.portalDialogService.openDialog<CombinedBookmark | undefined>(
           `DIALOG.DETAIL.CREATE.HEADER`,
           {
@@ -556,7 +558,7 @@ export class BookmarkConfigureEffects {
       map(([action, results]) => {
         return results.find((item) => item.id === action.id)
       }),
-      mergeMap((itemToDelete) => {
+      exhaustMap((itemToDelete) => {
         return this.portalDialogService
           .openDialog<unknown>(
             `DIALOG.DETAIL.DELETE.HEADER`,

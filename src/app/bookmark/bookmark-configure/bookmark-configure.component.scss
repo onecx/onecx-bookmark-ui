@@ -1,4 +1,4 @@
-@import '/src/app/_bm-mixins.scss';
+@use '/src/app/_bm-mixins.scss' as *;
 
 @include danger-action;
 @include displaying-text-responsive;
@@ -9,6 +9,15 @@
 @include search-criteria-select-button-slim;
 
 :host ::ng-deep {
+  #external-header-name ~ .icon-button-header-wrapper .sortButton,
+  #target-header-name ~ .icon-button-header-wrapper .sortButton {
+    display: none;
+  }
+
+  #interactiveDataViewHeader > div > div.ng-star-inserted {
+    width: 100%;
+  }
+
   .p-datatable {
     .p-datatable-header {
       padding-left: 0;
@@ -25,13 +34,20 @@
       }
     }
   }
-  // hide unusable stuff
-  ocx-column-group-selection,
-  ocx-interactive-data-view div div button {
-    display: none;
+  .table-header-wrapper {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 0.5rem;
   }
-  ocx-interactive-data-view div {
-    justify-content: center !important;
+
+  .table-header-wrapper .icon-button-header-wrapper {
+    margin-top: 0 !important;
+  }
+  // hide unusable stuff
+  div:has(> ocx-column-group-selection),
+  div:has(> ocx-data-layout-selection) {
+    display: none !important;
   }
 
   .max-height-for-2-lines {

@@ -1,19 +1,29 @@
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { TranslateService } from '@ngx-translate/core'
+import { TranslateModule } from '@ngx-translate/core'
 import { BehaviorSubject, Observable, map, of, take } from 'rxjs'
 import { Store } from '@ngrx/store'
+import { LetDirective } from '@ngrx/component'
 import { MenuItem, PrimeIcons } from 'primeng/api'
+import { DockModule } from 'primeng/dock'
+import { MessageModule } from 'primeng/message'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { UserProfile, Workspace } from '@onecx/integration-interface'
-import { Action } from '@onecx/angular-accelerator'
+import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AngularAuthModule } from '@onecx/angular-auth'
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { SlotService } from '@onecx/angular-remote-components'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
 import { BookmarkOverviewViewModel } from './bookmark-overview.viewmodel'
 import { selectBookmarkOverviewViewModel } from './bookmark-overview.selectors'
+import { BookmarkListComponent } from './bookmark-list/bookmark-list.component'
 
 export type Product = {
   name: string
@@ -25,7 +35,20 @@ export type Product = {
   selector: 'app-bookmark-overview',
   templateUrl: './bookmark-overview.component.html',
   styleUrls: ['./bookmark-overview.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [
+    AngularAcceleratorModule,
+    AngularAuthModule,
+    BookmarkListComponent,
+    CommonModule,
+    DockModule,
+    LetDirective,
+    MessageModule,
+    PortalPageComponent,
+    SharedModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class BookmarkOverviewComponent implements OnInit {
   // data

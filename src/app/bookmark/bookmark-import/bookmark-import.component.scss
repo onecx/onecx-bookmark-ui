@@ -1,4 +1,4 @@
-@import '/src/app/_bm-mixins.scss';
+@use '/src/app/_bm-mixins.scss' as *;
 
 @include displaying-text-responsive;
 @include readable-disabled-form-controls;

@@ -1,6 +1,16 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
+import { CheckboxModule } from 'primeng/checkbox'
+import { TooltipModule } from 'primeng/tooltip'
 
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
+import {
+  AngularAcceleratorModule,
+  DialogButtonClicked,
+  DialogPrimaryButtonDisabled,
+  DialogResult
+} from '@onecx/angular-accelerator'
 
 import { ExportBookmarksRequest, EximBookmarkScope } from 'src/app/shared/generated'
 
@@ -8,7 +18,8 @@ import { ExportBookmarksRequest, EximBookmarkScope } from 'src/app/shared/genera
   selector: 'app-bookmark-export',
   templateUrl: './bookmark-export.component.html',
   styleUrl: './bookmark-export.component.scss',
-  standalone: false
+  standalone: true,
+  imports: [AngularAcceleratorModule, CheckboxModule, CommonModule, FormsModule, TooltipModule, TranslateModule]
 })
 export class BookmarkExportComponent
   implements
