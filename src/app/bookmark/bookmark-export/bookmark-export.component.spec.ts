@@ -60,45 +60,23 @@ describe('BookmarkExportComponent', () => {
   })
 
   describe('onScopeChange', () => {
-    it('should emit false when both private and public are false', () => {
-      const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
-      component.private = false
-      component.public = false
+    it.each([
+      { private: false, public: false, expected: false },
+      { private: true, public: false, expected: true },
+      { private: false, public: true, expected: true },
+      { private: true, public: true, expected: true }
+    ])(
+      'should emit $expected when private is $private and public is $public',
+      ({ private: p, public: q, expected }) => {
+        const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
+        component.private = p
+        component.public = q
 
-      component.onScopeChange()
+        component.onScopeChange()
 
-      expect(emitSpy).toHaveBeenCalledWith(false)
-    })
-
-    it('should emit true when private is true', () => {
-      const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
-      component.private = true
-      component.public = false
-
-      component.onScopeChange()
-
-      expect(emitSpy).toHaveBeenCalledWith(true)
-    })
-
-    it('should emit true when public is true', () => {
-      const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
-      component.private = false
-      component.public = true
-
-      component.onScopeChange()
-
-      expect(emitSpy).toHaveBeenCalledWith(true)
-    })
-
-    it('should emit true when both private and public are true', () => {
-      const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
-      component.private = true
-      component.public = true
-
-      component.onScopeChange()
-
-      expect(emitSpy).toHaveBeenCalledWith(true)
-    })
+        expect(emitSpy).toHaveBeenCalledWith(expected)
+      }
+    )
   })
 
   describe('ocxDialogButtonClicked', () => {

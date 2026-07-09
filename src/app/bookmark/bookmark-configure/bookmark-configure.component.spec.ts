@@ -675,13 +675,13 @@ describe('BookmarkConfigureComponent', () => {
 
     it('should filter rows by name case-insensitively', () => {
       component.onGlobalFilter('alpha')
-      expect(component.interactiveRows.length).toBe(1)
+      expect(component.interactiveRows).toHaveLength(1)
       expect(component.interactiveRows[0]['id']).toBe('1')
     })
 
     it('should return empty array when no rows match the filter', () => {
       component.onGlobalFilter('zzz')
-      expect(component.interactiveRows.length).toBe(0)
+      expect(component.interactiveRows).toHaveLength(0)
     })
 
     it('should treat row with undefined displayName as non-matching', () => {
@@ -697,7 +697,7 @@ describe('BookmarkConfigureComponent', () => {
       ]
       component.filterText = 'alpha'
       ;(component as any).applyNameFilter()
-      expect(component.interactiveRows.length).toBe(1)
+      expect(component.interactiveRows).toHaveLength(1)
       expect(component.interactiveRows[0]['id']).toBe('1')
     })
   })

@@ -59,6 +59,5 @@
       "unitTestRunner": "jest"
     }
   },
-  "defaultProject": "onecx-bookmark-ui",
-  "useLegacyCache": true
+  "defaultProject": "onecx-bookmark-ui"
 }
