@@ -1,50 +1,109 @@
-import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
-import { TranslateService } from '@ngx-translate/core'
-import { Observable, map } from 'rxjs'
+import { Component, DestroyRef, Inject, LOCALE_ID, OnInit, inject } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { ActivatedRoute, Router, RouterModule } from '@angular/router'
+import { CommonModule } from '@angular/common'
+import { FormsModule } from '@angular/forms'
+import { Observable } from 'rxjs'
 import { Store } from '@ngrx/store'
+import { LetDirective } from '@ngrx/component'
+import { TranslateModule } from '@ngx-translate/core'
 import { PrimeIcons, SelectItem } from 'primeng/api'
-import { Table } from 'primeng/table'
+import { ButtonModule } from 'primeng/button'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon'
+import { InputGroupModule } from 'primeng/inputgroup'
+import { InputTextModule } from 'primeng/inputtext'
+import { MessageModule } from 'primeng/message'
+import { SelectButtonModule } from 'primeng/selectbutton'
+import { TooltipModule } from 'primeng/tooltip'
 
+import { AngularAuthModule } from '@onecx/angular-auth'
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
-import { Action, DataAction } from '@onecx/angular-accelerator'
-import { Column, DataSortDirection, DataViewControlTranslations } from '@onecx/portal-integration-angular'
+import { PortalPageComponent } from '@onecx/angular-utils'
+import {
+  Action,
+  AngularAcceleratorModule,
+  ColumnType,
+  DataSortDirection,
+  DataTableColumn,
+  Filter,
+  RowListGridData,
+  Sort
+} from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { limitText } from 'src/app/shared/utils/utils'
 
 import { BookmarkConfigureActions } from './bookmark-configure.actions'
+import { bookmarkColumns, ExtendedColumn } from './bookmark-configure.columns'
 import { BookmarkConfigureViewModel } from './bookmark-configure.viewmodel'
 import { selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
-import { bookmarkColumns } from './bookmark-configure.columns'
 
 export type ExtendedSelectItem = SelectItem & { title_key: string }
+
+type BookmarkTableRow = Bookmark & {
+  imagePath: string
+  canEditAction: boolean
+  canDeleteAction: boolean
+  showEnabledStateAction: boolean
+  showDisabledStateAction: boolean
+  [columnId: string]: unknown
+}
 
 @Component({
   selector: 'app-bookmark-configure',
   templateUrl: './bookmark-configure.component.html',
-  styleUrls: ['./bookmark-configure.component.scss']
+  styleUrls: ['./bookmark-configure.component.scss'],
+  standalone: true,
+  imports: [
+    AngularAcceleratorModule,
+    AngularAuthModule,
+    ButtonModule,
+    CommonModule,
+    FloatLabelModule,
+    FormsModule,
+    InputGroupAddonModule,
+    InputGroupModule,
+    InputTextModule,
+    LetDirective,
+    MessageModule,
+    PortalPageComponent,
+    RouterModule,
+    SelectButtonModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class BookmarkConfigureComponent implements OnInit {
   // data
   public viewModel$: Observable<BookmarkConfigureViewModel> = this.store.select(selectBookmarkConfigureViewModel)
+  public interactiveRows: BookmarkTableRow[] = []
+  private allInteractiveRows: BookmarkTableRow[] = []
+  private latestRows: RowListGridData[] = []
   public urls: Record<string, Observable<string>> = {}
   public pageActions: Action[] = []
-  public rowActions: DataAction[] = []
   public defaultSortDirection = DataSortDirection.ASCENDING
-  public filteredColumns: Column[] = []
+  public sortField = 'position'
+  public tableFilters: Filter[] = []
+  public filterText = ''
+  public interactiveColumns: DataTableColumn[] = []
+  public displayedColumnKeys: string[] = []
+  public filteredColumns: ExtendedColumn[] = []
   public bookmarkColumns = bookmarkColumns
   public limitText = limitText
   public editable = false
+  private permEdit = false
+  private permAdminEdit = false
+  private permDelete = false
+  private permAdminDelete = false
   public quickFilterItems$: Observable<SelectItem[]> | undefined
+  private readonly destroyRef: DestroyRef = inject(DestroyRef)
 
-  @ViewChild('dataTable', { static: false }) dataTable: Table | undefined
-  public dataViewControlsTranslations$: Observable<DataViewControlTranslations> | undefined
   public quickFilterOptions: ExtendedSelectItem[] = [
-    { label: 'BOOKMARK.SCOPES.PRIVATE', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PRIVATE', value: 'PRIVATE' },
-    { label: 'BOOKMARK.SCOPES.PUBLIC', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PUBLIC', value: 'PUBLIC' }
+    { label: 'BOOKMARK.SCOPES.PRIVATE', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PRIVATE', value: BookmarkScope.Private },
+    { label: 'BOOKMARK.SCOPES.PUBLIC', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PUBLIC', value: BookmarkScope.Public }
   ]
-  public quickFilterValue = this.quickFilterOptions[0].value
+  public quickFilterValue: BookmarkScope = BookmarkScope.Private
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
@@ -52,13 +111,14 @@ export class BookmarkConfigureComponent implements OnInit {
     private readonly router: Router,
     private readonly store: Store,
     private readonly user: UserService,
-    private readonly translate: TranslateService,
     private readonly workspaceService: WorkspaceService
   ) {
-    this.editable = this.user.hasPermission('BOOKMARK#EDIT') || this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
     this.filteredColumns = bookmarkColumns.filter((a) => a.active === true)
-    this.viewModel$.subscribe({
+    this.syncInteractiveColumns()
+    this.viewModel$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (vm) => {
+        this.latestRows = vm.results
+        this.refreshInteractiveRows()
         const a = vm.results.filter((b) => b['scope'] === this.quickFilterValue)
         this.pageActions = this.preparePageActions(a.length > 1, this.quickFilterValue)
       }
@@ -66,38 +126,38 @@ export class BookmarkConfigureComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.prepareDialogTranslations()
+    this.resolvePermissions()
     this.onSearch()
+  }
+
+  private resolvePermissions(): void {
+    Promise.all([
+      this.user.hasPermission('BOOKMARK#EDIT'),
+      this.user.hasPermission('BOOKMARK#ADMIN_EDIT'),
+      this.user.hasPermission('BOOKMARK#DELETE'),
+      this.user.hasPermission('BOOKMARK#ADMIN_DELETE')
+    ]).then(([permEdit, permAdminEdit, permDelete, permAdminDelete]) => {
+      this.permEdit = permEdit
+      this.permAdminEdit = permAdminEdit
+      this.permDelete = permDelete
+      this.permAdminDelete = permAdminDelete
+      this.editable = permEdit || permAdminEdit
+      this.refreshInteractiveRows()
+    })
   }
 
   /**
    * DIALOG preparation
    */
   public canEdit(scope: BookmarkScope): boolean {
-    return (
-      (scope === BookmarkScope.Public && this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) ||
-      (scope === BookmarkScope.Private && this.user.hasPermission('BOOKMARK#EDIT'))
-    )
+    return (scope === BookmarkScope.Public && this.permAdminEdit) || (scope === BookmarkScope.Private && this.permEdit)
   }
   public canDelete(scope: BookmarkScope): boolean {
     return (
-      (scope === BookmarkScope.Public && this.user.hasPermission('BOOKMARK#ADMIN_DELETE')) ||
-      (scope === BookmarkScope.Private && this.user.hasPermission('BOOKMARK#DELETE'))
+      (scope === BookmarkScope.Public && this.permAdminDelete) || (scope === BookmarkScope.Private && this.permDelete)
     )
   }
 
-  private prepareDialogTranslations(): void {
-    this.dataViewControlsTranslations$ = this.translate
-      .get(['DIALOG.DATAVIEW.FILTER', 'DIALOG.DATAVIEW.FILTER_BY', 'BOOKMARK.DISPLAY_NAME'])
-      .pipe(
-        map((data) => {
-          return {
-            filterInputPlaceholder: data['DIALOG.DATAVIEW.FILTER'],
-            filterInputTooltip: data['DIALOG.DATAVIEW.FILTER_BY'] + data['BOOKMARK.DISPLAY_NAME']
-          } as DataViewControlTranslations
-        })
-      )
-  }
   private preparePageActions(dataExists: boolean, scope: BookmarkScope): Action[] {
     const perm = 'BOOKMARK#' + (scope === BookmarkScope.Public ? 'ADMIN_' : '') + 'EDIT'
     return [
@@ -167,13 +227,35 @@ export class BookmarkConfigureComponent implements OnInit {
   }
 
   public onColumnsChange(activeIds: string[]): void {
-    this.filteredColumns = activeIds.map((id) => bookmarkColumns.find((col) => col.field === id)) as Column[]
+    this.filteredColumns = activeIds
+      .map((id) => bookmarkColumns.find((col) => col.field === id))
+      .filter((col): col is ExtendedColumn => !!col)
+    this.syncInteractiveColumns()
   }
   public onQuickFilterChange(scopeQuickFilter: string): void {
     this.store.dispatch(BookmarkConfigureActions.scopeQuickFilterChanged({ scopeQuickFilter: scopeQuickFilter }))
   }
-  public onFilterChange(event: string): void {
-    this.dataTable?.filterGlobal(event, 'contains')
+  public onFilterChange(event: Filter[]): void {
+    this.tableFilters = event
+  }
+
+  public onGlobalFilter(value: string): void {
+    this.filterText = value
+    this.applyNameFilter()
+  }
+
+  public onClearGlobalFilter(): void {
+    this.filterText = ''
+    this.applyNameFilter()
+  }
+  public onSortChange(event: Sort): void {
+    this.sortField = event.sortColumn
+    this.defaultSortDirection = event.sortDirection
+  }
+  public onDataViewChange(layout: 'list' | 'grid' | 'table'): void {
+    if (layout !== 'table') {
+      return
+    }
   }
 
   public onToggleDisable(data: Bookmark): void {
@@ -213,5 +295,88 @@ export class BookmarkConfigureComponent implements OnInit {
     if (!url) return ''
     const q = new URLSearchParams(b.query).toString()
     return url + (q ? '?' + q : '') + (b.fragment ? '#' + b.fragment : '')
+  }
+
+  private syncInteractiveColumns(): void {
+    const bookmarkDataColumns = this.filteredColumns.map((column) => ({
+      id: column.field,
+      nameKey: `${column.translationPrefix}.${column.header}`,
+      tooltipKey: this.getColumnTooltipKey(column.field, column),
+      columnType: this.getColumnType(column.field),
+      sortable: !!column.sort,
+      filterable: !!column.hasFilter
+    }))
+
+    this.interactiveColumns = [
+      {
+        id: 'actions',
+        nameKey: 'ACTIONS.LABEL',
+        tooltipKey: 'ACTIONS.TOOLTIP',
+        columnType: ColumnType.STRING,
+        sortable: false,
+        filterable: false
+      },
+      ...bookmarkDataColumns
+    ]
+    this.displayedColumnKeys = this.interactiveColumns.map((column) => column.id)
+  }
+
+  private getColumnType(field: string): ColumnType {
+    if (field === 'position') {
+      return ColumnType.NUMBER
+    }
+
+    return ColumnType.STRING
+  }
+
+  private getColumnTooltipKey(field: string, column: ExtendedColumn): string {
+    if (field === 'external') {
+      return 'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG'
+    }
+
+    if (field === 'target') {
+      return 'BOOKMARK.TOOLTIPS.TARGET.CONFIG'
+    }
+
+    return `${column.translationPrefix}.TOOLTIPS.${column.header}`
+  }
+
+  private mapInteractiveRow(bookmarkRow: RowListGridData): BookmarkTableRow {
+    const bookmark = this.toBookmark(bookmarkRow)
+    const canEditAction = this.canEdit(bookmark.scope)
+    const displayNameLower = (bookmark.displayName ?? '').toLocaleLowerCase(this.locale)
+
+    return {
+      ...bookmark,
+      imagePath: '',
+      displayNameLower,
+      canEditAction,
+      canDeleteAction: this.canDelete(bookmark.scope),
+      showEnabledStateAction: canEditAction && !bookmark.disabled,
+      showDisabledStateAction: canEditAction && !!bookmark.disabled
+    }
+  }
+
+  private refreshInteractiveRows(): void {
+    this.allInteractiveRows = this.latestRows.map((bookmarkRow) => this.mapInteractiveRow(bookmarkRow))
+    this.applyNameFilter()
+  }
+
+  private toBookmark(data: unknown): Bookmark {
+    return data as Bookmark
+  }
+
+  private applyNameFilter(): void {
+    const normalizedQuery = this.filterText.trim().toLocaleLowerCase(this.locale)
+    if (!normalizedQuery) {
+      this.interactiveRows = this.allInteractiveRows
+      return
+    }
+
+    // Keep original row object references; only the containing array is rebuilt.
+    this.interactiveRows = this.allInteractiveRows.filter((row) => {
+      const rowName = (row['displayNameLower'] as string | undefined) ?? ''
+      return rowName.includes(normalizedQuery)
+    })
   }
 }

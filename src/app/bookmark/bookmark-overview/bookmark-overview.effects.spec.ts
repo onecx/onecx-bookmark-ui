@@ -9,7 +9,7 @@ import { provideMockActions } from '@ngrx/effects/testing'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarksInternalAPIService } from 'src/app/shared/generated'
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
@@ -33,7 +33,7 @@ describe('BookmarkOverviewEffects', () => {
     await TestBed.configureTestingModule({
       imports: [
         RouterModule.forRoot([]),
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
@@ -56,14 +56,17 @@ describe('BookmarkOverviewEffects', () => {
     await appStateMock.currentWorkspace$.publish({ workspaceName: 'test-ws' } as any)
 
     userServiceMock = TestBed.inject(UserService) as unknown as jest.Mocked<Pick<UserService, 'hasPermission'>>
-    userServiceMock.hasPermission = jest.fn().mockReturnValue(false)
+    userServiceMock.hasPermission = jest.fn().mockReturnValue(Promise.resolve(false))
     routerMock = { navigate: jest.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true) } as any
   })
 
   describe('search$', () => {
     it('should dispatch bookmarkSearchResultsReceived on success', (done) => {
       bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(
-        of({ stream: [{ id: '1', position: 0, scope: 'PRIVATE' as any, workspaceName: 'ws', displayName: 'B1' }], totalElements: 1 }) as any
+        of({
+          stream: [{ id: '1', position: 0, scope: 'PRIVATE' as any, workspaceName: 'ws', displayName: 'B1' }],
+          totalElements: 1
+        }) as any
       )
 
       actions$.next(BookmarkOverviewActions.search())
@@ -90,7 +93,7 @@ describe('BookmarkOverviewEffects', () => {
     })
 
     it('should not add scope to criteria when user has ADMIN_EDIT permission', (done) => {
-      userServiceMock.hasPermission = jest.fn().mockReturnValue(true)
+      userServiceMock.hasPermission = jest.fn().mockReturnValue(Promise.resolve(true))
       bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(of({ stream: [], totalElements: 0 }) as any)
 
       actions$.next(BookmarkOverviewActions.search())
@@ -147,6 +150,26 @@ describe('BookmarkOverviewEffects', () => {
         done()
       })
     })
+
+    it('should not emit when workspace has no workspaceName', () => {
+      appStateMock.currentWorkspace$.publish({ workspaceName: '' } as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkOverviewActions.search())
+
+      expect(emittedActions).toHaveLength(0)
+    })
+
+    it('should not emit when workspace is null', () => {
+      appStateMock.currentWorkspace$.publish(null as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkOverviewActions.search())
+
+      expect(emittedActions).toHaveLength(0)
+    })
   })
 
   describe('navigate$', () => {
@@ -157,8 +180,7 @@ describe('BookmarkOverviewEffects', () => {
 
       effects.navigate$.subscribe()
 
-      expect(routerMock.navigate).toHaveBeenCalledWith(['configure'], { relativeTo: route }
-      )
+      expect(routerMock.navigate).toHaveBeenCalledWith(['configure'], { relativeTo: route })
     })
   })
 
@@ -202,9 +224,7 @@ describe('BookmarkOverviewEffects', () => {
 
       effects.displayError$.subscribe()
 
-      expect(messageServiceMock.error).toHaveBeenCalledWith(
-        expect.objectContaining({ detailKey: undefined })
-      )
+      expect(messageServiceMock.error).toHaveBeenCalledWith(expect.objectContaining({ detailKey: undefined }))
     })
 
     it('should pass undefined as detailKey when errorText is undefined', () => {
@@ -218,9 +238,7 @@ describe('BookmarkOverviewEffects', () => {
 
       effects.displayError$.subscribe()
 
-      expect(messageServiceMock.error).toHaveBeenCalledWith(
-        expect.objectContaining({ detailKey: undefined })
-      )
+      expect(messageServiceMock.error).toHaveBeenCalledWith(expect.objectContaining({ detailKey: undefined }))
     })
 
     it('should not call messageService.error for unrelated actions', () => {

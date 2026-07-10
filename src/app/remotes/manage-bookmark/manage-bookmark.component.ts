@@ -1,10 +1,11 @@
-import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
+import { Component, Inject, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { HttpClient } from '@angular/common/http'
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 import { RippleModule } from 'primeng/ripple'
 import { DynamicDialogModule } from 'primeng/dynamicdialog'
+import { ButtonModule } from 'primeng/button'
+import { TooltipModule } from 'primeng/tooltip'
 import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import {
   BehaviorSubject,
@@ -21,7 +22,6 @@ import {
 } from 'rxjs'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import {
   AppConfigService,
   AppStateService,
@@ -31,21 +31,19 @@ import {
 import { Endpoint, MfeInfo, PageInfo, Workspace } from '@onecx/integration-interface'
 import {
   AngularRemoteComponentsModule,
-  BASE_URL,
   ocxRemoteComponent,
   ocxRemoteWebcomponent,
-  provideTranslateServiceForRoot,
-  RemoteComponentConfig,
   SLOT_SERVICE,
   SlotService
 } from '@onecx/angular-remote-components'
 import {
   ButtonDialogButtonDetails,
-  PortalCoreModule,
+  AngularAcceleratorModule,
   PortalDialogConfig,
-  PortalDialogService,
-  providePortalDialogService
-} from '@onecx/portal-integration-angular'
+  providePortalDialogService,
+  PortalDialogService
+} from '@onecx/angular-accelerator'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { Bookmark, CreateBookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
 import { extractPathAfter, mapPathSegmentsToPathParameters } from 'src/app/shared/utils/path.utils'
@@ -60,36 +58,19 @@ export function slotInitializer(slotService: SlotService) {
 }
 
 @Component({
-  standalone: true,
   imports: [
     AngularAuthModule,
     AngularRemoteComponentsModule,
     CommonModule,
     RippleModule,
-    PortalCoreModule,
+    AngularAcceleratorModule,
     ProgressSpinnerModule,
     TranslateModule,
-    DynamicDialogModule
+    DynamicDialogModule,
+    ButtonModule,
+    TooltipModule
   ],
   providers: [
-    {
-      provide: BASE_URL,
-      useValue: new ReplaySubject<string>(1)
-    },
-    provideTranslateServiceForRoot({
-      isolate: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createRemoteComponentTranslateLoader,
-        deps: [HttpClient, BASE_URL]
-      }
-    }),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: slotInitializer,
-      deps: [SLOT_SERVICE],
-      multi: true
-    },
     {
       provide: SLOT_SERVICE,
       useExisting: SlotService
@@ -121,13 +102,14 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   constructor(
-    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    @Inject(REMOTE_COMPONENT_CONFIG) private readonly remoteComponentConfig: ReplaySubject<RemoteComponentConfig>,
     private readonly appConfigService: AppConfigService,
     private readonly appStateService: AppStateService,
     private readonly userService: UserService,
     private readonly translateService: TranslateService,
     private readonly portalDialogService: PortalDialogService,
-    private readonly bookmarkApiUtils: BookmarkAPIUtilsService
+    private readonly bookmarkApiUtils: BookmarkAPIUtilsService,
+    private readonly slotService: SlotService
   ) {
     this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
 
@@ -173,13 +155,14 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {
-    this.baseUrl.next(config.baseUrl)
+    this.remoteComponentConfig.next(config)
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
     this.appConfigService.init(config.baseUrl)
     this.bookmarkApiUtils.loadBookmarksForApp(this.commonObs$, this.handleBookmarkLoadError).subscribe((result) => {
       this.bookmarks$.next(result)
     })
+    this.slotService.init()
   }
 
   onOpenBookmarkDialog(): void {

@@ -5,14 +5,15 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { BehaviorSubject, of, ReplaySubject } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { PortalCoreModule, PortalDialogService } from '@onecx/portal-integration-angular'
-import { BASE_URL, RemoteComponentConfig, SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
+import { PortalDialogService, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 import {
   AppConfigService,
   AppStateService,
   PortalMessageService,
   UserService
 } from '@onecx/angular-integration-interface'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
@@ -36,7 +37,7 @@ describe('OneCXManageBookmarkComponent', () => {
   let component: OneCXManageBookmarkComponent
   let fixture: ComponentFixture<OneCXManageBookmarkComponent>
 
-  let baseUrlSubject: ReplaySubject<string>
+  let baseUrlSubject: ReplaySubject<RemoteComponentConfig>
   let bookmarkApiUtilsMock: jest.Mocked<
     Pick<
       BookmarkAPIUtilsService,
@@ -64,7 +65,7 @@ describe('OneCXManageBookmarkComponent', () => {
   }
 
   beforeEach(async () => {
-    baseUrlSubject = new ReplaySubject<string>(1)
+    baseUrlSubject = new ReplaySubject<RemoteComponentConfig>(1)
     bookmarkApiUtilsMock = {
       overwriteBaseURL: jest.fn(),
       loadBookmarksForApp: jest.fn().mockReturnValue(of([])),
@@ -84,7 +85,7 @@ describe('OneCXManageBookmarkComponent', () => {
     await TestBed.configureTestingModule({
       schemas: [NO_ERRORS_SCHEMA],
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
@@ -100,7 +101,7 @@ describe('OneCXManageBookmarkComponent', () => {
       .overrideComponent(OneCXManageBookmarkComponent, {
         set: {
           providers: [
-            { provide: BASE_URL, useValue: baseUrlSubject },
+            { provide: REMOTE_COMPONENT_CONFIG, useValue: baseUrlSubject },
             { provide: BookmarkAPIUtilsService, useValue: bookmarkApiUtilsMock },
             { provide: AppConfigService, useValue: appConfigServiceMock },
             { provide: PortalDialogService, useValue: portalDialogServiceMock },
@@ -155,12 +156,12 @@ describe('OneCXManageBookmarkComponent', () => {
   describe('ocxInitRemoteComponent', () => {
     it('should emit the base URL to the subject', () => {
       initializeComponent()
-      let emittedUrl: string | undefined
-      baseUrlSubject.subscribe((url) => (emittedUrl = url))
+      let emittedConfig: RemoteComponentConfig | undefined
+      baseUrlSubject.subscribe((url) => (emittedConfig = url))
 
       component.ocxInitRemoteComponent(remoteComponentConfig)
 
-      expect(emittedUrl).toBe('http://test-base-url')
+      expect(emittedConfig?.baseUrl).toBe('http://test-base-url')
     })
 
     it('should set permissions from config', () => {

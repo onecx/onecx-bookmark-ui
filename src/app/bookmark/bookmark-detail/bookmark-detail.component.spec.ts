@@ -7,10 +7,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { TabViewModule } from 'primeng/tabview'
 
 import { BreadcrumbService } from '@onecx/angular-accelerator'
-import { AppStateService, PortalCoreModule, UserService } from '@onecx/portal-integration-angular'
+import { AppStateService, UserService } from '@onecx/angular-integration-interface'
+import { provideAlwaysGrantPermissionChecker } from '@onecx/angular-utils'
 
 import { BookmarkDetailComponent, Product } from './bookmark-detail.component'
 import { of, throwError } from 'rxjs'
@@ -66,13 +68,13 @@ describe('BookmarkDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkDetailComponent],
       imports: [
-        PortalCoreModule,
+        BookmarkDetailComponent,
         FormsModule,
         ReactiveFormsModule,
         LetDirective,
         TabViewModule,
+        NoopAnimationsModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
@@ -80,6 +82,8 @@ describe('BookmarkDetailComponent', () => {
       ],
       providers: [
         BreadcrumbService,
+        UserService,
+        provideAlwaysGrantPermissionChecker(),
         provideHttpClient(),
         provideHttpClientTesting(),
         AppStateService,
@@ -100,7 +104,7 @@ describe('BookmarkDetailComponent', () => {
       remoteBaseUrl: 'http://example.com'
     })
     const userService = TestBed.inject(UserService)
-    userService.hasPermission = () => true
+    userService.hasPermission = () => Promise.resolve(true)
     component.vm = baseBookmarkDetailViewModel
 
     fixture.detectChanges()
@@ -852,6 +856,8 @@ describe('BookmarkDetailComponent', () => {
  * Test modification of built-in Angular class registerOnChange at top of the file
  */
 @Component({
+  standalone: true,
+  imports: [FormsModule],
   template: `<input type="text" [(ngModel)]="value" />`
 })
 class TestComponent {
@@ -871,8 +877,7 @@ describe('DefaultValueAccessor prototype modification', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [FormsModule]
+      imports: [TestComponent]
     }).compileComponents()
 
     initTestComponent()

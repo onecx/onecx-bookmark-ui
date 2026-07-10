@@ -72,26 +72,30 @@
               (onChange)="onScopeChange()"
               [(ngModel)]="private"
               [binary]="true"
-              [label]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
               [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
               [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             >
             </p-checkbox>
+            <label for="bm_export_field_private">
+              {{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}
+            </label>
             <p-checkbox
               id="bm_export_field_public"
               class=""
               (onChange)="onScopeChange()"
               [(ngModel)]="public"
               [binary]="true"
-              [label]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
               [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
               [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             >
             </p-checkbox>
+            <label for="bm_export_field_public">
+              {{ 'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate }}
+            </label>
           </div>
         </div>
       </div>
@@ -106,12 +110,12 @@
     tooltipEvent="hover"
   >
     <div class="flex flex-column row-gap-4">
-      <span class="flex-grow-1 p-float-label">
+      <p-floatlabel variant="on">
         <input
           pInputText
           type="text"
           id="bm_import_snapshot_date"
-          class="pt-3 pb-2 text-responsive"
+          class="pt-3 pb-2 text-responsive p-filled"
           [disabled]="true"
           [value]="snapshot?.created | date: dateFormat"
           [attr.aria-label]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
@@ -120,7 +124,7 @@
           tooltipEvent="hover"
         />
         <label for="bm_import_snapshot_date">{{ 'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate }}</label>
-      </span>
+      </p-floatlabel>
       <!-- For ADMINs only: Show both lists in parallel -->
       <div
         *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"

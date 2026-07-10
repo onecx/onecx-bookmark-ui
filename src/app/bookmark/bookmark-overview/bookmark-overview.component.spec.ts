@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -13,7 +12,7 @@ import { ofType } from '@ngrx/effects'
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { SlotService } from '@onecx/angular-remote-components'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkOverviewComponent } from './bookmark-overview.component'
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
@@ -35,7 +34,7 @@ describe('BookmarkOverviewComponent', () => {
   let store: MockStore<Store>
   let appStateMock: AppStateServiceMock
   let slotServiceMock: jest.Mocked<Pick<SlotService, 'isSomeComponentDefinedForSlot'>>
-  let userServiceMock: jest.Mocked<Pick<UserService, 'hasPermission' | 'profile$'>>
+  let userServiceMock: jest.Mocked<Pick<UserService, 'getPermissions' | 'profile$'>>
 
   beforeEach(async () => {
     slotServiceMock = {
@@ -43,11 +42,10 @@ describe('BookmarkOverviewComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      declarations: [BookmarkOverviewComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkOverviewComponent,
         StoreModule.forRoot({}),
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
@@ -84,8 +82,10 @@ describe('BookmarkOverviewComponent', () => {
     store.overrideSelector(selectBookmarkOverviewViewModel, baseViewModel)
     store.refreshState()
 
-    userServiceMock = TestBed.inject(UserService) as unknown as jest.Mocked<Pick<UserService, 'hasPermission' | 'profile$'>>
-    userServiceMock.hasPermission = jest.fn().mockReturnValue(true)
+    userServiceMock = TestBed.inject(UserService) as unknown as jest.Mocked<
+      Pick<UserService, 'getPermissions' | 'profile$'>
+    >
+    userServiceMock.getPermissions = jest.fn().mockReturnValue(of(['BOOKMARK#EDIT']))
 
     fixture = TestBed.createComponent(BookmarkOverviewComponent)
     component = fixture.componentInstance
@@ -101,14 +101,29 @@ describe('BookmarkOverviewComponent', () => {
       expect(component.BookmarkScope).toBe(BookmarkScope)
     })
 
-    it('should set hasEditPermissions based on user permissions', () => {
-      expect(component.hasEditPermissions).toBe(true)
+    it('should set hasEditPermissions based on user permissions', (done) => {
+      component.hasEditPermissions$.subscribe((val) => {
+        expect(val).toBe(true)
+        done()
+      })
     })
 
-    it('should fall back to ADMIN_EDIT permission when EDIT permission returns null', () => {
-      userServiceMock.hasPermission = jest.fn().mockReturnValueOnce(null).mockReturnValueOnce(false)
+    it('should fall back to ADMIN_EDIT permission when EDIT permission is missing', (done) => {
+      userServiceMock.getPermissions = jest.fn().mockReturnValue(of(['BOOKMARK#ADMIN_EDIT']))
       const newFixture = TestBed.createComponent(BookmarkOverviewComponent)
-      expect(newFixture.componentInstance.hasEditPermissions).toBe(false)
+      newFixture.componentInstance.hasEditPermissions$.subscribe((val) => {
+        expect(val).toBe(true)
+        done()
+      })
+    })
+
+    it('should not have edit permissions when no relevant permission is granted', (done) => {
+      userServiceMock.getPermissions = jest.fn().mockReturnValue(of([]))
+      const newFixture = TestBed.createComponent(BookmarkOverviewComponent)
+      newFixture.componentInstance.hasEditPermissions$.subscribe((val) => {
+        expect(val).toBe(false)
+        done()
+      })
     })
 
     it('should initialize isProductComponentDefined$ via SlotService', (done) => {
@@ -121,7 +136,8 @@ describe('BookmarkOverviewComponent', () => {
 
   describe('ngOnInit', () => {
     it('should dispatch search action on init', (done) => {
-      store.scannedActions$.pipe(ofType(BookmarkOverviewActions.search)).subscribe(() => {
+      store.scannedActions$.pipe(ofType(BookmarkOverviewActions.search)).subscribe((action) => {
+        expect(action.type).toBe(BookmarkOverviewActions.search.type)
         done()
       })
     })

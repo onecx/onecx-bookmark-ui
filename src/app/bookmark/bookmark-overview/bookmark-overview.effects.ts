@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Action } from '@ngrx/store'
-import { catchError, map, mergeMap, of, tap, withLatestFrom } from 'rxjs'
+import { catchError, filter, from, map, mergeMap, of, switchMap, take, tap } from 'rxjs'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
@@ -35,10 +35,13 @@ export class BookmarkOverviewEffects {
   search$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(BookmarkOverviewActions.search),
-      withLatestFrom(this.appStateService.currentWorkspace$.asObservable()),
-      mergeMap(([, { workspaceName }]) => {
-        return this.performSearch(workspaceName)
-      })
+      switchMap(() =>
+        this.appStateService.currentWorkspace$.asObservable().pipe(
+          filter((workspace) => !!workspace?.workspaceName),
+          take(1),
+          mergeMap(({ workspaceName }) => this.performSearch(workspaceName))
+        )
+      )
     )
   })
 
@@ -47,22 +50,26 @@ export class BookmarkOverviewEffects {
    */
   private performSearch(workspaceName: string) {
     this.context = 'BOOKMARKS'
-    let criteria: BookmarkSearchCriteria = { workspaceName: workspaceName }
-    // Normal user must see only his own bookmarks
-    if (!this.user.hasPermission('BOOKMARK#ADMIN_EDIT')) criteria = { ...criteria, scope: BookmarkScope.Private }
-    return this.bookmarksService.searchBookmarksByCriteria({ bookmarkSearchCriteria: criteria }).pipe(
-      map(({ stream, totalElements }) =>
-        BookmarkOverviewActions.bookmarkSearchResultsReceived({
-          results: stream?.sort(this.sortByPosition) ?? [],
-          totalNumberOfResults: totalElements ?? 0
-        })
-      ),
-      catchError((error) => {
-        return of(
-          BookmarkOverviewActions.bookmarkSearchFailed({
-            status: error.status,
-            errorText: error.message,
-            exceptionKey: this.buildExceptionKey(error.status)
+    return from(this.user.hasPermission('BOOKMARK#ADMIN_EDIT')).pipe(
+      mergeMap((isAdmin) => {
+        let criteria: BookmarkSearchCriteria = { workspaceName: workspaceName }
+        // Normal user must see only his own bookmarks
+        if (!isAdmin) criteria = { ...criteria, scope: BookmarkScope.Private }
+        return this.bookmarksService.searchBookmarksByCriteria({ bookmarkSearchCriteria: criteria }).pipe(
+          map(({ stream, totalElements }) =>
+            BookmarkOverviewActions.bookmarkSearchResultsReceived({
+              results: stream?.sort(this.sortByPosition) ?? [],
+              totalNumberOfResults: totalElements ?? 0
+            })
+          ),
+          catchError((error) => {
+            return of(
+              BookmarkOverviewActions.bookmarkSearchFailed({
+                status: error.status,
+                errorText: error.message,
+                exceptionKey: this.buildExceptionKey(error.status)
+              })
+            )
           })
         )
       })

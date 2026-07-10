@@ -1,19 +1,28 @@
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { TranslateService } from '@ngx-translate/core'
-import { BehaviorSubject, Observable, map, of } from 'rxjs'
+import { CommonModule } from '@angular/common'
+import { TranslateService, TranslateModule } from '@ngx-translate/core'
+import { BehaviorSubject, Observable, map, of, take } from 'rxjs'
 import { Store } from '@ngrx/store'
+import { LetDirective } from '@ngrx/component'
 import { MenuItem, PrimeIcons } from 'primeng/api'
+import { DockModule } from 'primeng/dock'
+import { MessageModule } from 'primeng/message'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { UserProfile, Workspace } from '@onecx/integration-interface'
-import { Action } from '@onecx/angular-accelerator'
+import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { AngularAuthModule } from '@onecx/angular-auth'
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { SlotService } from '@onecx/angular-remote-components'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
 import { BookmarkOverviewViewModel } from './bookmark-overview.viewmodel'
 import { selectBookmarkOverviewViewModel } from './bookmark-overview.selectors'
+import { BookmarkListComponent } from './bookmark-list/bookmark-list.component'
 
 export type Product = {
   name: string
@@ -24,14 +33,28 @@ export type Product = {
 @Component({
   selector: 'app-bookmark-overview',
   templateUrl: './bookmark-overview.component.html',
-  styleUrls: ['./bookmark-overview.component.scss']
+  styleUrls: ['./bookmark-overview.component.scss'],
+  standalone: true,
+  imports: [
+    AngularAcceleratorModule,
+    AngularAuthModule,
+    BookmarkListComponent,
+    CommonModule,
+    DockModule,
+    LetDirective,
+    MessageModule,
+    PortalPageComponent,
+    SharedModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class BookmarkOverviewComponent implements OnInit {
   // data
   public viewModel$: Observable<BookmarkOverviewViewModel> = this.store.select(selectBookmarkOverviewViewModel)
   public pageActions: Action[] = []
   public BookmarkScope = BookmarkScope
-  public hasEditPermissions = false
+  public hasEditPermissions$: Observable<boolean>
   public dockItems$: Observable<MenuItem[]> = of([])
 
   // data
@@ -54,11 +77,15 @@ export class BookmarkOverviewComponent implements OnInit {
   ) {
     this.user$ = this.user.profile$.asObservable()
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
-    this.hasEditPermissions = this.user.hasPermission('BOOKMARK#EDIT') ?? this.user.hasPermission('BOOKMARK#ADMIN_EDIT')
+    this.hasEditPermissions$ = this.user
+      .getPermissions()
+      .pipe(map((permissions) => permissions.includes('BOOKMARK#EDIT') || permissions.includes('BOOKMARK#ADMIN_EDIT')))
   }
 
   public ngOnInit() {
-    this.workspace = this.appStateService.currentWorkspace$.getValue()
+    this.appStateService.currentWorkspace$.pipe(take(1)).subscribe((workspace) => {
+      this.workspace = workspace
+    })
     this.productsEmitter.subscribe(this.products$)
     this.prepareDockItems()
     this.onSearch()
@@ -81,7 +108,7 @@ export class BookmarkOverviewComponent implements OnInit {
               tooltipEvent: 'hover'
             },
             routerLink: 'configure'
-          } as MenuItem
+          }
         ]
       })
     )

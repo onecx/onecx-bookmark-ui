@@ -1,25 +1,23 @@
-import { APP_INITIALIZER, Component, Inject, Input } from '@angular/core'
+import { Component, Inject, Input } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { HttpClient } from '@angular/common/http'
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
 import { TabViewModule } from 'primeng/tabview'
+import { MessageModule } from 'primeng/message'
+import { SkeletonModule } from 'primeng/skeleton'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import {
   AngularRemoteComponentsModule,
-  BASE_URL,
   ocxRemoteComponent,
   ocxRemoteWebcomponent,
-  provideTranslateServiceForRoot,
-  RemoteComponentConfig,
   SLOT_SERVICE,
   SlotService
 } from '@onecx/angular-remote-components'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { AppConfigService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
@@ -31,35 +29,18 @@ export function slotInitializer(slotService: SlotService) {
 }
 
 @Component({
-  standalone: true,
   imports: [
     AngularAuthModule,
     AngularRemoteComponentsModule,
     BookmarkLinksComponent,
     CommonModule,
-    PortalCoreModule,
+    AngularAcceleratorModule,
     TranslateModule,
-    TabViewModule
+    TabViewModule,
+    MessageModule,
+    SkeletonModule
   ],
   providers: [
-    {
-      provide: BASE_URL,
-      useValue: new ReplaySubject<string>(1)
-    },
-    provideTranslateServiceForRoot({
-      isolate: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createRemoteComponentTranslateLoader,
-        deps: [HttpClient, BASE_URL]
-      }
-    }),
-    {
-      provide: APP_INITIALIZER,
-      useFactory: slotInitializer,
-      deps: [SLOT_SERVICE],
-      multi: true
-    },
     {
       provide: SLOT_SERVICE,
       useExisting: SlotService
@@ -84,17 +65,18 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
   }
 
   constructor(
-    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    @Inject(REMOTE_COMPONENT_CONFIG) private readonly remoteComponentConfig: ReplaySubject<RemoteComponentConfig>,
     private readonly appConfigService: AppConfigService,
     private readonly userService: UserService,
     private readonly translateService: TranslateService,
-    private readonly bookmarkApiUtils: BookmarkAPIUtilsService
+    private readonly bookmarkApiUtils: BookmarkAPIUtilsService,
+    private readonly slotService: SlotService
   ) {
     this.translateService.use(this.userService.lang$.getValue())
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {
-    this.baseUrl.next(config.baseUrl)
+    this.remoteComponentConfig.next(config)
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
     this.appConfigService.init(config.baseUrl)
@@ -108,6 +90,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
       )
       this.loading = false
     })
+    this.slotService.init()
   }
 
   private readonly handleBookmarkLoadError = () => {

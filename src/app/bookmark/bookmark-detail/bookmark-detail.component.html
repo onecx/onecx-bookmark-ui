@@ -22,7 +22,7 @@
   >
     <div class="mt-1 mb-2 flex flex-column row-gap-4">
       <div>
-        <span class="p-float-label" controlErrorAnchor>
+        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
           <input
             pInputText
             type="text"
@@ -37,10 +37,10 @@
           <label class="ocx-required-label" for="bm_detail_form_field_display_name">
             {{ 'BOOKMARK.DISPLAY_NAME' | translate }}</label
           >
-        </span>
+        </p-floatlabel>
       </div>
       <div *ngIf="'CREATE' === vm.changeMode || vm.initialBookmark?.url">
-        <span class="p-float-label" controlErrorAnchor>
+        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
           <textarea
             #bookmarkUrl
             class="w-full"
@@ -55,7 +55,7 @@
             tooltipEvent="hover"
           ></textarea>
           <label class="ocx-required-label" for="bm_detail_form_field_url">{{ 'BOOKMARK.URL' | translate }}</label>
-        </span>
+        </p-floatlabel>
       </div>
       <!-- IMAGE -->
       <div class="flex flex-row flex-wrap sm:flex-nowrap align-items-center row-gap-2 column-gap-4">
@@ -99,7 +99,7 @@
           tooltipEvent="hover"
         ></button>
         <div class="flex flex-column w-full">
-          <span class="p-float-label">
+          <p-floatlabel variant="on" class="p-float-label">
             <textarea
               class="w-full"
               pInputTextarea
@@ -115,7 +115,7 @@
               tooltipEvent="hover"
             ></textarea>
             <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
-          </span>
+          </p-floatlabel>
           <label *ngIf="vm.changeMode !== 'VIEW'" class="ocx-control-hint block" for="bm_detail_form_field_image_url">
             {{ ('VALIDATION.HINTS.FORMAT_URL' | translate) + externUrlPattern }}
           </label>
@@ -128,13 +128,15 @@
           id="bm_detail_form_field_is_public"
           formControlName="is_public"
           [binary]="true"
-          [label]="'BOOKMARK.SCOPE_IS_PUBLIC' | translate"
           [ariaLabel]="'BOOKMARK.SCOPE_IS_PUBLIC' | translate"
           [pTooltip]="'BOOKMARK.TOOLTIPS.SCOPE_IS_PUBLIC' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         >
         </p-checkbox>
+        <label for="bm_detail_form_field_is_public">
+          {{ 'BOOKMARK.SCOPE_IS_PUBLIC' | translate }}
+        </label>
         <div class="flex flex-column">
           <div class="flex flex-column gap-3 md:gap-2 justify-content-evenly">
             <div class="w-full flex justify-content-start align-items-center">
@@ -143,13 +145,15 @@
                 class="checkbox-label"
                 formControlName="disabled"
                 [binary]="true"
-                [label]="'BOOKMARK.DISABLED' | translate"
                 [ariaLabel]="'BOOKMARK.TOOLTIPS.DISABLED' | translate"
                 [pTooltip]="'BOOKMARK.TOOLTIPS.DISABLED' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               >
               </p-checkbox>
+              <label for="bm_detail_form_field_disabled">
+                {{ 'BOOKMARK.DISABLED' | translate }}
+              </label>
             </div>
             <div class="w-full md:my-2 flex justify-content-start align-items-center">
               <p-checkbox
@@ -157,13 +161,15 @@
                 class="checkbox-label"
                 formControlName="external"
                 [binary]="true"
-                [label]="'BOOKMARK.EXTERNAL' | translate"
                 [ariaLabel]="'BOOKMARK.TOOLTIPS.EXTERNAL' | translate"
                 [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               >
               </p-checkbox>
+              <label for="bm_detail_form_field_ws_exit">
+                {{ 'BOOKMARK.EXTERNAL' | translate }}
+              </label>
             </div>
             <div class="w-full flex justify-content-start align-items-center">
               <p-checkbox
@@ -174,13 +180,15 @@
                 trueValue="_blank"
                 falseValue="_self"
                 [binary]="true"
-                [label]="'BOOKMARK.TARGET' | translate"
                 [ariaLabel]="'BOOKMARK.TOOLTIPS.TARGET' | translate"
                 [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               >
               </p-checkbox>
+              <label for="bm_detail_form_field_target">
+                {{ 'BOOKMARK.TARGET' | translate }}
+              </label>
             </div>
           </div>
         </div>
@@ -207,7 +215,7 @@
         (error)="onProductImageLoadError = true"
       />
       <div class="flex-grow-1 mt-1 flex flex-column row-gap-4">
-        <span class="p-float-label">
+        <p-floatlabel variant="on" class="p-float-label">
           <input
             pInputText
             type="text"
@@ -222,8 +230,8 @@
             tooltipEvent="hover"
           />
           <label for="bm_detail_form_field_product">{{ 'BOOKMARK.PRODUCT' | translate }}</label>
-        </span>
-        <span *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="p-float-label">
+        </p-floatlabel>
+        <p-floatlabel *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" variant="on" class="p-float-label">
           <input
             pInputText
             type="text"
@@ -237,7 +245,7 @@
             tooltipEvent="hover"
           />
           <label for="bm_detail_form_field_app_id">{{ 'BOOKMARK.APP_ID' | translate }}</label>
-        </span>
+        </p-floatlabel>
       </div>
     </div>
   </p-tabPanel>
@@ -250,7 +258,7 @@
     tooltipEvent="hover"
   >
     <div class="mt-1 mb-2 flex flex-column row-gap-4">
-      <span class="p-float-label" controlErrorAnchor>
+      <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
         <input
           pInputText
           type="text"
@@ -263,11 +271,11 @@
           tooltipEvent="hover"
         />
         <label for="bm_detail_form_field_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
-      </span>
+      </p-floatlabel>
       <div>
-        <span class="p-float-label" controlErrorAnchor>
+        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
           <p-badge
-            severity="primary"
+            severity="info"
             [value]="1000 - EndpointParameterObject.value.length"
             class="z-1 text-badge-right"
             [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
@@ -290,7 +298,7 @@
           ></textarea>
           <label for="bm_detail_form_field_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
           <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
-        </span>
+        </p-floatlabel>
         <label
           *ngIf="formGroup.get('endpointParams')?.errors"
           class="block control-error"
@@ -333,9 +341,9 @@
         </div>
       </div>
       <div>
-        <span class="p-float-label" controlErrorAnchor>
+        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
           <p-badge
-            severity="primary"
+            severity="info"
             [value]="1000 - QueryObject.value.length"
             class="z-1 text-badge-right"
             [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
@@ -358,14 +366,14 @@
           ></textarea>
           <label for="bm_detail_form_field_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
           <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
-        </span>
+        </p-floatlabel>
         <label *ngIf="formGroup.get('query')?.errors" class="block control-error" for="bm_detail_form_field_query">
           {{ formGroup.get('query')?.errors?.['error'] }}
         </label>
       </div>
-      <span class="p-float-label">
+      <p-floatlabel variant="on" class="p-float-label">
         <p-badge
-          severity="primary"
+          severity="info"
           [value]="1000 - FragmentObject.value.length"
           class="z-1 text-badge-right"
           [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
@@ -387,7 +395,7 @@
           tooltipEvent="hover"
         ></textarea>
         <label for="bm_detail_form_field_fragment">{{ 'BOOKMARK.FRAGMENT' | translate }}</label>
-      </span>
+      </p-floatlabel>
     </div>
   </p-tabPanel>
 
@@ -403,7 +411,7 @@
     <div class="mt-1 mb-2 flex flex-column row-gap-4">
       <!-- row 1 -->
       <div class="flex flex-row flex-wrap gap-4">
-        <span class="flex-grow-1 sm:flex-grow-0 p-float-label">
+        <p-floatlabel variant="on" class="flex-grow-1 sm:flex-grow-0 p-float-label">
           <input
             pInputText
             type="text"
@@ -416,8 +424,8 @@
             tooltipEvent="hover"
           />
           <label for="bm_detail_form_field_creation_date">{{ 'INTERNAL.CREATION_DATE' | translate }}</label>
-        </span>
-        <span class="flex-grow-1 p-float-label">
+        </p-floatlabel>
+        <p-floatlabel variant="on" class="flex-grow-1 p-float-label">
           <input
             pInputText
             type="text"
@@ -430,12 +438,12 @@
             tooltipEvent="hover"
           />
           <label for="bm_detail_form_field_creation_user"> {{ 'INTERNAL.CREATION_USER' | translate }} </label>
-        </span>
+        </p-floatlabel>
       </div>
 
       <!-- row 2 -->
       <div class="flex flex-row flex-wrap gap-4">
-        <span class="flex-grow-1 sm:flex-grow-0 p-float-label">
+        <p-floatlabel variant="on" class="flex-grow-1 sm:flex-grow-0 p-float-label">
           <input
             pInputText
             type="text"
@@ -450,8 +458,8 @@
             tooltipEvent="hover"
           />
           <label for="bm_detail_form_field_modification_date"> {{ 'INTERNAL.MODIFICATION_DATE' | translate }} </label>
-        </span>
-        <span class="flex-grow-1 p-float-label">
+        </p-floatlabel>
+        <p-floatlabel variant="on" class="flex-grow-1 p-float-label">
           <input
             pInputText
             type="text"
@@ -464,7 +472,7 @@
             tooltipEvent="hover"
           />
           <label for="bm_detail_form_field_modification_user"> {{ 'INTERNAL.MODIFICATION_USER' | translate }} </label>
-        </span>
+        </p-floatlabel>
       </div>
     </div>
   </p-tabPanel>

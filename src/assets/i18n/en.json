@@ -234,6 +234,10 @@
   "BOOKMARK_EXPORT": {
     "HEADER": "Export Bookmarks",
     "INFO": "Select the areas whose Bookmarks you want to export.",
+    "SCOPE": {
+      "PRIVATE": "My",
+      "PUBLIC": "Workspace"
+    },
     "SCOPE_PRIVATE": "Export the own Bookmarks",
     "SCOPE_PUBLIC": "Export the Workspace Bookmarks",
     "ERROR": "Export failed",

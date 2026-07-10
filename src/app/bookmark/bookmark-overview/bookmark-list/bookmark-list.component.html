@@ -1,7 +1,7 @@
 <div class="flex flex-column justify-content-between">
   <h2
     class="m-0 p-0 text-center text-base md:text-lg md:text-xl"
-    [ariaLabel]="'BOOKMARK.SCOPES.TOOLTIPS.' + (isPrivate ? 'PRIVATE' : 'PUBLIC') | translate"
+    [attr.aria-label]="'BOOKMARK.SCOPES.TOOLTIPS.' + (isPrivate ? 'PRIVATE' : 'PUBLIC') | translate"
     [pTooltip]="'BOOKMARK.SCOPES.TOOLTIPS.' + (isPrivate ? 'PRIVATE' : 'PUBLIC') | translate"
     tooltipPosition="top"
     tooltipEvent="hover"
@@ -70,7 +70,7 @@
   </div>
 
   <!-- NO BOOKMARKS -->
-  <p-messages *ngIf="!loading && bookmarks.length === 0" severity="info">
+  <p-message *ngIf="!loading && bookmarks.length === 0" severity="info">
     <ng-template pTemplate>
       <div class="flex gap-2 align-items-center">
         <span class="p-message-icon">
@@ -84,5 +84,5 @@
         </div>
       </div>
     </ng-template>
-  </p-messages>
+  </p-message>
 </div>

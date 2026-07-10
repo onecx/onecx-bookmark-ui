@@ -1,7 +1,9 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
-import { Location } from '@angular/common'
+import { CommonModule, Location } from '@angular/common'
+import { SkeletonModule } from 'primeng/skeleton'
 import { map, Observable, of } from 'rxjs'
 
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { AppStateService } from '@onecx/angular-integration-interface'
 
 import { Bookmark } from 'src/app/shared/generated'
@@ -12,7 +14,9 @@ import { Product } from '../bookmark-overview/bookmark-overview.component'
 @Component({
   selector: 'app-bookmark-image',
   templateUrl: './bookmark-image.component.html',
-  styleUrls: ['./bookmark-image.component.scss']
+  styleUrls: ['./bookmark-image.component.scss'],
+  standalone: true,
+  imports: [AngularAcceleratorModule, CommonModule, SkeletonModule]
 })
 export class BookmarkImageComponent implements OnChanges {
   @Input() public bookmark: Bookmark | undefined

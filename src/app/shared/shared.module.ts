@@ -9,13 +9,14 @@ import { FileUploadModule } from 'primeng/fileupload'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputGroupModule } from 'primeng/inputgroup'
 import { InputTextModule } from 'primeng/inputtext'
-import { InputTextareaModule } from 'primeng/inputtextarea'
+import { TextareaModule } from 'primeng/textarea'
 import { OrderListModule } from 'primeng/orderlist'
 import { RadioButtonModule } from 'primeng/radiobutton'
 import { RippleModule } from 'primeng/ripple'
 import { SkeletonModule } from 'primeng/skeleton'
 import { TabViewModule } from 'primeng/tabview'
 import { TooltipModule } from 'primeng/tooltip'
+import { ButtonModule } from 'primeng/button'
 
 import { LabelResolver } from 'src/app/shared/utils/label.resolver'
 
@@ -29,7 +30,7 @@ import { LabelResolver } from 'src/app/shared/utils/label.resolver'
     FormsModule,
     InputGroupModule,
     InputTextModule,
-    InputTextareaModule,
+    TextareaModule,
     OrderListModule,
     RadioButtonModule,
     ReactiveFormsModule,
@@ -38,7 +39,8 @@ import { LabelResolver } from 'src/app/shared/utils/label.resolver'
     TabViewModule,
     TooltipModule,
     TranslateModule,
-    errorTailorImports
+    errorTailorImports,
+    ButtonModule
   ],
   exports: [
     DockModule,
@@ -47,13 +49,14 @@ import { LabelResolver } from 'src/app/shared/utils/label.resolver'
     FormsModule,
     InputGroupModule,
     InputTextModule,
-    InputTextareaModule,
+    TextareaModule,
     OrderListModule,
     RadioButtonModule,
     ReactiveFormsModule,
     RippleModule,
     SkeletonModule,
     TabViewModule,
+    ButtonModule,
     TooltipModule,
     TranslateModule,
     errorTailorImports

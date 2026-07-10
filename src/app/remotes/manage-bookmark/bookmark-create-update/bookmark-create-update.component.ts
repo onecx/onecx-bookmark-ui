@@ -5,22 +5,23 @@ import { map } from 'rxjs'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
 import { MessagesModule } from 'primeng/messages'
 import { InputTextModule } from 'primeng/inputtext'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { TooltipModule } from 'primeng/tooltip'
 
 import { UserService } from '@onecx/angular-integration-interface'
-import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/portal-integration-angular'
+import { DialogButtonClicked, DialogPrimaryButtonDisabled, DialogResult } from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmodel'
 
 @Component({
-  standalone: true,
   selector: 'app-bookmark-create-update',
   templateUrl: './bookmark-create-update.component.html',
   styleUrls: ['./bookmark-create-update.component.scss'],
   imports: [
     errorTailorImports,
+    FloatLabelModule,
     FormsModule,
     InputTextModule,
     MessagesModule,
@@ -97,10 +98,12 @@ export class BookmarkCreateUpdateComponent
       }
     }
     this.permissionKey = 'BOOKMARK#' + this.vm.mode
-    this.hasPermission = this.hasEditPermission()
-    if (!this.hasPermission || this.isPublicBookmark) {
-      this.formGroup.disable()
-    }
+    this.hasEditPermission().then((hasPermission) => {
+      this.hasPermission = hasPermission
+      if (!this.hasPermission || this.isPublicBookmark) {
+        this.formGroup.disable()
+      }
+    })
 
     // align button status according to form validation
     this.formGroup.statusChanges
@@ -122,7 +125,7 @@ export class BookmarkCreateUpdateComponent
     }, 500)
   }
 
-  private hasEditPermission(): boolean {
+  private async hasEditPermission(): Promise<boolean> {
     if (this.vm.permissions) {
       return this.vm.permissions.includes(this.permissionKey)
     }

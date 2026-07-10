@@ -1,14 +1,6 @@
 import { PrimeIcons } from 'primeng/api'
 
-import {
-  cancelButton,
-  closeButton,
-  exportButton,
-  importButton,
-  noButton,
-  saveButton,
-  yesButton
-} from './actionButtons'
+import { cancelButton, closeButton, exportButton, importButton, noButton, saveButton, yesButton } from './actionButtons'
 
 describe('actionButtons', () => {
   it('should define yesButton with correct properties', () => {

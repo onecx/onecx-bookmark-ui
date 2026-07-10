@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, DoBootstrap, Injector, NgModule, isDevMode } from '@angular/core'
+import { DoBootstrap, Injector, NgModule, isDevMode, inject, provideAppInitializer } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -10,11 +10,10 @@ import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createTranslateLoader, provideTranslationPathFromMeta } from '@onecx/angular-utils'
+import { createTranslateLoader, provideTranslationPathFromMeta, providePermissionService } from '@onecx/angular-utils'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
-import { addInitializeModuleGuard, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
-import { AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
+import { AngularAcceleratorModule, AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
 
 import { Configuration } from './shared/generated'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
@@ -29,13 +28,13 @@ const effectProvidersForWorkaround = [EffectsRunner, EffectSources, Actions]
 effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
 
 @NgModule({
-  declarations: [AppEntrypointComponent],
   imports: [
+    AppEntrypointComponent,
     AngularAuthModule,
     BrowserModule,
     BrowserAnimationsModule,
-    PortalCoreModule.forMicroFrontend(),
-    RouterModule.forRoot(addInitializeModuleGuard(routes)),
+    AngularAcceleratorModule,
+    RouterModule.forRoot(routes),
     TranslateModule.forRoot({
       isolate: true,
       loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
@@ -57,13 +56,12 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
   ],
   providers: [
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: initializeRouter,
-      multi: true,
-      deps: [Router, AppStateService]
-    },
+    provideAppInitializer(() => {
+      const initializerFn = initializeRouter(inject(Router), inject(AppStateService))
+      return initializerFn()
+    }),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
+    providePermissionService(),
     provideHttpClient(withInterceptorsFromDi())
   ]
 })

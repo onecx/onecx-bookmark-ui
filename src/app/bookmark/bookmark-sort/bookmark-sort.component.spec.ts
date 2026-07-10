@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'
 import { CommonModule } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
 import { BookmarkSortComponent } from './bookmark-sort.component'
@@ -26,11 +25,10 @@ describe('BookmarkSortComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkSortComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkSortComponent,
         CommonModule,
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

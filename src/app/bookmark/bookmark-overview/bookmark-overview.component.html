@@ -34,8 +34,8 @@
       </div>
     </div>
     <!-- dock is absolute positioned -->
-    <p-dock *ngIf="hasEditPermissions" [model]="dockItems$ | async" position="right" styleClass="">
-      <ng-template pTemplate="item" let-item>
+    <p-dock *ngIf="hasEditPermissions$ | async" [model]="dockItems$ | async" position="right" styleClass="">
+      <ng-template #item let-item>
         <span
           [class]="'text-primary cursor-pointer text-lg sm:text-2xl ' + item.iconClass"
           [attr.aria-label]="'ACTIONS.CONFIGURE.LABEL' | translate"

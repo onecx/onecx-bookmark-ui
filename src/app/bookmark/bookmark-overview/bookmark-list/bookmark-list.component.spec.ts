@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -9,7 +9,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
 
 import { WorkspaceService } from '@onecx/angular-integration-interface'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkListComponent } from './bookmark-list.component'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -41,12 +41,12 @@ describe('BookmarkListComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      declarations: [BookmarkListComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkListComponent,
         CommonModule,
+        NoopAnimationsModule,
         RouterModule.forRoot([]),
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

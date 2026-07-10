@@ -13,7 +13,7 @@
       ></app-bookmark-links>
       <ng-template #noPrivateBookmarks>
         <div class="max-h-16rem overflow-auto">
-          <p-messages severity="info">
+          <p-message severity="info">
             <ng-template pTemplate>
               <div class="flex gap-2 align-items-center">
                 <span class="p-message-icon">
@@ -29,7 +29,7 @@
                 </div>
               </div>
             </ng-template>
-          </p-messages>
+          </p-message>
         </div>
       </ng-template>
     </p-tabPanel>
@@ -54,7 +54,7 @@
 
   <ng-template #loadingError>
     <div class="max-h-16rem overflow-auto">
-      <p-messages severity="error">
+      <p-message severity="error">
         <ng-template pTemplate>
           <div class="flex gap-2 align-items-center">
             <span class="p-message-icon">
@@ -68,7 +68,7 @@
             </div>
           </div>
         </ng-template>
-      </p-messages>
+      </p-message>
     </div>
   </ng-template>
 </div>

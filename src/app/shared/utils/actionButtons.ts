@@ -1,5 +1,5 @@
 import { PrimeIcons } from 'primeng/api'
-import { ButtonDialogButtonDetails } from '@onecx/portal-integration-angular'
+import { ButtonDialogButtonDetails } from '@onecx/angular-accelerator'
 
 export const yesButton: ButtonDialogButtonDetails = {
   key: 'ACTIONS.CONFIRMATION.YES',

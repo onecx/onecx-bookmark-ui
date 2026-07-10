@@ -3,22 +3,26 @@ import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { MockAuthModule, PortalCoreModule } from '@onecx/portal-integration-angular'
+// import { DisabledAuthService, AuthService } from '@onecx/angular-auth'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { AppComponent } from './app.component'
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
       imports: [
-        MockAuthModule,
-        PortalCoreModule.forRoot('test'),
+        AppComponent,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+      providers: [
+        // { provide: AuthService, useClass: DisabledAuthService },
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     }).compileComponents()
   })
 

@@ -1,6 +1,8 @@
-import { Column } from '@onecx/portal-integration-angular'
-
-export type ExtendedColumn = Column & {
+export type ExtendedColumn = {
+  field: string
+  header: string
+  active?: boolean
+  translationPrefix?: string
   hasFilter?: boolean
   isDate?: boolean
   isDropdown?: boolean
@@ -31,14 +33,16 @@ export const bookmarkColumns: ExtendedColumn[] = [
     header: 'EXTERNAL.CONFIG',
     active: true,
     translationPrefix: 'BOOKMARK',
-    css: 'text-center'
+    css: 'text-center',
+    sort: true
   },
   {
     field: 'target',
     header: 'TARGET.CONFIG',
     active: true,
     translationPrefix: 'BOOKMARK',
-    css: 'text-center'
+    css: 'text-center',
+    sort: true
   },
   {
     field: 'url',

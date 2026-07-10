@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -8,10 +7,19 @@ import { FormsModule } from '@angular/forms'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkImportComponent } from './bookmark-import.component'
 import { EximBookmarkScope, EximMode } from 'src/app/shared/generated'
+
+Object.defineProperty(window, 'ResizeObserver', {
+  writable: true,
+  value: jest.fn().mockImplementation(() => ({
+    disconnect: jest.fn(),
+    observe: jest.fn(),
+    unobserve: jest.fn()
+  }))
+})
 
 describe('BookmarkImportComponent', () => {
   let component: BookmarkImportComponent
@@ -19,13 +27,12 @@ describe('BookmarkImportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BookmarkImportComponent],
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
+        BookmarkImportComponent,
         CommonModule,
         FormsModule,
         FileUploadModule,
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

@@ -4,7 +4,6 @@ import { MessagesModule } from 'primeng/messages'
 import { SharedModule } from 'primeng/api'
 
 @Component({
-  standalone: true,
   imports: [TranslateModule, MessagesModule, SharedModule],
   selector: 'app-page-not-bookmarkable-dialog',
   templateUrl: './page-not-bookmarkable-dialog.component.html',

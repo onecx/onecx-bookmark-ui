@@ -1,13 +1,15 @@
 /* global styles */
-@import 'node_modules/primeng/resources/primeng.min.css';
-@import 'node_modules/primeicons/primeicons.css';
-@import 'node_modules/primeflex/primeflex.scss';
+@use 'primeflex/primeflex.scss';
+@use 'primeicons/primeicons.css';
 
 /* portal core */
-@import 'node_modules/@onecx/portal-layout-styles/src/styles/shell/shell.scss';
-@import 'node_modules/@onecx/portal-layout-styles/src/styles/primeng/theme-light.scss';
-@import 'node_modules/@onecx/portal-integration-angular/assets/styles.scss';
+@use 'node_modules/@onecx/angular-accelerator/assets/styles.scss';
 
+/*
+ * Global styles for OneCX Bookmark UI
+ *
+ * These styles are required here because there are some DOM elements created on the fly (e.g. dropdownn lists) are under the DOM root.
+*/
 // disable default settings of dialogs created by portal dialog service
 .buttonDialogScrollableContent {
   max-height: unset !important;
@@ -16,4 +18,19 @@
 
 .p-dialog .p-dialog-footer button {
   margin: 0;
+}
+
+.p-select-option,
+.p-listbox-option {
+  padding: 0.5rem 1rem !important;
+}
+/* ZEBRA rows on dropdown */
+.p-select-overlay .p-select-list *:nth-child(even) .p-select-option {
+  background-color: var(--onecx-permission-onecx-permission-ui-datatable-row-striped-background);
+}
+/* ZEBRA rows on listbox */
+.p-listbox:not(.p-disabled) .p-listbox-option:not(.p-listbox-option-selected):not(.p-disabled) {
+  &:nth-child(even) {
+    background-color: var(--onecx-permission-onecx-permission-ui-datatable-row-striped-background);
+  }
 }

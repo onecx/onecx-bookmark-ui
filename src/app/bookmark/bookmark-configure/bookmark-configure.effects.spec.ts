@@ -9,7 +9,7 @@ import { MockStore, provideMockStore } from '@ngrx/store/testing'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { PortalCoreModule, PortalDialogService } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule, PortalDialogService } from '@onecx/angular-accelerator'
 
 import {
   Bookmark,
@@ -58,12 +58,19 @@ describe('BookmarkConfigureEffects', () => {
     >
   >
   let eximServiceMock: jest.Mocked<Pick<BookmarkExportImportAPIService, 'exportBookmarks' | 'importBookmarks'>>
-  let userServiceMock: { hasPermission: jest.Mock; profile$: any; lang$: BehaviorSubject<string> }
+  let userServiceMock: {
+    hasPermission: jest.Mock
+    getPermissions: jest.Mock
+    profile$: any
+    lang$: BehaviorSubject<string>
+  }
   let profileSubject: BehaviorSubject<any>
+  let permissionsSubject: BehaviorSubject<string[]>
 
   beforeEach(async () => {
     actions$ = new ReplaySubject(1)
     profileSubject = new BehaviorSubject({ userId: 'user-1' })
+    permissionsSubject = new BehaviorSubject<string[]>([])
 
     portalDialogServiceMock = { openDialog: jest.fn() }
     messageServiceMock = { success: jest.fn(), error: jest.fn() }
@@ -76,14 +83,15 @@ describe('BookmarkConfigureEffects', () => {
     }
     eximServiceMock = { exportBookmarks: jest.fn(), importBookmarks: jest.fn() }
     userServiceMock = {
-      hasPermission: jest.fn().mockReturnValue(false),
+      hasPermission: jest.fn((key: string) => Promise.resolve(permissionsSubject.getValue().includes(key))),
+      getPermissions: jest.fn(() => permissionsSubject.asObservable()),
       profile$: { asObservable: () => profileSubject.asObservable() },
       lang$: new BehaviorSubject<string>('en')
     }
 
     await TestBed.configureTestingModule({
       imports: [
-        PortalCoreModule,
+        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
@@ -171,7 +179,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should not add scope to criteria when user has ADMIN_EDIT permission', (done) => {
-      userServiceMock.hasPermission.mockReturnValue(true)
+      permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
       bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(of({ stream: [], totalElements: 0 }) as any)
 
       actions$.next(BookmarkConfigureActions.search())
@@ -211,6 +219,26 @@ describe('BookmarkConfigureEffects', () => {
         expect((action as any).exceptionKey).toContain('500')
         done()
       })
+    })
+
+    it('should not emit when workspace has no workspaceName', () => {
+      appStateMock.currentWorkspace$.publish({ workspaceName: '' } as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkConfigureActions.search())
+
+      expect(emittedActions).toHaveLength(0)
+    })
+
+    it('should not emit when workspace is null', () => {
+      appStateMock.currentWorkspace$.publish(null as any)
+      const emittedActions: any[] = []
+      effects.search$.subscribe((action) => emittedActions.push(action))
+
+      actions$.next(BookmarkConfigureActions.search())
+
+      expect(emittedActions).toHaveLength(0)
     })
   })
 
@@ -301,7 +329,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should open export dialog for admin users and cancel on secondary', (done) => {
-      userServiceMock.hasPermission.mockReturnValue(true)
+      permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
@@ -314,7 +342,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch exportBookmarksFailed when scopes are empty', (done) => {
-      userServiceMock.hasPermission.mockReturnValue(true)
+      permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { workspaceName: 'test-ws', scopes: [] } }) as any
@@ -329,7 +357,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should export bookmarks and dispatch success for admin selecting scopes', (done) => {
-      userServiceMock.hasPermission.mockReturnValue(true)
+      permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({
@@ -583,7 +611,7 @@ describe('BookmarkConfigureEffects', () => {
 
   describe('viewOrEditBookmark$', () => {
     it('should open dialog in view mode when bookmark not found (canEdit returns false)', (done) => {
-      userServiceMock.hasPermission.mockReturnValue(false)
+      permissionsSubject.next([])
       // secondary + canEdit(undefined)=false → does not cancel → result undefined → throws
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
@@ -597,7 +625,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should cancel when secondary button clicked and bookmark is editable', (done) => {
-      userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#EDIT')
+      permissionsSubject.next(['BOOKMARK#EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: bm1 }) as any)
 
@@ -610,7 +638,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should cancel when primary button clicked and bookmark is not editable (view mode)', (done) => {
-      userServiceMock.hasPermission.mockReturnValue(false)
+      permissionsSubject.next([])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bm1 }) as any)
 
@@ -623,7 +651,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should cancel when primary clicked with all permissions but bookmark not found', (done) => {
-      userServiceMock.hasPermission.mockReturnValue(true)
+      permissionsSubject.next(['BOOKMARK#EDIT', 'BOOKMARK#ADMIN_EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
 
@@ -637,7 +665,7 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should dispatch editBookmarkFailed when result is missing', (done) => {
       // secondary + canEdit=false → does NOT cancel via secondary path, then throws on missing result
-      userServiceMock.hasPermission.mockReturnValue(false)
+      permissionsSubject.next([])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
@@ -650,7 +678,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should update bookmark and dispatch editBookmarkSucceeded', (done) => {
-      userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#EDIT')
+      permissionsSubject.next(['BOOKMARK#EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bm1 } }) as any)
       bookmarksServiceMock.updateBookmark.mockReturnValue(of(undefined) as any)
@@ -665,7 +693,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch editBookmarkFailed on api error', (done) => {
-      userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#EDIT')
+      permissionsSubject.next(['BOOKMARK#EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bm1 } }) as any)
       bookmarksServiceMock.updateBookmark.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
@@ -679,7 +707,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should cancel when secondary button clicked and public bookmark is editable by admin', (done) => {
-      userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#ADMIN_EDIT')
+      permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: bmPublic }) as any)
 
@@ -692,7 +720,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should update public bookmark and dispatch editBookmarkSucceeded when admin edits', (done) => {
-      userServiceMock.hasPermission.mockImplementation((perm: string) => perm === 'BOOKMARK#ADMIN_EDIT')
+      permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bmPublic } }) as any)
       bookmarksServiceMock.updateBookmark.mockReturnValue(of(undefined) as any)
