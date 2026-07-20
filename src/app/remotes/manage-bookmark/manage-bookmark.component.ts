@@ -1,12 +1,6 @@
 import { Component, Inject, Input } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { AsyncPipe } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { PrimeIcons } from 'primeng/api'
-import { RippleModule } from 'primeng/ripple'
-import { DynamicDialogModule } from 'primeng/dynamicdialog'
-import { ButtonModule } from 'primeng/button'
-import { TooltipModule } from 'primeng/tooltip'
-import { ProgressSpinnerModule } from 'primeng/progressspinner'
 import {
   BehaviorSubject,
   catchError,
@@ -20,6 +14,13 @@ import {
   ReplaySubject,
   withLatestFrom
 } from 'rxjs'
+
+import { ButtonModule } from 'primeng/button'
+import { DynamicDialogModule } from 'primeng/dynamicdialog'
+import { RippleModule } from 'primeng/ripple'
+import { PrimeIcons } from 'primeng/api'
+import { ProgressSpinnerModule } from 'primeng/progressspinner'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import {
@@ -58,30 +59,27 @@ export function slotInitializer(slotService: SlotService) {
 }
 
 @Component({
+  selector: 'app-manage-bookmark',
   imports: [
     AngularAuthModule,
-    AngularRemoteComponentsModule,
-    CommonModule,
-    RippleModule,
     AngularAcceleratorModule,
-    ProgressSpinnerModule,
-    TranslateModule,
-    DynamicDialogModule,
+    AngularRemoteComponentsModule,
+    AsyncPipe,
     ButtonModule,
-    TooltipModule
+    DynamicDialogModule,
+    ProgressSpinnerModule,
+    RippleModule,
+    TooltipModule,
+    TranslateModule
   ],
   providers: [
-    {
-      provide: SLOT_SERVICE,
-      useExisting: SlotService
-    },
-    PortalMessageService,
+    { provide: SLOT_SERVICE, useExisting: SlotService },
     providePortalDialogService(),
-    BookmarkAPIUtilsService
+    BookmarkAPIUtilsService,
+    PortalMessageService
   ],
-  selector: 'app-manage-bookmark',
   templateUrl: './manage-bookmark.component.html',
-  styleUrls: ['./manage-bookmark.component.scss']
+  styleUrl: './manage-bookmark.component.scss'
 })
 export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
   permissions: string[] = []

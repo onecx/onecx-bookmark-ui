@@ -1,10 +1,9 @@
 @use '/src/app/_bm-mixins.scss' as *;
 
-@include displaying-text-responsive;
+@include ocx-text-responsive;
 @include readable-disabled-form-controls;
 @include correct-file-upload;
 @include correct-select-button;
 @include search-criteria-select-button;
 @include search-criteria-select-button-slim;
-@include tabview-reduce-padding;
-@include tabview-fix-color-selected-tab;
+@include ocx-p-tabs;

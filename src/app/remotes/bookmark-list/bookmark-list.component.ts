@@ -1,10 +1,12 @@
 import { Component, Inject, Input } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { AsyncPipe } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
-import { TabViewModule } from 'primeng/tabview'
+
 import { MessageModule } from 'primeng/message'
 import { SkeletonModule } from 'primeng/skeleton'
+import { TabsModule } from 'primeng/tabs'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import {
@@ -15,7 +17,6 @@ import {
   SlotService
 } from '@onecx/angular-remote-components'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
-
 import { AppConfigService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
@@ -29,26 +30,21 @@ export function slotInitializer(slotService: SlotService) {
 }
 
 @Component({
+  selector: 'app-bookmark-list',
+  standalone: true,
   imports: [
     AngularAuthModule,
     AngularRemoteComponentsModule,
-    BookmarkLinksComponent,
-    CommonModule,
+    AsyncPipe,
     AngularAcceleratorModule,
-    TranslateModule,
-    TabViewModule,
     MessageModule,
-    SkeletonModule
+    SkeletonModule,
+    TabsModule,
+    TooltipModule,
+    TranslateModule,
+    BookmarkLinksComponent
   ],
-  providers: [
-    {
-      provide: SLOT_SERVICE,
-      useExisting: SlotService
-    },
-    PortalMessageService,
-    BookmarkAPIUtilsService
-  ],
-  selector: 'app-bookmark-list',
+  providers: [{ provide: SLOT_SERVICE, useExisting: SlotService }, PortalMessageService, BookmarkAPIUtilsService],
   templateUrl: './bookmark-list.component.html',
   styleUrl: './bookmark-list.component.scss'
 })

@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { map } from 'rxjs'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
+import { map } from 'rxjs'
+
 import { MessagesModule } from 'primeng/messages'
 import { InputTextModule } from 'primeng/inputtext'
 import { FloatLabelModule } from 'primeng/floatlabel'
@@ -17,8 +18,6 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
 
 @Component({
   selector: 'app-bookmark-create-update',
-  templateUrl: './bookmark-create-update.component.html',
-  styleUrls: ['./bookmark-create-update.component.scss'],
   imports: [
     errorTailorImports,
     FloatLabelModule,
@@ -29,6 +28,8 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
     TooltipModule,
     TranslateModule
   ],
+  templateUrl: './bookmark-create-update.component.html',
+  styleUrl: './bookmark-create-update.component.scss',
   providers: [
     provideErrorTailorConfig({
       controlErrorsOn: { async: true, blur: true, change: true },
