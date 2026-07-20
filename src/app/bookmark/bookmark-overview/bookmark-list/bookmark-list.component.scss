@@ -1,7 +1,7 @@
 @use '/src/app/_bm-mixins.scss' as *;
 
 @include card-badges;
-@include displaying-text-responsive;
+@include ocx-text-responsive;
 
 .bookmark-link:hover {
   background: var(--tabview-header-hover-bg);

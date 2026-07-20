@@ -1,7 +1,7 @@
 @use '/src/app/_bm-mixins.scss' as *;
 
 @include danger-action;
-@include displaying-text-responsive;
+@include ocx-text-responsive;
 
 :host ::ng-deep {
   @media screen and (min-width: 1200px) {
