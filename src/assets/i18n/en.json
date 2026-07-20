@@ -322,11 +322,13 @@
       "TITLE": "Bookmarks",
       "TABS": {
         "PRIVATE": "My Bookmarks",
+        "PRIVATE.TOOLTIP": "Links I have created myself and are only visible to me.",
         "PUBLIC": "Workspace Links",
-        "PUBLIC_TOOLTIP": "Links that have been provided by the Workspace."
+        "PUBLIC.TOOLTIP": "Links that have been provided by the Workspace."
       },
       "LOADING_ERROR": "Your Bookmarks couldn't be loaded.",
       "LOADING_ERROR_DETAIL": "Please try again later",
+      "NO_PUBLIC_BOOKMARKS.STATE": "No bookmarks created yet for the Workspace.",
       "NO_PRIVATE_BOOKMARKS.STATE": "No bookmarks created yet",
       "NO_PRIVATE_BOOKMARKS.TODO": "Use the \"Star\" icon in the header to create a bookmark for the current page."
     }

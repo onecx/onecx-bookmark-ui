@@ -3,8 +3,7 @@
 @include text-badges;
 @include displaying-text-responsive;
 @include readable-disabled-form-controls;
-@include tabview-reduce-padding;
-@include tabview-fix-color-selected-tab;
+@include ocx-p-tabs;
 
 .image-object {
   object-fit: scale-down;

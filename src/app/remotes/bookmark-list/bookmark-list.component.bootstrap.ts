@@ -1,23 +1,26 @@
 import { importProvidersFrom, inject, provideAppInitializer } from '@angular/core'
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideRouter } from '@angular/router'
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core'
 import { ReplaySubject } from 'rxjs'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { bootstrapRemoteComponent } from '@onecx/angular-webcomponents'
+import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
+import {
+  AngularAcceleratorModule,
+  AngularAcceleratorMissingTranslationHandler,
+  providePortalDialogService
+} from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
 import {
-  provideTranslationPathFromMeta,
+  REMOTE_COMPONENT_CONFIG,
+  RemoteComponentConfig,
   createTranslateLoader,
   provideThemeConfig,
-  REMOTE_COMPONENT_CONFIG,
-  RemoteComponentConfig
+  provideTranslationPathFromMeta
 } from '@onecx/angular-utils'
-import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
-import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
 
 import { environment } from 'src/environments/environment'
 import { OneCXBookmarkListComponent } from './bookmark-list.component'
@@ -33,16 +36,20 @@ bootstrapRemoteComponent(OneCXBookmarkListComponent, 'ocx-bookmark-list-componen
     provide: REMOTE_COMPONENT_CONFIG,
     useValue: new ReplaySubject<RemoteComponentConfig>(1)
   },
+  importProvidersFrom(AngularAcceleratorModule, AngularAuthModule, BrowserAnimationsModule),
+  provideAppInitializer(() => {
+    const initializerFn = userProfileInitializer(inject(UserService))
+    return initializerFn()
+  }),
   provideHttpClient(withInterceptorsFromDi()),
   providePortalDialogService(),
-  importProvidersFrom(AngularAuthModule, BrowserModule, BrowserAnimationsModule),
-  provideThemeConfig(),
   provideRouter([
     {
       path: '**',
       children: []
     }
   ]),
+  provideThemeConfig(),
   provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
   provideTranslateServiceForRoot({
     isolate: true,
@@ -55,9 +62,5 @@ bootstrapRemoteComponent(OneCXBookmarkListComponent, 'ocx-bookmark-list-componen
       provide: MissingTranslationHandler,
       useClass: AngularAcceleratorMissingTranslationHandler
     }
-  }),
-  provideAppInitializer(() => {
-    const initializerFn = userProfileInitializer(inject(UserService))
-    return initializerFn()
   })
 ])

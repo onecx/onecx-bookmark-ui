@@ -318,11 +318,13 @@
       "TITLE": "Lesezeichen",
       "TABS": {
         "PRIVATE": "Meine Lesezeichen",
+        "PRIVATE.TOOLTIP": "Links die ich selbst angelegt habe und nur für mich sichtbar sind.",
         "PUBLIC": "Workspace Links",
-        "PUBLIC_TOOLTIP": "Links die durch den Workspace bereitgestellt wurden."
+        "PUBLIC.TOOLTIP": "Links die durch den Workspace bereitgestellt wurden."
       },
       "LOADING_ERROR": "Ihre Lesezeichen konnten nicht geladen werden.",
       "LOADING_ERROR_DETAIL": "Bitte versuchen Sie es in Kürze erneut.",
+      "NO_PUBLIC_BOOKMARKS.STATE": "Es wurden noch keine Lesezeichen für den Workspace angelegt.",
       "NO_PRIVATE_BOOKMARKS.STATE": "Noch keine Lesezeichen angelegt",
       "NO_PRIVATE_BOOKMARKS.TODO": "Nutzen Sie das \"Stern\" Symbol in der Kopfleiste, um ein Lesezeichen für die jeweils aktuelle Seite zu erstellen."
     }

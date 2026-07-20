@@ -1,3 +1,4 @@
 @use 'src/app/_bm-mixins.scss' as *;
 
-@include displaying-text-responsive;
+@include ocx-text-responsive;
+@include ocx-required-label;

@@ -1,74 +1,70 @@
-<div class="card surface-200">
-  <div class="mb-2 sm:mb-3 font-medium text-lg">{{ 'REMOTES.BOOKMARK_LIST.TITLE' | translate }}</div>
+<div class="surface-50 border-round">
+  <div class="p-3 font-medium text-lg bg-gray-50">{{ 'REMOTES.BOOKMARK_LIST.TITLE' | translate }}</div>
 
-  <p-tabView *ngIf="!bookmarkLoadingError && !loading; else loadingSpinner">
-    <p-tabPanel
-      [header]="'REMOTES.BOOKMARK_LIST.TABS.PRIVATE' | translate"
-      *ngIf="privateBookmarks$ | async as privateBookmarks"
-      [selected]="privateBookmarks.length > 0"
-    >
-      <app-bookmark-links
-        [bookmarks]="privateBookmarks"
-        *ngIf="privateBookmarks.length > 0; else noPrivateBookmarks"
-      ></app-bookmark-links>
-      <ng-template #noPrivateBookmarks>
-        <div class="max-h-16rem overflow-auto">
-          <p-message severity="info">
-            <ng-template pTemplate>
-              <div class="flex gap-2 align-items-center">
-                <span class="p-message-icon">
-                  <i class="pi pi-star"></i>
-                </span>
-                <div class="flex gap-1 flex-column">
-                  <span class="p-message-summary">
-                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.STATE' | translate }}
-                  </span>
-                  <span *ngIf="permissions.includes('BOOKMARK#CREATE')" class="p-message-detail m-0 max-w-30rem">
-                    {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}
-                  </span>
-                </div>
-              </div>
-            </ng-template>
-          </p-message>
-        </div>
-      </ng-template>
-    </p-tabPanel>
-
-    <p-tabPanel
-      [header]="'REMOTES.BOOKMARK_LIST.TABS.PUBLIC' | translate"
-      *ngIf="publicBookmarks$.getValue().length > 0"
-      [selected]="privateBookmarks$.getValue().length === 0"
-      [tooltip]="'REMOTES.BOOKMARK_LIST.TABS.PUBLIC_TOOLTIP' | translate"
-    >
-      <app-bookmark-links [bookmarks]="publicBookmarks$.getValue()"></app-bookmark-links>
-    </p-tabPanel>
-  </p-tabView>
-
-  <ng-template #loadingSpinner>
-    <div *ngIf="loading && !bookmarkLoadingError; else loadingError" class="flex flex-column gap-2">
-      <p-skeleton height="2rem"></p-skeleton>
-      <p-skeleton height="2rem"></p-skeleton>
+  @if (bookmarkLoadingError) {
+    <p-message
+      severity="error"
+      icon="pi pi-times-circle"
+      styleClass="m-4"
+      [text]="'REMOTES.BOOKMARK_LIST.LOADING_ERROR' | translate"
+    />
+  } @else if (loading) {
+    <div class="m-3 min-h-xrem">
       <p-skeleton height="2rem"></p-skeleton>
     </div>
-  </ng-template>
+  } @else {
+    @let privateBookmarks = privateBookmarks$ | async;
+    @let publicBookmarks = (publicBookmarks$ | async) ?? [];
+    <p-tabs value="0">
+      <p-tablist>
+        <!-- this tab is shown in case the user has permissions to create or have private bookmarks -->
+        @if ((privateBookmarks && privateBookmarks.length > 0) || permissions.includes('BOOKMARK#CREATE')) {
+          <p-tab
+            value="0"
+            [ariaLabel]="'REMOTES.BOOKMARK_LIST.TABS.PRIVATE' | translate"
+            [pTooltip]="'REMOTES.BOOKMARK_LIST.TABS.PRIVATE.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          >
+            {{ 'REMOTES.BOOKMARK_LIST.TABS.PRIVATE' | translate }}
+          </p-tab>
+        }
+        <p-tab
+          value="1"
+          [ariaLabel]="'REMOTES.BOOKMARK_LIST.TABS.PUBLIC' | translate"
+          [pTooltip]="'REMOTES.BOOKMARK_LIST.TABS.PUBLIC.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
+          {{ 'REMOTES.BOOKMARK_LIST.TABS.PUBLIC' | translate }}
+        </p-tab>
+      </p-tablist>
 
-  <ng-template #loadingError>
-    <div class="max-h-16rem overflow-auto">
-      <p-message severity="error">
-        <ng-template pTemplate>
-          <div class="flex gap-2 align-items-center">
-            <span class="p-message-icon">
-              <i class="pi pi-times-circle"></i>
-            </span>
-            <div class="flex gap-1 flex-column">
-              <span class="p-message-summary"> {{ 'REMOTES.BOOKMARK_LIST.LOADING_ERROR' | translate }} </span>
-              <span class="p-message-detail m-0 max-w-30rem">
-                {{ 'REMOTES.BOOKMARK_LIST.LOADING_ERROR_DETAIL' | translate }}
-              </span>
-            </div>
-          </div>
-        </ng-template>
-      </p-message>
-    </div>
-  </ng-template>
+      <p-tabpanel value="0">
+        @if (privateBookmarks && privateBookmarks.length > 0) {
+          <app-bookmark-links [bookmarks]="privateBookmarks"></app-bookmark-links>
+        } @else if (permissions.includes('BOOKMARK#CREATE')) {
+          <p-message
+            severity="info"
+            icon="pi pi-star"
+            styleClass="m-4"
+            text="{{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}"
+          />
+        }
+      </p-tabpanel>
+
+      <p-tabpanel value="1">
+        @if (publicBookmarks && publicBookmarks.length > 0) {
+          <app-bookmark-links [bookmarks]="publicBookmarks"></app-bookmark-links>
+        } @else {
+          <p-message
+            severity="info"
+            icon="pi pi-info-circle"
+            styleClass="m-4"
+            text="{{ 'REMOTES.BOOKMARK_LIST.NO_PUBLIC_BOOKMARKS.STATE' | translate }}"
+          />
+        }
+      </p-tabpanel>
+    </p-tabs>
+  }
 </div>

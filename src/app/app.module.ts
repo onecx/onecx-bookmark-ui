@@ -1,7 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { TranslateLoader, TranslateModule, MissingTranslationHandler } from '@ngx-translate/core'
 
@@ -20,6 +19,7 @@ import {
 } from '@onecx/angular-utils'
 import { APP_CONFIG, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
+import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
 
 import { Configuration } from './shared/generated'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
@@ -29,15 +29,12 @@ import { AppComponent } from './app.component'
 import { AppRoutingModule } from './app-routing.module'
 import { metaReducers, reducers } from './app.reducers'
 
-import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
-
 @NgModule({
   imports: [
     AppComponent,
     StandaloneShellModule,
     CommonModule,
     AppRoutingModule,
-    BrowserModule,
     BrowserAnimationsModule,
     EffectsModule.forRoot([]),
     AngularAuthModule,
@@ -73,7 +70,6 @@ import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angula
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideHttpClient(withInterceptorsFromDi()),
     providePortalDialogService()
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
 export class AppModule {}

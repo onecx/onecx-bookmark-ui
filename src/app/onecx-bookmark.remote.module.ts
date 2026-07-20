@@ -1,6 +1,5 @@
 import { DoBootstrap, Injector, NgModule, isDevMode, inject, provideAppInitializer } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule, Router } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
@@ -31,7 +30,6 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
   imports: [
     AppEntrypointComponent,
     AngularAuthModule,
-    BrowserModule,
     BrowserAnimationsModule,
     AngularAcceleratorModule,
     RouterModule.forRoot(routes),
@@ -66,9 +64,7 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
   ]
 })
 export class OneCXBookmarkModule implements DoBootstrap {
-  constructor(private readonly injector: Injector) {
-    console.info('OneCX Bookmark Module constructor')
-  }
+  private readonly injector = inject(Injector)
 
   ngDoBootstrap(): void {
     createAppEntrypoint(AppEntrypointComponent, 'ocx-bookmark-component', this.injector)

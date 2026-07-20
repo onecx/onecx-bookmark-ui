@@ -1,22 +1,24 @@
 import { importProvidersFrom } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
-import { provideRouter } from '@angular/router'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core'
 import { ReplaySubject } from 'rxjs'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { bootstrapRemoteComponent } from '@onecx/angular-webcomponents'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
 import {
-  provideTranslationPathFromMeta,
+  AngularAcceleratorModule,
+  AngularAcceleratorMissingTranslationHandler,
+  providePortalDialogService
+} from '@onecx/angular-accelerator'
+import {
+  REMOTE_COMPONENT_CONFIG,
+  RemoteComponentConfig,
   createTranslateLoader,
   provideThemeConfig,
-  REMOTE_COMPONENT_CONFIG,
-  RemoteComponentConfig
+  provideTranslationPathFromMeta
 } from '@onecx/angular-utils'
-import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
-import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
 
 import { environment } from 'src/environments/environment'
 import { OneCXManageBookmarkComponent } from './manage-bookmark.component'
@@ -26,16 +28,10 @@ bootstrapRemoteComponent(OneCXManageBookmarkComponent, 'ocx-bookmark-manage-comp
     provide: REMOTE_COMPONENT_CONFIG,
     useValue: new ReplaySubject<RemoteComponentConfig>(1)
   },
+  importProvidersFrom(AngularAcceleratorModule, AngularAuthModule, BrowserAnimationsModule),
   provideHttpClient(withInterceptorsFromDi()),
   providePortalDialogService(),
   provideThemeConfig(),
-  importProvidersFrom(AngularAuthModule, BrowserModule, BrowserAnimationsModule),
-  provideRouter([
-    {
-      path: '**',
-      children: []
-    }
-  ]),
   provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
   provideTranslateServiceForRoot({
     isolate: true,
