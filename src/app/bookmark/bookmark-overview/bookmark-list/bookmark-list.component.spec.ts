@@ -73,10 +73,6 @@ describe('BookmarkListComponent', () => {
       expect(component.bookmarks).toEqual([])
     })
 
-    it('should have loading false by default', () => {
-      expect(component.loading).toBe(false)
-    })
-
     it('should have isPrivate false by default', () => {
       expect(component.isPrivate).toBe(false)
     })

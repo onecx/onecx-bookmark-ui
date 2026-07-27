@@ -1,5 +1,3 @@
-import { jest } from '@jest/globals'
-
 Object.defineProperty(HTMLElement.prototype, 'ariaLabel', {
   get() {
     return this.getAttribute('aria-label')
