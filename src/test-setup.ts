@@ -1,6 +1,5 @@
 import { jest } from '@jest/globals'
 
-// 1. Zuerst den DOM-Prototyp für JSDOM fixen
 Object.defineProperty(HTMLElement.prototype, 'ariaLabel', {
   get() {
     return this.getAttribute('aria-label')
@@ -11,7 +10,6 @@ Object.defineProperty(HTMLElement.prototype, 'ariaLabel', {
   configurable: true
 })
 
-// 2. MatchMedia Mock
 globalThis.matchMedia =
   globalThis.matchMedia ||
   function () {
@@ -21,7 +19,6 @@ globalThis.matchMedia =
     }
   }
 
-// 3. Strikte Angular-Jest Optionen definieren
 // @ts-expect-error https://thymikee.github.io/jest-preset-angular/docs/getting-started/test-environment
 globalThis.ngJest = {
   testEnvironmentOptions: {
@@ -30,7 +27,6 @@ globalThis.ngJest = {
   }
 }
 
-// 4. Erst jetzt das Preset laden (nutzt die modifizierten Prototypen)
 import 'jest-preset-angular/setup-jest'
 
 /* fixes a bug with jsdom: ignoring this error message in log */

@@ -67,8 +67,7 @@
           <div>{{ 'BOOKMARK_IMPORT.SCOPE.INFO' | translate }}</div>
           <div class="flex flex-row justify-content-center align-items-center column-gap-6">
             <p-checkbox
-              id="bm_export_field_private"
-              class=""
+              id="bm_import_field_private"
               (onChange)="onScopeChange()"
               [(ngModel)]="private"
               [binary]="true"
@@ -78,12 +77,11 @@
               tooltipEvent="hover"
             >
             </p-checkbox>
-            <label for="bm_export_field_private">
+            <label for="bm_import_field_private">
               {{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}
             </label>
             <p-checkbox
-              id="bm_export_field_public"
-              class=""
+              id="bm_import_field_public"
               (onChange)="onScopeChange()"
               [(ngModel)]="public"
               [binary]="true"
@@ -93,7 +91,7 @@
               tooltipEvent="hover"
             >
             </p-checkbox>
-            <label for="bm_export_field_public">
+            <label for="bm_import_field_public">
               {{ 'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate }}
             </label>
           </div>
