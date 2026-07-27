@@ -8,21 +8,23 @@
   ],
   "config": {
     "openapiYaml": "src/assets/api/openapi-bff.yaml",
-    "openapiOutput": "src/app/shared/generated"
+    "openapiOutput": "src/app/shared/generated",
+    "jest.params": "--noStackTrace --codeCoverage"
   },
   "scripts": {
     "build": "nx build",
     "postbuild": "mv \"$(find dist/$npm_package_name -maxdepth 1 -type f -name 'styles.*.css' | head -n 1)\" dist/$npm_package_name/styles.css",
     "check": "nx lint --cache=true && npx prettier -c --cache .",
     "clean": "npm cache clean --force && rm -rf *.log dist reports .nx .angular .eslintcache ./node_modules/.cache/prettier/.prettier-cache",
-    "lint": "nx lint --cache=true",
+    "lint": "nx lint --cache=true && npx prettier -c --cache .",
     "format": "nx lint --fix",
     "eslint": "eslint --quiet --ext .js,.ts src",
+    "audit": "npm audit --audit-level=high",
     "browser": "npx browserslist",
     "prepare": "husky || true",
     "start": "nx serve --configuration=development --proxy-config=proxy.conf.js",
-    "test": "nx test",
-    "test:ci": "nx test --watch=false --browsers=ChromeHeadless --coverage",
+    "test": "nx test $npm_package_config_jest_params",
+    "test:ci": "nx test $npm_package_config_jest_params --watch=false",
     "sonar": "npx sonar-scanner",
     "apigen-cleanup": "rm -rf $npm_package_config_openapiOutput",
     "apigen-format": "npx prettier $npm_package_config_openapiYaml --write && npx prettier $npm_package_config_openapiOutput/**/* --write",
@@ -33,6 +35,30 @@
     "hooks": {
       "pre-commit": "pretty-quick --staged"
     }
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "text",
+      "lcov",
+      "text-summary"
+    ],
+    "preset": "jest-preset-angular",
+    "reporters": [
+      "default",
+      [
+        "jest-sonar",
+        {
+          "outputDirectory": "reports",
+          "outputName": "sonarqube_report.xml",
+          "reportedFilePath": "absolute"
+        }
+      ]
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setup-jest.ts"
+    ]
   },
   "jestSonar": {
     "reportPath": "reports"
@@ -115,6 +141,7 @@
     "husky": "^9.1.7",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
+    "jest-marbles": "3.1.1",
     "jest-preset-angular": "14.4.2",
     "jest-sonar": "^0.2.16",
     "jest-sonar-reporter": "^2.0.0",
@@ -127,9 +154,7 @@
     "ts-jest": "^29.2.5",
     "ts-node": "10.9.2",
     "typescript": "5.5.4",
+    "webpack": "5.95.0",
     "zone.js": "0.15.1"
-  },
-  "overrides": {
-    "webpack": "5.94.0"
   }
 }
