@@ -1,6 +1,6 @@
 <div class="flex flex-column justify-content-between">
   <h2
-    class="m-0 p-0 text-center text-base md:text-lg md:text-xl"
+    class="m-0 p-0 text-center text-base md:text-lg md:text-xl white-space-nowrap overflow-hidden text-overflow-ellipsis"
     [attr.aria-label]="'BOOKMARK.SCOPES.TOOLTIPS.' + (isPrivate ? 'PRIVATE' : 'PUBLIC') | translate"
     [pTooltip]="'BOOKMARK.SCOPES.TOOLTIPS.' + (isPrivate ? 'PRIVATE' : 'PUBLIC') | translate"
     tooltipPosition="top"
@@ -9,80 +9,73 @@
     {{ headerKey | translate }}
   </h2>
 
-  <!-- BOOKMARKS -->
-  <div
-    *ngIf="bookmarks.length > 0"
-    class="pt-2 p-1 sm:p-2 md:p-3 flex flex-row flex-wrap justify-content-center gap-2 sm:gap-3 md:gap-5"
-  >
-    <ng-container *ngFor="let bookmark of bookmarks; let i = index">
-      <!-- Define visible tile content as template -->
-      <ng-template #tileContentTemplate>
-        <div
-          *ngIf="bookmark.target === '_blank'"
-          [id]="'bm_overview_data_' + bookmark.scope + '_' + i"
-          class="card-badge-right badge-1 text-lg pi pi-external-link"
-          [attr.aria-label]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
-          [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
-          tooltipPosition="right"
-          tooltipEvent="hover"
-          role="note"
-        ></div>
-        <div
-          class="w-4rem sm:w-5rem md:w-6rem xl:w-8rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem flex justify-content-center align-items-center"
-        >
-          <app-bookmark-image
-            [bookmark]="bookmark"
-            [product]="getProductByName(bookmark.productName)"
-            styleClass="max-w-3rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem"
-          ></app-bookmark-image>
-        </div>
-        <div
-          class="md:mt-1 max-w-6rem sm:max-w-7rem md:max-w-9rem xl:max-w-12rem md:font-bold text-xs sm:text-sm xl:text-base text-responsive"
-        >
-          {{ bookmark['displayName'] }}
-        </div>
-      </ng-template>
+  @if (bookmarks.length === 0) {
+    <p-message
+      severity="info"
+      icon="pi pi-star"
+      styleClass="m-2 md:m-4 w-15rem md:w-20rem"
+      text="{{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}"
+    />
+  } @else {
+    <div class="pt-2 p-1 sm:p-2 md:p-3 flex flex-row flex-wrap justify-content-center gap-2 sm:gap-3 md:gap-5">
+      @for (bookmark of bookmarks; track $index; let i = $index) {
+        <!-- Define visible tile content as template -->
+        <ng-template #tileContentTemplate>
+          @if (bookmark.target === '_blank') {
+            <div
+              [id]="'bm_overview_data_' + bookmark.scope + '_' + i"
+              class="card-badge-right badge-1 text-lg pi pi-external-link"
+              [attr.aria-label]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+              tooltipPosition="right"
+              tooltipEvent="hover"
+              role="note"
+            ></div>
+          }
+          <div
+            class="w-4rem sm:w-5rem md:w-6rem xl:w-8rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem flex justify-content-center align-items-center"
+          >
+            <app-bookmark-image
+              [bookmark]="bookmark"
+              [product]="getProductByName(bookmark.productName)"
+              styleClass="max-w-3rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem"
+            ></app-bookmark-image>
+          </div>
+          <div
+            class="md:mt-1 max-w-6rem sm:max-w-7rem md:max-w-9rem xl:max-w-12rem md:font-bold text-xs sm:text-sm xl:text-base text-responsive"
+          >
+            {{ bookmark['displayName'] }}
+          </div>
+        </ng-template>
 
-      <!-- BADGE -->
-      <!-- Create anchor tags corresponding to the bookmark type: URL and OneCX -->
-      <a
-        *ngIf="bookmark.url && !bookmark.disabled"
-        tabindex="0"
-        id=""
-        class="relative mb-0 p-1 xl:p-2 card w-7rem sm:w-8rem md:w-10rem xl:w-13rem h-5rem sm:h-6rem md:h-7rem xl:h-9rem flex flex-column justify-content-between align-items-center hover:bg-gray-200 cursor-pointer"
-        [href]="bookmark.url"
-        [target]="bookmark.target"
-      >
-        <ng-container [ngTemplateOutlet]="tileContentTemplate"> </ng-container>
-      </a>
-      <a
-        *ngIf="!bookmark.url && !bookmark.disabled"
-        tabindex="0"
-        class="relative mb-0 p-1 xl:p-2 card w-7rem sm:w-8rem md:w-10rem xl:w-13rem h-5rem sm:h-6rem md:h-7rem xl:h-9rem flex flex-column justify-content-between align-items-center hover:bg-gray-200 cursor-pointer"
-        [routerLink]="getUrl(bookmark) | async"
-        [queryParams]="bookmark.query"
-        [fragment]="bookmark.fragment"
-        [target]="bookmark.target"
-      >
-        <ng-container [ngTemplateOutlet]="tileContentTemplate"> </ng-container>
-      </a>
-    </ng-container>
-  </div>
-
-  <!-- NO BOOKMARKS -->
-  <p-message *ngIf="!loading && bookmarks.length === 0" severity="info">
-    <ng-template pTemplate>
-      <div class="flex gap-2 align-items-center">
-        <span class="p-message-icon">
-          <i class="pi pi-star"></i>
-        </span>
-        <div class="flex gap-1 flex-column">
-          <span class="p-message-summary">{{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.STATE' | translate }}</span>
-          <span *ocxIfPermission="'BOOKMARK#CREATE'" class="p-message-detail m-0">
-            {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}
-          </span>
-        </div>
-      </div>
-    </ng-template>
-  </p-message>
+        <!-- BADGE -->
+        <!-- Create anchor tags corresponding to the bookmark type: URL and OneCX -->
+        @if (!bookmark.disabled) {
+          @if (bookmark.url) {
+            <a
+              tabindex="0"
+              [id]="'bm_overview_data_' + bookmark.scope + '_' + i + '_badge_url'"
+              class="relative mb-0 p-1 xl:p-2 border-radius card-layout w-7rem sm:w-8rem md:w-10rem xl:w-13rem h-5rem sm:h-6rem md:h-7rem xl:h-9rem flex flex-column justify-content-between align-items-center hover:bg-gray-200 cursor-pointer"
+              [href]="bookmark.url"
+              [target]="bookmark.target"
+            >
+              <ng-container [ngTemplateOutlet]="tileContentTemplate"> </ng-container>
+            </a>
+          } @else {
+            <a
+              tabindex="0"
+              [id]="'bm_overview_data_' + bookmark.scope + '_' + i + '_badge_no_url'"
+              class="relative mb-0 p-1 xl:p-2 border-radius card-layout w-7rem sm:w-8rem md:w-10rem xl:w-13rem h-5rem sm:h-6rem md:h-7rem xl:h-9rem flex flex-column justify-content-between align-items-center hover:bg-gray-200 cursor-pointer"
+              [routerLink]="getUrl(bookmark) | async"
+              [queryParams]="bookmark.query"
+              [fragment]="bookmark.fragment"
+              [target]="bookmark.target"
+            >
+              <ng-container [ngTemplateOutlet]="tileContentTemplate"> </ng-container>
+            </a>
+          }
+        }
+      }
+    </div>
+  }
 </div>

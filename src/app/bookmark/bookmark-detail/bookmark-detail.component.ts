@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { CommonModule, Location } from '@angular/common'
+import { AsyncPipe, DatePipe, Location } from '@angular/common'
 import {
   AbstractControl,
   DefaultValueAccessor,
@@ -10,21 +10,22 @@ import {
   Validators,
   ValidatorFn
 } from '@angular/forms'
+import { RouterModule } from '@angular/router'
 import { BehaviorSubject, filter, map, Observable } from 'rxjs'
 import { TranslateModule } from '@ngx-translate/core'
+
 import { ButtonModule } from 'primeng/button'
 import { BadgeModule } from 'primeng/badge'
 import { CheckboxModule } from 'primeng/checkbox'
 import { DividerModule } from 'primeng/divider'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputTextModule } from 'primeng/inputtext'
 import { MessageModule } from 'primeng/message'
+import { SelectModule } from 'primeng/select'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TabViewModule } from 'primeng/tabview'
 import { TextareaModule } from 'primeng/textarea'
 import { TooltipModule } from 'primeng/tooltip'
-import { FloatLabelModule } from 'primeng/floatlabel'
-import { SelectModule } from 'primeng/select'
-import { RouterModule } from '@angular/router'
 
 import {
   AppStateService,
@@ -42,7 +43,6 @@ import { AngularAuthModule } from '@onecx/angular-auth'
 import { AngularRemoteComponentsModule, SlotService } from '@onecx/angular-remote-components'
 
 import { BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 // trim the value (string!) of a form control before passes to the control
@@ -98,17 +98,16 @@ export type Product = {
 
 @Component({
   selector: 'app-bookmark-detail',
-  templateUrl: './bookmark-detail.component.html',
-  styleUrls: ['./bookmark-detail.component.scss'],
   standalone: true,
   imports: [
     AngularAcceleratorModule,
     AngularAuthModule,
     AngularRemoteComponentsModule,
+    AsyncPipe,
+    DatePipe,
     BadgeModule,
     ButtonModule,
     CheckboxModule,
-    CommonModule,
     DividerModule,
     FloatLabelModule,
     FormsModule,
@@ -118,12 +117,13 @@ export type Product = {
     RouterModule,
     SelectButtonModule,
     SelectModule,
-    SharedModule,
     TabViewModule,
     TextareaModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './bookmark-detail.component.html',
+  styleUrl: './bookmark-detail.component.scss'
 })
 export class BookmarkDetailComponent
   implements

@@ -1,4 +1,5 @@
-<div *ngIf="dialogResult as bookmarks">
+@let bookmarks = dialogResult;
+<div>
   <p-orderList
     id="bm_sort_bookmark_list"
     datakey="id"
