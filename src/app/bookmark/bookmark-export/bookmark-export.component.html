@@ -3,34 +3,38 @@
   <div class="flex flex-column row-gap-3 mb-2">
     <div>{{ 'BOOKMARK_EXPORT.INFO' | translate }}</div>
     <div class="flex flex-row column-gap-6 justify-content-center">
-      <p-checkbox
-        id="bm_export_field_private"
-        (onChange)="onScopeChange()"
-        [(ngModel)]="private"
-        [binary]="true"
-        [ariaLabel]="'BOOKMARK.SCOPES.PRIVATE' | translate"
-        [pTooltip]="'BOOKMARK_EXPORT.SCOPE_PRIVATE' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      >
-      </p-checkbox>
-      <label for="bm_export_field_private">
-        {{ 'BOOKMARK_EXPORT.SCOPE.PRIVATE' | translate }}
-      </label>
-      <p-checkbox
-        id="bm_export_field_public"
-        (onChange)="onScopeChange()"
-        [(ngModel)]="public"
-        [binary]="true"
-        [ariaLabel]="'BOOKMARK.SCOPES.PUBLIC' | translate"
-        [pTooltip]="'BOOKMARK_EXPORT.SCOPE_PUBLIC' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      >
-      </p-checkbox>
-      <label for="bm_export_field_public">
-        {{ 'BOOKMARK_EXPORT.SCOPE.PUBLIC' | translate }}
-      </label>
+      <div class="flex flex-row column-gap-2 justify-content-center align-items-center">
+        <p-checkbox
+          id="bm_export_field_private"
+          (onChange)="onScopeChange()"
+          [(ngModel)]="private"
+          [binary]="true"
+          [ariaLabel]="'BOOKMARK_EXPORT.SCOPE.PRIVATE' | translate"
+          [pTooltip]="'BOOKMARK_EXPORT.SCOPE.PRIVATE.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
+        </p-checkbox>
+        <label for="bm_export_field_private">
+          {{ 'BOOKMARK_EXPORT.SCOPE.PRIVATE' | translate }}
+        </label>
+      </div>
+      <div class="flex flex-row column-gap-2 justify-content-center align-items-center">
+        <p-checkbox
+          id="bm_export_field_public"
+          (onChange)="onScopeChange()"
+          [(ngModel)]="public"
+          [binary]="true"
+          [ariaLabel]="'BOOKMARK_EXPORT.SCOPE.PUBLIC' | translate"
+          [pTooltip]="'BOOKMARK_EXPORT.SCOPE.PUBLIC.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
+        </p-checkbox>
+        <label for="bm_export_field_public">
+          {{ 'BOOKMARK_EXPORT.SCOPE.PUBLIC' | translate }}
+        </label>
+      </div>
     </div>
   </div>
 </div>

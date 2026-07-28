@@ -186,10 +186,10 @@
       "DISABLED": "Wenn gesetzt, dann wird der Bookmark nicht angezeigt",
       "EXTERNAL": "Wenn gesetzt, dann wird die OneCX Shell verlassen.",
       "EXTERNAL.CONFIG": "Die OneCX Shell wird verlassen.",
-      "TARGET": "Wenn gesetzt, dann wird das Ziel in einem neuen TAB geöffnet.",
-      "TARGET.CONFIG": "Das Ziel wird in einem neuen TAB geöffnet.",
       "QUERY": "Zusätzliche Informationen die server- oder clientseitig verarbeitet werden können.",
       "FRAGMENT": "Referenz zu einem Bereich (Ressource) auf der Zielseite (Anchor Link / Fragment). Wird clientseitig benutzt um zu dem Bereich zu navigieren.",
+      "TARGET": "Wenn gesetzt, dann wird das Ziel in einem neuen TAB geöffnet.",
+      "TARGET.CONFIG": "Das Ziel wird in einem neuen TAB geöffnet.",
       "TYPE_URL": "URL zu einem Ziel ggf. auch ausserhalb des Workspaces. Wird in separatem TAB geladen.",
       "TYPE_PRODUCT": "URL zu einem Endpunkt einer Applikation im aktuellen Workspace",
       "URL": "Komplette URL, die 1:1 benutzt wird",
@@ -234,10 +234,14 @@
   "BOOKMARK_EXPORT": {
     "HEADER": "Lesezeichen exportieren",
     "INFO": "Wählen Sie die Bereiche deren Lesezeichen exportiert werden sollen.",
-    "SCOPE_PRIVATE": "Die eigenen Lesezeichen exportieren",
-    "SCOPE_PUBLIC": "Die Workspace Lesezeichen exportieren",
     "ERROR": "Export fehlgeschlagen",
-    "SUCCESS": "Lesezeichen erfolgreich exportiert"
+    "SUCCESS": "Lesezeichen erfolgreich exportiert",
+    "SCOPE": {
+      "PRIVATE": "Meine",
+      "PUBLIC": "Workspace",
+      "PRIVATE.TOOLTIP": "Meine Lesezeichen exportieren",
+      "PUBLIC.TOOLTIP": "Workspace Lesezeichen exportieren"
+    }
   },
   "BOOKMARK_IMPORT": {
     "HEADER": "Lesezeichen importieren",
@@ -285,7 +289,7 @@
     "CONSTRAINT_NAME": "Bitte füge einen Namen hinzu bevor das Bild geladen wird.",
     "CONSTRAINT_SIZE": "Die Größe der Bilddatei übersteigt die maximale Lönge von 100.000 Bytes.",
     "TOOLTIPS": {
-      "URL": "Als Alternative zum Hochladen kann hier eine URL zu einem Bild angegeben werden.",
+      "URL": "Als Alternative zum Hochladen kann hier eine URL zu einem Bild angegeben werden.<br/>Format: https://pfad/zum/bild",
       "IMAGE": "Logo",
       "PLACEHOLDER": "Logo Platzhalter",
       "REMOVE": "Bild löschen",

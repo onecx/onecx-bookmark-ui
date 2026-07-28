@@ -104,6 +104,7 @@
                 [pTooltip]="'BOOKMARK.TOOLTIPS.URL' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
+                escape="true"
               ></textarea>
               <label class="ocx-required-label" for="bm_detail_form_field_url">{{ 'BOOKMARK.URL' | translate }}</label>
             </p-floatlabel>
@@ -154,11 +155,11 @@
           <div class="flex flex-column w-full">
             <p-floatlabel variant="on">
               <textarea
+                id="bm_detail_form_field_image_url"
                 class="w-full"
                 pInputTextarea
                 autoresize="true"
                 rows="2"
-                id="bm_detail_form_field_image_url"
                 formControlName="imageUrl"
                 (input)="onInputChange($event, vm.initialBookmark)"
                 (change)="onInputChange($event, vm.initialBookmark)"
@@ -166,19 +167,17 @@
                 [pTooltip]="'IMAGE.TOOLTIPS.URL' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
+                escape="false"
               ></textarea>
               <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
             </p-floatlabel>
-            @if (vm.changeMode !== 'VIEW') {
-              <label class="ocx-control-hint block" for="bm_detail_form_field_image_url">
-                {{ ('VALIDATION.HINTS.FORMAT_URL' | translate) + externUrlPattern }}
-              </label>
-            }
           </div>
         </div>
-        <div class="w-full flex flex-column sm:flex-row flex-wrap row-gap-3 justify-content-around">
-          <!-- PUBLIC ? -->
-          <div class="flex justify-content-start align-items-center">
+        <div
+          class="w-full flex flex-column sm:flex-row flex-wrap row-gap-2 justify-content-start sm:justify-content-around"
+        >
+          <!-- PUBLIC? -->
+          <div class="flex flex-row column-gap-2 justify-content-start sm:justify-content-center align-items-center">
             <p-checkbox
               *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
               type="text"
@@ -192,63 +191,62 @@
               tooltipEvent="hover"
             >
             </p-checkbox>
-            <label for="bm_detail_form_field_is_public" class="ml-2">
+            <label for="bm_detail_form_field_is_public">
               {{ 'BOOKMARK.SCOPE_IS_PUBLIC' | translate }}
             </label>
           </div>
-          <div class="flex flex-column">
-            <div class="flex flex-column gap-3 md:gap-2 justify-content-evenly">
-              <div class="w-full flex justify-content-start align-items-center">
-                <p-checkbox
-                  id="bm_detail_form_field_disabled"
-                  class="checkbox-label"
-                  formControlName="disabled"
-                  [binary]="true"
-                  [ariaLabel]="'BOOKMARK.TOOLTIPS.DISABLED' | translate"
-                  [pTooltip]="'BOOKMARK.TOOLTIPS.DISABLED' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                >
-                </p-checkbox>
-                <label for="bm_detail_form_field_disabled" class="ml-2">
-                  {{ 'BOOKMARK.DISABLED' | translate }}
-                </label>
-              </div>
-              <div class="w-full md:my-2 flex justify-content-start align-items-center">
-                <p-checkbox
-                  id="bm_detail_form_field_ws_exit"
-                  class="checkbox-label"
-                  formControlName="external"
-                  [binary]="true"
-                  [ariaLabel]="'BOOKMARK.TOOLTIPS.EXTERNAL' | translate"
-                  [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                >
-                </p-checkbox>
-                <label for="bm_detail_form_field_ws_exit" class="ml-2">
-                  {{ 'BOOKMARK.EXTERNAL' | translate }}
-                </label>
-              </div>
-              <div class="w-full flex justify-content-start align-items-center">
-                <p-checkbox
-                  id="bm_detail_form_field_target"
-                  class="checkbox-label"
-                  formControlName="target"
-                  [binary]="true"
-                  trueValue="_blank"
-                  falseValue="_self"
-                  [binary]="true"
-                  [ariaLabel]="'BOOKMARK.TOOLTIPS.TARGET' | translate"
-                  [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                >
-                </p-checkbox>
-                <label for="bm_detail_form_field_target" class="ml-2">
-                  {{ 'BOOKMARK.TARGET' | translate }}
-                </label>
-              </div>
+          <!-- FLAGS -->
+          <div class="flex flex-column row-gap-2 md:row-gap-3">
+            <div class="flex flex-row column-gap-2 justify-content-start align-items-center">
+              <p-checkbox
+                id="bm_detail_form_field_disabled"
+                class="checkbox-label"
+                formControlName="disabled"
+                [binary]="true"
+                [ariaLabel]="'BOOKMARK.TOOLTIPS.DISABLED' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.DISABLED' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              >
+              </p-checkbox>
+              <label for="bm_detail_form_field_disabled">
+                {{ 'BOOKMARK.DISABLED' | translate }}
+              </label>
+            </div>
+            <div class="flex flex-row column-gap-2 justify-content-start align-items-center">
+              <p-checkbox
+                id="bm_detail_form_field_ws_exit"
+                class="checkbox-label"
+                formControlName="external"
+                [binary]="true"
+                [ariaLabel]="'BOOKMARK.TOOLTIPS.EXTERNAL' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              >
+              </p-checkbox>
+              <label for="bm_detail_form_field_ws_exit">
+                {{ 'BOOKMARK.EXTERNAL' | translate }}
+              </label>
+            </div>
+            <div class="flex flex-row column-gap-2 justify-content-start align-items-center">
+              <p-checkbox
+                id="bm_detail_form_field_target"
+                class="checkbox-label"
+                formControlName="target"
+                [binary]="true"
+                trueValue="_blank"
+                falseValue="_self"
+                [binary]="true"
+                [ariaLabel]="'BOOKMARK.TOOLTIPS.TARGET' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              >
+              </p-checkbox>
+              <label for="bm_detail_form_field_target">
+                {{ 'BOOKMARK.TARGET' | translate }}
+              </label>
             </div>
           </div>
         </div>
