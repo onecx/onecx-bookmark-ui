@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { AsyncPipe } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Observable, map } from 'rxjs'
 
@@ -11,7 +11,7 @@ import { Bookmark } from 'src/app/shared/generated'
   selector: 'app-bookmark-links',
   templateUrl: './bookmark-links.component.html',
   styleUrls: ['./bookmark-links.component.scss'],
-  imports: [CommonModule, RouterModule]
+  imports: [AsyncPipe, RouterModule]
 })
 export class BookmarkLinksComponent {
   urls: Record<string, Observable<string>> = {}

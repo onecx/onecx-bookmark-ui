@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
 import { ButtonModule } from 'primeng/button'
 import { OrderListModule } from 'primeng/orderlist'
@@ -17,7 +16,7 @@ import { BookmarkSortViewModel } from './bookmark-sort.viewmodel'
   templateUrl: './bookmark-sort.component.html',
   styleUrls: ['./bookmark-sort.component.scss'],
   standalone: true,
-  imports: [AngularAcceleratorModule, ButtonModule, CommonModule, OrderListModule, TooltipModule, TranslateModule]
+  imports: [AngularAcceleratorModule, ButtonModule, OrderListModule, TooltipModule, TranslateModule]
 })
 export class BookmarkSortComponent
   implements DialogResult<UpdateBookmark[] | undefined>, DialogButtonClicked<BookmarkSortComponent>, OnInit

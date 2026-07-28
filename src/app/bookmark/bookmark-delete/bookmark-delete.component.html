@@ -17,27 +17,31 @@
           </div>
         </div>
       }
-      @if (bookmark?.url) {
+      @let url = bookmark?.url;
+      @if (url) {
         <div id="bm_delete_url" class="h-2rem font-italic text-xs word-break-all">
-          {{ limitText(bookmark?.url, 120) }}
+          {{ limitText(url, 120) }}
         </div>
       }
-      @if (bookmark?.productName) {
+      @let productName = bookmark?.productName;
+      @if (productName) {
         <div class="flex flex-row column-gap-2">
           <div class="w-4 text-right font-bold">{{ 'BOOKMARK.PRODUCT' | translate }}:</div>
-          <div class="w-8 text-left white-space-nowrap" id="bm_delete_product">{{ bookmark?.productName }}</div>
+          <div class="w-8 text-left white-space-nowrap" id="bm_delete_product">{{ productName }}</div>
         </div>
       }
-      @if (bookmark?.appId) {
+      @let appId = bookmark?.appId;
+      @if (appId) {
         <div class="flex flex-row column-gap-2">
           <div class="w-4 text-right font-bold">{{ 'BOOKMARK.APP_ID' | translate }}:</div>
-          <div class="w-8 text-left white-space-nowrap" id="bm_delete_app_id">{{ bookmark?.appId }}</div>
+          <div class="w-8 text-left white-space-nowrap" id="bm_delete_app_id">{{ appId }}</div>
         </div>
       }
-      @if (bookmark?.endpointName) {
+      @let endpointName = bookmark?.endpointName;
+      @if (endpointName) {
         <div class="flex flex-row column-gap-2">
           <div class="w-4 text-right font-bold">{{ 'BOOKMARK.ENDPOINT' | translate }}:</div>
-          <div class="w-8 text-left white-space-nowrap" id="bm_delete_endpoint">{{ bookmark?.endpointName }}</div>
+          <div class="w-8 text-left white-space-nowrap" id="bm_delete_endpoint">{{ endpointName }}</div>
         </div>
       }
       @if (Object.keys(bookmark?.endpointParameters ?? {}).length > 0) {
