@@ -22,7 +22,7 @@
     "audit": "npm audit --audit-level=high",
     "browser": "npx browserslist",
     "prepare": "husky || true",
-    "start": "nx serve --configuration=development --proxy-config=proxy.conf.js",
+    "start": "nx serve --host 0.0.0.0 --disable-host-check --configuration=development --proxy-config=proxy.conf.js",
     "test": "nx test $npm_package_config_jest_params",
     "test:ci": "nx test $npm_package_config_jest_params --watch=false",
     "sonar": "npx sonar-scanner",

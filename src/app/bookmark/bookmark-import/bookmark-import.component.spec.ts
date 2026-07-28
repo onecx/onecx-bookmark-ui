@@ -75,8 +75,11 @@ describe('BookmarkImportComponent', () => {
       expect(component.importError).toBeUndefined()
     })
 
-    it('should expose EximMode for template use', () => {
-      expect(component.EximMode).toBe(EximMode)
+    it('should define modeOptions with Append and Overwrite values', () => {
+      expect(component.modeOptions).toEqual([
+        { label: 'BOOKMARK_IMPORT.MODE.APPEND', value: EximMode.Append },
+        { label: 'BOOKMARK_IMPORT.MODE.OVERWRITE', value: EximMode.Overwrite }
+      ])
     })
   })
 

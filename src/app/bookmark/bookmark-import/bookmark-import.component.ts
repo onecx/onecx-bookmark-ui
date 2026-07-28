@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button'
 import { CheckboxModule } from 'primeng/checkbox'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { MessageModule } from 'primeng/message'
-import { RadioButtonModule } from 'primeng/radiobutton'
+import { SelectButtonModule } from 'primeng/selectbutton'
 import { TabViewModule } from 'primeng/tabview'
 import { TooltipModule } from 'primeng/tooltip'
 
@@ -45,7 +45,7 @@ export type ImportError = {
     FloatLabelModule,
     FormsModule,
     MessageModule,
-    RadioButtonModule,
+    SelectButtonModule,
     TabViewModule,
     TooltipModule,
     TranslateModule
@@ -63,11 +63,15 @@ export class BookmarkImportComponent
 
   @ViewChild(FileUpload) fileUploader: FileUpload | undefined
 
+  public readonly modeOptions: { label: string; value: EximMode }[] = [
+    { label: 'BOOKMARK_IMPORT.MODE.APPEND', value: EximMode.Append },
+    { label: 'BOOKMARK_IMPORT.MODE.OVERWRITE', value: EximMode.Overwrite }
+  ]
+
   public dialogResult: ImportBookmarkData | undefined = undefined
   public importError: ImportError | undefined = undefined
   public snapshot: BookmarkSnapshot | undefined = undefined
   public mode: EximMode = EximMode.Append
-  public EximMode = EximMode
   public private = true
   public public = false
 

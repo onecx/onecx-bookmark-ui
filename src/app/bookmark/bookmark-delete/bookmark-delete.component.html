@@ -9,33 +9,45 @@
       {{ bookmark?.displayName }}
     </div>
     <div class="max-w-28rem px-2 flex flex-column row-gap-1">
-      <div *ngIf="bookmark?.scope === BookmarkScope.Public" class="flex flex-row column-gap-2">
-        <div class="w-4 text-right font-bold">{{ 'BOOKMARK.SCOPE' | translate }}:</div>
-        <div class="w-8 text-left white-space-nowrap" id="am_delete_scope">
-          {{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}
+      @if (bookmark?.scope === BookmarkScope.Public) {
+        <div class="flex flex-row column-gap-2">
+          <div class="w-4 text-right font-bold">{{ 'BOOKMARK.SCOPE' | translate }}:</div>
+          <div class="w-8 text-left white-space-nowrap" id="am_delete_scope">
+            {{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}
+          </div>
         </div>
-      </div>
-      <div *ngIf="bookmark?.url" id="bm_delete_url" class="h-2rem font-italic text-xs word-break-all">
-        {{ limitText(bookmark?.url, 120) }}
-      </div>
-      <div *ngIf="bookmark?.productName" class="flex flex-row column-gap-2">
-        <div class="w-4 text-right font-bold">{{ 'BOOKMARK.PRODUCT' | translate }}:</div>
-        <div class="w-8 text-left white-space-nowrap" id="bm_delete_product">{{ bookmark?.productName }}</div>
-      </div>
-      <div *ngIf="bookmark?.appId" class="flex flex-row column-gap-2">
-        <div class="w-4 text-right font-bold">{{ 'BOOKMARK.APP_ID' | translate }}:</div>
-        <div class="w-8 text-left white-space-nowrap" id="bm_delete_app_id">{{ bookmark?.appId }}</div>
-      </div>
-      <div *ngIf="bookmark?.endpointName" class="flex flex-row column-gap-2">
-        <div class="w-4 text-right font-bold">{{ 'BOOKMARK.ENDPOINT' | translate }}:</div>
-        <div class="w-8 text-left white-space-nowrap" id="bm_delete_endpoint">{{ bookmark?.endpointName }}</div>
-      </div>
-      <div *ngIf="Object.keys(bookmark?.endpointParameters ?? {}).length > 0" class="flex flex-row column-gap-2">
-        <div class="w-4 text-right font-bold">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}:</div>
-        <div class="w-8 text-left white-space-nowrap" id="bm_delete_endpoint_parameter">
-          {{ Object.keys(bookmark?.endpointParameters ?? {}) }}
+      }
+      @if (bookmark?.url) {
+        <div id="bm_delete_url" class="h-2rem font-italic text-xs word-break-all">
+          {{ limitText(bookmark?.url, 120) }}
         </div>
-      </div>
+      }
+      @if (bookmark?.productName) {
+        <div class="flex flex-row column-gap-2">
+          <div class="w-4 text-right font-bold">{{ 'BOOKMARK.PRODUCT' | translate }}:</div>
+          <div class="w-8 text-left white-space-nowrap" id="bm_delete_product">{{ bookmark?.productName }}</div>
+        </div>
+      }
+      @if (bookmark?.appId) {
+        <div class="flex flex-row column-gap-2">
+          <div class="w-4 text-right font-bold">{{ 'BOOKMARK.APP_ID' | translate }}:</div>
+          <div class="w-8 text-left white-space-nowrap" id="bm_delete_app_id">{{ bookmark?.appId }}</div>
+        </div>
+      }
+      @if (bookmark?.endpointName) {
+        <div class="flex flex-row column-gap-2">
+          <div class="w-4 text-right font-bold">{{ 'BOOKMARK.ENDPOINT' | translate }}:</div>
+          <div class="w-8 text-left white-space-nowrap" id="bm_delete_endpoint">{{ bookmark?.endpointName }}</div>
+        </div>
+      }
+      @if (Object.keys(bookmark?.endpointParameters ?? {}).length > 0) {
+        <div class="flex flex-row column-gap-2">
+          <div class="w-4 text-right font-bold">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}:</div>
+          <div class="w-8 text-left white-space-nowrap" id="bm_delete_endpoint_parameter">
+            {{ Object.keys(bookmark?.endpointParameters ?? {}) }}
+          </div>
+        </div>
+      }
     </div>
     <div>{{ 'BOOKMARK_DELETE.INFO' | translate }}</div>
   </div>
