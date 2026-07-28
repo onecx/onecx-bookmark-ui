@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { CommonModule } from '@angular/common'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+
 import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
@@ -29,7 +29,6 @@ describe('BookmarkImportComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         BookmarkImportComponent,
-        CommonModule,
         FormsModule,
         FileUploadModule,
         AngularAcceleratorModule,

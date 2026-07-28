@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 
@@ -20,7 +19,7 @@ import { ExportBookmarksRequest, EximBookmarkScope } from 'src/app/shared/genera
   templateUrl: './bookmark-export.component.html',
   styleUrl: './bookmark-export.component.scss',
   standalone: true,
-  imports: [AngularAcceleratorModule, CheckboxModule, CommonModule, FormsModule, TooltipModule, TranslateModule]
+  imports: [AngularAcceleratorModule, CheckboxModule, FormsModule, TooltipModule, TranslateModule]
 })
 export class BookmarkExportComponent
   implements

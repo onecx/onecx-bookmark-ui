@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { CommonModule } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { SimpleChange, SimpleChanges } from '@angular/core'
@@ -8,10 +7,9 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { AppStateService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
-import { BookmarkImageComponent } from './bookmark-image.component'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { BookmarkImageComponent } from './bookmark-image.component'
 import { Product } from '../bookmark-overview/bookmark-overview.component'
 
 const baseBookmark: Bookmark = {
@@ -36,8 +34,6 @@ describe('BookmarkImageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         BookmarkImageComponent,
-        CommonModule,
-        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')

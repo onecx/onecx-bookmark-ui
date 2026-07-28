@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { DatePipe, NgFor } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
+
 import { ButtonModule } from 'primeng/button'
 import { CheckboxModule } from 'primeng/checkbox'
+import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { MessageModule } from 'primeng/message'
 import { SelectButtonModule } from 'primeng/selectbutton'
@@ -33,14 +34,13 @@ export type ImportError = {
 
 @Component({
   selector: 'app-bookmark-import',
-  templateUrl: './bookmark-import.component.html',
-  styleUrl: './bookmark-import.component.scss',
   standalone: true,
   imports: [
     AngularAcceleratorModule,
+    DatePipe,
+    NgFor,
     ButtonModule,
     CheckboxModule,
-    CommonModule,
     FileUploadModule,
     FloatLabelModule,
     FormsModule,
@@ -49,7 +49,9 @@ export type ImportError = {
     TabViewModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './bookmark-import.component.html',
+  styleUrl: './bookmark-import.component.scss'
 })
 export class BookmarkImportComponent
   implements

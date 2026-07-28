@@ -1,12 +1,13 @@
 import { Component, DestroyRef, Inject, LOCALE_ID, OnInit, inject } from '@angular/core'
+import { AsyncPipe, NgClass } from '@angular/common'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { Observable } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { LetDirective } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
+
 import { PrimeIcons, SelectItem } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { FloatLabelModule } from 'primeng/floatlabel'
@@ -58,8 +59,9 @@ type BookmarkTableRow = Bookmark & {
   imports: [
     AngularAcceleratorModule,
     AngularAuthModule,
+    AsyncPipe,
+    NgClass,
     ButtonModule,
-    CommonModule,
     FloatLabelModule,
     FormsModule,
     InputGroupAddonModule,

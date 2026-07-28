@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
+
 import { ButtonModule } from 'primeng/button'
 import { TooltipModule } from 'primeng/tooltip'
 
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { AngularAuthModule } from '@onecx/angular-auth'
+
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 @Component({
@@ -13,7 +14,7 @@ import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
   templateUrl: './bookmark-delete.component.html',
   styleUrl: './bookmark-delete.component.scss',
   standalone: true,
-  imports: [AngularAcceleratorModule, AngularAuthModule, ButtonModule, CommonModule, TooltipModule, TranslateModule]
+  imports: [AngularAcceleratorModule, AngularAuthModule, ButtonModule, TooltipModule, TranslateModule]
 })
 export class BookmarkDeleteComponent {
   @Input() public bookmark: Bookmark | undefined

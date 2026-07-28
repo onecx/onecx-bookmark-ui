@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { AsyncPipe } from '@angular/common'
 import { TranslateService, TranslateModule } from '@ngx-translate/core'
 import { BehaviorSubject, Observable, map, of, take } from 'rxjs'
 import { Store } from '@ngrx/store'
@@ -32,14 +32,12 @@ export type Product = {
 
 @Component({
   selector: 'app-bookmark-overview',
-  templateUrl: './bookmark-overview.component.html',
-  styleUrls: ['./bookmark-overview.component.scss'],
   standalone: true,
   imports: [
     AngularAcceleratorModule,
     AngularAuthModule,
+    AsyncPipe,
     BookmarkListComponent,
-    CommonModule,
     DockModule,
     LetDirective,
     MessageModule,
@@ -47,7 +45,9 @@ export type Product = {
     SharedModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './bookmark-overview.component.html',
+  styleUrl: './bookmark-overview.component.scss'
 })
 export class BookmarkOverviewComponent implements OnInit {
   // data

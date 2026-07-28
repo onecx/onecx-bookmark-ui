@@ -29,6 +29,7 @@ import { BookmarkConfigureComponent } from './bookmark-configure.component'
 import { BookmarkConfigureHarness } from './bookmark-configure.harness'
 import { BookmarkConfigureViewModel } from './bookmark-configure.viewmodel'
 import { selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
+import { By } from '@angular/platform-browser'
 
 ensureIntersectionObserverMockExists()
 Object.defineProperty(window, 'matchMedia', {
@@ -382,16 +383,15 @@ describe('BookmarkConfigureComponent', () => {
     fixture.detectChanges()
     await fixture.whenStable()
 
-    // Important: the action buttons are native <button pButton> elements — the id is on the button itself
-    const copyButton: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_configure_table_row_1_action_copy')
-    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#bm_configure_table_row_1_action_delete'
-    )
-    const editButton: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_configure_table_row_1_action_edit')
-
-    const toggleButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#bm_configure_table_row_1_action_toggle'
-    )
+    // Important: the action buttons are native <p-button id=""><button> elements
+    const copyButton = fixture.debugElement.query(By.css('#bm_configure_table_row_1_action_copy button')).nativeElement
+    const deleteButton = fixture.debugElement.query(
+      By.css('#bm_configure_table_row_1_action_delete button')
+    ).nativeElement
+    const editButton = fixture.debugElement.query(By.css('#bm_configure_table_row_1_action_edit button')).nativeElement
+    const toggleButton = fixture.debugElement.query(
+      By.css('#bm_configure_table_row_1_action_toggle button')
+    ).nativeElement
 
     expect(copyButton).toBeTruthy()
     expect(deleteButton).toBeTruthy()
