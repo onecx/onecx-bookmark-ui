@@ -185,8 +185,16 @@ export class BookmarkDetailComponent
         updateOn: 'change'
       }),
       fragment: new FormControl(null, [Validators.maxLength(255)]),
-      url: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
-      imageUrl: new FormControl(null, [Validators.maxLength(255)])
+      url: new FormControl(null, [
+        Validators.minLength(7),
+        Validators.maxLength(255),
+        Validators.pattern('^(http|https)://.{6,245}')
+      ]),
+      imageUrl: new FormControl(null, [
+        Validators.minLength(7),
+        Validators.maxLength(255),
+        Validators.pattern('^(http|https)://.{6,245}')
+      ])
     })
   }
   /*
