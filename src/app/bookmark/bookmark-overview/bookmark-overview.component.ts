@@ -17,7 +17,6 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
 import { BookmarkOverviewViewModel } from './bookmark-overview.viewmodel'
@@ -42,7 +41,6 @@ export type Product = {
     LetDirective,
     MessageModule,
     PortalPageComponent,
-    SharedModule,
     TooltipModule,
     TranslateModule
   ],

@@ -15,6 +15,7 @@ import { AppStateService, ConfigurationService } from '@onecx/angular-integratio
 import { AngularAcceleratorModule, AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
 
 import { Configuration } from './shared/generated'
+import { LabelResolver } from './shared/utils/label.resolver'
 import { apiConfigProvider } from './shared/utils/apiConfigProvider.utils'
 
 import { AppEntrypointComponent } from './app-entrypoint.component'
@@ -53,6 +54,7 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
     })
   ],
   providers: [
+    LabelResolver,
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
     provideAppInitializer(() => {
       const initializerFn = initializeRouter(inject(Router), inject(AppStateService))

@@ -21,7 +21,6 @@ import { ensureIntersectionObserverMockExists } from '@onecx/angular-testing'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { provideHttpClient } from '@angular/common/http'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { initialState } from './bookmark-configure.reducers'
 import { BookmarkConfigureActions } from './bookmark-configure.actions'
@@ -68,7 +67,6 @@ describe('BookmarkConfigureComponent', () => {
       deferBlockBehavior: DeferBlockBehavior.Manual,
       imports: [
         BookmarkConfigureComponent,
-        SharedModule,
         LetDirective,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations({
@@ -723,7 +721,6 @@ describe('BookmarkConfigureComponent - no permission testcase', () => {
     await TestBed.configureTestingModule({
       imports: [
         BookmarkConfigureComponent,
-        SharedModule,
         LetDirective,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations({
