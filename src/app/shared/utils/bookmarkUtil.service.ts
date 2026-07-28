@@ -9,7 +9,7 @@ import { BookmarksInternalAPIService, Configuration, CreateBookmark, UpdateBookm
 import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'any' })
-export class BookmarkAPIUtilsService {
+export class BookmarkUtilService {
   constructor(
     private readonly bookmarkService: BookmarksInternalAPIService,
     private readonly messageService: PortalMessageService,
@@ -50,7 +50,8 @@ export class BookmarkAPIUtilsService {
       mergeMap((workspace) => {
         return this.bookmarkService.searchBookmarksByCriteria({
           bookmarkSearchCriteria: {
-            workspaceName: workspace.workspaceName
+            workspaceName: workspace.workspaceName,
+            disabled: false
           }
         })
       }),

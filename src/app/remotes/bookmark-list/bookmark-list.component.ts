@@ -21,7 +21,7 @@ import { AppConfigService, PortalMessageService, UserService } from '@onecx/angu
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
 
 import { BookmarkLinksComponent } from './bookmark-links/bookmark-links.component'
 
@@ -44,7 +44,7 @@ export function slotInitializer(slotService: SlotService) {
     TranslateModule,
     BookmarkLinksComponent
   ],
-  providers: [{ provide: SLOT_SERVICE, useExisting: SlotService }, PortalMessageService, BookmarkAPIUtilsService],
+  providers: [{ provide: SLOT_SERVICE, useExisting: SlotService }, PortalMessageService, BookmarkUtilService],
   templateUrl: './bookmark-list.component.html',
   styleUrl: './bookmark-list.component.scss'
 })
@@ -65,7 +65,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     private readonly appConfigService: AppConfigService,
     private readonly userService: UserService,
     private readonly translateService: TranslateService,
-    private readonly bookmarkApiUtils: BookmarkAPIUtilsService,
+    private readonly bookmarkApiUtils: BookmarkUtilService,
     private readonly slotService: SlotService
   ) {
     this.translateService.use(this.userService.lang$.getValue())

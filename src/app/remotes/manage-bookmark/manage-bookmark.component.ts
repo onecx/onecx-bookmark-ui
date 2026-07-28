@@ -49,7 +49,7 @@ import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-u
 import { Bookmark, CreateBookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
 import { extractPathAfter, mapPathSegmentsToPathParameters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
-import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
 
 import { BookmarkCreateUpdateComponent } from './bookmark-create-update/bookmark-create-update.component'
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog/page-not-bookmarkable-dialog.component'
@@ -75,7 +75,7 @@ export function slotInitializer(slotService: SlotService) {
   providers: [
     { provide: SLOT_SERVICE, useExisting: SlotService },
     providePortalDialogService(),
-    BookmarkAPIUtilsService,
+    BookmarkUtilService,
     PortalMessageService
   ],
   templateUrl: './manage-bookmark.component.html',
@@ -106,7 +106,7 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     private readonly userService: UserService,
     private readonly translateService: TranslateService,
     private readonly portalDialogService: PortalDialogService,
-    private readonly bookmarkApiUtils: BookmarkAPIUtilsService,
+    private readonly bookmarkApiUtils: BookmarkUtilService,
     private readonly slotService: SlotService
   ) {
     this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
