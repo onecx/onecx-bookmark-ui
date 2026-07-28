@@ -63,7 +63,7 @@ describe('BookmarkUtilService', () => {
 
       service.loadBookmarks().subscribe((result) => {
         expect(bookmarkServiceMock.searchBookmarksByCriteria).toHaveBeenCalledWith({
-          bookmarkSearchCriteria: { workspaceName: 'my-workspace' }
+          bookmarkSearchCriteria: { disabled: false, workspaceName: 'my-workspace' }
         })
         expect(result).toHaveLength(1)
         done()
@@ -119,7 +119,7 @@ describe('BookmarkUtilService', () => {
 
       service.loadBookmarksForApp(obs$).subscribe((result) => {
         expect(bookmarkServiceMock.searchUserBookmarksByCriteria).toHaveBeenCalledWith({
-          bookmarkSearchCriteria: { workspaceName: 'ws', productName: 'product', appId: 'app' }
+          bookmarkSearchCriteria: { disabled: false, workspaceName: 'ws', productName: 'product', appId: 'app' }
         })
         expect(result).toHaveLength(1)
         done()

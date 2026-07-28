@@ -27,6 +27,7 @@ export class BookmarkUtilService {
       mergeMap(([currentWorkspace, currentMfe]) => {
         return this.bookmarkService.searchUserBookmarksByCriteria({
           bookmarkSearchCriteria: {
+            disabled: false,
             workspaceName: currentWorkspace.workspaceName,
             productName: currentMfe.productName,
             appId: currentMfe.appId
@@ -50,8 +51,8 @@ export class BookmarkUtilService {
       mergeMap((workspace) => {
         return this.bookmarkService.searchBookmarksByCriteria({
           bookmarkSearchCriteria: {
-            workspaceName: workspace.workspaceName,
-            disabled: false
+            disabled: false,
+            workspaceName: workspace.workspaceName
           }
         })
       }),

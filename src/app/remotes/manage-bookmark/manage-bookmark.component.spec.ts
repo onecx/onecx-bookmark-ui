@@ -16,7 +16,7 @@ import {
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { BookmarkScope } from 'src/app/shared/generated'
-import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
 import { OneCXManageBookmarkComponent, slotInitializer } from './manage-bookmark.component'
 
 Object.defineProperty(window, 'matchMedia', {

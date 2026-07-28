@@ -25,7 +25,10 @@ globalThis.ngJest = {
   }
 }
 
-import 'jest-preset-angular/setup-jest'
+// setup-jest.ts
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone'
+
+setupZoneTestEnv()
 
 /* fixes a bug with jsdom: ignoring this error message in log */
 const originalConsoleError = console.error

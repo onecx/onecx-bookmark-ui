@@ -19,7 +19,7 @@ import { provideAlwaysGrantPermissionChecker } from '@onecx/angular-utils'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 
 import { BookmarkScope } from 'src/app/shared/generated'
-import { BookmarkDetailComponent, Product } from './bookmark-detail.component'
+import { Application, BookmarkDetailComponent, Product } from './bookmark-detail.component'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 Object.defineProperty(window, 'matchMedia', {
@@ -123,6 +123,15 @@ describe('BookmarkDetailComponent', () => {
 
       const result = component.getProductAppDisplayName(product, 'app1')
       expect(result).toBe('My App')
+    })
+
+    it('should return appId if applications are empty', () => {
+      const product = {
+        applications: [] as Application[]
+      } as Product
+
+      const result = component.getProductAppDisplayName(product, 'app1')
+      expect(result).toBe('app1')
     })
 
     it('should return undefined if no app id', () => {

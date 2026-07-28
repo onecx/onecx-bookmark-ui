@@ -11,7 +11,7 @@ import { AppConfigService, UserService } from '@onecx/angular-integration-interf
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
 import { OneCXBookmarkListComponent, slotInitializer } from './bookmark-list.component'
 
 Object.defineProperty(window, 'matchMedia', {
