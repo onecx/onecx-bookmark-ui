@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe, DatePipe, Location } from '@angular/common'
 import {
   AbstractControl,
@@ -138,6 +139,7 @@ export class BookmarkDetailComponent
   }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
+  private readonly destroyRef = inject(DestroyRef)
   public defaultProduct: Product | undefined
   public formGroup: FormGroup
   public dialogResult: CombinedBookmark | undefined = undefined
@@ -214,7 +216,7 @@ export class BookmarkDetailComponent
         undeployed: false,
         applications: []
       }
-      this.productEmitter.subscribe(this.product$)
+      this.productEmitter.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.product$)
       this.formGroup.patchValue({
         ...this.vm.initialBookmark,
         is_public: this.vm.initialBookmark.scope === BookmarkScope.Public,
@@ -230,9 +232,14 @@ export class BookmarkDetailComponent
     } else {
       this.formGroup.enable()
       // do something if form is valid
-      this.formGroup.statusChanges.pipe(filter(() => this.formGroup.valid)).subscribe((val) => {
-        this.primaryButtonEnabled.emit(this.editable)
-      })
+      this.formGroup.statusChanges
+        .pipe(
+          filter(() => this.formGroup.valid),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe(() => {
+          this.primaryButtonEnabled.emit(this.editable)
+        })
     }
     if (this.vm.changeMode === 'CREATE' || this.vm.initialBookmark?.url) {
       this.formGroup.controls['url'].setValidators(Validators.required)
