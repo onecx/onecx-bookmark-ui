@@ -10,14 +10,14 @@
       <p-message
         id="bm_configure_message_loading"
         severity="info"
-        styleClass="m-3"
+        styleClass="m-4"
         [text]="'ACTIONS.LOADING' | translate"
       ></p-message>
     } @else if (vm.exceptionKey) {
       <p-message
         id="bm_configure_message_error"
         severity="error"
-        styleClass="m-3"
+        styleClass="m-4"
         [text]="vm.exceptionKey! | translate"
       ></p-message>
     } @else {

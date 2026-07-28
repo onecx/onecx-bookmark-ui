@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
-import { DatePipe, NgFor } from '@angular/common'
+import { DatePipe } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
@@ -38,7 +38,6 @@ export type ImportError = {
   imports: [
     AngularAcceleratorModule,
     DatePipe,
-    NgFor,
     ButtonModule,
     CheckboxModule,
     FileUploadModule,

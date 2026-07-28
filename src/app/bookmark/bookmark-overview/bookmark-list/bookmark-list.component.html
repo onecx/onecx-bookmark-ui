@@ -14,10 +14,10 @@
       severity="info"
       icon="pi pi-star"
       styleClass="m-2 md:m-4 w-15rem md:w-20rem"
-      text="{{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}"
+      [text]="'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate"
     />
   } @else {
-    <div class="pt-2 p-1 sm:p-2 md:p-3 flex flex-row flex-wrap justify-content-center gap-2 sm:gap-3 md:gap-5">
+    <div class="pt-2 p-1 sm:p-2 md:p-3 flex flex-row flex-wrap justify-content-center gap-2 sm:gap-3 md:gap-4">
       @for (bookmark of bookmarks; track $index; let i = $index) {
         <!-- Define visible tile content as template -->
         <ng-template #tileContentTemplate>

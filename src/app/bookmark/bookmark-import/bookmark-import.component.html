@@ -98,7 +98,7 @@
           class="pt-3 pb-2 text-responsive p-filled"
           [disabled]="true"
           [value]="snapshot?.created | date: dateFormat"
-          [attr.aria-label]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
+          [ariaLabel]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
           [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.DATE.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
@@ -113,17 +113,23 @@
         <div class="flex flex-column">
           <div class="font-bold">{{ 'BOOKMARK.SCOPES.PRIVATE' | translate }}</div>
           <div class="m-0 py-1 pl-2">
-            <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PRIVATE']">
-              {{ item.displayName }}
-            </div>
+            @let privateBookmarks = snapshot?.bookmarks?.['PRIVATE'];
+            @for (item of privateBookmarks; track $index; let i = $index) {
+              <div class="w-15rem text-responsive" [id]="'bm_import_private_' + i">
+                {{ item.displayName }}
+              </div>
+            }
           </div>
         </div>
         <div class="flex flex-column">
           <div class="font-bold">{{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}</div>
           <div class="m-0 py-1 pl-2">
-            <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PUBLIC']">
-              {{ item.displayName }}
-            </div>
+            @let publicBookmarks = snapshot?.bookmarks?.['PUBLIC'];
+            @for (item of publicBookmarks; track $index; let i = $index) {
+              <div class="w-15rem text-responsive" [id]="'bm_import_public_' + i">
+                {{ item.displayName }}
+              </div>
+            }
           </div>
         </div>
       </div>
@@ -131,9 +137,12 @@
       <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'" class="ml-3 flex flex-column">
         <div class="font-bold">{{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}</div>
         <div class="m-0 py-1 pl-2">
-          <div class="w-30rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PRIVATE']">
-            {{ item.displayName }}
-          </div>
+          @let privateBookmarks = snapshot?.bookmarks?.['PRIVATE'];
+          @for (item of privateBookmarks; track $index; let i = $index) {
+            <div class="w-30rem text-responsive" [id]="'bm_import_private_' + i">
+              {{ item.displayName }}
+            </div>
+          }
         </div>
       </div>
     </div>
