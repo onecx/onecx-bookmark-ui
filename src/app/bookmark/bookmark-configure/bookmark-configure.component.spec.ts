@@ -526,20 +526,20 @@ describe('BookmarkConfigureComponent', () => {
   })
 
   describe('onGlobalFilter', () => {
-    it('should set filterText and apply name filter', () => {
+    it('should set globalFilterValue and apply name filter', () => {
       const applySpy = jest.spyOn(component as any, 'applyNameFilter')
       component.onGlobalFilter('hello')
-      expect(component.filterText).toBe('hello')
+      expect(component.globalFilterValue).toBe('hello')
       expect(applySpy).toHaveBeenCalled()
     })
   })
 
   describe('onClearGlobalFilter', () => {
-    it('should reset filterText to empty string and apply name filter', () => {
-      component.filterText = 'something'
+    it('should reset globalFilterValue to empty string and apply name filter', () => {
+      component.globalFilterValue = 'something'
       const applySpy = jest.spyOn(component as any, 'applyNameFilter')
       component.onClearGlobalFilter()
-      expect(component.filterText).toBe('')
+      expect(component.globalFilterValue).toBe('')
       expect(applySpy).toHaveBeenCalled()
     })
   })
@@ -693,7 +693,7 @@ describe('BookmarkConfigureComponent', () => {
         { id: '1', displayNameLower: 'alpha', imagePath: '' },
         { id: '2', imagePath: '' }
       ]
-      component.filterText = 'alpha'
+      component.globalFilterValue = 'alpha'
       ;(component as any).applyNameFilter()
       expect(component.interactiveRows).toHaveLength(1)
       expect(component.interactiveRows[0]['id']).toBe('1')
