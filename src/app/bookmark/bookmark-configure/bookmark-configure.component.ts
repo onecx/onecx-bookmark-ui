@@ -87,7 +87,7 @@ export class BookmarkConfigureComponent implements OnInit {
   public defaultSortDirection = DataSortDirection.ASCENDING
   public sortField = 'position'
   public tableFilters: Filter[] = []
-  public filterText = ''
+  public globalFilterValue = ''
   public interactiveColumns: DataTableColumn[] = []
   public displayedColumnKeys: string[] = []
   public filteredColumns: ExtendedColumn[] = []
@@ -242,12 +242,12 @@ export class BookmarkConfigureComponent implements OnInit {
   }
 
   public onGlobalFilter(value: string): void {
-    this.filterText = value
+    this.globalFilterValue = value
     this.applyNameFilter()
   }
 
   public onClearGlobalFilter(): void {
-    this.filterText = ''
+    this.globalFilterValue = ''
     this.applyNameFilter()
   }
   public onSortChange(event: Sort): void {
@@ -369,7 +369,7 @@ export class BookmarkConfigureComponent implements OnInit {
   }
 
   private applyNameFilter(): void {
-    const normalizedQuery = this.filterText.trim().toLocaleLowerCase(this.locale)
+    const normalizedQuery = this.globalFilterValue.trim().toLocaleLowerCase(this.locale)
     if (!normalizedQuery) {
       this.interactiveRows = this.allInteractiveRows
       return

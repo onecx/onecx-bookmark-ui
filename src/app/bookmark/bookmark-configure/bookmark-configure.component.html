@@ -73,24 +73,28 @@
                 </p-inputgroup-addon>
                 <p-floatlabel variant="on">
                   <input
-                    #dvFilterInput
+                    #globalFilterInput
                     id="bm_configure_search_filter"
                     type="text"
                     pInputText
-                    [value]="filterText"
-                    (input)="onGlobalFilter(dvFilterInput.value)"
+                    [value]="globalFilterValue"
+                    (input)="onGlobalFilter(globalFilterInput.value)"
+                    [ariaLabel]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
                     [pTooltip]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
                     tooltipPosition="top"
                     tooltipEvent="hover"
-                    [attr.aria-label]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
                   />
                   <label for="bm_configure_search_filter" aria-hidden="true">
                     {{ 'ACTIONS.SEARCH.FILTER.LABEL' | translate }}
                   </label>
                 </p-floatlabel>
                 <p-button
+                  id="bm_configure_table_global_filter_clear"
                   icon="pi pi-filter-slash"
-                  (onClick)="dvFilterInput.value = ''; onClearGlobalFilter()"
+                  (onClick)="globalFilterInput.value = ''; onClearGlobalFilter()"
+                  (onKeydown.enter)="globalFilterInput.value = ''; onClearGlobalFilter()"
+                  [severity]="globalFilterInput.value !== '' ? 'primary' : 'secondary'"
+                  [disabled]="!globalFilterValue"
                   [ariaLabel]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
                   [pTooltip]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
                   tooltipPosition="top"
