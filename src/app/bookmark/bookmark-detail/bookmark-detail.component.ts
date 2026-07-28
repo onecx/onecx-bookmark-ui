@@ -23,16 +23,11 @@ import { InputTextModule } from 'primeng/inputtext'
 import { MessageModule } from 'primeng/message'
 import { SelectModule } from 'primeng/select'
 import { SelectButtonModule } from 'primeng/selectbutton'
-import { TabViewModule } from 'primeng/tabview'
+import { TabsModule } from 'primeng/tabs'
 import { TextareaModule } from 'primeng/textarea'
 import { TooltipModule } from 'primeng/tooltip'
 
-import {
-  AppStateService,
-  //ParametersService,
-  PortalMessageService,
-  UserService
-} from '@onecx/angular-integration-interface'
+import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 import {
   AngularAcceleratorModule,
   DialogButtonClicked,
@@ -117,7 +112,7 @@ export type Product = {
     RouterModule,
     SelectButtonModule,
     SelectModule,
-    TabViewModule,
+    TabsModule,
     TextareaModule,
     TooltipModule,
     TranslateModule
@@ -160,7 +155,6 @@ export class BookmarkDetailComponent
   public size: any
 
   constructor(
-    private readonly user: UserService,
     private readonly appStateService: AppStateService,
     //private readonly parameterService: ParametersService,
     private readonly slotService: SlotService,
@@ -290,8 +284,8 @@ export class BookmarkDetailComponent
   }
 
   public getProductAppDisplayName(product: Product, appId?: string): string | undefined {
-    if (product.applications?.length === 0) return appId
     if (!appId) return undefined
+    if (product.applications?.length === 0) return appId
     return product.applications?.find((app) => app.appId === appId)?.appName
   }
 
