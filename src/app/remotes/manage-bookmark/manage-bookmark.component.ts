@@ -1,4 +1,5 @@
-import { Component, Inject, Input } from '@angular/core'
+import { Component, DestroyRef, inject, Inject, Input } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import {
@@ -109,7 +110,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     private readonly bookmarkApiUtils: BookmarkUtilService,
     private readonly slotService: SlotService
   ) {
-    this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
+    this.userService.lang$
+      .pipe(takeUntilDestroyed(inject(DestroyRef)))
+      .subscribe((lang) => this.translateService.use(lang))
 
     this.isBookmarkable$ = this.commonObs$.pipe(
       map(([currentWorkspace, currentMfe, currentPage]) => {

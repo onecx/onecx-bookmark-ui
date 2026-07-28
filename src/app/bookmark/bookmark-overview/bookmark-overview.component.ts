@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
+import { Component, DestroyRef, EventEmitter, inject, Inject, LOCALE_ID, OnInit } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe } from '@angular/common'
 import { TranslateService, TranslateModule } from '@ngx-translate/core'
 import { BehaviorSubject, Observable, map, of, take } from 'rxjs'
@@ -64,6 +65,7 @@ export class BookmarkOverviewComponent implements OnInit {
   public products_empty: Product[] = []
   public products$ = new BehaviorSubject<Product[] | undefined>(undefined) // theme data
   public productsEmitter = new EventEmitter<Product[]>()
+  private readonly destroyRef = inject(DestroyRef)
 
   constructor(
     @Inject(LOCALE_ID) public readonly locale: string,
@@ -84,7 +86,7 @@ export class BookmarkOverviewComponent implements OnInit {
     this.appStateService.currentWorkspace$.pipe(take(1)).subscribe((workspace) => {
       this.workspace = workspace
     })
-    this.productsEmitter.subscribe(this.products$)
+    this.productsEmitter.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.products$)
     this.prepareDockItems()
     this.onSearch()
   }
