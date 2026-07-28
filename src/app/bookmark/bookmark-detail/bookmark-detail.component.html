@@ -58,9 +58,8 @@
     @if (['EDIT', 'VIEW'].includes(vm.changeMode)) {
       <p-tab
         value="4"
-        [hidden]="!['EDIT', 'VIEW'].includes(vm.changeMode)"
-        [ariaLabel]="'INTERNAL.TOOLTIPS' | translate"
-        [pTooltip]="'INTERNAL.TOOLTIPS' | translate"
+        [ariaLabel]="'INTERNAL.TOOLTIP' | translate"
+        [pTooltip]="'INTERNAL.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       >

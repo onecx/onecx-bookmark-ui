@@ -193,35 +193,31 @@
         </ng-template>
 
         <ng-template pTemplate="externalIdTableCell" let-rowObject="rowObject">
-          <div class="text-center">
-            @if (rowObject.external) {
-              <span
-                class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
-                [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-                [attr.aria-label]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
-              >
-                <span class="pi pi-link"></span>
-              </span>
-            }
-          </div>
+          @if (rowObject.external) {
+            <span
+              class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+              [attr.aria-label]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
+            >
+              <span class="pi pi-link"></span>
+            </span>
+          }
         </ng-template>
 
         <ng-template pTemplate="targetIdTableCell" let-rowObject="rowObject">
-          <div class="text-center">
-            @if (rowObject.target === '_blank') {
-              <span
-                class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
-                [attr.aria-label]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
-                [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              >
-                <span class="pi pi-external-link"></span>
-              </span>
-            }
-          </div>
+          @if (rowObject.target === '_blank') {
+            <span
+              class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
+              [attr.aria-label]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+              <span class="pi pi-external-link"></span>
+            </span>
+          }
         </ng-template>
 
         <ng-template pTemplate="urlIdTableCell" let-rowObject="rowObject" let-column="column">
