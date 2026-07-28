@@ -256,7 +256,9 @@
     "SCOPE": {
       "INFO": "Which Bookmarks to import?",
       "PRIVATE": "My Bookmarks",
-      "PUBLIC": "Workspace Bookmarks"
+      "PUBLIC": "Workspace Bookmarks",
+      "PRIVATE.TOOLTIP": "Import my Bookmarks",
+      "PUBLIC.TOOLTIP": "Import Workspace Bookmarks"
     },
     "SNAPSHOT": {
       "DATE": "Created on",

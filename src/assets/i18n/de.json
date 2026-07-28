@@ -256,7 +256,9 @@
     "SCOPE": {
       "INFO": "Welche Lesezeichen sollen importiert werden?",
       "PRIVATE": "Meine Lesezeichen",
-      "PUBLIC": "Workspace Lesezeichen"
+      "PUBLIC": "Workspace Lesezeichen",
+      "PRIVATE.TOOLTIP": "Meine Lesezeichen importieren",
+      "PUBLIC.TOOLTIP": "Workspace Lesezeichen importieren"
     },
     "SNAPSHOT": {
       "DATE": "Erstellt am",
