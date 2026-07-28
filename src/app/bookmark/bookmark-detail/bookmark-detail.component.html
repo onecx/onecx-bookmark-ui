@@ -259,8 +259,6 @@
       @let product = (productEmitter.asObservable() | async) ?? defaultProduct;
       @if (product) {
         <div class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4">
-          <div>{{ product.imageUrl }}</div>
-          <div>{{ onProductImageLoadError }}</div>
           @if (product.imageUrl && !onProductImageLoadError) {
             <img
               [alt]="product.displayName"
