@@ -4,7 +4,6 @@ import { AsyncPipe } from '@angular/common'
 import { TranslateService, TranslateModule } from '@ngx-translate/core'
 import { BehaviorSubject, Observable, map, of, take } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { LetDirective } from '@ngrx/component'
 import { MenuItem, PrimeIcons } from 'primeng/api'
 import { DockModule } from 'primeng/dock'
 import { MessageModule } from 'primeng/message'
@@ -39,7 +38,6 @@ export type Product = {
     AsyncPipe,
     BookmarkListComponent,
     DockModule,
-    LetDirective,
     MessageModule,
     PortalPageComponent,
     TooltipModule,

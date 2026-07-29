@@ -5,7 +5,6 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { FormsModule } from '@angular/forms'
 import { Observable } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { LetDirective } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { PrimeIcons, SelectItem } from 'primeng/api'
@@ -67,7 +66,6 @@ type BookmarkTableRow = Bookmark & {
     InputGroupAddonModule,
     InputGroupModule,
     InputTextModule,
-    LetDirective,
     MessageModule,
     PortalPageComponent,
     RouterModule,
