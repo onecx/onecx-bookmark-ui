@@ -120,8 +120,8 @@ export class BookmarkOverviewComponent implements OnInit {
   public onSearch() {
     this.store.dispatch(BookmarkOverviewActions.search())
   }
-  public onFilterBookmarksByScope(bs: Bookmark[], sc: BookmarkScope): Bookmark[] {
-    return bs.filter((b) => b.scope === sc)
+  public onFilterBookmarksByScope(bs: Bookmark[] | undefined, sc: BookmarkScope): Bookmark[] {
+    return bs?.filter((b) => b.scope === sc) ?? []
   }
   public onGoToConfigure() {
     this.store.dispatch(BookmarkOverviewActions.navigate({ path: ['configure'] }))

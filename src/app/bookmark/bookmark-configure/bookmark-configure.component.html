@@ -1,4 +1,5 @@
-<ocx-portal-page permission="BOOKMARK#CONFIGURE" helpArticleId="PAGE_BOOKMARK_CONFIGURE" *ngrxLet="viewModel$ as vm">
+<ocx-portal-page permission="BOOKMARK#CONFIGURE" helpArticleId="PAGE_BOOKMARK_CONFIGURE">
+  @let vm = viewModel$ | async;
   <ocx-page-header
     [header]="'DIALOG.CONFIGURE.HEADER' | translate"
     [subheader]="'DIALOG.CONFIGURE.SUBHEADER' | translate"
@@ -6,19 +7,19 @@
   />
 
   <ocx-content class="ocx-content">
-    @if (vm.loading) {
+    @if (vm?.loading) {
       <p-message
         id="bm_configure_message_loading"
         severity="info"
         styleClass="m-4"
         [text]="'ACTIONS.LOADING' | translate"
       ></p-message>
-    } @else if (vm.exceptionKey) {
+    } @else if (vm?.exceptionKey) {
       <p-message
         id="bm_configure_message_error"
         severity="error"
         styleClass="m-4"
-        [text]="vm.exceptionKey! | translate"
+        [text]="vm?.exceptionKey! | translate"
       ></p-message>
     } @else {
       <ocx-interactive-data-view

@@ -280,7 +280,7 @@
     "SUCCESS": "Sorting successfully changed"
   },
   "IMAGE": {
-    "LOGO_URL": "External Logo URL",
+    "LOGO_URL": "Logo URL",
     "UPLOAD_FAIL": " The file could not be uploaded.",
     "UPLOAD_SUCCESS": "The file was successfully uploaded.",
     "REMOVE_FAIL": "The file could not be removed.",

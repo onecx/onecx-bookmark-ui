@@ -2,6 +2,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
 
@@ -13,6 +14,7 @@ import { AppStateService, UserService } from '@onecx/angular-integration-interfa
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { SlotService } from '@onecx/angular-remote-components'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { PermissionService } from '@onecx/angular-utils'
 
 import { BookmarkOverviewComponent } from './bookmark-overview.component'
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
@@ -64,7 +66,9 @@ describe('BookmarkOverviewComponent', () => {
             }
           }
         }),
-        { provide: SlotService, useValue: slotServiceMock }
+        { provide: SlotService, useValue: slotServiceMock },
+        { provide: PermissionService, useValue: { hasPermission: () => of(true) } },
+        provideRouter([])
       ]
     }).compileComponents()
 
@@ -194,6 +198,11 @@ describe('BookmarkOverviewComponent', () => {
 
     it('should return empty array when no bookmarks match scope', () => {
       const result = component.onFilterBookmarksByScope([], BookmarkScope.Private)
+      expect(result).toEqual([])
+    })
+
+    it('should return empty array when bookmarks input is undefined', () => {
+      const result = component.onFilterBookmarksByScope(undefined, BookmarkScope.Private)
       expect(result).toEqual([])
     })
   })
