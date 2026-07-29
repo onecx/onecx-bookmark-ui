@@ -6,12 +6,9 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { ActivatedRoute } from '@angular/router'
-import { LetDirective } from '@ngrx/component'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { provideMockStore } from '@ngrx/store/testing'
 import { of, throwError } from 'rxjs'
-
-import { TabViewModule } from 'primeng/tabview'
 
 import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
@@ -73,8 +70,6 @@ describe('BookmarkDetailComponent', () => {
         BookmarkDetailComponent,
         FormsModule,
         ReactiveFormsModule,
-        LetDirective,
-        TabViewModule,
         NoopAnimationsModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),

@@ -4,11 +4,10 @@ import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { of } from 'rxjs'
-
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { Store, StoreModule } from '@ngrx/store'
 import { ofType } from '@ngrx/effects'
+import { of } from 'rxjs'
 
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
@@ -16,13 +15,14 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PermissionService } from '@onecx/angular-utils'
 
+import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+
 import { BookmarkOverviewComponent } from './bookmark-overview.component'
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
 import { BookmarkOverviewViewModel } from './bookmark-overview.viewmodel'
 import { selectBookmarkOverviewViewModel } from './bookmark-overview.selectors'
 import { initialState as overviewInitialState } from './bookmark-overview.reducers'
 import { initialState as configureInitialState } from '../bookmark-configure/bookmark-configure.reducers'
-import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 
 const baseViewModel: BookmarkOverviewViewModel = {
   results: [],
