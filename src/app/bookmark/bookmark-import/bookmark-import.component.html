@@ -109,9 +109,10 @@
             pInputText
             type="text"
             id="bm_import_snapshot_date"
-            class="pt-3 pb-2 text-responsive p-filled"
+            class="pt-3 pb-2 text-responsive"
+            [class.p-filled]="snapshot?.created !== null"
             [disabled]="true"
-            [value]="snapshot?.created | date: dateFormat"
+            [ngModel]="snapshot?.created | date: dateFormat"
             [ariaLabel]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
             [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.DATE.TOOLTIP' | translate"
             tooltipPosition="top"

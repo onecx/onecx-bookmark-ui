@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button'
 import { CheckboxModule } from 'primeng/checkbox'
 import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 import { MessageModule } from 'primeng/message'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TabsModule } from 'primeng/tabs'
@@ -43,6 +44,7 @@ export type ImportError = {
     FileUploadModule,
     FloatLabelModule,
     FormsModule,
+    InputTextModule,
     MessageModule,
     SelectButtonModule,
     TabsModule,
