@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core'
-import { AsyncPipe, Location, NgClass } from '@angular/common'
-import { map, Observable, of } from 'rxjs'
+import { Location, NgClass } from '@angular/common'
+import { take } from 'rxjs'
 
 import { SkeletonModule } from 'primeng/skeleton'
 
@@ -15,7 +15,7 @@ import { Product } from '../bookmark-overview/bookmark-overview.component'
 @Component({
   selector: 'app-bookmark-image',
   standalone: true,
-  imports: [AngularAcceleratorModule, AsyncPipe, NgClass, SkeletonModule],
+  imports: [AngularAcceleratorModule, NgClass, SkeletonModule],
   templateUrl: './bookmark-image.component.html',
   styleUrl: './bookmark-image.component.scss'
 })
@@ -26,70 +26,76 @@ export class BookmarkImageComponent implements OnChanges {
   @Input() public product: Product | undefined
   @Input() public styleClass: string | undefined
 
-  public defaultImageUrl$: Observable<string>
-  public bookmarkImageBaseURL$: Observable<string> | undefined
-  public errorImage$: Observable<string> | undefined
+  public currentImageUrl: string | undefined
   public loading = true
-  public productLogoUrl: string | undefined
-  private imageLoadCounter = 0
+
+  private remoteBaseUrl = ''
+  // Ordered fallback list; walked front-to-back on each image load error
+  private urlQueue: string[] = []
+  private urlQueueIndex = 0
 
   constructor() {
-    this.errorImage$ = undefined
-    this.defaultImageUrl$ = this.appStateService.currentMfe$.pipe(
-      map((mfe) => {
-        return this.prepareUrlPath(mfe.remoteBaseUrl, environment.DEFAULT_LOGO_PATH)
-      })
-    )
-    // bookmark image URL via bookmark BFF
-    this.bookmarkImageBaseURL$ = this.appStateService.currentMfe$.pipe(
-      map((mfe) => {
-        return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/') + this.bookmark?.id
-      })
-    )
+    // Capture the remote base URL once — needed to build absolute paths for BFF and default logo
+    this.appStateService.currentMfe$.pipe(take(1)).subscribe((mfe) => {
+      this.remoteBaseUrl = mfe.remoteBaseUrl ?? ''
+      this.rebuildUrlQueue()
+      this.applyCurrentUrl()
+    })
   }
+
   public ngOnChanges(changes: SimpleChanges): void {
-    if (this.bookmark?.id) {
-      if (changes['product'] && !changes['product'].firstChange && this.product) {
-        this.productLogoUrl = this.product.imageUrl
-        // if default was loaded and product image url exists, then try to get product logos
-        if (this.imageLoadCounter === 2 && this.productLogoUrl) {
-          this.errorImage$ = undefined
-          this.loading = true
-          this.imageLoadCounter = 0
-          this.onImageError()
-        }
-      }
+    if (changes['bookmark'] || changes['product']) {
+      // Restart the fallback chain from the top when the displayed item changes
+      this.rebuildUrlQueue()
+      this.urlQueueIndex = 0
+      this.loading = true
+      this.applyCurrentUrl()
     }
   }
 
-  private prepareUrlPath(url?: string, path?: string): string {
-    if (url && path) return Location.joinWithSlash(url, path)
-    else if (url) return url
-    else return ''
-  }
-
-  public onImageLoad() {
+  public onImageLoad(): void {
     this.loading = false
   }
 
-  /**
-   * Loading order:
-   *   0 => load bookmark a) URL b) image
-   *   1 => loaded the product URL => prepared by RC product data with existing extern or image URL of the product
-   *   2 => loaded default bookmark image
-   */
-  public onImageError() {
-    if (this.loading) {
-      // load bookmark default logo
-      if (this.imageLoadCounter === 1 || (this.imageLoadCounter === 0 && !this.productLogoUrl)) {
-        this.errorImage$ = this.defaultImageUrl$
-        this.imageLoadCounter = 2
-      }
-      // load product logo
-      if (this.imageLoadCounter === 0 && this.productLogoUrl) {
-        this.errorImage$ = of(this.productLogoUrl)
-        this.imageLoadCounter = 1
-      }
+  public onImageError(): void {
+    // Try the next URL in priority order
+    this.urlQueueIndex++
+    if (this.urlQueueIndex < this.urlQueue.length) {
+      this.applyCurrentUrl()
+    } else {
+      // All fallbacks exhausted
+      this.loading = false
+      this.currentImageUrl = undefined
     }
+  }
+
+  private rebuildUrlQueue(): void {
+    const queue: string[] = []
+
+    // Priority 1: External URL stored directly on the bookmark
+    if (this.bookmark?.imageUrl) {
+      queue.push(this.bookmark.imageUrl)
+    }
+
+    // Priority 2: Image uploaded to BFF storage for this bookmark (identified by id)
+    if (this.bookmark?.id && this.remoteBaseUrl) {
+      queue.push(Location.joinWithSlash(this.remoteBaseUrl, `bff/images/${this.bookmark.id}`))
+    }
+
+    // Priority 3: Product logo URL
+    if (this.product?.imageUrl) {
+      queue.push(this.product.imageUrl)
+    }
+
+    // Priority 4: Default app logo served from the MFE remote base
+    if (this.remoteBaseUrl) {
+      queue.push(Location.joinWithSlash(this.remoteBaseUrl, environment.DEFAULT_LOGO_PATH))
+    }
+
+    this.urlQueue = queue
+  }
+
+  private applyCurrentUrl(): void {
+    this.currentImageUrl = this.urlQueue[this.urlQueueIndex]
   }
 }
