@@ -9,8 +9,11 @@ import { AppStateService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { environment } from 'src/environments/environment'
 import { BookmarkImageComponent } from './bookmark-image.component'
 import { Product } from '../bookmark-overview/bookmark-overview.component'
+
+const REMOTE_BASE_URL = 'http://remote.example.com'
 
 const baseBookmark: Bookmark = {
   id: 'bm-1',
@@ -30,6 +33,32 @@ describe('BookmarkImageComponent', () => {
   let fixture: ComponentFixture<BookmarkImageComponent>
   let appStateMock: AppStateServiceMock
 
+  function publishMfe(remoteBaseUrl: string): void {
+    appStateMock.currentMfe$.publish({
+      appId: 'app',
+      baseHref: '/',
+      productName: 'product',
+      shellName: 'shell',
+      mountPath: '/',
+      remoteBaseUrl
+    })
+  }
+
+  function createFreshComponent(remoteBaseUrl = REMOTE_BASE_URL): BookmarkImageComponent {
+    publishMfe(remoteBaseUrl)
+    const f = TestBed.createComponent(BookmarkImageComponent)
+    f.detectChanges()
+    return f.componentInstance
+  }
+
+  function bookmarkChange(curr: Bookmark | undefined): SimpleChanges {
+    return { bookmark: new SimpleChange(undefined, curr, curr === undefined) }
+  }
+
+  function productChange(curr: Product | undefined): SimpleChanges {
+    return { product: new SimpleChange(undefined, curr, curr === undefined) }
+  }
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -43,14 +72,7 @@ describe('BookmarkImageComponent', () => {
     }).compileComponents()
 
     appStateMock = TestBed.inject(AppStateServiceMock)
-    appStateMock.currentMfe$.publish({
-      appId: 'app',
-      baseHref: '/',
-      productName: 'product',
-      shellName: 'shell',
-      mountPath: '/',
-      remoteBaseUrl: 'http://remote.example.com'
-    })
+    publishMfe(REMOTE_BASE_URL)
 
     fixture = TestBed.createComponent(BookmarkImageComponent)
     component = fixture.componentInstance
@@ -66,54 +88,121 @@ describe('BookmarkImageComponent', () => {
       expect(component.loading).toBe(true)
     })
 
-    it('should start with errorImage$ undefined', () => {
-      expect(component.errorImage$).toBeUndefined()
+    it('should set currentImageUrl to the default logo when no bookmark or product is set', () => {
+      expect(component.currentImageUrl).toContain(REMOTE_BASE_URL)
+      expect(component.currentImageUrl).toContain(environment.DEFAULT_LOGO_PATH)
     })
 
-    it('should resolve defaultImageUrl$ from remoteBaseUrl', (done) => {
-      component.defaultImageUrl$.subscribe((url) => {
-        expect(url).toContain('http://remote.example.com')
-        done()
-      })
+    it('should set currentImageUrl to undefined when remoteBaseUrl is empty and no bookmark or product', () => {
+      const c = createFreshComponent('')
+      expect(c.currentImageUrl).toBeUndefined()
     })
 
-    it('should resolve bookmarkImageBaseURL$ from remoteBaseUrl and bookmark id', (done) => {
-      component.bookmark = baseBookmark
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      component.bookmarkImageBaseURL$!.subscribe((url) => {
-        expect(url).toContain('bff/images/')
-        expect(url).toContain('bm-1')
-        done()
-      })
-    })
-
-    it('should resolve bookmarkImageBaseURL$ without bookmark id when bookmark is not set', (done) => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      component.bookmarkImageBaseURL$!.subscribe((url) => {
-        expect(url).toContain('bff/images/')
-        done()
-      })
-    })
-  })
-
-  describe('prepareUrlPath (via observables)', () => {
-    it('should return empty string when remoteBaseUrl is empty', (done) => {
+    it('should set currentImageUrl to undefined when remoteBaseUrl is undefined', () => {
       appStateMock.currentMfe$.publish({
         appId: 'app',
         baseHref: '/',
         productName: 'product',
         shellName: 'shell',
-        mountPath: '/',
-        remoteBaseUrl: ''
-      })
-      component.defaultImageUrl$.subscribe((url) => {
-        expect(url).toBe('')
-        done()
-      })
+        mountPath: '/'
+      } as never)
+      const f = TestBed.createComponent(BookmarkImageComponent)
+      f.detectChanges()
+      expect(f.componentInstance.currentImageUrl).toBeUndefined()
+    })
+  })
+
+  describe('ngOnChanges', () => {
+    it('should rebuild queue and reset loading to true when bookmark changes', () => {
+      component.loading = false
+      component.bookmark = { ...baseBookmark, imageUrl: 'http://img.example.com/logo.png' }
+
+      component.ngOnChanges(bookmarkChange(component.bookmark))
+
+      expect(component.loading).toBe(true)
+      expect(component.currentImageUrl).toBe('http://img.example.com/logo.png')
     })
 
-    it('should return url when only url is provided', () => {
-      expect(component['prepareUrlPath']('http://example.com', undefined)).toBe('http://example.com')
+    it('should rebuild queue and reset loading to true when product changes', () => {
+      component.loading = false
+      component.product = { ...baseProduct, imageUrl: 'http://product.example.com/logo.png' }
+
+      component.ngOnChanges(productChange(component.product))
+
+      expect(component.loading).toBe(true)
+    })
+
+    it('should not reset or rebuild when an unrelated input changes', () => {
+      component.loading = false
+      const urlBefore = component.currentImageUrl
+
+      component.ngOnChanges({ styleClass: new SimpleChange(undefined, 'my-class', false) })
+
+      expect(component.loading).toBe(false)
+      expect(component.currentImageUrl).toBe(urlBefore)
+    })
+  })
+
+  describe('rebuildUrlQueue priorities', () => {
+    it('should use bookmark.imageUrl as first priority (P1)', () => {
+      component.bookmark = { ...baseBookmark, imageUrl: 'http://img.example.com/logo.png' }
+      component.ngOnChanges(bookmarkChange(component.bookmark))
+
+      expect(component.currentImageUrl).toBe('http://img.example.com/logo.png')
+    })
+
+    it('should use BFF URL as second priority when bookmark has id and remoteBaseUrl is set (P2)', () => {
+      component.bookmark = { ...baseBookmark, imageUrl: undefined }
+      component.ngOnChanges(bookmarkChange(component.bookmark))
+
+      expect(component.currentImageUrl).toContain(REMOTE_BASE_URL)
+      expect(component.currentImageUrl).toContain('bff/images/bm-1')
+    })
+
+    it('should skip BFF URL when remoteBaseUrl is empty (P2 skipped)', () => {
+      const c = createFreshComponent('')
+      c.bookmark = { ...baseBookmark, imageUrl: undefined }
+      c.product = { ...baseProduct, imageUrl: 'http://product.example.com/logo.png' }
+      c.ngOnChanges({
+        bookmark: new SimpleChange(undefined, c.bookmark, true),
+        product: new SimpleChange(undefined, c.product, true)
+      })
+
+      expect(c.currentImageUrl).toBe('http://product.example.com/logo.png')
+    })
+
+    it('should use product.imageUrl as third priority after BFF URL fails (P3)', () => {
+      component.bookmark = { ...baseBookmark, imageUrl: undefined }
+      component.product = { ...baseProduct, imageUrl: 'http://product.example.com/logo.png' }
+      component.ngOnChanges({
+        bookmark: new SimpleChange(undefined, component.bookmark, true),
+        product: new SimpleChange(undefined, component.product, true)
+      })
+
+      component.onImageError() // skip BFF URL (P2)
+
+      expect(component.currentImageUrl).toBe('http://product.example.com/logo.png')
+    })
+
+    it('should use default logo as last fallback when all higher priorities fail (P4)', () => {
+      component.bookmark = { ...baseBookmark, imageUrl: undefined }
+      component.product = undefined
+      component.ngOnChanges(bookmarkChange(component.bookmark))
+
+      component.onImageError() // skip BFF URL (P2) → arrives at default (P4)
+
+      expect(component.currentImageUrl).toContain(REMOTE_BASE_URL)
+      expect(component.currentImageUrl).toContain(environment.DEFAULT_LOGO_PATH)
+    })
+
+    it('should skip default logo when remoteBaseUrl is empty (P4 skipped)', () => {
+      const c = createFreshComponent('')
+      c.bookmark = { ...baseBookmark, imageUrl: 'http://img.example.com/logo.png' }
+      c.ngOnChanges(bookmarkChange(c.bookmark))
+      // P1 is bookmark.imageUrl — after one error the queue is exhausted (no BFF, no default)
+      c.onImageError()
+
+      expect(c.currentImageUrl).toBeUndefined()
     })
   })
 
@@ -121,122 +210,51 @@ describe('BookmarkImageComponent', () => {
     it('should set loading to false', () => {
       component.loading = true
       component.onImageLoad()
+
       expect(component.loading).toBe(false)
     })
   })
 
   describe('onImageError', () => {
-    it('should do nothing when loading is false', () => {
-      component.loading = false
-      component.onImageError()
-      expect(component.errorImage$).toBeUndefined()
-    })
-
-    it('should load product logo when counter is 0 and productLogoUrl is set', () => {
-      component.loading = true
-      component['imageLoadCounter'] = 0
-      component['productLogoUrl'] = 'http://product.logo/img.png'
+    it('should advance to the next URL in the queue', () => {
+      component.bookmark = { ...baseBookmark, imageUrl: 'http://img.example.com/logo.png' }
+      component.ngOnChanges(bookmarkChange(component.bookmark))
+      expect(component.currentImageUrl).toBe('http://img.example.com/logo.png')
 
       component.onImageError()
 
-      expect(component['imageLoadCounter']).toBe(1)
-      expect(component.errorImage$).toBeDefined()
+      expect(component.currentImageUrl).toContain('bff/images/bm-1')
     })
 
-    it('should load default image when counter is 0 and no productLogoUrl', () => {
-      component.loading = true
-      component['imageLoadCounter'] = 0
-      component['productLogoUrl'] = undefined
+    it('should walk through all four priorities in order', () => {
+      component.bookmark = { ...baseBookmark, imageUrl: 'http://img.example.com/logo.png' }
+      component.product = { ...baseProduct, imageUrl: 'http://product.example.com/logo.png' }
+      component.ngOnChanges({
+        bookmark: new SimpleChange(undefined, component.bookmark, true),
+        product: new SimpleChange(undefined, component.product, true)
+      })
+
+      expect(component.currentImageUrl).toBe('http://img.example.com/logo.png') // P1
 
       component.onImageError()
-
-      expect(component['imageLoadCounter']).toBe(2)
-      expect(component.errorImage$).toBe(component.defaultImageUrl$)
-    })
-
-    it('should load default image when counter is 1', () => {
-      component.loading = true
-      component['imageLoadCounter'] = 1
+      expect(component.currentImageUrl).toContain('bff/images/bm-1') // P2
 
       component.onImageError()
+      expect(component.currentImageUrl).toBe('http://product.example.com/logo.png') // P3
 
-      expect(component['imageLoadCounter']).toBe(2)
-      expect(component.errorImage$).toBe(component.defaultImageUrl$)
+      component.onImageError()
+      expect(component.currentImageUrl).toContain(environment.DEFAULT_LOGO_PATH) // P4
     })
-  })
 
-  describe('ngOnChanges', () => {
-    it('should do nothing when bookmark has no id', () => {
+    it('should set loading to false and currentImageUrl to undefined when all fallbacks are exhausted', () => {
+      // Queue has only the default logo; one error exhausts it
       component.bookmark = undefined
-      const changes: SimpleChanges = {
-        product: new SimpleChange(undefined, baseProduct, false)
-      }
+      component.ngOnChanges(bookmarkChange(undefined))
 
-      component.ngOnChanges(changes)
+      component.onImageError()
 
-      expect(component['productLogoUrl']).toBeUndefined()
-    })
-
-    it('should do nothing when product change is first change', () => {
-      component.bookmark = baseBookmark
-      const changes: SimpleChanges = {
-        product: new SimpleChange(undefined, baseProduct, true)
-      }
-
-      component.ngOnChanges(changes)
-
-      expect(component['productLogoUrl']).toBeUndefined()
-    })
-
-    it('should do nothing when product is falsy after non-first change', () => {
-      component.bookmark = baseBookmark
-      const changes: SimpleChanges = {
-        product: new SimpleChange(baseProduct, undefined, false)
-      }
-      component.product = undefined
-
-      component.ngOnChanges(changes)
-
-      expect(component['productLogoUrl']).toBeUndefined()
-    })
-
-    it('should set productLogoUrl to undefined when product has no imageUrl', () => {
-      component.bookmark = baseBookmark
-      component.product = { name: 'product', displayName: 'My Product' }
-      const changes: SimpleChanges = {
-        product: new SimpleChange(undefined, component.product, false)
-      }
-
-      component.ngOnChanges(changes)
-
-      expect(component['productLogoUrl']).toBeUndefined()
-    })
-
-    it('should set productLogoUrl on non-first product change with bookmark and product', () => {
-      component.bookmark = baseBookmark
-      component.product = { ...baseProduct, imageUrl: 'http://img.example.com/logo.png' }
-      const changes: SimpleChanges = {
-        product: new SimpleChange(undefined, component.product, false)
-      }
-
-      component.ngOnChanges(changes)
-
-      expect(component['productLogoUrl']).toBe('http://img.example.com/logo.png')
-    })
-
-    it('should trigger image reload when counter is 2 and productLogoUrl exists', () => {
-      component.bookmark = baseBookmark
-      component.product = { ...baseProduct, imageUrl: 'http://img.example.com/logo.png' }
-      component['imageLoadCounter'] = 2
-      component.loading = false
-      const changes: SimpleChanges = {
-        product: new SimpleChange(undefined, component.product, false)
-      }
-
-      component.ngOnChanges(changes)
-
-      expect(component.loading).toBe(true)
-      expect(component['imageLoadCounter']).toBeGreaterThan(0)
+      expect(component.loading).toBe(false)
+      expect(component.currentImageUrl).toBeUndefined()
     })
   })
 })

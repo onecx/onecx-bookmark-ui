@@ -4,7 +4,7 @@
 @if (bookmark) {
   <img
     [alt]="bookmark.displayName"
-    [ocxSrc]="(this.errorImage$ | async) ?? bookmark.imageUrl ?? (bookmarkImageBaseURL$ | async) ?? undefined"
+    [ocxSrc]="currentImageUrl"
     [class]="'image-object  border-round-sm ' + (styleClass ? styleClass : '')"
     [ngClass]="loading ? 'hidden' : ''"
     (error)="onImageError()"
