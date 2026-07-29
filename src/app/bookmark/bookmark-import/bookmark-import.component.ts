@@ -9,7 +9,7 @@ import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileuploa
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { MessageModule } from 'primeng/message'
 import { SelectButtonModule } from 'primeng/selectbutton'
-import { TabViewModule } from 'primeng/tabview'
+import { TabsModule } from 'primeng/tabs'
 import { TooltipModule } from 'primeng/tooltip'
 
 import {
@@ -45,7 +45,7 @@ export type ImportError = {
     FormsModule,
     MessageModule,
     SelectButtonModule,
-    TabViewModule,
+    TabsModule,
     TooltipModule,
     TranslateModule
   ],
