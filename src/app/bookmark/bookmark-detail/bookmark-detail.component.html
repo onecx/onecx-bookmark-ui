@@ -1,11 +1,12 @@
 <!-- PRODUCTS -->
 @if (isProductComponentDefined$ | async) {
+  <!-- Get product data from product store, provided in product$ -->
   <ocx-slot
     [name]="slotName"
     [inputs]="{
       dataType: 'product',
       productName: this.vm.initialBookmark?.productName,
-      logEnabled: true,
+      logEnabled: false,
       logPrefix: 'bookmark'
     }"
     [outputs]="{ product: productEmitter }"
@@ -253,7 +254,7 @@
     </p-tabpanel>
 
     <p-tabpanel value="1">
-      @let product = (productEmitter.asObservable() | async) ?? defaultProduct;
+      @let product = (product$ | async) ?? defaultProduct;
       @if (product) {
         <div class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4">
           @if (product.imageUrl && !onProductImageLoadError) {

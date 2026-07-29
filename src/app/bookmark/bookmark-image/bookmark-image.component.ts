@@ -49,7 +49,7 @@ export class BookmarkImageComponent implements OnChanges {
   }
   public ngOnChanges(changes: SimpleChanges): void {
     if (this.bookmark?.id) {
-      if (changes['product'] && !changes['product'].firstChange && this.product) {
+      if (changes['product'] && this.product) {
         this.productLogoUrl = this.product.imageUrl
         // if default was loaded and product image url exists, then try to get product logos
         if (this.imageLoadCounter === 2 && this.productLogoUrl) {

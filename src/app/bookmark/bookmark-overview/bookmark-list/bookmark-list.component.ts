@@ -54,11 +54,7 @@ export class BookmarkListComponent {
       if (!Object.keys(this.urls).includes(bookmark.id)) {
         this.urls[bookmark.id] = this.workspaceService
           .getUrl(bookmark.productName, bookmark.appId, bookmark.endpointName, bookmark.endpointParameters)
-          .pipe(
-            map((path) => {
-              return path
-            })
-          )
+          .pipe(map((path) => path))
       }
       return this.urls[bookmark.id]
     }
