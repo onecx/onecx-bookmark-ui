@@ -463,6 +463,8 @@ components:
           type: string
         scope:
           $ref: '#/components/schemas/BookmarkScope'
+        disabled:
+          type: boolean
         pageNumber:
           format: int32
           description: The number of page.

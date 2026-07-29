@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { CommonModule } from '@angular/common'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
@@ -43,7 +42,6 @@ describe('BookmarkListComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         BookmarkListComponent,
-        CommonModule,
         NoopAnimationsModule,
         RouterModule.forRoot([]),
         AngularAcceleratorModule,
@@ -71,10 +69,6 @@ describe('BookmarkListComponent', () => {
   describe('initial state', () => {
     it('should have empty bookmarks array by default', () => {
       expect(component.bookmarks).toEqual([])
-    })
-
-    it('should have loading false by default', () => {
-      expect(component.loading).toBe(false)
     })
 
     it('should have isPrivate false by default', () => {

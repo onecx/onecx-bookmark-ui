@@ -4,22 +4,20 @@ import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { ActivatedRoute } from '@angular/router'
-import { LetDirective } from '@ngrx/component'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
-import { TabViewModule } from 'primeng/tabview'
+import { ActivatedRoute } from '@angular/router'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { provideMockStore } from '@ngrx/store/testing'
+import { of, throwError } from 'rxjs'
 
 import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
 import { provideAlwaysGrantPermissionChecker } from '@onecx/angular-utils'
-
-import { BookmarkDetailComponent, Product } from './bookmark-detail.component'
-import { of, throwError } from 'rxjs'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { provideMockStore } from '@ngrx/store/testing'
-import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
+
 import { BookmarkScope } from 'src/app/shared/generated'
+import { Application, BookmarkDetailComponent, Product } from './bookmark-detail.component'
+import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -72,8 +70,6 @@ describe('BookmarkDetailComponent', () => {
         BookmarkDetailComponent,
         FormsModule,
         ReactiveFormsModule,
-        LetDirective,
-        TabViewModule,
         NoopAnimationsModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
@@ -122,6 +118,15 @@ describe('BookmarkDetailComponent', () => {
 
       const result = component.getProductAppDisplayName(product, 'app1')
       expect(result).toBe('My App')
+    })
+
+    it('should return appId if applications are empty', () => {
+      const product = {
+        applications: [] as Application[]
+      } as Product
+
+      const result = component.getProductAppDisplayName(product, 'app1')
+      expect(result).toBe('app1')
     })
 
     it('should return undefined if no app id', () => {

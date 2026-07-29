@@ -4,18 +4,19 @@
 @include ocx-text-responsive;
 @include table-inline-buttons;
 @include table-zebra-rows;
-@include correct-select-button;
-@include search-criteria-select-button;
-@include search-criteria-select-button-slim;
 
 :host ::ng-deep {
   #external-header-name ~ .icon-button-header-wrapper .sortButton,
   #target-header-name ~ .icon-button-header-wrapper .sortButton {
     display: none;
   }
-
   #interactiveDataViewHeader > div > div.ng-star-inserted {
     width: 100%;
+  }
+
+  .ocx-content > div {
+    margin-bottom: 0 !important;
+    padding: 0;
   }
 
   .p-datatable {

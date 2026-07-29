@@ -11,7 +11,7 @@ import { AppConfigService, UserService } from '@onecx/angular-integration-interf
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
 import { OneCXBookmarkListComponent, slotInitializer } from './bookmark-list.component'
 
 Object.defineProperty(window, 'matchMedia', {
@@ -33,7 +33,7 @@ describe('OneCXBookmarkListComponent', () => {
   let fixture: ComponentFixture<OneCXBookmarkListComponent>
 
   let baseUrlSubject: ReplaySubject<RemoteComponentConfig>
-  let bookmarkApiUtilsMock: jest.Mocked<Pick<BookmarkAPIUtilsService, 'overwriteBaseURL' | 'loadBookmarks'>>
+  let bookmarkApiUtilsMock: jest.Mocked<Pick<BookmarkUtilService, 'overwriteBaseURL' | 'loadBookmarks'>>
   let appConfigServiceMock: jest.Mocked<Pick<AppConfigService, 'init'>>
   let userServiceMock: { lang$: BehaviorSubject<string> }
 
@@ -74,7 +74,7 @@ describe('OneCXBookmarkListComponent', () => {
         set: {
           providers: [
             { provide: REMOTE_COMPONENT_CONFIG, useValue: baseUrlSubject },
-            { provide: BookmarkAPIUtilsService, useValue: bookmarkApiUtilsMock },
+            { provide: BookmarkUtilService, useValue: bookmarkApiUtilsMock },
             { provide: AppConfigService, useValue: appConfigServiceMock },
             { provide: SLOT_SERVICE, useValue: { init: jest.fn().mockReturnValue(Promise.resolve()) } }
           ]

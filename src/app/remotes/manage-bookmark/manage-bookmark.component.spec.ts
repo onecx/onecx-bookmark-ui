@@ -16,7 +16,7 @@ import {
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { BookmarkScope } from 'src/app/shared/generated'
-import { BookmarkAPIUtilsService } from 'src/app/shared/utils/bookmarkApiUtils.service'
+import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
 import { OneCXManageBookmarkComponent, slotInitializer } from './manage-bookmark.component'
 
 Object.defineProperty(window, 'matchMedia', {
@@ -40,7 +40,7 @@ describe('OneCXManageBookmarkComponent', () => {
   let baseUrlSubject: ReplaySubject<RemoteComponentConfig>
   let bookmarkApiUtilsMock: jest.Mocked<
     Pick<
-      BookmarkAPIUtilsService,
+      BookmarkUtilService,
       'overwriteBaseURL' | 'loadBookmarksForApp' | 'createNewBookmark' | 'editBookmark' | 'deleteBookmarkById'
     >
   >
@@ -102,7 +102,7 @@ describe('OneCXManageBookmarkComponent', () => {
         set: {
           providers: [
             { provide: REMOTE_COMPONENT_CONFIG, useValue: baseUrlSubject },
-            { provide: BookmarkAPIUtilsService, useValue: bookmarkApiUtilsMock },
+            { provide: BookmarkUtilService, useValue: bookmarkApiUtilsMock },
             { provide: AppConfigService, useValue: appConfigServiceMock },
             { provide: PortalDialogService, useValue: portalDialogServiceMock },
             { provide: PortalMessageService, useValue: { success: jest.fn(), error: jest.fn() } },

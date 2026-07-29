@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { Location } from '@angular/common'
 import { catchError, map, mergeMap, Observable, of, retry, tap } from 'rxjs'
 
@@ -9,12 +9,10 @@ import { BookmarksInternalAPIService, Configuration, CreateBookmark, UpdateBookm
 import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'any' })
-export class BookmarkAPIUtilsService {
-  constructor(
-    private readonly bookmarkService: BookmarksInternalAPIService,
-    private readonly messageService: PortalMessageService,
-    private readonly appStateService: AppStateService
-  ) {}
+export class BookmarkUtilService {
+  private readonly bookmarkService = inject(BookmarksInternalAPIService)
+  private readonly messageService = inject(PortalMessageService)
+  private readonly appStateService = inject(AppStateService)
 
   overwriteBaseURL(baseUrl: string) {
     this.bookmarkService.configuration = new Configuration({
@@ -27,6 +25,7 @@ export class BookmarkAPIUtilsService {
       mergeMap(([currentWorkspace, currentMfe]) => {
         return this.bookmarkService.searchUserBookmarksByCriteria({
           bookmarkSearchCriteria: {
+            disabled: false,
             workspaceName: currentWorkspace.workspaceName,
             productName: currentMfe.productName,
             appId: currentMfe.appId
@@ -50,6 +49,7 @@ export class BookmarkAPIUtilsService {
       mergeMap((workspace) => {
         return this.bookmarkService.searchBookmarksByCriteria({
           bookmarkSearchCriteria: {
+            disabled: false,
             workspaceName: workspace.workspaceName
           }
         })

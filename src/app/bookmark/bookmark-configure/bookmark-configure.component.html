@@ -1,263 +1,264 @@
-<ocx-portal-page permission="BOOKMARK#CONFIGURE" helpArticleId="PAGE_BOOKMARK_CONFIGURE" *ngrxLet="viewModel$ as vm">
+<ocx-portal-page permission="BOOKMARK#CONFIGURE" helpArticleId="PAGE_BOOKMARK_CONFIGURE">
+  @let vm = viewModel$ | async;
   <ocx-page-header
     [header]="'DIALOG.CONFIGURE.HEADER' | translate"
     [subheader]="'DIALOG.CONFIGURE.SUBHEADER' | translate"
     [actions]="pageActions"
   />
 
-  <ocx-content>
-    <p-message
-      *ngIf="vm.loading"
-      id="bm_configure_message_loading"
-      severity="info"
-      styleClass="m-3"
-      [text]="'ACTIONS.LOADING' | translate"
-    ></p-message>
-    <p-message
-      *ngIf="vm.exceptionKey"
-      id="bm_configure_message_error"
-      severity="error"
-      styleClass="m-3"
-      [text]="vm.exceptionKey! | translate"
-    ></p-message>
-
-    <ocx-interactive-data-view
-      *ngIf="!(vm.loading || vm.exceptionKey)"
-      [data]="interactiveRows"
-      [columns]="interactiveColumns"
-      [displayedColumnKeys]="displayedColumnKeys"
-      [supportedViewLayouts]="['table']"
-      [layout]="'table'"
-      [sortField]="sortField"
-      [sortDirection]="defaultSortDirection"
-      [tablePaginator]="true"
-      [pageSize]="10"
-      [pageSizes]="[10, 30, 100]"
-      [filters]="tableFilters"
-      [clientSideFiltering]="true"
-      [clientSideSorting]="true"
-      [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
-      headerStyleClass="pb-2 px-3"
-      contentStyleClass="px-3"
-      (filtered)="onFilterChange($event)"
-      (sorted)="onSortChange($event)"
-      (dataViewLayoutChange)="onDataViewChange($event)"
-      (displayedColumnKeysChange)="onColumnsChange($event)"
-    >
-      <ng-template #topCenter>
-        <section class="w-full flex flex-wrap justify-content-between align-items-center gap-2 row-gap-1">
-          <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'"></div>
-          <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="slim-selectbutton search-criteria-selectbutton">
-            <p-selectButton
-              inputid="bm_configure_table_quick_filter"
-              [options]="quickFilterOptions"
-              [(ngModel)]="quickFilterValue"
-              (onChange)="onQuickFilterChange($event.value)"
-              [attr.aria-label]="'BOOKMARK.SCOPE' | translate"
-            >
-              <ng-template let-item pTemplate="item">
-                <span
-                  [id]="'bm_configure_table_quick_filter_' + item.value"
-                  [pTooltip]="item.title_key | translate"
+  <ocx-content class="ocx-content">
+    @if (vm?.loading) {
+      <p-message
+        id="bm_configure_message_loading"
+        severity="info"
+        styleClass="m-4"
+        [text]="'ACTIONS.LOADING' | translate"
+      ></p-message>
+    } @else if (vm?.exceptionKey) {
+      <p-message
+        id="bm_configure_message_error"
+        severity="error"
+        styleClass="m-4"
+        [text]="vm?.exceptionKey! | translate"
+      ></p-message>
+    } @else {
+      <ocx-interactive-data-view
+        [data]="interactiveRows"
+        [columns]="interactiveColumns"
+        [displayedColumnKeys]="displayedColumnKeys"
+        [supportedViewLayouts]="['table']"
+        [layout]="'table'"
+        [sortField]="sortField"
+        [sortDirection]="defaultSortDirection"
+        [tablePaginator]="true"
+        [pageSize]="10"
+        [pageSizes]="[10, 30, 100]"
+        [filters]="tableFilters"
+        [clientSideFiltering]="true"
+        [clientSideSorting]="true"
+        [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
+        headerStyleClass="pb-2 px-3"
+        contentStyleClass="px-3"
+        (filtered)="onFilterChange($event)"
+        (sorted)="onSortChange($event)"
+        (dataViewLayoutChange)="onDataViewChange($event)"
+        (displayedColumnKeysChange)="onColumnsChange($event)"
+      >
+        <ng-template #topCenter>
+          <section class="w-full flex flex-wrap justify-content-between align-items-center gap-2 row-gap-1">
+            <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'"></div>
+            <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="slim-selectbutton search-criteria-selectbutton">
+              <p-selectButton
+                inputid="bm_configure_table_quick_filter"
+                [options]="quickFilterOptions"
+                [(ngModel)]="quickFilterValue"
+                (onChange)="onQuickFilterChange($event.value)"
+                [attr.aria-label]="'BOOKMARK.SCOPE' | translate"
+              >
+                <ng-template let-item pTemplate="item">
+                  <span
+                    [id]="'bm_configure_table_quick_filter_' + item.value"
+                    [pTooltip]="item.title_key | translate"
+                    tooltipPosition="top"
+                    tooltipEvent="hover"
+                  >
+                    {{ item.label | translate }}
+                  </span>
+                </ng-template>
+              </p-selectButton>
+            </div>
+            <div class="app-search-filterbox min-w-14rem">
+              <p-inputgroup class="w-full">
+                <p-inputgroup-addon>
+                  <i class="pi pi-filter" aria-hidden="true"></i>
+                </p-inputgroup-addon>
+                <p-floatlabel variant="on">
+                  <input
+                    #globalFilterInput
+                    id="bm_configure_search_filter"
+                    type="text"
+                    pInputText
+                    [value]="globalFilterValue"
+                    (input)="onGlobalFilter(globalFilterInput.value)"
+                    [ariaLabel]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
+                    [pTooltip]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
+                    tooltipPosition="top"
+                    tooltipEvent="hover"
+                  />
+                  <label for="bm_configure_search_filter" aria-hidden="true">
+                    {{ 'ACTIONS.SEARCH.FILTER.LABEL' | translate }}
+                  </label>
+                </p-floatlabel>
+                <p-button
+                  id="bm_configure_table_global_filter_clear"
+                  icon="pi pi-filter-slash"
+                  (onClick)="globalFilterInput.value = ''; onClearGlobalFilter()"
+                  (onKeydown.enter)="globalFilterInput.value = ''; onClearGlobalFilter()"
+                  [severity]="globalFilterInput.value !== '' ? 'primary' : 'secondary'"
+                  [disabled]="!globalFilterValue"
+                  [ariaLabel]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
+                  [pTooltip]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
-                >
-                  {{ item.label | translate }}
-                </span>
-              </ng-template>
-            </p-selectButton>
-          </div>
-          <div class="app-search-filterbox min-w-14rem">
-            <p-inputgroup class="w-full">
-              <p-inputgroup-addon>
-                <i class="pi pi-filter" aria-hidden="true"></i>
-              </p-inputgroup-addon>
-              <p-floatlabel variant="on">
-                <input
-                  #dvFilterInput
-                  id="bm_configure_search_filter"
-                  type="text"
-                  pInputText
-                  [value]="filterText"
-                  (input)="onGlobalFilter(dvFilterInput.value)"
-                  [pTooltip]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                  [attr.aria-label]="'ACTIONS.SEARCH.FILTER.TOOLTIP' | translate"
                 />
-                <label for="bm_configure_search_filter" aria-hidden="true">
-                  {{ 'ACTIONS.SEARCH.FILTER.LABEL' | translate }}
-                </label>
-              </p-floatlabel>
+              </p-inputgroup>
+            </div>
+            <p-button
+              id="bm_configure_table_reload_button"
+              icon="pi pi-refresh"
+              (onClick)="onSearch()"
+              [ariaLabel]="'ACTIONS.SEARCH.RELOAD' | translate"
+              [pTooltip]="'ACTIONS.SEARCH.RELOAD' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            ></p-button>
+          </section>
+        </ng-template>
+
+        <ng-template pTemplate="actionsIdTableCell" let-rowObject="rowObject">
+          <div class="icon-button-row-wrapper">
+            @if (rowObject.showEnabledStateAction) {
               <p-button
-                icon="pi pi-filter-slash"
-                (onClick)="dvFilterInput.value = ''; onClearGlobalFilter()"
-                [attr.aria-label]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
-                [pTooltip]="'ACTIONS.SEARCH.FILTER.RESET' | translate"
+                *ocxIfPermission="['BOOKMARK#EDIT', 'BOOKMARK#ADMIN_EDIT']"
+                pRipple
+                [id]="'bm_configure_table_row_' + rowObject.id + '_action_toggle'"
+                icon="pi pi-check-circle"
+                severity="success"
+                [text]="true"
+                [rounded]="true"
+                (onClick)="onToggleDisable(rowObject)"
+                [ariaLabel]="'BOOKMARK.ENABLED' | translate"
+                [pTooltip]="'BOOKMARK.ENABLED' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
-              />
-            </p-inputgroup>
-          </div>
-          <p-button
-            id="bm_configure_table_reload_button"
-            icon="pi pi-refresh"
-            (onClick)="onSearch()"
-            [ariaLabel]="'ACTIONS.SEARCH.RELOAD' | translate"
-            [pTooltip]="'ACTIONS.SEARCH.RELOAD' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          ></p-button>
-        </section>
-      </ng-template>
+              ></p-button>
+            }
+            @if (rowObject.showDisabledStateAction) {
+              <p-button
+                pRipple
+                [id]="'bm_configure_table_row_' + rowObject.id + '_action_toggle'"
+                icon="pi pi-minus-circle"
+                severity="danger"
+                [text]="true"
+                [rounded]="true"
+                (onClick)="onToggleDisable(rowObject)"
+                [ariaLabel]="'BOOKMARK.DISABLED' | translate"
+                [pTooltip]="'BOOKMARK.DISABLED' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></p-button>
+            }
 
-      <ng-template pTemplate="actionsIdTableCell" let-rowObject="rowObject">
-        <div class="icon-button-row-wrapper">
-          <ng-container *ocxIfPermission="['BOOKMARK#EDIT', 'BOOKMARK#ADMIN_EDIT']">
-            <button
-              *ngIf="rowObject.showEnabledStateAction"
-              type="button"
-              pButton
-              pRipple
-              [id]="'bm_configure_table_row_' + rowObject.id + '_action_toggle'"
-              class="p-button-rounded p-button-text p-button-success"
-              icon="pi pi-check-circle"
-              (click)="onToggleDisable(rowObject)"
-              [attr.aria-label]="'BOOKMARK.ENABLED' | translate"
-              [pTooltip]="'BOOKMARK.ENABLED' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            ></button>
+            @if (rowObject.canEditAction) {
+              <p-button
+                pRipple
+                [id]="'bm_configure_table_row_' + rowObject.id + '_action_edit'"
+                icon="pi pi-pencil"
+                [text]="true"
+                [rounded]="true"
+                (onClick)="onDetail(rowObject)"
+                [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
+                [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></p-button>
+            }
 
-            <button
-              *ngIf="rowObject.showDisabledStateAction"
-              type="button"
-              pButton
-              pRipple
-              [id]="'bm_configure_table_row_' + rowObject.id + '_action_toggle'"
-              class="p-button-rounded p-button-text p-button-danger"
-              icon="pi pi-minus-circle"
-              (click)="onToggleDisable(rowObject)"
-              [attr.aria-label]="'BOOKMARK.DISABLED' | translate"
-              [pTooltip]="'BOOKMARK.DISABLED' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            ></button>
-
-            <button
-              *ngIf="rowObject.canEditAction"
-              type="button"
-              pButton
-              pRipple
-              [id]="'bm_configure_table_row_' + rowObject.id + '_action_edit'"
-              class="p-button-rounded p-button-text"
-              icon="pi pi-pencil"
-              (click)="onDetail(rowObject)"
-              [attr.aria-label]="'ACTIONS.EDIT.LABEL' | translate"
-              [pTooltip]="'ACTIONS.EDIT.LABEL' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            ></button>
-          </ng-container>
-
-          <ng-container *ocxIfPermission="'BOOKMARK#CREATE'">
-            <button
-              type="button"
-              pButton
+            <p-button
+              *ocxIfPermission="'BOOKMARK#CREATE'"
               pRipple
               [id]="'bm_configure_table_row_' + rowObject.id + '_action_copy'"
-              class="p-button-rounded p-button-text"
               icon="pi pi-copy"
-              (click)="onCopy(rowObject)"
-              [attr.aria-label]="'ACTIONS.COPY.LABEL' | translate"
+              [text]="true"
+              [rounded]="true"
+              (onClick)="onCopy(rowObject)"
+              [ariaLabel]="'ACTIONS.COPY.LABEL' | translate"
               [pTooltip]="'ACTIONS.COPY.LABEL' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
-            ></button>
-          </ng-container>
+            ></p-button>
 
-          <ng-container *ocxIfPermission="['BOOKMARK#DELETE', 'BOOKMARK#ADMIN_DELETE']">
-            <button
-              *ngIf="rowObject.canDeleteAction"
-              type="button"
-              pButton
-              pRipple
-              [id]="'bm_configure_table_row_' + rowObject.id + '_action_delete'"
-              class="p-button-rounded p-button-text p-button-danger"
-              icon="pi pi-trash"
-              (click)="onDelete(rowObject)"
-              [attr.aria-label]="'ACTIONS.DELETE.LABEL' | translate"
-              [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            ></button>
-          </ng-container>
-        </div>
-      </ng-template>
-
-      <ng-template pTemplate="externalIdTableCell" let-rowObject="rowObject">
-        <div class="text-center">
-          <span
-            *ngIf="rowObject.external"
-            class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-            [attr.aria-label]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
-          >
-            <span class="pi pi-link"></span>
-          </span>
-        </div>
-      </ng-template>
-
-      <ng-template pTemplate="targetIdTableCell" let-rowObject="rowObject">
-        <div class="text-center">
-          <span
-            *ngIf="rowObject.target === '_blank'"
-            class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-            [attr.aria-label]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
-          >
-            <span class="pi pi-external-link"></span>
-          </span>
-        </div>
-      </ng-template>
-
-      <ng-template pTemplate="urlIdTableCell" let-rowObject="rowObject" let-column="column">
-        <div class="flex flex-row column-gap-2 align-items-center">
-          <span
-            class="text-primary pi"
-            [ngClass]="rowObject.url ? 'pi-globe' : 'pi-link'"
-            [attr.aria-label]="'BOOKMARK.TOOLTIPS.TYPE_' + (rowObject.url ? 'URL' : 'PRODUCT') | translate"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.TYPE_' + (rowObject.url ? 'URL' : 'PRODUCT') | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          ></span>
-          <div class="text-ellipsis-2-lines">
-            @if (rowObject.url) {
-              <a
-                class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
-                [href]="rowObject[column.id]"
-                [target]="rowObject.target"
-              >
-                {{ limitText(rowObject[column.id], 100) }}
-              </a>
-            } @else {
-              <a
-                class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
-                [routerLink]="getUrl(rowObject) | async"
-                [queryParams]="rowObject.query"
-                [fragment]="rowObject.fragment"
-                [target]="rowObject.target"
-              >
-                {{ limitText(prepareUrlBookmarkLink(getUrl(rowObject) | async, rowObject), 100) }}
-              </a>
+            @if (rowObject.canDeleteAction) {
+              <p-button
+                *ocxIfPermission="['BOOKMARK#DELETE', 'BOOKMARK#ADMIN_DELETE']"
+                pRipple
+                [id]="'bm_configure_table_row_' + rowObject.id + '_action_delete'"
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                [rounded]="true"
+                (onClick)="onDelete(rowObject)"
+                [ariaLabel]="'ACTIONS.DELETE.LABEL' | translate"
+                [pTooltip]="'ACTIONS.DELETE.LABEL' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></p-button>
             }
           </div>
-        </div>
-      </ng-template>
-    </ocx-interactive-data-view>
+        </ng-template>
+
+        <ng-template pTemplate="externalIdTableCell" let-rowObject="rowObject">
+          @if (rowObject.external) {
+            <span
+              class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+              [attr.aria-label]="'BOOKMARK.TOOLTIPS.EXTERNAL.CONFIG' | translate"
+            >
+              <span class="pi pi-link"></span>
+            </span>
+          }
+        </ng-template>
+
+        <ng-template pTemplate="targetIdTableCell" let-rowObject="rowObject">
+          @if (rowObject.target === '_blank') {
+            <span
+              class="inline-flex align-items-center justify-content-center w-1rem h-1rem"
+              [attr.aria-label]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.TARGET.CONFIG' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+              <span class="pi pi-external-link"></span>
+            </span>
+          }
+        </ng-template>
+
+        <ng-template pTemplate="urlIdTableCell" let-rowObject="rowObject" let-column="column">
+          <div class="flex flex-row column-gap-2 align-items-center">
+            <span
+              class="text-primary pi"
+              [ngClass]="rowObject.url ? 'pi-globe' : 'pi-link'"
+              [attr.aria-label]="'BOOKMARK.TOOLTIPS.TYPE_' + (rowObject.url ? 'URL' : 'PRODUCT') | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.TYPE_' + (rowObject.url ? 'URL' : 'PRODUCT') | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            ></span>
+            <div class="text-ellipsis-2-lines">
+              @if (rowObject.url) {
+                <a
+                  class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
+                  [href]="rowObject[column.id]"
+                  [target]="rowObject.target"
+                >
+                  {{ limitText(rowObject[column.id], 100) }}
+                </a>
+              } @else {
+                <a
+                  class="mt-1 p-1 border-round bookmark-link font-italic text-primary"
+                  [routerLink]="getUrl(rowObject) | async"
+                  [queryParams]="rowObject.query"
+                  [fragment]="rowObject.fragment"
+                  [target]="rowObject.target"
+                >
+                  {{ limitText(prepareUrlBookmarkLink(getUrl(rowObject) | async, rowObject), 100) }}
+                </a>
+              }
+            </div>
+          </div>
+        </ng-template>
+      </ocx-interactive-data-view>
+    }
   </ocx-content>
 </ocx-portal-page>

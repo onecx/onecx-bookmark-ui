@@ -1,11 +1,14 @@
-<p-skeleton *ngIf="loading" [styleClass]="styleClass ? styleClass : 'max-w-8rem max-h-5rem'"></p-skeleton>
-<img
-  *ngIf="bookmark"
-  [alt]="bookmark.displayName"
-  [ocxSrc]="(this.errorImage$ | async) ?? bookmark.imageUrl ?? (bookmarkImageBaseURL$ | async) ?? undefined"
-  [class]="'image-object  border-round-sm ' + (styleClass ? styleClass : '')"
-  [ngClass]="loading ? 'hidden' : ''"
-  (error)="onImageError()"
-  (load)="onImageLoad()"
-  aria-hidden="true"
-/>
+@if (loading) {
+  <p-skeleton [styleClass]="styleClass ? styleClass : 'max-w-8rem max-h-5rem'"></p-skeleton>
+}
+@if (bookmark) {
+  <img
+    [alt]="bookmark.displayName"
+    [ocxSrc]="(this.errorImage$ | async) ?? bookmark.imageUrl ?? (bookmarkImageBaseURL$ | async) ?? undefined"
+    [class]="'image-object  border-round-sm ' + (styleClass ? styleClass : '')"
+    [ngClass]="loading ? 'hidden' : ''"
+    (error)="onImageError()"
+    (load)="onImageLoad()"
+    aria-hidden="true"
+  />
+}

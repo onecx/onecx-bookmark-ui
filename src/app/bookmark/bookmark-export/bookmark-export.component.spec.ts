@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -20,7 +19,6 @@ describe('BookmarkExportComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         BookmarkExportComponent,
-        CommonModule,
         FormsModule,
         CheckboxModule,
         AngularAcceleratorModule,

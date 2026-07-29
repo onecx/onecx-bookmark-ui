@@ -16,6 +16,7 @@ export interface BookmarkSearchCriteria {
     productName?: string;
     appId?: string;
     scope?: BookmarkScope;
+    disabled?: boolean;
     /**
      * The number of page.
      */

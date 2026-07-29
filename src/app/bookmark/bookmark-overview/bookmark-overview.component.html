@@ -1,13 +1,14 @@
-<ocx-portal-page permission="BOOKMARK#OVERVIEW" helpArticleId="PAGE_BOOKMARK_OVERVIEW" *ngrxLet="viewModel$ as vm">
+<ocx-portal-page permission="BOOKMARK#OVERVIEW" helpArticleId="PAGE_BOOKMARK_OVERVIEW">
+  @let vm = viewModel$ | async;
   <!-- PRODUCTS -->
-  <ng-container *ngIf="isProductComponentDefined$ | async">
+  @if (isProductComponentDefined$ | async) {
     <ocx-slot
       [name]="slotName"
       [inputs]="{ dataType: 'products', logEnabled: false, logPrefix: 'bookmarks' }"
       [outputs]="{ products: productsEmitter }"
     >
     </ocx-slot>
-  </ng-container>
+  }
 
   <!-- HEADER -->
   <div class="relative overflow-hidden">
@@ -18,53 +19,55 @@
       <div id="wc_overview_info_workspace" class="m-0 line-height-1 font-normal text-sm sm:text-base">
         Workspace: {{ workspace?.displayName }}
       </div>
-      <div *ngIf="vm.loading || vm.exceptionKey" class="mt-4">
+      @if (vm?.loading) {
         <p-message
-          *ngIf="vm.loading"
           id="bm_overview_message_loading"
           severity="info"
+          styleClass="mt-4"
           [text]="'ACTIONS.LOADING' | translate"
         ></p-message>
+      } @else if (vm?.exceptionKey) {
         <p-message
-          *ngIf="vm.exceptionKey"
           id="bm_overview_message_error"
           severity="error"
-          [text]="vm.exceptionKey! | translate"
+          styleClass="mt-4"
+          [text]="vm?.exceptionKey! | translate"
         ></p-message>
-      </div>
+      }
     </div>
     <!-- dock is absolute positioned -->
-    <p-dock *ngIf="hasEditPermissions$ | async" [model]="dockItems$ | async" position="right" styleClass="">
-      <ng-template #item let-item>
-        <span
-          [class]="'text-primary cursor-pointer text-lg sm:text-2xl ' + item.iconClass"
-          [attr.aria-label]="'ACTIONS.CONFIGURE.LABEL' | translate"
-        ></span>
-      </ng-template>
-    </p-dock>
+    @if (hasEditPermissions$ | async) {
+      <p-dock [model]="dockItems$ | async" position="right" styleClass="">
+        <ng-template #item let-item>
+          <span
+            [class]="'text-primary cursor-pointer text-lg sm:text-2xl ' + item.iconClass"
+            [attr.aria-label]="'ACTIONS.CONFIGURE.LABEL' | translate"
+          ></span>
+        </ng-template>
+      </p-dock>
+    }
   </div>
 
   <!-- BOOKMARKS
        => absolute positioned because screen centered and flex needs a height dimension of parent -->
   <div class="xl:absolute my-4 lg:my-6 xl:area-centered">
-    <div
-      *ngIf="!vm.loading && !vm.exceptionKey && ((products$ | async) ?? []) as products"
-      class="xl:w-11 mx-auto flex flex-row flex-nowrap column-gap-0 xl:column-gap-3 row-gap-4 sm:row-gap-3"
-    >
-      <app-bookmark-list
-        headerKey="REMOTES.BOOKMARK_LIST.TABS.PRIVATE"
-        [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Private)"
-        [products]="products"
-        [loading]="vm.loading"
-        [isPrivate]="true"
-      />
-      <app-bookmark-list
-        *ngIf="onFilterBookmarksByScope(vm.results, BookmarkScope.Public).length > 0"
-        headerKey="REMOTES.BOOKMARK_LIST.TABS.PUBLIC"
-        [bookmarks]="onFilterBookmarksByScope(vm.results, BookmarkScope.Public)"
-        [products]="products"
-        [loading]="vm.loading"
-      />
-    </div>
+    @let products = products$ | async;
+    @if (!vm?.loading && !vm?.exceptionKey && products) {
+      <div class="xl:w-11 mx-auto flex flex-row flex-nowrap row-gap-4 sm:row-gap-3 column-gap-2 xl:column-gap-3">
+        <app-bookmark-list
+          headerKey="REMOTES.BOOKMARK_LIST.TABS.PRIVATE"
+          [bookmarks]="onFilterBookmarksByScope(vm?.results, BookmarkScope.Private)"
+          [products]="products"
+          [isPrivate]="true"
+        />
+        @if (onFilterBookmarksByScope(vm?.results, BookmarkScope.Public).length > 0) {
+          <app-bookmark-list
+            headerKey="REMOTES.BOOKMARK_LIST.TABS.PUBLIC"
+            [bookmarks]="onFilterBookmarksByScope(vm?.results, BookmarkScope.Public)"
+            [products]="products"
+          />
+        }
+      </div>
+    }
   </div>
 </ocx-portal-page>

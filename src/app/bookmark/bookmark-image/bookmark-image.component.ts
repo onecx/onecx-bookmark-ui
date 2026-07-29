@@ -1,7 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
-import { CommonModule, Location } from '@angular/common'
-import { SkeletonModule } from 'primeng/skeleton'
+import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core'
+import { AsyncPipe, Location, NgClass } from '@angular/common'
 import { map, Observable, of } from 'rxjs'
+
+import { SkeletonModule } from 'primeng/skeleton'
 
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { AppStateService } from '@onecx/angular-integration-interface'
@@ -13,12 +14,14 @@ import { Product } from '../bookmark-overview/bookmark-overview.component'
 
 @Component({
   selector: 'app-bookmark-image',
-  templateUrl: './bookmark-image.component.html',
-  styleUrls: ['./bookmark-image.component.scss'],
   standalone: true,
-  imports: [AngularAcceleratorModule, CommonModule, SkeletonModule]
+  imports: [AngularAcceleratorModule, AsyncPipe, NgClass, SkeletonModule],
+  templateUrl: './bookmark-image.component.html',
+  styleUrl: './bookmark-image.component.scss'
 })
 export class BookmarkImageComponent implements OnChanges {
+  private readonly appStateService = inject(AppStateService)
+
   @Input() public bookmark: Bookmark | undefined
   @Input() public product: Product | undefined
   @Input() public styleClass: string | undefined
@@ -30,15 +33,15 @@ export class BookmarkImageComponent implements OnChanges {
   public productLogoUrl: string | undefined
   private imageLoadCounter = 0
 
-  constructor(private readonly appStateService: AppStateService) {
+  constructor() {
     this.errorImage$ = undefined
-    this.defaultImageUrl$ = appStateService.currentMfe$.pipe(
+    this.defaultImageUrl$ = this.appStateService.currentMfe$.pipe(
       map((mfe) => {
         return this.prepareUrlPath(mfe.remoteBaseUrl, environment.DEFAULT_LOGO_PATH)
       })
     )
     // bookmark image URL via bookmark BFF
-    this.bookmarkImageBaseURL$ = appStateService.currentMfe$.pipe(
+    this.bookmarkImageBaseURL$ = this.appStateService.currentMfe$.pipe(
       map((mfe) => {
         return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/') + this.bookmark?.id
       })

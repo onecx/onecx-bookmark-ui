@@ -21,7 +21,6 @@ import { ensureIntersectionObserverMockExists } from '@onecx/angular-testing'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { provideHttpClient } from '@angular/common/http'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { initialState } from './bookmark-configure.reducers'
 import { BookmarkConfigureActions } from './bookmark-configure.actions'
@@ -29,6 +28,7 @@ import { BookmarkConfigureComponent } from './bookmark-configure.component'
 import { BookmarkConfigureHarness } from './bookmark-configure.harness'
 import { BookmarkConfigureViewModel } from './bookmark-configure.viewmodel'
 import { selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
+import { By } from '@angular/platform-browser'
 
 ensureIntersectionObserverMockExists()
 Object.defineProperty(window, 'matchMedia', {
@@ -67,7 +67,6 @@ describe('BookmarkConfigureComponent', () => {
       deferBlockBehavior: DeferBlockBehavior.Manual,
       imports: [
         BookmarkConfigureComponent,
-        SharedModule,
         LetDirective,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations({
@@ -382,16 +381,15 @@ describe('BookmarkConfigureComponent', () => {
     fixture.detectChanges()
     await fixture.whenStable()
 
-    // Important: the action buttons are native <button pButton> elements — the id is on the button itself
-    const copyButton: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_configure_table_row_1_action_copy')
-    const deleteButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#bm_configure_table_row_1_action_delete'
-    )
-    const editButton: HTMLButtonElement = fixture.nativeElement.querySelector('#bm_configure_table_row_1_action_edit')
-
-    const toggleButton: HTMLButtonElement = fixture.nativeElement.querySelector(
-      '#bm_configure_table_row_1_action_toggle'
-    )
+    // Important: the action buttons are native <p-button id=""><button> elements
+    const copyButton = fixture.debugElement.query(By.css('#bm_configure_table_row_1_action_copy button')).nativeElement
+    const deleteButton = fixture.debugElement.query(
+      By.css('#bm_configure_table_row_1_action_delete button')
+    ).nativeElement
+    const editButton = fixture.debugElement.query(By.css('#bm_configure_table_row_1_action_edit button')).nativeElement
+    const toggleButton = fixture.debugElement.query(
+      By.css('#bm_configure_table_row_1_action_toggle button')
+    ).nativeElement
 
     expect(copyButton).toBeTruthy()
     expect(deleteButton).toBeTruthy()
@@ -528,20 +526,20 @@ describe('BookmarkConfigureComponent', () => {
   })
 
   describe('onGlobalFilter', () => {
-    it('should set filterText and apply name filter', () => {
+    it('should set globalFilterValue and apply name filter', () => {
       const applySpy = jest.spyOn(component as any, 'applyNameFilter')
       component.onGlobalFilter('hello')
-      expect(component.filterText).toBe('hello')
+      expect(component.globalFilterValue).toBe('hello')
       expect(applySpy).toHaveBeenCalled()
     })
   })
 
   describe('onClearGlobalFilter', () => {
-    it('should reset filterText to empty string and apply name filter', () => {
-      component.filterText = 'something'
+    it('should reset globalFilterValue to empty string and apply name filter', () => {
+      component.globalFilterValue = 'something'
       const applySpy = jest.spyOn(component as any, 'applyNameFilter')
       component.onClearGlobalFilter()
-      expect(component.filterText).toBe('')
+      expect(component.globalFilterValue).toBe('')
       expect(applySpy).toHaveBeenCalled()
     })
   })
@@ -695,7 +693,7 @@ describe('BookmarkConfigureComponent', () => {
         { id: '1', displayNameLower: 'alpha', imagePath: '' },
         { id: '2', imagePath: '' }
       ]
-      component.filterText = 'alpha'
+      component.globalFilterValue = 'alpha'
       ;(component as any).applyNameFilter()
       expect(component.interactiveRows).toHaveLength(1)
       expect(component.interactiveRows[0]['id']).toBe('1')
@@ -723,7 +721,6 @@ describe('BookmarkConfigureComponent - no permission testcase', () => {
     await TestBed.configureTestingModule({
       imports: [
         BookmarkConfigureComponent,
-        SharedModule,
         LetDirective,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations({

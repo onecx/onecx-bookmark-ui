@@ -1,5 +1,4 @@
 import { NgModule, isDevMode } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { TranslateLoader, TranslateModule, MissingTranslationHandler } from '@ngx-translate/core'
@@ -33,7 +32,6 @@ import { metaReducers, reducers } from './app.reducers'
   imports: [
     AppComponent,
     StandaloneShellModule,
-    CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     EffectsModule.forRoot([]),

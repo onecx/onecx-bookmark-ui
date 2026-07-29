@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
+import { Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core'
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
@@ -60,6 +60,9 @@ export class BookmarkCreateUpdateComponent
     DialogButtonClicked<BookmarkCreateUpdateComponent>,
     OnChanges
 {
+  private readonly userService = inject(UserService)
+  private readonly translate = inject(TranslateService)
+
   @Input() public vm: BookmarkCreateUpdateViewModel = {
     initialBookmark: undefined,
     permissions: undefined,
@@ -73,10 +76,7 @@ export class BookmarkCreateUpdateComponent
   private permissionKey = ''
   private hasPermission = false
 
-  constructor(
-    private readonly userService: UserService,
-    private readonly translate: TranslateService
-  ) {
+  constructor() {
     this.formGroup = new FormGroup({
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
     })

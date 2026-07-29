@@ -1,12 +1,12 @@
-import { Component, DestroyRef, Inject, LOCALE_ID, OnInit, inject } from '@angular/core'
+import { Component, DestroyRef, inject, LOCALE_ID, OnInit } from '@angular/core'
+import { AsyncPipe, NgClass } from '@angular/common'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
-import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { Observable } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { LetDirective } from '@ngrx/component'
 import { TranslateModule } from '@ngx-translate/core'
+
 import { PrimeIcons, SelectItem } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { FloatLabelModule } from 'primeng/floatlabel'
@@ -32,7 +32,7 @@ import {
 } from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { limitText } from 'src/app/shared/utils/utils'
+import { Utils } from 'src/app/shared/utils/utils'
 
 import { BookmarkConfigureActions } from './bookmark-configure.actions'
 import { bookmarkColumns, ExtendedColumn } from './bookmark-configure.columns'
@@ -58,14 +58,14 @@ type BookmarkTableRow = Bookmark & {
   imports: [
     AngularAcceleratorModule,
     AngularAuthModule,
+    AsyncPipe,
+    NgClass,
     ButtonModule,
-    CommonModule,
     FloatLabelModule,
     FormsModule,
     InputGroupAddonModule,
     InputGroupModule,
     InputTextModule,
-    LetDirective,
     MessageModule,
     PortalPageComponent,
     RouterModule,
@@ -75,6 +75,14 @@ type BookmarkTableRow = Bookmark & {
   ]
 })
 export class BookmarkConfigureComponent implements OnInit {
+  public readonly locale = inject(LOCALE_ID)
+  public readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly store = inject(Store)
+  private readonly user = inject(UserService)
+  private readonly workspaceService = inject(WorkspaceService)
+  private readonly destroyRef = inject(DestroyRef)
+
   // data
   public viewModel$: Observable<BookmarkConfigureViewModel> = this.store.select(selectBookmarkConfigureViewModel)
   public interactiveRows: BookmarkTableRow[] = []
@@ -85,19 +93,18 @@ export class BookmarkConfigureComponent implements OnInit {
   public defaultSortDirection = DataSortDirection.ASCENDING
   public sortField = 'position'
   public tableFilters: Filter[] = []
-  public filterText = ''
+  public globalFilterValue = ''
   public interactiveColumns: DataTableColumn[] = []
   public displayedColumnKeys: string[] = []
   public filteredColumns: ExtendedColumn[] = []
   public bookmarkColumns = bookmarkColumns
-  public limitText = limitText
+  public limitText = Utils.limitText
   public editable = false
   private permEdit = false
   private permAdminEdit = false
   private permDelete = false
   private permAdminDelete = false
   public quickFilterItems$: Observable<SelectItem[]> | undefined
-  private readonly destroyRef: DestroyRef = inject(DestroyRef)
 
   public quickFilterOptions: ExtendedSelectItem[] = [
     { label: 'BOOKMARK.SCOPES.PRIVATE', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PRIVATE', value: BookmarkScope.Private },
@@ -105,14 +112,7 @@ export class BookmarkConfigureComponent implements OnInit {
   ]
   public quickFilterValue: BookmarkScope = BookmarkScope.Private
 
-  constructor(
-    @Inject(LOCALE_ID) public readonly locale: string,
-    public readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly store: Store,
-    private readonly user: UserService,
-    private readonly workspaceService: WorkspaceService
-  ) {
+  constructor() {
     this.filteredColumns = bookmarkColumns.filter((a) => a.active === true)
     this.syncInteractiveColumns()
     this.viewModel$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
@@ -240,12 +240,12 @@ export class BookmarkConfigureComponent implements OnInit {
   }
 
   public onGlobalFilter(value: string): void {
-    this.filterText = value
+    this.globalFilterValue = value
     this.applyNameFilter()
   }
 
   public onClearGlobalFilter(): void {
-    this.filterText = ''
+    this.globalFilterValue = ''
     this.applyNameFilter()
   }
   public onSortChange(event: Sort): void {
@@ -367,7 +367,7 @@ export class BookmarkConfigureComponent implements OnInit {
   }
 
   private applyNameFilter(): void {
-    const normalizedQuery = this.filterText.trim().toLocaleLowerCase(this.locale)
+    const normalizedQuery = this.globalFilterValue.trim().toLocaleLowerCase(this.locale)
     if (!normalizedQuery) {
       this.interactiveRows = this.allInteractiveRows
       return

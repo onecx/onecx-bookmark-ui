@@ -1,161 +1,166 @@
-<p-tabView>
-  <p-tabPanel
-    [header]="'BOOKMARK_IMPORT.TABS.IMPORT' | translate"
-    [tooltip]="'BOOKMARK_IMPORT.TABS.TOOLTIPS.IMPORT' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-    <div class="flex flex-column row-gap-3">
-      <p-fileUpload
-        #fileUploader
-        id="bm_import_file_upload"
-        mode="advanced"
-        name="file"
-        accept=".json"
-        [maxFileSize]="1000000"
-        [customUpload]="true"
-        (onImportClear)="onImportClear()"
-        (onRemove)="onImportClear()"
-        (onSelect)="onImportFileSelect($event)"
-        [showUploadButton]="false"
-        [chooseLabel]="'ACTIONS.IMPORT.CHOOSE' | translate"
-        [cancelLabel]="'ACTIONS.CANCEL' | translate"
-      />
-      <p-message
-        *ngIf="importError?.exceptionKey"
-        id="bm_import_error_message_general"
-        class="w-full"
-        severity="error"
-        [text]="importError ? (importError.exceptionKey | translate) : ''"
-      ></p-message>
-
-      <div *ngIf="snapshot !== undefined" class="mt-2 flex flex-column row-gap-4">
-        <div class="flex flex-column row-gap-2">
-          <div>{{ 'BOOKMARK_IMPORT.MODE.INFO' | translate }}</div>
-          <div class="mt-1 flex flex-row justify-content-center align-items-center column-gap-6">
-            <div class="flex flex-row align-items-center column-gap-2">
-              <p-radioButton
-                inputId="bm_import_field_mode_append"
-                name="mode"
-                [(ngModel)]="mode"
-                value="APPEND"
-                [ariaLabel]="'BOOKMARK_IMPORT.MODE.APPEND' | translate"
-                [pTooltip]="'BOOKMARK_IMPORT.MODE.APPEND' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              >
-              </p-radioButton>
-              <label for="bm_import_field_mode_append">{{ 'BOOKMARK_IMPORT.MODE.APPEND' | translate }}</label>
-            </div>
-            <div class="flex flex-row align-items-center column-gap-2">
-              <p-radioButton
-                inputId="bm_import_field_mode_overwrite"
-                name="mode"
-                [(ngModel)]="mode"
-                value="OVERWRITE"
-                [ariaLabel]="'BOOKMARK_IMPORT.MODE.OVERWRITE' | translate"
-                [pTooltip]="'BOOKMARK_IMPORT.MODE.OVERWRITE' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              >
-              </p-radioButton>
-              <label for="bm_import_field_mode_overwrite">{{ 'BOOKMARK_IMPORT.MODE.OVERWRITE' | translate }}</label>
-            </div>
-          </div>
-        </div>
-        <div *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" class="flex flex-column row-gap-3">
-          <div>{{ 'BOOKMARK_IMPORT.SCOPE.INFO' | translate }}</div>
-          <div class="flex flex-row justify-content-center align-items-center column-gap-6">
-            <p-checkbox
-              id="bm_export_field_private"
-              class=""
-              (onChange)="onScopeChange()"
-              [(ngModel)]="private"
-              [binary]="true"
-              [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
-              [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            >
-            </p-checkbox>
-            <label for="bm_export_field_private">
-              {{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}
-            </label>
-            <p-checkbox
-              id="bm_export_field_public"
-              class=""
-              (onChange)="onScopeChange()"
-              [(ngModel)]="public"
-              [binary]="true"
-              [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
-              [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            >
-            </p-checkbox>
-            <label for="bm_export_field_public">
-              {{ 'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate }}
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </p-tabPanel>
-
-  <p-tabPanel
-    [disabled]="snapshot === undefined"
-    [header]="'BOOKMARK_IMPORT.TABS.CONTENT' | translate"
-    [tooltip]="'BOOKMARK_IMPORT.TABS.TOOLTIPS.CONTENT' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-    <div class="flex flex-column row-gap-4">
-      <p-floatlabel variant="on">
-        <input
-          pInputText
-          type="text"
-          id="bm_import_snapshot_date"
-          class="pt-3 pb-2 text-responsive p-filled"
-          [disabled]="true"
-          [value]="snapshot?.created | date: dateFormat"
-          [attr.aria-label]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
-          [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.DATE.TOOLTIP' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
+<p-tabs value="0">
+  <p-tablist>
+    <p-tab
+      value="0"
+      [ariaLabel]="'BOOKMARK_IMPORT.TABS.TOOLTIPS.IMPORT' | translate"
+      [pTooltip]="'BOOKMARK_IMPORT.TABS.TOOLTIPS.IMPORT' | translate"
+      tooltipPosition="top"
+      tooltipEvent="hover"
+    >
+      {{ 'BOOKMARK_IMPORT.TABS.IMPORT' | translate }}
+    </p-tab>
+    <p-tab
+      value="1"
+      [disabled]="snapshot === undefined"
+      [ariaLabel]="'BOOKMARK_IMPORT.TABS.TOOLTIPS.CONTENT' | translate"
+      [pTooltip]="'BOOKMARK_IMPORT.TABS.TOOLTIPS.CONTENT' | translate"
+      tooltipPosition="top"
+      tooltipEvent="hover"
+    >
+      {{ 'BOOKMARK_IMPORT.TABS.CONTENT' | translate }}
+    </p-tab>
+  </p-tablist>
+  <p-tabpanels>
+    <p-tabpanel value="0">
+      <div class="flex flex-column row-gap-3">
+        <p-fileUpload
+          #fileUploader
+          id="bm_import_file_upload"
+          mode="advanced"
+          name="file"
+          accept=".json"
+          [maxFileSize]="1000000"
+          [customUpload]="true"
+          (onImportClear)="onImportClear()"
+          (onRemove)="onImportClear()"
+          (onSelect)="onImportFileSelect($event)"
+          [showUploadButton]="false"
+          [chooseLabel]="'ACTIONS.IMPORT.CHOOSE' | translate"
+          [cancelLabel]="'ACTIONS.CANCEL' | translate"
         />
-        <label for="bm_import_snapshot_date">{{ 'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate }}</label>
-      </p-floatlabel>
-      <!-- For ADMINs only: Show both lists in parallel -->
-      <div
-        *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
-        class="flex flex-row justify-content-center align-items-start column-gap-5"
-      >
-        <div class="flex flex-column">
-          <div class="font-bold">{{ 'BOOKMARK.SCOPES.PRIVATE' | translate }}</div>
-          <div class="m-0 py-1 pl-2">
-            <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PRIVATE']">
-              {{ item.displayName }}
+        @if (importError?.exceptionKey) {
+          <p-message
+            id="bm_import_error_message_general"
+            class="w-full"
+            severity="error"
+            [text]="importError ? (importError.exceptionKey | translate) : ''"
+          ></p-message>
+        }
+
+        @if (snapshot !== undefined) {
+          <div class="mt-2 flex flex-column row-gap-4">
+            <div class="flex flex-column row-gap-2">
+              <div class="mt-1 flex justify-content-center">
+                <p-selectButton
+                  id="bm_import_field_mode"
+                  [(ngModel)]="mode"
+                  [options]="modeOptions"
+                  [allowEmpty]="false"
+                >
+                  <ng-template pTemplate="item" let-item>{{ item.label | translate }}</ng-template>
+                </p-selectButton>
+              </div>
+            </div>
+            <div
+              *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
+              class="flex flex-row justify-content-center align-items-center column-gap-6"
+            >
+              <div class="flex flex-row align-items-center column-gap-2">
+                <p-checkbox
+                  id="bm_import_field_private"
+                  (onChange)="onScopeChange()"
+                  [(ngModel)]="private"
+                  [binary]="true"
+                  [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate"
+                  [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PRIVATE.TOOLTIP' | translate"
+                  tooltipPosition="top"
+                  tooltipEvent="hover"
+                >
+                </p-checkbox>
+                <label for="bm_import_field_private">
+                  {{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}
+                </label>
+              </div>
+              <div class="flex flex-row align-items-center column-gap-2">
+                <p-checkbox
+                  id="bm_import_field_public"
+                  (onChange)="onScopeChange()"
+                  [(ngModel)]="public"
+                  [binary]="true"
+                  [ariaLabel]="'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate"
+                  [pTooltip]="'BOOKMARK_IMPORT.SCOPE.PUBLIC.TOOLTIP' | translate"
+                  tooltipPosition="top"
+                  tooltipEvent="hover"
+                >
+                </p-checkbox>
+                <label for="bm_import_field_public">
+                  {{ 'BOOKMARK_IMPORT.SCOPE.PUBLIC' | translate }}
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </p-tabpanel>
+    <p-tabpanel value="1">
+      <div class="flex flex-column row-gap-4">
+        <p-floatlabel variant="on">
+          <input
+            pInputText
+            type="text"
+            id="bm_import_snapshot_date"
+            class="pt-3 pb-2 text-responsive"
+            [class.p-filled]="snapshot?.created !== null"
+            [disabled]="true"
+            [ngModel]="snapshot?.created | date: dateFormat"
+            [ariaLabel]="'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate"
+            [pTooltip]="'BOOKMARK_IMPORT.SNAPSHOT.DATE.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          />
+          <label for="bm_import_snapshot_date">{{ 'BOOKMARK_IMPORT.SNAPSHOT.DATE' | translate }}</label>
+        </p-floatlabel>
+        <!-- For ADMINs only: Show both lists in parallel -->
+        <div
+          *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
+          class="flex flex-row justify-content-center align-items-start column-gap-5"
+        >
+          <div class="flex flex-column">
+            <div class="font-bold">{{ 'BOOKMARK.SCOPES.PRIVATE' | translate }}</div>
+            <div class="m-0 py-1 pl-2">
+              @let privateBookmarks = snapshot?.bookmarks?.['PRIVATE'];
+              @for (item of privateBookmarks; track $index; let i = $index) {
+                <div class="w-15rem text-responsive" [id]="'bm_import_private_' + i">
+                  {{ item.displayName }}
+                </div>
+              }
+            </div>
+          </div>
+          <div class="flex flex-column">
+            <div class="font-bold">{{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}</div>
+            <div class="m-0 py-1 pl-2">
+              @let publicBookmarks = snapshot?.bookmarks?.['PUBLIC'];
+              @for (item of publicBookmarks; track $index; let i = $index) {
+                <div class="w-15rem text-responsive" [id]="'bm_import_public_' + i">
+                  {{ item.displayName }}
+                </div>
+              }
             </div>
           </div>
         </div>
-        <div class="flex flex-column">
-          <div class="font-bold">{{ 'BOOKMARK.SCOPES.PUBLIC' | translate }}</div>
+        <!-- For non-admins: Show both lists in parallel -->
+        <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'" class="ml-3 flex flex-column">
+          <div class="font-bold">{{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}</div>
           <div class="m-0 py-1 pl-2">
-            <div class="w-15rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PUBLIC']">
-              {{ item.displayName }}
-            </div>
+            @let privateBookmarks = snapshot?.bookmarks?.['PRIVATE'];
+            @for (item of privateBookmarks; track $index; let i = $index) {
+              <div class="w-30rem text-responsive" [id]="'bm_import_private_' + i">
+                {{ item.displayName }}
+              </div>
+            }
           </div>
         </div>
       </div>
-      <!-- For non-admins: Show both lists in parallel -->
-      <div *ocxIfNotPermission="'BOOKMARK#ADMIN_EDIT'" class="ml-3 flex flex-column">
-        <div class="font-bold">{{ 'BOOKMARK_IMPORT.SCOPE.PRIVATE' | translate }}</div>
-        <div class="m-0 py-1 pl-2">
-          <div class="w-30rem text-responsive" *ngFor="let item of snapshot?.bookmarks?.['PRIVATE']">
-            {{ item.displayName }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </p-tabPanel>
-</p-tabView>
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

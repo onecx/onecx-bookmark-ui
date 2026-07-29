@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { CommonModule, Location } from '@angular/common'
+import { Component, DestroyRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { AsyncPipe, DatePipe, Location } from '@angular/common'
 import {
   AbstractControl,
   DefaultValueAccessor,
@@ -10,28 +11,24 @@ import {
   Validators,
   ValidatorFn
 } from '@angular/forms'
+import { RouterModule } from '@angular/router'
 import { BehaviorSubject, filter, map, Observable } from 'rxjs'
 import { TranslateModule } from '@ngx-translate/core'
+
 import { ButtonModule } from 'primeng/button'
 import { BadgeModule } from 'primeng/badge'
 import { CheckboxModule } from 'primeng/checkbox'
 import { DividerModule } from 'primeng/divider'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputTextModule } from 'primeng/inputtext'
 import { MessageModule } from 'primeng/message'
+import { SelectModule } from 'primeng/select'
 import { SelectButtonModule } from 'primeng/selectbutton'
-import { TabViewModule } from 'primeng/tabview'
+import { TabsModule } from 'primeng/tabs'
 import { TextareaModule } from 'primeng/textarea'
 import { TooltipModule } from 'primeng/tooltip'
-import { FloatLabelModule } from 'primeng/floatlabel'
-import { SelectModule } from 'primeng/select'
-import { RouterModule } from '@angular/router'
 
-import {
-  AppStateService,
-  //ParametersService,
-  PortalMessageService,
-  UserService
-} from '@onecx/angular-integration-interface'
+import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 import {
   AngularAcceleratorModule,
   DialogButtonClicked,
@@ -42,7 +39,6 @@ import { AngularAuthModule } from '@onecx/angular-auth'
 import { AngularRemoteComponentsModule, SlotService } from '@onecx/angular-remote-components'
 
 import { BookmarkScope, ImagesInternalAPIService, CreateBookmark } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 import { BookmarkDetailViewModel } from './bookmark-detail.viewmodel'
 
 // trim the value (string!) of a form control before passes to the control
@@ -98,17 +94,16 @@ export type Product = {
 
 @Component({
   selector: 'app-bookmark-detail',
-  templateUrl: './bookmark-detail.component.html',
-  styleUrls: ['./bookmark-detail.component.scss'],
   standalone: true,
   imports: [
     AngularAcceleratorModule,
     AngularAuthModule,
     AngularRemoteComponentsModule,
+    AsyncPipe,
+    DatePipe,
     BadgeModule,
     ButtonModule,
     CheckboxModule,
-    CommonModule,
     DividerModule,
     FloatLabelModule,
     FormsModule,
@@ -118,12 +113,13 @@ export type Product = {
     RouterModule,
     SelectButtonModule,
     SelectModule,
-    SharedModule,
-    TabViewModule,
+    TabsModule,
     TextareaModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './bookmark-detail.component.html',
+  styleUrl: './bookmark-detail.component.scss'
 })
 export class BookmarkDetailComponent
   implements
@@ -132,6 +128,12 @@ export class BookmarkDetailComponent
     DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
+  private readonly appStateService = inject(AppStateService)
+  private readonly slotService = inject(SlotService)
+  private readonly msgService = inject(PortalMessageService)
+  private readonly imageApi = inject(ImagesInternalAPIService)
+  private readonly destroyRef = inject(DestroyRef)
+
   @Input() public workspaceName = ''
   @Input() public dateFormat = 'medium'
   @Input() public editable = false
@@ -159,16 +161,9 @@ export class BookmarkDetailComponent
   public productEmitter = new EventEmitter<Product>()
   public size: any
 
-  constructor(
-    private readonly user: UserService,
-    private readonly appStateService: AppStateService,
-    //private readonly parameterService: ParametersService,
-    private readonly slotService: SlotService,
-    private readonly msgService: PortalMessageService,
-    private readonly imageApi: ImagesInternalAPIService
-  ) {
+  constructor() {
     // bookmark image URL via bookmark BFF
-    this.bookmarkImageBaseURL$ = appStateService.currentMfe$.pipe(
+    this.bookmarkImageBaseURL$ = this.appStateService.currentMfe$.pipe(
       map((mfe) => {
         return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/') + this.vm.initialBookmark?.id
       })
@@ -191,8 +186,16 @@ export class BookmarkDetailComponent
         updateOn: 'change'
       }),
       fragment: new FormControl(null, [Validators.maxLength(255)]),
-      url: new FormControl(null, [Validators.minLength(2), Validators.maxLength(255)]),
-      imageUrl: new FormControl(null, [Validators.maxLength(255)])
+      url: new FormControl(null, [
+        Validators.minLength(7),
+        Validators.maxLength(255),
+        Validators.pattern('^(http|https)://.{6,245}')
+      ]),
+      imageUrl: new FormControl(null, [
+        Validators.minLength(7),
+        Validators.maxLength(255),
+        Validators.pattern('^(http|https)://.{6,245}')
+      ])
     })
   }
   /*
@@ -212,7 +215,7 @@ export class BookmarkDetailComponent
         undeployed: false,
         applications: []
       }
-      this.productEmitter.subscribe(this.product$)
+      this.productEmitter.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.product$)
       this.formGroup.patchValue({
         ...this.vm.initialBookmark,
         is_public: this.vm.initialBookmark.scope === BookmarkScope.Public,
@@ -228,9 +231,14 @@ export class BookmarkDetailComponent
     } else {
       this.formGroup.enable()
       // do something if form is valid
-      this.formGroup.statusChanges.pipe(filter(() => this.formGroup.valid)).subscribe((val) => {
-        this.primaryButtonEnabled.emit(this.editable)
-      })
+      this.formGroup.statusChanges
+        .pipe(
+          filter(() => this.formGroup.valid),
+          takeUntilDestroyed(this.destroyRef)
+        )
+        .subscribe(() => {
+          this.primaryButtonEnabled.emit(this.editable)
+        })
     }
     if (this.vm.changeMode === 'CREATE' || this.vm.initialBookmark?.url) {
       this.formGroup.controls['url'].setValidators(Validators.required)
@@ -290,8 +298,8 @@ export class BookmarkDetailComponent
   }
 
   public getProductAppDisplayName(product: Product, appId?: string): string | undefined {
-    if (product.applications?.length === 0) return appId
     if (!appId) return undefined
+    if (product.applications?.length === 0) return appId
     return product.applications?.find((app) => app.appId === appId)?.appName
   }
 

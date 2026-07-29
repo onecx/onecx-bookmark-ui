@@ -41,7 +41,6 @@ export const bookmarkColumns: ExtendedColumn[] = [
     header: 'TARGET.CONFIG',
     active: true,
     translationPrefix: 'BOOKMARK',
-    css: 'text-center',
     sort: true
   },
   {

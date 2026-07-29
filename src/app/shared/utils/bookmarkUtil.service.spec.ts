@@ -4,10 +4,10 @@ import { of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { BookmarksInternalAPIService } from '../generated'
-import { BookmarkAPIUtilsService } from './bookmarkApiUtils.service'
+import { BookmarkUtilService } from './bookmarkUtil.service'
 
-describe('BookmarkAPIUtilsService', () => {
-  let service: BookmarkAPIUtilsService
+describe('BookmarkUtilService', () => {
+  let service: BookmarkUtilService
   let bookmarkServiceMock: jest.Mocked<BookmarksInternalAPIService>
   let messageServiceMock: jest.Mocked<PortalMessageService>
   let appStateServiceMock: { currentWorkspace$: Subject<any> }
@@ -31,14 +31,14 @@ describe('BookmarkAPIUtilsService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        BookmarkAPIUtilsService,
+        BookmarkUtilService,
         { provide: BookmarksInternalAPIService, useValue: bookmarkServiceMock },
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: AppStateService, useValue: appStateServiceMock }
       ]
     })
 
-    service = TestBed.inject(BookmarkAPIUtilsService)
+    service = TestBed.inject(BookmarkUtilService)
   })
 
   it('should be created', () => {
@@ -63,7 +63,7 @@ describe('BookmarkAPIUtilsService', () => {
 
       service.loadBookmarks().subscribe((result) => {
         expect(bookmarkServiceMock.searchBookmarksByCriteria).toHaveBeenCalledWith({
-          bookmarkSearchCriteria: { workspaceName: 'my-workspace' }
+          bookmarkSearchCriteria: { disabled: false, workspaceName: 'my-workspace' }
         })
         expect(result).toHaveLength(1)
         done()
@@ -119,7 +119,7 @@ describe('BookmarkAPIUtilsService', () => {
 
       service.loadBookmarksForApp(obs$).subscribe((result) => {
         expect(bookmarkServiceMock.searchUserBookmarksByCriteria).toHaveBeenCalledWith({
-          bookmarkSearchCriteria: { workspaceName: 'ws', productName: 'product', appId: 'app' }
+          bookmarkSearchCriteria: { disabled: false, workspaceName: 'ws', productName: 'product', appId: 'app' }
         })
         expect(result).toHaveLength(1)
         done()

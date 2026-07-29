@@ -1,14 +1,16 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core'
+import { DatePipe } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
+
 import { ButtonModule } from 'primeng/button'
 import { CheckboxModule } from 'primeng/checkbox'
+import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 import { MessageModule } from 'primeng/message'
-import { RadioButtonModule } from 'primeng/radiobutton'
-import { TabViewModule } from 'primeng/tabview'
+import { SelectButtonModule } from 'primeng/selectbutton'
+import { TabsModule } from 'primeng/tabs'
 import { TooltipModule } from 'primeng/tooltip'
 
 import {
@@ -33,23 +35,24 @@ export type ImportError = {
 
 @Component({
   selector: 'app-bookmark-import',
-  templateUrl: './bookmark-import.component.html',
-  styleUrl: './bookmark-import.component.scss',
   standalone: true,
   imports: [
     AngularAcceleratorModule,
+    DatePipe,
     ButtonModule,
     CheckboxModule,
-    CommonModule,
     FileUploadModule,
     FloatLabelModule,
     FormsModule,
+    InputTextModule,
     MessageModule,
-    RadioButtonModule,
-    TabViewModule,
+    SelectButtonModule,
+    TabsModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './bookmark-import.component.html',
+  styleUrl: './bookmark-import.component.scss'
 })
 export class BookmarkImportComponent
   implements
@@ -57,21 +60,25 @@ export class BookmarkImportComponent
     DialogResult<ExportBookmarksRequest | undefined>,
     DialogButtonClicked<BookmarkImportComponent>
 {
+  private readonly translate = inject(TranslateService)
+
   @Input() public workspaceName = ''
   @Input() public dateFormat = 'medium'
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   @ViewChild(FileUpload) fileUploader: FileUpload | undefined
 
+  public readonly modeOptions: { label: string; value: EximMode }[] = [
+    { label: 'BOOKMARK_IMPORT.MODE.APPEND', value: EximMode.Append },
+    { label: 'BOOKMARK_IMPORT.MODE.OVERWRITE', value: EximMode.Overwrite }
+  ]
+
   public dialogResult: ImportBookmarkData | undefined = undefined
   public importError: ImportError | undefined = undefined
   public snapshot: BookmarkSnapshot | undefined = undefined
   public mode: EximMode = EximMode.Append
-  public EximMode = EximMode
   public private = true
   public public = false
-
-  constructor(private readonly translate: TranslateService) {}
 
   private checkImportReady() {
     this.primaryButtonEnabled.emit((this.private || this.public) && this.snapshot !== undefined)

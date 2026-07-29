@@ -1,9 +1,9 @@
-import { Component, EventEmitter, Inject, LOCALE_ID, OnInit } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { Component, DestroyRef, EventEmitter, inject, LOCALE_ID, OnInit } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { AsyncPipe } from '@angular/common'
 import { TranslateService, TranslateModule } from '@ngx-translate/core'
 import { BehaviorSubject, Observable, map, of, take } from 'rxjs'
 import { Store } from '@ngrx/store'
-import { LetDirective } from '@ngrx/component'
 import { MenuItem, PrimeIcons } from 'primeng/api'
 import { DockModule } from 'primeng/dock'
 import { MessageModule } from 'primeng/message'
@@ -17,7 +17,6 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 
 import { BookmarkOverviewActions } from './bookmark-overview.actions'
 import { BookmarkOverviewViewModel } from './bookmark-overview.viewmodel'
@@ -32,24 +31,30 @@ export type Product = {
 
 @Component({
   selector: 'app-bookmark-overview',
-  templateUrl: './bookmark-overview.component.html',
-  styleUrls: ['./bookmark-overview.component.scss'],
   standalone: true,
   imports: [
     AngularAcceleratorModule,
     AngularAuthModule,
+    AsyncPipe,
     BookmarkListComponent,
-    CommonModule,
     DockModule,
-    LetDirective,
     MessageModule,
     PortalPageComponent,
-    SharedModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './bookmark-overview.component.html',
+  styleUrl: './bookmark-overview.component.scss'
 })
 export class BookmarkOverviewComponent implements OnInit {
+  public readonly locale = inject(LOCALE_ID)
+  private readonly store = inject(Store)
+  private readonly user = inject(UserService)
+  private readonly slotService = inject(SlotService)
+  private readonly translate = inject(TranslateService)
+  private readonly appStateService = inject(AppStateService)
+  private readonly destroyRef = inject(DestroyRef)
+
   // data
   public viewModel$: Observable<BookmarkOverviewViewModel> = this.store.select(selectBookmarkOverviewViewModel)
   public pageActions: Action[] = []
@@ -67,14 +72,7 @@ export class BookmarkOverviewComponent implements OnInit {
   public products$ = new BehaviorSubject<Product[] | undefined>(undefined) // theme data
   public productsEmitter = new EventEmitter<Product[]>()
 
-  constructor(
-    @Inject(LOCALE_ID) public readonly locale: string,
-    private readonly store: Store,
-    private readonly user: UserService,
-    private readonly slotService: SlotService,
-    private readonly translate: TranslateService,
-    private readonly appStateService: AppStateService
-  ) {
+  constructor() {
     this.user$ = this.user.profile$.asObservable()
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
     this.hasEditPermissions$ = this.user
@@ -86,7 +84,7 @@ export class BookmarkOverviewComponent implements OnInit {
     this.appStateService.currentWorkspace$.pipe(take(1)).subscribe((workspace) => {
       this.workspace = workspace
     })
-    this.productsEmitter.subscribe(this.products$)
+    this.productsEmitter.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(this.products$)
     this.prepareDockItems()
     this.onSearch()
   }
@@ -120,8 +118,8 @@ export class BookmarkOverviewComponent implements OnInit {
   public onSearch() {
     this.store.dispatch(BookmarkOverviewActions.search())
   }
-  public onFilterBookmarksByScope(bs: Bookmark[], sc: BookmarkScope): Bookmark[] {
-    return bs.filter((b) => b.scope === sc)
+  public onFilterBookmarksByScope(bs: Bookmark[] | undefined, sc: BookmarkScope): Bookmark[] {
+    return bs?.filter((b) => b.scope === sc) ?? []
   }
   public onGoToConfigure() {
     this.store.dispatch(BookmarkOverviewActions.navigate({ path: ['configure'] }))

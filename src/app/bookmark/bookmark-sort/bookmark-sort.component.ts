@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
 import { ButtonModule } from 'primeng/button'
 import { OrderListModule } from 'primeng/orderlist'
@@ -8,7 +7,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { AngularAcceleratorModule, DialogButtonClicked, DialogResult } from '@onecx/angular-accelerator'
 
 import { Bookmark, UpdateBookmark } from 'src/app/shared/generated'
-import { limitText } from 'src/app/shared/utils/utils'
+import { Utils } from 'src/app/shared/utils/utils'
 
 import { BookmarkSortViewModel } from './bookmark-sort.viewmodel'
 
@@ -17,7 +16,7 @@ import { BookmarkSortViewModel } from './bookmark-sort.viewmodel'
   templateUrl: './bookmark-sort.component.html',
   styleUrls: ['./bookmark-sort.component.scss'],
   standalone: true,
-  imports: [AngularAcceleratorModule, ButtonModule, CommonModule, OrderListModule, TooltipModule, TranslateModule]
+  imports: [AngularAcceleratorModule, ButtonModule, OrderListModule, TooltipModule, TranslateModule]
 })
 export class BookmarkSortComponent
   implements DialogResult<UpdateBookmark[] | undefined>, DialogButtonClicked<BookmarkSortComponent>, OnInit
@@ -26,7 +25,7 @@ export class BookmarkSortComponent
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public dialogResult: UpdateBookmark[] = []
-  public limitText = limitText
+  public limitText = Utils.limitText
 
   ocxDialogButtonClicked() {
     // sonar does not like forEach

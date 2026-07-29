@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { CommonModule } from '@angular/common'
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { FormsModule } from '@angular/forms'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+
 import { FileSelectEvent, FileUpload, FileUploadModule } from 'primeng/fileupload'
 
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
@@ -29,7 +29,6 @@ describe('BookmarkImportComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         BookmarkImportComponent,
-        CommonModule,
         FormsModule,
         FileUploadModule,
         AngularAcceleratorModule,
@@ -75,8 +74,11 @@ describe('BookmarkImportComponent', () => {
       expect(component.importError).toBeUndefined()
     })
 
-    it('should expose EximMode for template use', () => {
-      expect(component.EximMode).toBe(EximMode)
+    it('should define modeOptions with Append and Overwrite values', () => {
+      expect(component.modeOptions).toEqual([
+        { label: 'BOOKMARK_IMPORT.MODE.APPEND', value: EximMode.Append },
+        { label: 'BOOKMARK_IMPORT.MODE.OVERWRITE', value: EximMode.Overwrite }
+      ])
     })
   })
 

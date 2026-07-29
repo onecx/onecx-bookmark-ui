@@ -1,145 +1,203 @@
 <!-- PRODUCTS -->
-<ng-container *ngIf="isProductComponentDefined$ | async">
+@if (isProductComponentDefined$ | async) {
   <ocx-slot
     [name]="slotName"
     [inputs]="{
       dataType: 'product',
       productName: this.vm.initialBookmark?.productName,
-      logEnabled: false,
+      logEnabled: true,
       logPrefix: 'bookmark'
     }"
     [outputs]="{ product: productEmitter }"
   >
   </ocx-slot>
-</ng-container>
+}
 
-<p-tabView [formGroup]="formGroup" errorTailor>
-  <p-tabPanel
-    [header]="'BOOKMARK_DETAIL.TAB.PROPS' | translate"
-    [tooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.PROPS' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-    <div class="mt-1 mb-2 flex flex-column row-gap-4">
-      <div>
-        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
-          <input
-            pInputText
-            type="text"
-            id="bm_detail_form_field_display_name"
-            class="w-full pt-3 pb-2 text-responsive"
-            formControlName="displayName"
-            [attr.aria-label]="'BOOKMARK.DISPLAY_NAME' | translate"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.DISPLAY_NAME' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <label class="ocx-required-label" for="bm_detail_form_field_display_name">
-            {{ 'BOOKMARK.DISPLAY_NAME' | translate }}</label
-          >
-        </p-floatlabel>
-      </div>
-      <div *ngIf="'CREATE' === vm.changeMode || vm.initialBookmark?.url">
-        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
-          <textarea
-            #bookmarkUrl
-            class="w-full"
-            pInputTextarea
-            autoresize="true"
-            rows="3"
-            id="bm_detail_form_field_url"
-            formControlName="url"
-            [attr.aria-label]="'BOOKMARK.URL' | translate"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.URL' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          ></textarea>
-          <label class="ocx-required-label" for="bm_detail_form_field_url">{{ 'BOOKMARK.URL' | translate }}</label>
-        </p-floatlabel>
-      </div>
-      <!-- IMAGE -->
-      <div class="flex flex-row flex-wrap sm:flex-nowrap align-items-center row-gap-2 column-gap-4">
-        <input
-          hidden
-          type="file"
-          accept="image/*"
-          #selectedFileInputLogo
-          (change)="onFileUpload($event, vm.initialBookmark)"
-        />
-        <img
-          *ngIf="vm.initialBookmark && fetchingLogoUrl && !onBookmarkImageLoadError"
-          [alt]="vm.initialBookmark.displayName"
-          [ocxSrc]="fetchingLogoUrl"
-          class="max-w-3rem max-h-3rem border-round-sm image-object"
-          (error)="onBookmarkImageLoadError = true"
-        />
-        <button
-          *ocxIfPermission="'BOOKMARK#EDIT'"
-          pButton
-          id="bm_detail_form_field_remove_logo"
-          icon="pi pi-times"
-          [disabled]="!vm.initialBookmark?.id || onBookmarkImageLoadError"
-          class="ml-1 action-button p-button-icon-only cursor-pointer"
-          (click)="onRemoveLogo(vm.initialBookmark)"
-          [attr.aria-label]="'IMAGE.TOOLTIPS.REMOVE' | translate"
-          [pTooltip]="'IMAGE.TOOLTIPS.REMOVE' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        ></button>
-        <button
-          *ocxIfPermission="'BOOKMARK#EDIT'"
-          pButton
-          id="bm_detail_form_field_upload_logo"
-          icon="pi pi-upload"
-          class="action-button p-button-icon-only cursor-pointer"
-          (click)="selectedFileInputLogo.click()"
-          [attr.aria-label]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
-          [pTooltip]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        ></button>
-        <div class="flex flex-column w-full">
-          <p-floatlabel variant="on" class="p-float-label">
-            <textarea
-              class="w-full"
-              pInputTextarea
-              autoresize="true"
-              rows="2"
-              id="bm_detail_form_field_image_url"
-              formControlName="imageUrl"
-              (input)="onInputChange($event, vm.initialBookmark)"
-              (change)="onInputChange($event, vm.initialBookmark)"
-              [attr.aria-label]="'IMAGE.LOGO_URL' | translate"
-              [pTooltip]="'IMAGE.TOOLTIPS.URL' | translate"
-              tooltipPosition="top"
-              tooltipEvent="hover"
-            ></textarea>
-            <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
-          </p-floatlabel>
-          <label *ngIf="vm.changeMode !== 'VIEW'" class="ocx-control-hint block" for="bm_detail_form_field_image_url">
-            {{ ('VALIDATION.HINTS.FORMAT_URL' | translate) + externUrlPattern }}
-          </label>
-        </div>
-      </div>
-      <div class="w-full flex flex-column sm:flex-row flex-wrap row-gap-3 justify-content-around">
-        <!-- PUBLIC ? -->
-        <p-checkbox
-          *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
-          id="bm_detail_form_field_is_public"
-          formControlName="is_public"
-          [binary]="true"
-          [ariaLabel]="'BOOKMARK.SCOPE_IS_PUBLIC' | translate"
-          [pTooltip]="'BOOKMARK.TOOLTIPS.SCOPE_IS_PUBLIC' | translate"
+<p-tabs value="0" [formGroup]="formGroup" errorTailor>
+  <p-tablist>
+    <p-tab
+      value="0"
+      [ariaLabel]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.PROPS' | translate"
+      [pTooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.PROPS' | translate"
+      tooltipPosition="top"
+      tooltipEvent="hover"
+    >
+      {{ 'BOOKMARK_DETAIL.TAB.PROPS' | translate }}
+    </p-tab>
+    @if ('CREATE' !== vm.changeMode && !vm.initialBookmark?.url) {
+      <p-tab
+        value="1"
+        [ariaLabel]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.TARGET' | translate"
+        [pTooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.TARGET' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      >
+        {{ 'BOOKMARK_DETAIL.TAB.TARGET' | translate }}
+      </p-tab>
+      @if (editable) {
+        <p-tab
+          value="2"
+          [ariaLabel]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.ENDPOINT' | translate"
+          [pTooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.ENDPOINT' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         >
-        </p-checkbox>
-        <label for="bm_detail_form_field_is_public">
-          {{ 'BOOKMARK.SCOPE_IS_PUBLIC' | translate }}
-        </label>
-        <div class="flex flex-column">
-          <div class="flex flex-column gap-3 md:gap-2 justify-content-evenly">
-            <div class="w-full flex justify-content-start align-items-center">
+          {{ 'BOOKMARK_DETAIL.TAB.ENDPOINT' | translate }}
+        </p-tab>
+      }
+      <p-tab
+        value="3"
+        [ariaLabel]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.PARAMS' | translate"
+        [pTooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.PARAMS' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      >
+        {{ 'BOOKMARK_DETAIL.TAB.PARAMS' | translate }}
+      </p-tab>
+    }
+    @if (['EDIT', 'VIEW'].includes(vm.changeMode)) {
+      <p-tab
+        value="4"
+        [ariaLabel]="'INTERNAL.TOOLTIP' | translate"
+        [pTooltip]="'INTERNAL.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      >
+        {{ 'INTERNAL.HEADER' | translate }}
+      </p-tab>
+    }
+  </p-tablist>
+
+  <p-tabpanels>
+    <p-tabpanel value="0">
+      <div class="mt-1 mb-2 flex flex-column row-gap-4">
+        <div>
+          <p-floatlabel variant="on" controlErrorAnchor>
+            <input
+              pInputText
+              type="text"
+              id="bm_detail_form_field_display_name"
+              class="w-full pt-3 pb-2 text-responsive"
+              formControlName="displayName"
+              [ariaLabel]="'BOOKMARK.DISPLAY_NAME' | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.DISPLAY_NAME' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label class="ocx-required-label" for="bm_detail_form_field_display_name">
+              {{ 'BOOKMARK.DISPLAY_NAME' | translate }}</label
+            >
+          </p-floatlabel>
+        </div>
+        @if ('CREATE' === vm.changeMode || vm.initialBookmark?.url) {
+          <div>
+            <p-floatlabel variant="on" controlErrorAnchor>
+              <textarea
+                #bookmarkUrl
+                class="w-full"
+                pInputTextarea
+                autoresize="true"
+                rows="3"
+                id="bm_detail_form_field_url"
+                formControlName="url"
+                [ariaLabel]="'BOOKMARK.URL' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.URL' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+                escape="false"
+              ></textarea>
+              <label class="ocx-required-label" for="bm_detail_form_field_url">{{ 'BOOKMARK.URL' | translate }}</label>
+            </p-floatlabel>
+          </div>
+        }
+        <!-- IMAGE -->
+        <div class="flex flex-row flex-wrap sm:flex-nowrap align-items-center row-gap-2 column-gap-4">
+          <input
+            hidden
+            type="file"
+            accept="image/*"
+            #selectedFileInputLogo
+            (change)="onFileUpload($event, vm.initialBookmark)"
+          />
+          @if (vm.initialBookmark && fetchingLogoUrl && !onBookmarkImageLoadError) {
+            <img
+              [alt]="vm.initialBookmark.displayName"
+              [ocxSrc]="fetchingLogoUrl"
+              class="max-w-3rem max-h-3rem border-round-sm image-object"
+              (error)="onBookmarkImageLoadError = true"
+            />
+          }
+          <button
+            *ocxIfPermission="'BOOKMARK#EDIT'"
+            pButton
+            id="bm_detail_form_field_remove_logo"
+            icon="pi pi-times"
+            [disabled]="!vm.initialBookmark?.id || onBookmarkImageLoadError"
+            class="ml-1 action-button p-button-icon-only cursor-pointer"
+            (click)="onRemoveLogo(vm.initialBookmark)"
+            [attr.aria-label]="'IMAGE.TOOLTIPS.REMOVE' | translate"
+            [pTooltip]="'IMAGE.TOOLTIPS.REMOVE' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          ></button>
+          <button
+            *ocxIfPermission="'BOOKMARK#EDIT'"
+            pButton
+            id="bm_detail_form_field_upload_logo"
+            icon="pi pi-upload"
+            class="action-button p-button-icon-only cursor-pointer"
+            (click)="selectedFileInputLogo.click()"
+            [attr.aria-label]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
+            [pTooltip]="'IMAGE.TOOLTIPS.UPLOAD' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          ></button>
+          <div class="flex flex-column w-full">
+            <p-floatlabel variant="on">
+              <textarea
+                id="bm_detail_form_field_image_url"
+                class="w-full"
+                pInputTextarea
+                autoresize="true"
+                rows="2"
+                formControlName="imageUrl"
+                (input)="onInputChange($event, vm.initialBookmark)"
+                (change)="onInputChange($event, vm.initialBookmark)"
+                [ariaLabel]="'IMAGE.LOGO_URL' | translate"
+                [pTooltip]="'IMAGE.TOOLTIPS.URL' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+                escape="false"
+              ></textarea>
+              <label for="bm_detail_form_field_image_url">{{ 'IMAGE.LOGO_URL' | translate }} </label>
+            </p-floatlabel>
+          </div>
+        </div>
+        <div
+          class="w-full flex flex-column sm:flex-row flex-wrap row-gap-2 justify-content-start sm:justify-content-around"
+        >
+          <!-- PUBLIC? -->
+          <div class="flex flex-row column-gap-2 justify-content-start sm:justify-content-center align-items-center">
+            <p-checkbox
+              *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'"
+              type="text"
+              id="bm_detail_form_field_is_public"
+              formControlName="is_public"
+              styleClass="cursor-auto shadow-none"
+              [binary]="true"
+              [ariaLabel]="'BOOKMARK.SCOPE_IS_PUBLIC' | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.SCOPE_IS_PUBLIC' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+            </p-checkbox>
+            <label for="bm_detail_form_field_is_public">
+              {{ 'BOOKMARK.SCOPE_IS_PUBLIC' | translate }}
+            </label>
+          </div>
+          <!-- FLAGS -->
+          <div class="flex flex-column row-gap-2 md:row-gap-3">
+            <div class="flex flex-row column-gap-2 justify-content-start align-items-center">
               <p-checkbox
                 id="bm_detail_form_field_disabled"
                 class="checkbox-label"
@@ -155,7 +213,7 @@
                 {{ 'BOOKMARK.DISABLED' | translate }}
               </label>
             </div>
-            <div class="w-full md:my-2 flex justify-content-start align-items-center">
+            <div class="flex flex-row column-gap-2 justify-content-start align-items-center">
               <p-checkbox
                 id="bm_detail_form_field_ws_exit"
                 class="checkbox-label"
@@ -171,12 +229,11 @@
                 {{ 'BOOKMARK.EXTERNAL' | translate }}
               </label>
             </div>
-            <div class="w-full flex justify-content-start align-items-center">
+            <div class="flex flex-row column-gap-2 justify-content-start align-items-center">
               <p-checkbox
                 id="bm_detail_form_field_target"
                 class="checkbox-label"
                 formControlName="target"
-                [binary]="true"
                 trueValue="_blank"
                 falseValue="_self"
                 [binary]="true"
@@ -193,287 +250,273 @@
           </div>
         </div>
       </div>
-    </div>
-  </p-tabPanel>
+    </p-tabpanel>
 
-  <p-tabPanel
-    *ngIf="'CREATE' !== vm.changeMode && !vm.initialBookmark?.url"
-    [header]="'BOOKMARK_DETAIL.TAB.TARGET' | translate"
-    [tooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.TARGET' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-    <div
-      *ngIf="(product$ | async) ?? defaultProduct as product"
-      class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4"
-    >
-      <img
-        *ngIf="product.imageUrl && !onProductImageLoadError"
-        [alt]="product.displayName"
-        [ocxSrc]="product.imageUrl"
-        class="max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem image-object border-round-sm"
-        (error)="onProductImageLoadError = true"
-      />
-      <div class="flex-grow-1 mt-1 flex flex-column row-gap-4">
-        <p-floatlabel variant="on" class="p-float-label">
-          <input
-            pInputText
-            type="text"
-            readonly
-            [disabled]="true"
-            id="bm_detail_form_field_product"
-            class="w-full pt-3 pb-2 text-responsive"
-            [value]="product.displayName"
-            [attr.aria-label]="'BOOKMARK.PRODUCT' | translate"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.PRODUCT' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <label for="bm_detail_form_field_product">{{ 'BOOKMARK.PRODUCT' | translate }}</label>
-        </p-floatlabel>
-        <p-floatlabel *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" variant="on" class="p-float-label">
-          <input
-            pInputText
-            type="text"
-            id="bm_detail_form_field_app_id"
-            class="w-full pt-3 pb-2 text-responsive"
-            [disabled]="true"
-            [value]="getProductAppDisplayName(product, vm.initialBookmark?.appId)"
-            [attr.aria-label]="'BOOKMARK.APP_ID' | translate"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.APP_ID' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <label for="bm_detail_form_field_app_id">{{ 'BOOKMARK.APP_ID' | translate }}</label>
-        </p-floatlabel>
-      </div>
-    </div>
-  </p-tabPanel>
-
-  <p-tabPanel
-    *ngIf="'CREATE' !== vm.changeMode && !vm.initialBookmark?.url && editable"
-    [header]="'BOOKMARK_DETAIL.TAB.ENDPOINT' | translate"
-    [tooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.ENDPOINT' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-    <div class="mt-1 mb-2 flex flex-column row-gap-4">
-      <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
-        <input
-          pInputText
-          type="text"
-          id="bm_detail_form_field_endpoint_name"
-          class="w-full pt-3 pb-2"
-          formControlName="endpointName"
-          [attr.aria-label]="'BOOKMARK.ENDPOINT' | translate"
-          [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        />
-        <label for="bm_detail_form_field_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
-      </p-floatlabel>
-      <div>
-        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
-          <p-badge
-            severity="info"
-            [value]="1000 - EndpointParameterObject.value.length"
-            class="z-1 text-badge-right"
-            [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
-            [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <textarea
-            #EndpointParameterObject
-            pInputTextarea
-            class="w-full"
-            autoresize="true"
-            rows="3"
-            id="bm_detail_form_field_endpoint_parameter"
-            formControlName="endpointParams"
-            [attr.aria-label]="'BOOKMARK.ENDPOINT_PARAMETER' | translate"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT_PARAMETER' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          ></textarea>
-          <label for="bm_detail_form_field_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
-          <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
-        </p-floatlabel>
-        <label
-          *ngIf="formGroup.get('endpointParams')?.errors"
-          class="block control-error"
-          for="bm_detail_form_field_endpoint_parameter"
-        >
-          {{ formGroup.get('endpointParams')?.errors?.['error'] }}
-        </label>
-      </div>
-    </div>
-  </p-tabPanel>
-
-  <p-tabPanel
-    *ngIf="'CREATE' !== vm.changeMode && !vm.initialBookmark?.url"
-    [header]="'BOOKMARK_DETAIL.TAB.PARAMS' | translate"
-    [tooltip]="'BOOKMARK_DETAIL.TAB.TOOLTIPS.PARAMS' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-    <div class="mb-2 flex flex-column row-gap-4">
-      <div class="mx-auto flex flex-column text-xs">
-        <div class="mb-1 flex flex-row gap-2">
-          <div class="w-5rem font-bold">URL Format</div>
-          :
-          <div class="font-italic">
-            {{ 'VALIDATION.URL_FORMAT' | translate }}
-            <span class="text-red-500 font-bold"> ? </span>
-            <i><b>query</b></i>
-            <span class="text-red-500 font-bold"> # </span>
-            <i><b>fragment</b></i>
+    <p-tabpanel value="1">
+      @let product = (productEmitter.asObservable() | async) ?? defaultProduct;
+      @if (product) {
+        <div class="flex flex-row flex-wrap justify-content-between align-items-center column-gap-3 row-gap-4">
+          @if (product.imageUrl && !onProductImageLoadError) {
+            <img
+              [alt]="product.displayName"
+              [ocxSrc]="product.imageUrl"
+              class="max-w-4rem sm:max-w-5rem md:max-w-6rem xl:max-w-7rem max-h-3rem sm:max-h-4rem md:max-h-5rem xl:max-h-6rem image-object border-round-sm"
+              (error)="onProductImageLoadError = true"
+            />
+          }
+          <div class="flex-grow-1 mt-1 flex flex-column row-gap-4">
+            <p-floatlabel variant="on">
+              <input
+                pInputText
+                type="text"
+                readonly
+                [disabled]="true"
+                id="bm_detail_form_field_product"
+                class="w-full pt-3 pb-2 text-responsive"
+                [value]="product.displayName"
+                [ariaLabel]="'BOOKMARK.PRODUCT' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.PRODUCT' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="bm_detail_form_field_product">{{ 'BOOKMARK.PRODUCT' | translate }}</label>
+            </p-floatlabel>
+            <p-floatlabel *ocxIfPermission="'BOOKMARK#ADMIN_EDIT'" variant="on">
+              <input
+                pInputText
+                type="text"
+                id="bm_detail_form_field_app_id"
+                class="w-full pt-3 pb-2 text-responsive"
+                [disabled]="true"
+                [value]="getProductAppDisplayName(product, vm.initialBookmark?.appId)"
+                [ariaLabel]="'BOOKMARK.APP_ID' | translate"
+                [pTooltip]="'BOOKMARK.TOOLTIPS.APP_ID' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="bm_detail_form_field_app_id">{{ 'BOOKMARK.APP_ID' | translate }}</label>
+            </p-floatlabel>
           </div>
         </div>
-        <div class="flex flex-row gap-2">
-          <div class="w-5rem font-bold">Query</div>
-          :
-          <i>key_1=value_1<span class="text-red-500 font-bold"> & </span>key_2=value_2</i>
-        </div>
-        <div class="flex flex-row gap-2">
-          <div class="w-5rem font-bold">Fragment</div>
-          :<i>ressource</i>
+      }
+    </p-tabpanel>
+
+    <p-tabpanel value="2">
+      <div class="mt-1 mb-2 flex flex-column row-gap-4">
+        <p-floatlabel variant="on" controlErrorAnchor>
+          <input
+            pInputText
+            type="text"
+            id="bm_detail_form_field_endpoint_name"
+            class="w-full pt-3 pb-2"
+            formControlName="endpointName"
+            [ariaLabel]="'BOOKMARK.ENDPOINT' | translate"
+            [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          />
+          <label for="bm_detail_form_field_endpoint_name">{{ 'BOOKMARK.ENDPOINT' | translate }}</label>
+        </p-floatlabel>
+        <div>
+          <p-floatlabel variant="on" controlErrorAnchor>
+            <p-badge
+              severity="info"
+              [value]="1000 - EndpointParameterObject.value.length"
+              class="z-1 text-badge-right"
+              [ariaLabel]="'DIALOG.DETAIL.CHARACTERS' | translate"
+              [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <textarea
+              #EndpointParameterObject
+              pInputTextarea
+              class="w-full"
+              autoresize="true"
+              rows="3"
+              id="bm_detail_form_field_endpoint_parameter"
+              formControlName="endpointParams"
+              [ariaLabel]="'BOOKMARK.ENDPOINT_PARAMETER' | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.ENDPOINT_PARAMETER' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            ></textarea>
+            <label for="bm_detail_form_field_endpoint_parameter">{{ 'BOOKMARK.ENDPOINT_PARAMETER' | translate }}</label>
+            <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
+          </p-floatlabel>
+          @if (formGroup.get('endpointParams')?.errors) {
+            <label class="block ocx-control-error" for="bm_detail_form_field_endpoint_parameter">
+              {{ formGroup.get('endpointParams')?.errors?.['error'] }}
+            </label>
+          }
         </div>
       </div>
-      <div>
-        <p-floatlabel variant="on" class="p-float-label" controlErrorAnchor>
+    </p-tabpanel>
+
+    <p-tabpanel value="3">
+      <div class="mb-2 flex flex-column row-gap-4">
+        <div class="mx-auto flex flex-column text-xs">
+          <div class="mb-1 flex flex-row gap-2">
+            <div class="w-5rem font-bold">URL Format</div>
+            :
+            <div class="font-italic">
+              {{ 'VALIDATION.URL_FORMAT' | translate }}
+              <span class="text-red-500 font-bold"> ? </span>
+              <i><b>query</b></i>
+              <span class="text-red-500 font-bold"> # </span>
+              <i><b>fragment</b></i>
+            </div>
+          </div>
+          <div class="flex flex-row gap-2">
+            <div class="w-5rem font-bold">Query</div>
+            :
+            <i>key_1=value_1<span class="text-red-500 font-bold"> & </span>key_2=value_2</i>
+          </div>
+          <div class="flex flex-row gap-2">
+            <div class="w-5rem font-bold">Fragment</div>
+            :<i>ressource</i>
+          </div>
+        </div>
+        <div>
+          <p-floatlabel variant="on" controlErrorAnchor>
+            <p-badge
+              severity="info"
+              [value]="1000 - QueryObject.value.length"
+              class="z-1 text-badge-right"
+              [ariaLabel]="'DIALOG.DETAIL.CHARACTERS' | translate"
+              [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <textarea
+              #QueryObject
+              class="w-full"
+              pInputTextarea
+              autoresize="true"
+              rows="3"
+              id="bm_detail_form_field_query"
+              formControlName="query"
+              [ariaLabel]="'BOOKMARK.QUERY' | translate"
+              [pTooltip]="'BOOKMARK.TOOLTIPS.QUERY' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            ></textarea>
+            <label for="bm_detail_form_field_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
+            <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
+          </p-floatlabel>
+          @if (formGroup.get('query')?.errors) {
+            <label class="block ocx-control-error" for="bm_detail_form_field_query">
+              {{ formGroup.get('query')?.errors?.['error'] }}
+            </label>
+          }
+        </div>
+        <p-floatlabel variant="on">
           <p-badge
             severity="info"
-            [value]="1000 - QueryObject.value.length"
+            [value]="1000 - FragmentObject.value.length"
             class="z-1 text-badge-right"
-            [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
+            [ariaLabel]="'DIALOG.DETAIL.CHARACTERS' | translate"
             [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
             tooltipPosition="top"
             tooltipEvent="hover"
           />
           <textarea
-            #QueryObject
+            #FragmentObject
             class="w-full"
             pInputTextarea
             autoresize="true"
             rows="3"
-            id="bm_detail_form_field_query"
-            formControlName="query"
-            [attr.aria-label]="'BOOKMARK.QUERY' | translate"
-            [pTooltip]="'BOOKMARK.TOOLTIPS.QUERY' | translate"
+            id="bm_detail_form_field_fragment"
+            formControlName="fragment"
+            [ariaLabel]="'BOOKMARK.FRAGMENT' | translate"
+            [pTooltip]="'BOOKMARK.TOOLTIPS.FRAGMENT' | translate"
             tooltipPosition="top"
             tooltipEvent="hover"
           ></textarea>
-          <label for="bm_detail_form_field_query">{{ 'BOOKMARK.QUERY' | translate }}</label>
-          <div class="text-xs">Format: {{ 'VALIDATION.JSON_FORMAT' | translate }}</div>
+          <label for="bm_detail_form_field_fragment">{{ 'BOOKMARK.FRAGMENT' | translate }}</label>
         </p-floatlabel>
-        <label *ngIf="formGroup.get('query')?.errors" class="block control-error" for="bm_detail_form_field_query">
-          {{ formGroup.get('query')?.errors?.['error'] }}
-        </label>
       </div>
-      <p-floatlabel variant="on" class="p-float-label">
-        <p-badge
-          severity="info"
-          [value]="1000 - FragmentObject.value.length"
-          class="z-1 text-badge-right"
-          [attr.aria-label]="'DIALOG.DETAIL.CHARACTERS' | translate"
-          [pTooltip]="'DIALOG.DETAIL.CHARACTERS' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        />
-        <textarea
-          #FragmentObject
-          class="w-full"
-          pInputTextarea
-          autoresize="true"
-          rows="3"
-          id="bm_detail_form_field_fragment"
-          formControlName="fragment"
-          [attr.aria-label]="'BOOKMARK.FRAGMENT' | translate"
-          [pTooltip]="'BOOKMARK.TOOLTIPS.FRAGMENT' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        ></textarea>
-        <label for="bm_detail_form_field_fragment">{{ 'BOOKMARK.FRAGMENT' | translate }}</label>
-      </p-floatlabel>
-    </div>
-  </p-tabPanel>
+    </p-tabpanel>
 
-  <!-- The internals - in case of an existing item only -->
-  <p-tabPanel
-    *ngIf="['EDIT', 'VIEW'].includes(vm.changeMode)"
-    [header]="'INTERNAL.HEADER' | translate"
-    [attr.aria-label]="'INTERNAL.HEADER' | translate"
-    [tooltip]="'INTERNAL.TOOLTIP' | translate"
-    tooltipPosition="top"
-    tooltipEvent="hover"
-  >
-    <div class="mt-1 mb-2 flex flex-column row-gap-4">
-      <!-- row 1 -->
-      <div class="flex flex-row flex-wrap gap-4">
-        <p-floatlabel variant="on" class="flex-grow-1 sm:flex-grow-0 p-float-label">
-          <input
-            pInputText
-            type="text"
-            id="bm_detail_form_field_creation_date"
-            class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
-            [disabled]="true"
-            [value]="vm.initialBookmark?.creationDate ? (vm.initialBookmark?.creationDate | date: dateFormat) : ''"
-            [pTooltip]="'INTERNAL.TOOLTIPS.CREATION_DATE' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <label for="bm_detail_form_field_creation_date">{{ 'INTERNAL.CREATION_DATE' | translate }}</label>
-        </p-floatlabel>
-        <p-floatlabel variant="on" class="flex-grow-1 p-float-label">
-          <input
-            pInputText
-            type="text"
-            id="bm_detail_form_field_creation_user"
-            class="w-full pt-3 pb-2 text-responsive"
-            [disabled]="true"
-            [value]="vm.initialBookmark?.creationUser"
-            [pTooltip]="'INTERNAL.TOOLTIPS.CREATION_USER' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <label for="bm_detail_form_field_creation_user"> {{ 'INTERNAL.CREATION_USER' | translate }} </label>
-        </p-floatlabel>
-      </div>
+    <!-- The internals - in case of an existing item only -->
+    <p-tabpanel value="4">
+      <div class="mt-1 mb-2 flex flex-column row-gap-4">
+        <!-- row 1 -->
+        <div class="flex flex-row flex-wrap gap-4">
+          <p-floatlabel variant="on" class="flex-grow-1 sm:flex-grow-0">
+            @let _creationDate = vm.initialBookmark?.creationDate;
+            @let creationDate = _creationDate ? (_creationDate | date: dateFormat) : '';
+            <input
+              pInputText
+              type="text"
+              id="bm_detail_form_field_creation_date"
+              class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
+              [disabled]="true"
+              [value]="creationDate"
+              [ariaLabel]="'INTERNAL.TOOLTIPS.CREATION_DATE' | translate"
+              [pTooltip]="'INTERNAL.TOOLTIPS.CREATION_DATE' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="bm_detail_form_field_creation_date">{{ 'INTERNAL.CREATION_DATE' | translate }}</label>
+          </p-floatlabel>
+          <p-floatlabel variant="on" class="flex-grow-1">
+            <input
+              pInputText
+              type="text"
+              id="bm_detail_form_field_creation_user"
+              class="w-full pt-3 pb-2 text-responsive"
+              [disabled]="true"
+              [value]="vm.initialBookmark?.creationUser"
+              [ariaLabel]="'INTERNAL.TOOLTIPS.CREATION_USER' | translate"
+              [pTooltip]="'INTERNAL.TOOLTIPS.CREATION_USER' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="bm_detail_form_field_creation_user"> {{ 'INTERNAL.CREATION_USER' | translate }} </label>
+          </p-floatlabel>
+        </div>
 
-      <!-- row 2 -->
-      <div class="flex flex-row flex-wrap gap-4">
-        <p-floatlabel variant="on" class="flex-grow-1 sm:flex-grow-0 p-float-label">
-          <input
-            pInputText
-            type="text"
-            id="bm_detail_form_field_modification_date"
-            class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
-            [disabled]="true"
-            [value]="
-              vm.initialBookmark?.modificationDate ? (vm.initialBookmark?.modificationDate | date: dateFormat) : ''
-            "
-            [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_DATE' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <label for="bm_detail_form_field_modification_date"> {{ 'INTERNAL.MODIFICATION_DATE' | translate }} </label>
-        </p-floatlabel>
-        <p-floatlabel variant="on" class="flex-grow-1 p-float-label">
-          <input
-            pInputText
-            type="text"
-            id="bm_detail_form_field_modification_user"
-            class="w-full pt-3 pb-2 text-responsive"
-            [disabled]="true"
-            [value]="vm.initialBookmark?.modificationUser"
-            [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_USER' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          />
-          <label for="bm_detail_form_field_modification_user"> {{ 'INTERNAL.MODIFICATION_USER' | translate }} </label>
-        </p-floatlabel>
+        <!-- row 2 -->
+        <div class="flex flex-row flex-wrap gap-4">
+          <p-floatlabel variant="on" class="flex-grow-1 sm:flex-grow-0">
+            @let _modificationDate = vm.initialBookmark?.modificationDate;
+            @let modificationDate = _modificationDate ? (_modificationDate | date: dateFormat) : '';
+            <input
+              pInputText
+              type="text"
+              id="bm_detail_form_field_modification_date"
+              class="w-full sm:w-13rem pt-3 pb-2 text-responsive"
+              [disabled]="true"
+              [value]="modificationDate"
+              [ariaLabel]="'INTERNAL.TOOLTIPS.MODIFICATION_DATE' | translate"
+              [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_DATE' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="bm_detail_form_field_modification_date">
+              {{ 'INTERNAL.MODIFICATION_DATE' | translate }}
+            </label>
+          </p-floatlabel>
+          <p-floatlabel variant="on" class="flex-grow-1">
+            <input
+              pInputText
+              type="text"
+              id="bm_detail_form_field_modification_user"
+              class="w-full pt-3 pb-2 text-responsive"
+              [disabled]="true"
+              [value]="vm.initialBookmark?.modificationUser"
+              [ariaLabel]="'INTERNAL.TOOLTIPS.MODIFICATION_USER' | translate"
+              [pTooltip]="'INTERNAL.TOOLTIPS.MODIFICATION_USER' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="bm_detail_form_field_modification_user">
+              {{ 'INTERNAL.MODIFICATION_USER' | translate }}
+            </label>
+          </p-floatlabel>
+        </div>
       </div>
-    </div>
-  </p-tabPanel>
-</p-tabView>
+    </p-tabpanel>
+  </p-tabpanels>
+</p-tabs>

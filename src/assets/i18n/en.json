@@ -183,11 +183,11 @@
       "SCOPE_IS_PUBLIC": "If checked, the Bookmark is visible to everyone in the workspace.",
       "ENDPOINT": "The name of the app endpoint that the Bookmark points to.",
       "ENDPOINT_PARAMETER": "A specific parameter of the endpoint which expect a value.",
-      "QUERY": "Additional information that can be further processed on the server or client side.",
-      "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
       "DISABLED": "If set, then the Bookmark is not displayed.",
       "EXTERNAL": "If set, the OneCX Shell will be exited.",
       "EXTERNAL.CONFIG": "The OneCX Shell will be exited.",
+      "QUERY": "Additional information that can be further processed on the server or client side.",
+      "FRAGMENT": "Reference to an area (resource) on the target page (anchor link). Used on the client side to navigate to the area.",
       "TARGET": "If set, the target will be opened in a new TAB.",
       "TARGET.CONFIG": "The target will be opened in a new TAB.",
       "TYPE_URL": "Static URL to target maybe also outside of the Workspace. Loaded in separate TAB",
@@ -234,14 +234,14 @@
   "BOOKMARK_EXPORT": {
     "HEADER": "Export Bookmarks",
     "INFO": "Select the areas whose Bookmarks you want to export.",
+    "ERROR": "Export failed",
+    "SUCCESS": "Bookmarks successfully exported",
     "SCOPE": {
       "PRIVATE": "My",
-      "PUBLIC": "Workspace"
-    },
-    "SCOPE_PRIVATE": "Export the own Bookmarks",
-    "SCOPE_PUBLIC": "Export the Workspace Bookmarks",
-    "ERROR": "Export failed",
-    "SUCCESS": "Bookmarks successfully exported"
+      "PUBLIC": "Workspace",
+      "PRIVATE.TOOLTIP": "Export my Bookmarks",
+      "PUBLIC.TOOLTIP": "Export Workspace Bookmarks"
+    }
   },
   "BOOKMARK_IMPORT": {
     "HEADER": "Import Bookmarks",
@@ -256,7 +256,9 @@
     "SCOPE": {
       "INFO": "Which Bookmarks to import?",
       "PRIVATE": "My Bookmarks",
-      "PUBLIC": "Workspace Bookmarks"
+      "PUBLIC": "Workspace Bookmarks",
+      "PRIVATE.TOOLTIP": "Import my Bookmarks",
+      "PUBLIC.TOOLTIP": "Import Workspace Bookmarks"
     },
     "SNAPSHOT": {
       "DATE": "Created on",
@@ -278,7 +280,7 @@
     "SUCCESS": "Sorting successfully changed"
   },
   "IMAGE": {
-    "LOGO_URL": "External Logo URL",
+    "LOGO_URL": "Logo URL",
     "UPLOAD_FAIL": " The file could not be uploaded.",
     "UPLOAD_SUCCESS": "The file was successfully uploaded.",
     "REMOVE_FAIL": "The file could not be removed.",

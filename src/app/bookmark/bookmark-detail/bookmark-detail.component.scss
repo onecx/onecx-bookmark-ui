@@ -2,9 +2,17 @@
 
 @include text-badges;
 @include ocx-text-responsive;
-@include readable-disabled-form-controls;
 @include ocx-p-tabs;
 
 .image-object {
   object-fit: scale-down;
+}
+
+label.ocx-control-error {
+  color: var(--error-color);
+  font-size: smaller;
+}
+label.ocx-control-hint {
+  color: var(--text-secondary-color, var(--text-secondary-color-default));
+  font-size: smaller;
 }
