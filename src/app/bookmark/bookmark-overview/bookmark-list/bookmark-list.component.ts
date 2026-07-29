@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, inject, Input } from '@angular/core'
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
@@ -13,7 +13,7 @@ import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { WorkspaceService } from '@onecx/angular-integration-interface'
 
 import { Bookmark } from 'src/app/shared/generated'
-import { limitText } from 'src/app/shared/utils/utils'
+import { Utils } from 'src/app/shared/utils/utils'
 
 import { Product } from '../bookmark-overview.component'
 import { BookmarkImageComponent } from 'src/app/bookmark/bookmark-image/bookmark-image.component'
@@ -44,9 +44,9 @@ export class BookmarkListComponent {
   @Input() public isPrivate = false
 
   public urls: Record<string, Observable<string>> = {}
-  public limitText = limitText
+  private readonly workspaceService = inject(WorkspaceService)
 
-  constructor(private readonly workspaceService: WorkspaceService) {}
+  public limitText = Utils.limitText
 
   // get the target URL for the Bookmark
   public getUrl(bookmark: Bookmark): Observable<string> | undefined {

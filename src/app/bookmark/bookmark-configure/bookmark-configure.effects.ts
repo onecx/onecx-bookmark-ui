@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
 import { concatLatestFrom } from '@ngrx/operators'
 import { Action, Store } from '@ngrx/store'
@@ -22,7 +22,7 @@ import {
   BookmarkSnapshot,
   EximMode
 } from 'src/app/shared/generated'
-import { getCurrentDateTime } from 'src/app/shared/utils/utils'
+import { Utils } from 'src/app/shared/utils/utils'
 
 import { BookmarkConfigureActions, ActionErrorType } from './bookmark-configure.actions'
 import { bookmarkSearchSelectors, selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
@@ -40,18 +40,16 @@ export type ImportBookmarkData = {
 }
 @Injectable()
 export class BookmarkConfigureEffects {
-  private context = 'BOOKMARK'
+  private readonly actions$ = inject(Actions)
+  private readonly user = inject(UserService)
+  private readonly store = inject(Store)
+  private readonly appStateService = inject(AppStateService)
+  private readonly portalDialogService = inject(PortalDialogService)
+  private readonly messageService = inject(PortalMessageService)
+  private readonly bookmarksService = inject(BookmarksInternalAPIService)
+  private readonly eximService = inject(BookmarkExportImportAPIService)
 
-  constructor(
-    private readonly actions$: Actions,
-    private readonly user: UserService,
-    private readonly store: Store,
-    private readonly appStateService: AppStateService,
-    private readonly portalDialogService: PortalDialogService,
-    private readonly messageService: PortalMessageService,
-    private readonly bookmarksService: BookmarksInternalAPIService,
-    private readonly eximService: BookmarkExportImportAPIService
-  ) {}
+  private context = 'BOOKMARK'
 
   private dateFormat(lang: string) {
     return lang === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
@@ -182,7 +180,7 @@ export class BookmarkConfigureEffects {
             const workspaceJson = JSON.stringify(snapshot, null, 2)
             FileSaver.saveAs(
               new Blob([workspaceJson], { type: 'text/json' }),
-              `onecx-bookmarks_${getCurrentDateTime()}.json`
+              `onecx-bookmarks_${Utils.getCurrentDateTime()}.json`
             )
             this.messageService.success({ summaryKey: 'BOOKMARK_EXPORT.SUCCESS' })
             return BookmarkConfigureActions.exportBookmarksSucceeded()

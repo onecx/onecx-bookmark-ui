@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { ActivatedRoute, Router } from '@angular/router'
 import { Action } from '@ngrx/store'
+import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, filter, from, map, mergeMap, of, switchMap, take, tap } from 'rxjs'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
@@ -12,17 +12,15 @@ import { BookmarkOverviewActions, ActionErrorType } from './bookmark-overview.ac
 
 @Injectable()
 export class BookmarkOverviewEffects {
-  private context = 'BOOKMARK'
+  private readonly actions$ = inject(Actions)
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly user = inject(UserService)
+  private readonly appStateService = inject(AppStateService)
+  private readonly messageService = inject(PortalMessageService)
+  private readonly bookmarksService = inject(BookmarksInternalAPIService)
 
-  constructor(
-    private readonly actions$: Actions,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly user: UserService,
-    private readonly appStateService: AppStateService,
-    private readonly messageService: PortalMessageService,
-    private readonly bookmarksService: BookmarksInternalAPIService
-  ) {}
+  private context = 'BOOKMARK'
 
   private buildExceptionKey(status: string): string {
     return 'EXCEPTIONS.HTTP_STATUS_' + status + '.' + this.context

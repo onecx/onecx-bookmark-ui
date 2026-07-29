@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, inject, Input } from '@angular/core'
 import { AsyncPipe } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { Observable, map } from 'rxjs'
@@ -14,10 +14,10 @@ import { Bookmark } from 'src/app/shared/generated'
   imports: [AsyncPipe, RouterModule]
 })
 export class BookmarkLinksComponent {
+  private readonly workspaceService = inject(WorkspaceService)
+
   urls: Record<string, Observable<string>> = {}
   @Input() public bookmarks: Bookmark[] | undefined
-
-  constructor(private readonly workspaceService: WorkspaceService) {}
 
   // get the URL basically used by Bookmark
   public getUrl(bookmark: Bookmark): Observable<string> | undefined {

@@ -8,6 +8,7 @@ import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { AngularAuthModule } from '@onecx/angular-auth'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils/utils'
 
 @Component({
   selector: 'app-bookmark-delete',
@@ -21,12 +22,5 @@ export class BookmarkDeleteComponent {
 
   public BookmarkScope = BookmarkScope
   public Object = Object
-
-  public limitText(text: string | null | undefined, limit: number): string {
-    if (text) {
-      return text.length < limit ? text : text.substring(0, limit) + '...'
-    } else {
-      return ''
-    }
-  }
+  public limitText = Utils.limitText
 }

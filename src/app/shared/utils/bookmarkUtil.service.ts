@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, inject } from '@angular/core'
 import { Location } from '@angular/common'
 import { catchError, map, mergeMap, Observable, of, retry, tap } from 'rxjs'
 
@@ -10,11 +10,9 @@ import { environment } from 'src/environments/environment'
 
 @Injectable({ providedIn: 'any' })
 export class BookmarkUtilService {
-  constructor(
-    private readonly bookmarkService: BookmarksInternalAPIService,
-    private readonly messageService: PortalMessageService,
-    private readonly appStateService: AppStateService
-  ) {}
+  private readonly bookmarkService = inject(BookmarksInternalAPIService)
+  private readonly messageService = inject(PortalMessageService)
+  private readonly appStateService = inject(AppStateService)
 
   overwriteBaseURL(baseUrl: string) {
     this.bookmarkService.configuration = new Configuration({

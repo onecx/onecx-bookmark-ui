@@ -7,7 +7,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { AngularAcceleratorModule, DialogButtonClicked, DialogResult } from '@onecx/angular-accelerator'
 
 import { Bookmark, UpdateBookmark } from 'src/app/shared/generated'
-import { limitText } from 'src/app/shared/utils/utils'
+import { Utils } from 'src/app/shared/utils/utils'
 
 import { BookmarkSortViewModel } from './bookmark-sort.viewmodel'
 
@@ -25,7 +25,7 @@ export class BookmarkSortComponent
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
   public dialogResult: UpdateBookmark[] = []
-  public limitText = limitText
+  public limitText = Utils.limitText
 
   ocxDialogButtonClicked() {
     // sonar does not like forEach

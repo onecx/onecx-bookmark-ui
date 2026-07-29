@@ -1,4 +1,4 @@
-import { Component, DestroyRef, Inject, LOCALE_ID, OnInit, inject } from '@angular/core'
+import { Component, DestroyRef, inject, LOCALE_ID, OnInit } from '@angular/core'
 import { AsyncPipe, NgClass } from '@angular/common'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
@@ -33,7 +33,7 @@ import {
 } from '@onecx/angular-accelerator'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
-import { limitText } from 'src/app/shared/utils/utils'
+import { Utils } from 'src/app/shared/utils/utils'
 
 import { BookmarkConfigureActions } from './bookmark-configure.actions'
 import { bookmarkColumns, ExtendedColumn } from './bookmark-configure.columns'
@@ -77,6 +77,14 @@ type BookmarkTableRow = Bookmark & {
   ]
 })
 export class BookmarkConfigureComponent implements OnInit {
+  public readonly locale = inject(LOCALE_ID)
+  public readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly store = inject(Store)
+  private readonly user = inject(UserService)
+  private readonly workspaceService = inject(WorkspaceService)
+  private readonly destroyRef = inject(DestroyRef)
+
   // data
   public viewModel$: Observable<BookmarkConfigureViewModel> = this.store.select(selectBookmarkConfigureViewModel)
   public interactiveRows: BookmarkTableRow[] = []
@@ -92,14 +100,13 @@ export class BookmarkConfigureComponent implements OnInit {
   public displayedColumnKeys: string[] = []
   public filteredColumns: ExtendedColumn[] = []
   public bookmarkColumns = bookmarkColumns
-  public limitText = limitText
+  public limitText = Utils.limitText
   public editable = false
   private permEdit = false
   private permAdminEdit = false
   private permDelete = false
   private permAdminDelete = false
   public quickFilterItems$: Observable<SelectItem[]> | undefined
-  private readonly destroyRef: DestroyRef = inject(DestroyRef)
 
   public quickFilterOptions: ExtendedSelectItem[] = [
     { label: 'BOOKMARK.SCOPES.PRIVATE', title_key: 'BOOKMARK.SCOPES.TOOLTIPS.PRIVATE', value: BookmarkScope.Private },
@@ -107,14 +114,7 @@ export class BookmarkConfigureComponent implements OnInit {
   ]
   public quickFilterValue: BookmarkScope = BookmarkScope.Private
 
-  constructor(
-    @Inject(LOCALE_ID) public readonly locale: string,
-    public readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly store: Store,
-    private readonly user: UserService,
-    private readonly workspaceService: WorkspaceService
-  ) {
+  constructor() {
     this.filteredColumns = bookmarkColumns.filter((a) => a.active === true)
     this.syncInteractiveColumns()
     this.viewModel$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({

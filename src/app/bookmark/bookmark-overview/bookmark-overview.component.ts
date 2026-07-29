@@ -1,4 +1,4 @@
-import { Component, DestroyRef, EventEmitter, inject, Inject, LOCALE_ID, OnInit } from '@angular/core'
+import { Component, DestroyRef, EventEmitter, inject, LOCALE_ID, OnInit } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe } from '@angular/common'
 import { TranslateService, TranslateModule } from '@ngx-translate/core'
@@ -49,6 +49,14 @@ export type Product = {
   styleUrl: './bookmark-overview.component.scss'
 })
 export class BookmarkOverviewComponent implements OnInit {
+  public readonly locale = inject(LOCALE_ID)
+  private readonly store = inject(Store)
+  private readonly user = inject(UserService)
+  private readonly slotService = inject(SlotService)
+  private readonly translate = inject(TranslateService)
+  private readonly appStateService = inject(AppStateService)
+  private readonly destroyRef = inject(DestroyRef)
+
   // data
   public viewModel$: Observable<BookmarkOverviewViewModel> = this.store.select(selectBookmarkOverviewViewModel)
   public pageActions: Action[] = []
@@ -65,16 +73,8 @@ export class BookmarkOverviewComponent implements OnInit {
   public products_empty: Product[] = []
   public products$ = new BehaviorSubject<Product[] | undefined>(undefined) // theme data
   public productsEmitter = new EventEmitter<Product[]>()
-  private readonly destroyRef = inject(DestroyRef)
 
-  constructor(
-    @Inject(LOCALE_ID) public readonly locale: string,
-    private readonly store: Store,
-    private readonly user: UserService,
-    private readonly slotService: SlotService,
-    private readonly translate: TranslateService,
-    private readonly appStateService: AppStateService
-  ) {
+  constructor() {
     this.user$ = this.user.profile$.asObservable()
     this.isProductComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
     this.hasEditPermissions$ = this.user

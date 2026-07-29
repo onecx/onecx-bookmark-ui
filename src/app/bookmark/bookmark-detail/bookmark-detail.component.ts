@@ -128,6 +128,12 @@ export class BookmarkDetailComponent
     DialogButtonClicked<BookmarkDetailComponent>,
     OnInit
 {
+  private readonly appStateService = inject(AppStateService)
+  private readonly slotService = inject(SlotService)
+  private readonly msgService = inject(PortalMessageService)
+  private readonly imageApi = inject(ImagesInternalAPIService)
+  private readonly destroyRef = inject(DestroyRef)
+
   @Input() public workspaceName = ''
   @Input() public dateFormat = 'medium'
   @Input() public editable = false
@@ -139,7 +145,6 @@ export class BookmarkDetailComponent
   }
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
 
-  private readonly destroyRef = inject(DestroyRef)
   public defaultProduct: Product | undefined
   public formGroup: FormGroup
   public dialogResult: CombinedBookmark | undefined = undefined
@@ -156,15 +161,9 @@ export class BookmarkDetailComponent
   public productEmitter = new EventEmitter<Product>()
   public size: any
 
-  constructor(
-    private readonly appStateService: AppStateService,
-    //private readonly parameterService: ParametersService,
-    private readonly slotService: SlotService,
-    private readonly msgService: PortalMessageService,
-    private readonly imageApi: ImagesInternalAPIService
-  ) {
+  constructor() {
     // bookmark image URL via bookmark BFF
-    this.bookmarkImageBaseURL$ = appStateService.currentMfe$.pipe(
+    this.bookmarkImageBaseURL$ = this.appStateService.currentMfe$.pipe(
       map((mfe) => {
         return this.prepareUrlPath(mfe.remoteBaseUrl, 'bff/images/') + this.vm.initialBookmark?.id
       })

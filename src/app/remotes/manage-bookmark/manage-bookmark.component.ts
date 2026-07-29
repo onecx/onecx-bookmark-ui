@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Inject, Input } from '@angular/core'
+import { Component, DestroyRef, inject, Input } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -83,6 +83,16 @@ export function slotInitializer(slotService: SlotService) {
   styleUrl: './manage-bookmark.component.scss'
 })
 export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
+  private readonly remoteComponentConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
+  private readonly appConfigService = inject(AppConfigService)
+  private readonly appStateService = inject(AppStateService)
+  private readonly userService = inject(UserService)
+  private readonly translateService = inject(TranslateService)
+  private readonly portalDialogService = inject(PortalDialogService)
+  private readonly bookmarkApiUtils = inject(BookmarkUtilService)
+  private readonly slotService = inject(SlotService)
+  private readonly destroyRef = inject(DestroyRef)
+
   permissions: string[] = []
   bookmarkLoadingError = false
   bookmarks$ = new BehaviorSubject<Bookmark[] | undefined>(undefined)
@@ -100,18 +110,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     this.ocxInitRemoteComponent(config)
   }
 
-  constructor(
-    @Inject(REMOTE_COMPONENT_CONFIG) private readonly remoteComponentConfig: ReplaySubject<RemoteComponentConfig>,
-    private readonly appConfigService: AppConfigService,
-    private readonly appStateService: AppStateService,
-    private readonly userService: UserService,
-    private readonly translateService: TranslateService,
-    private readonly portalDialogService: PortalDialogService,
-    private readonly bookmarkApiUtils: BookmarkUtilService,
-    private readonly slotService: SlotService
-  ) {
+  constructor() {
     this.userService.lang$
-      .pipe(takeUntilDestroyed(inject(DestroyRef)))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((lang) => this.translateService.use(lang))
 
     this.isBookmarkable$ = this.commonObs$.pipe(

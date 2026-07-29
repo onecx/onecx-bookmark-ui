@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core'
 import { DatePipe } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -58,6 +58,8 @@ export class BookmarkImportComponent
     DialogResult<ExportBookmarksRequest | undefined>,
     DialogButtonClicked<BookmarkImportComponent>
 {
+  private readonly translate = inject(TranslateService)
+
   @Input() public workspaceName = ''
   @Input() public dateFormat = 'medium'
   @Output() primaryButtonEnabled: EventEmitter<boolean> = new EventEmitter()
@@ -75,8 +77,6 @@ export class BookmarkImportComponent
   public mode: EximMode = EximMode.Append
   public private = true
   public public = false
-
-  constructor(private readonly translate: TranslateService) {}
 
   private checkImportReady() {
     this.primaryButtonEnabled.emit((this.private || this.public) && this.snapshot !== undefined)

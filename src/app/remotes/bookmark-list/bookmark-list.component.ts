@@ -1,4 +1,4 @@
-import { Component, Inject, Input } from '@angular/core'
+import { Component, inject, Input } from '@angular/core'
 import { AsyncPipe } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, ReplaySubject } from 'rxjs'
@@ -49,6 +49,13 @@ export function slotInitializer(slotService: SlotService) {
   styleUrl: './bookmark-list.component.scss'
 })
 export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
+  private readonly remoteComponentConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
+  private readonly appConfigService = inject(AppConfigService)
+  private readonly userService = inject(UserService)
+  private readonly translateService = inject(TranslateService)
+  private readonly bookmarkApiUtils = inject(BookmarkUtilService)
+  private readonly slotService = inject(SlotService)
+
   publicBookmarks$ = new BehaviorSubject<Bookmark[]>([])
   privateBookmarks$ = new BehaviorSubject<Bookmark[]>([])
 
@@ -60,14 +67,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     this.ocxInitRemoteComponent(config)
   }
 
-  constructor(
-    @Inject(REMOTE_COMPONENT_CONFIG) private readonly remoteComponentConfig: ReplaySubject<RemoteComponentConfig>,
-    private readonly appConfigService: AppConfigService,
-    private readonly userService: UserService,
-    private readonly translateService: TranslateService,
-    private readonly bookmarkApiUtils: BookmarkUtilService,
-    private readonly slotService: SlotService
-  ) {
+  constructor() {
     this.translateService.use(this.userService.lang$.getValue())
   }
 
