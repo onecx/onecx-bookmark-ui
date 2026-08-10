@@ -1,14 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": false,
-    "declaration": false,
-    "outDir": "./dist/test",
-    "types": ["jest", "node"],
-    "target": "es2016",
-    "useDefineForClassFields": false
+    "types": ["jest", "node"]
   },
-  "files": ["src/test-setup.ts"],
-  "exclude": ["src/app/shared/generated", "node_modules", "dist", "src/app/bookmark/bookmark.*.ts"],
-  "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+  "files": ["setup-jest.ts"],
+  "include": ["src/app/**/*.spec.ts", "src/**/*.d.ts"],
+  "exclude": ["src/app/shared/generated/**/*"]
 }

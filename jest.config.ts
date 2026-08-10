@@ -14,7 +14,7 @@ const config: Config = {
   displayName: 'onecx-bookmark-ui',
   testEnvironment: 'jsdom',
   preset: './jest.preset.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testMatch: ['<rootDir>/src/app/**/*.spec.ts'],
   testPathIgnorePatterns: ignoredPathPatterns,
   transform: {
