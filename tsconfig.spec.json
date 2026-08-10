@@ -1,10 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "types": ["jest", "node"],
-    "useDefineForClassFields": false
+    "types": ["jest", "node"]
   },
-  "files": ["src/polyfills.ts"],
+  "files": ["setup-jest.ts"],
   "include": ["src/app/**/*.spec.ts", "src/**/*.d.ts"],
   "exclude": ["src/app/shared/generated/**/*"]
 }
