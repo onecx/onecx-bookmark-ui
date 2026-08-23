@@ -89,7 +89,9 @@ describe('BookmarkSortComponent', () => {
       expect(component.dialogResult.map((b) => b.id)).toEqual(['bm-1', 'bm-2', 'bm-3'])
     }))
 
-    it('should emit primaryButtonEnabled true after 200ms', fakeAsync(() => {
+    it('should emit primaryButtonEnabled true after 200ms', () => {
+      jest.useFakeTimers()
+
       const emittedValues: boolean[] = []
       component.primaryButtonEnabled.subscribe((val) => emittedValues.push(val))
       component.vm = { initialBookmarks: undefined }
@@ -97,9 +99,12 @@ describe('BookmarkSortComponent', () => {
       fixture.detectChanges()
       expect(emittedValues).toHaveLength(0)
 
-      tick(200)
+      jest.advanceTimersByTime(200)
+
       expect(emittedValues).toEqual([true])
-    }))
+
+      jest.useRealTimers()
+    })
   })
 
   describe('ocxDialogButtonClicked', () => {

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core'
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
 import { map } from 'rxjs'
@@ -21,7 +21,6 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
   imports: [
     errorTailorImports,
     FloatLabelModule,
-    FormsModule,
     InputTextModule,
     MessagesModule,
     ReactiveFormsModule,
@@ -77,7 +76,7 @@ export class BookmarkCreateUpdateComponent
   private hasPermission = false
 
   constructor() {
-    this.formGroup = new FormGroup({
+    this.formGroup = new FormGroup<{ displayName: FormControl<string | null> }>({
       displayName: new FormControl(null, [Validators.required, Validators.minLength(2), Validators.maxLength(255)])
     })
   }
