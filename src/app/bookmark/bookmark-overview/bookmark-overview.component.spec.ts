@@ -9,10 +9,9 @@ import { Store, StoreModule } from '@ngrx/store'
 import { ofType } from '@ngrx/effects'
 import { of } from 'rxjs'
 
-import { AppStateService, UserService } from '@onecx/angular-integration-interface'
+import { UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { SlotService } from '@onecx/angular-remote-components'
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PermissionService } from '@onecx/angular-utils'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -47,7 +46,6 @@ describe('BookmarkOverviewComponent', () => {
       imports: [
         BookmarkOverviewComponent,
         StoreModule.forRoot({}),
-        AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
@@ -56,7 +54,6 @@ describe('BookmarkOverviewComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        AppStateService,
         provideAppStateServiceMock(),
         provideMockStore({
           initialState: {

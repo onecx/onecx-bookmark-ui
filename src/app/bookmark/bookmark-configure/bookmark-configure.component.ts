@@ -1,11 +1,11 @@
 import { Component, DestroyRef, inject, LOCALE_ID, OnInit } from '@angular/core'
-import { AsyncPipe, NgClass } from '@angular/common'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { AsyncPipe, NgClass } from '@angular/common'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { FormsModule } from '@angular/forms'
-import { Observable } from 'rxjs'
 import { Store } from '@ngrx/store'
 import { TranslateModule } from '@ngx-translate/core'
+import { Observable } from 'rxjs'
 
 import { PrimeIcons, SelectItem } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
@@ -162,6 +162,7 @@ export class BookmarkConfigureComponent implements OnInit {
     const perm = 'BOOKMARK#' + (scope === BookmarkScope.Public ? 'ADMIN_' : '') + 'EDIT'
     return [
       {
+        id: 'bm_configure_action_back',
         labelKey: 'ACTIONS.NAVIGATION.BACK',
         titleKey: 'ACTIONS.NAVIGATION.BACK.TOOLTIP',
         icon: PrimeIcons.ARROW_LEFT,
@@ -169,6 +170,7 @@ export class BookmarkConfigureComponent implements OnInit {
         actionCallback: () => this.onBack()
       },
       {
+        id: 'bm_configure_action_sort',
         labelKey: 'ACTIONS.SORT.LABEL',
         titleKey: 'ACTIONS.SORT.TOOLTIP',
         icon: PrimeIcons.SORT,
@@ -179,6 +181,7 @@ export class BookmarkConfigureComponent implements OnInit {
         actionCallback: () => this.onSortDialog()
       },
       {
+        id: 'bm_configure_action_export',
         labelKey: 'ACTIONS.EXPORT.LABEL',
         titleKey: 'ACTIONS.EXPORT.TOOLTIP',
         icon: PrimeIcons.DOWNLOAD,
@@ -189,6 +192,7 @@ export class BookmarkConfigureComponent implements OnInit {
         actionCallback: () => this.onExport()
       },
       {
+        id: 'bm_configure_action_import',
         labelKey: 'ACTIONS.IMPORT.LABEL',
         titleKey: 'ACTIONS.IMPORT.TOOLTIP',
         icon: PrimeIcons.UPLOAD,
@@ -197,6 +201,7 @@ export class BookmarkConfigureComponent implements OnInit {
         actionCallback: () => this.onImport()
       },
       {
+        id: 'bm_configure_action_create',
         labelKey: 'ACTIONS.CREATE.LABEL',
         titleKey: 'ACTIONS.CREATE.TOOLTIP',
         icon: PrimeIcons.PLUS,

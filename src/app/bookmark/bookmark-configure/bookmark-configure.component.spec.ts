@@ -1,25 +1,24 @@
-import { ComponentFixture, TestBed, DeferBlockBehavior, DeferBlockState } from '@angular/core/testing'
+import { ComponentFixture, TestBed, DeferBlockBehavior } from '@angular/core/testing'
+import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { ActivatedRoute } from '@angular/router'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
-import { of } from 'rxjs'
-
+import { provideNoopAnimations } from '@angular/platform-browser/animations'
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
-
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { of } from 'rxjs'
+
 import { DialogService } from 'primeng/dynamicdialog'
 
-import { UserService, WorkspaceService, AppStateService } from '@onecx/angular-integration-interface'
+import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
 import { DataSortDirection, Filter, RowListGridData, Sort } from '@onecx/angular-accelerator'
 import { PermissionService } from '@onecx/angular-utils'
 import { ensureIntersectionObserverMockExists } from '@onecx/angular-testing'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
-import { provideHttpClient } from '@angular/common/http'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { initialState } from './bookmark-configure.reducers'
@@ -28,7 +27,6 @@ import { BookmarkConfigureComponent } from './bookmark-configure.component'
 import { BookmarkConfigureHarness } from './bookmark-configure.harness'
 import { BookmarkConfigureViewModel } from './bookmark-configure.viewmodel'
 import { selectBookmarkConfigureViewModel } from './bookmark-configure.selectors'
-import { By } from '@angular/platform-browser'
 
 ensureIntersectionObserverMockExists()
 Object.defineProperty(window, 'matchMedia', {
@@ -50,7 +48,6 @@ describe('BookmarkConfigureComponent', () => {
   let fixture: ComponentFixture<BookmarkConfigureComponent>
   let store: MockStore<Store>
   let appStateMock: AppStateServiceMock
-  let bookmarkSearch: BookmarkConfigureHarness
 
   const mockActivatedRoute = {}
   const baseBookmarkConfigureViewModel: BookmarkConfigureViewModel = {
@@ -67,23 +64,21 @@ describe('BookmarkConfigureComponent', () => {
       deferBlockBehavior: DeferBlockBehavior.Manual,
       imports: [
         BookmarkConfigureComponent,
-        LetDirective,
         StoreModule.forRoot({}),
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en'),
-        NoopAnimationsModule
+        }).withDefaultLanguage('en')
       ],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideNoopAnimations(),
         DialogService,
         UserService,
         WorkspaceService,
         { provide: PermissionService, useValue: { hasPermission: () => of(true) } },
-        AppStateService,
         provideAppStateServiceMock(),
-        provideHttpClientTesting(),
-        provideHttpClient(),
         provideMockStore({ initialState: { bookmarks: { search: initialState } } }),
         { provide: ActivatedRoute, useValue: mockActivatedRoute }
       ]
@@ -124,397 +119,253 @@ describe('BookmarkConfigureComponent', () => {
 
     fixture = TestBed.createComponent(BookmarkConfigureComponent)
     component = fixture.componentInstance
+    await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarkConfigureHarness)
     fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-    bookmarkSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarkConfigureHarness)
   })
 
-  it('should create the component', () => {
-    expect(component).toBeTruthy()
-  })
+  describe('init', () => {
+    it('should create the component', () => {
+      expect(component).toBeTruthy()
+    })
 
-  it('should dispatch searchButtonClicked action on page init', (done) => {
-    store.scannedActions$.pipe(ofType(BookmarkConfigureActions.search)).subscribe((action) => {
-      expect(action.type).toBe(BookmarkConfigureActions.search.type)
-      done()
+    it('should dispatch searchButtonClicked action on page init', (done) => {
+      store.scannedActions$.pipe(ofType(BookmarkConfigureActions.search)).subscribe((action) => {
+        expect(action.type).toBe(BookmarkConfigureActions.search.type)
+        done()
+      })
     })
   })
-  it('should filter results by scope in constructor and set pageActions', () => {
-    const mockResults = [
-      { id: '1', scope: 'admin', imagePath: '' },
-      { id: '2', scope: 'admin', imagePath: '' },
-      { id: '3', scope: 'user', imagePath: '' }
-    ] as RowListGridData[]
 
-    const mockViewModel: BookmarkConfigureViewModel = {
-      columns: [],
-      results: mockResults,
-      bookmarkFilter: '',
-      scopeQuickFilter: 'PRIVATE',
-      loading: false,
-      exceptionKey: null
-    }
+  describe('filter: PRIVATE', () => {
+    it('should filter results by scope in constructor and set pageActions', () => {
+      const mockResults = [
+        { id: '1', scope: 'admin', imagePath: '' },
+        { id: '2', scope: 'admin', imagePath: '' },
+        { id: '3', scope: 'user', imagePath: '' }
+      ] as RowListGridData[]
 
-    const prepareSpy = jest.spyOn(component as any, 'preparePageActions').mockReturnValue(['mockAction'])
-
-    store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
-    store.refreshState()
-
-    component.quickFilterValue = BookmarkScope.Private
-    expect(prepareSpy).toHaveBeenCalledWith(false, 'PRIVATE')
-    expect(component.pageActions).toEqual(['mockAction'])
-  })
-
-  it('should export csv data on export action click', async () => {
-    jest.spyOn(store, 'dispatch')
-    jest.spyOn(component, 'onExport')
-    const mockResults = [
-      { id: '1', scope: 'PRIVATE', imagePath: '' },
-      { id: '2', scope: 'PRIVATE', imagePath: '' },
-      { id: '3', scope: 'PRIVATE', imagePath: '' },
-      { id: '1', scope: 'PUBLIC', imagePath: '' },
-      { id: '2', scope: 'PUBLIC', imagePath: '' },
-      { id: '3', scope: 'PUBLIC', imagePath: '' }
-    ] as RowListGridData[]
-
-    const mockViewModel: BookmarkConfigureViewModel = {
-      columns: [],
-      results: mockResults,
-      bookmarkFilter: '',
-      scopeQuickFilter: 'PUBLIC',
-      loading: false,
-      exceptionKey: null
-    }
-
-    const prepareSpy = jest.spyOn(component as any, 'preparePageActions')
-    component.quickFilterValue = BookmarkScope.Public
-
-    store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
-    store.refreshState()
-    fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-    expect(prepareSpy).toHaveBeenCalledWith(true, 'PUBLIC')
-
-    const pageHeader = await bookmarkSearch.getHeader()
-    const overflowActionButton = await pageHeader.getOverflowActionMenuButton()
-    expect(overflowActionButton).toBeDefined()
-    await overflowActionButton?.click()
-    const exportItem = await pageHeader.getOverFlowMenuItem('Export')
-
-    await exportItem?.selectItem()
-
-    expect(component.onExport).toHaveBeenCalled()
-
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.exportBookmarks())
-  })
-
-  it('should open import dialog on import action click', async () => {
-    jest.spyOn(store, 'dispatch')
-    jest.spyOn(component, 'onImport')
-    const mockResults = [
-      { id: '1', scope: 'PRIVATE', imagePath: '' },
-      { id: '2', scope: 'PRIVATE', imagePath: '' },
-      { id: '3', scope: 'PRIVATE', imagePath: '' },
-      { id: '1', scope: 'PUBLIC', imagePath: '' },
-      { id: '2', scope: 'PUBLIC', imagePath: '' },
-      { id: '3', scope: 'PUBLIC', imagePath: '' }
-    ] as RowListGridData[]
-
-    const mockViewModel: BookmarkConfigureViewModel = {
-      columns: [],
-      results: mockResults,
-      bookmarkFilter: '',
-      scopeQuickFilter: 'PRIVATE',
-      loading: false,
-      exceptionKey: null
-    }
-
-    const prepareSpy = jest.spyOn(component as any, 'preparePageActions')
-    component.quickFilterValue = BookmarkScope.Private
-
-    store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
-    store.refreshState()
-    fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-    expect(prepareSpy).toHaveBeenCalledWith(true, 'PRIVATE')
-
-    const pageHeader = await bookmarkSearch.getHeader()
-    const overflowActionButton = await pageHeader.getOverflowActionMenuButton()
-    expect(overflowActionButton).toBeDefined()
-    await overflowActionButton?.click()
-    const exportItem = await pageHeader.getOverFlowMenuItem('Import')
-
-    await exportItem?.selectItem()
-
-    expect(component.onImport).toHaveBeenCalled()
-
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.importBookmarks())
-  })
-
-  it('should call create action on click', async () => {
-    jest.spyOn(store, 'dispatch')
-    jest.spyOn(component, 'onCreate')
-
-    const mockResults = [
-      { id: '1', scope: 'PRIVATE', imagePath: '' },
-      { id: '2', scope: 'PRIVATE', imagePath: '' },
-      { id: '3', scope: 'PRIVATE', imagePath: '' },
-      { id: '1', scope: 'PUBLIC', imagePath: '' },
-      { id: '2', scope: 'PUBLIC', imagePath: '' },
-      { id: '3', scope: 'PUBLIC', imagePath: '' }
-    ] as RowListGridData[]
-
-    const mockViewModel: BookmarkConfigureViewModel = {
-      columns: [],
-      results: mockResults,
-      bookmarkFilter: '',
-      scopeQuickFilter: 'PRIVATE',
-      loading: false,
-      exceptionKey: null
-    }
-
-    const prepareSpy = jest.spyOn(component as any, 'preparePageActions')
-    component.quickFilterValue = BookmarkScope.Private
-
-    store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
-    store.refreshState()
-    fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-    expect(prepareSpy).toHaveBeenCalledWith(true, 'PRIVATE')
-
-    const pageHeader = await bookmarkSearch.getHeader()
-    const overflowActionButton = await pageHeader.getOverflowActionMenuButton()
-    expect(overflowActionButton).toBeDefined()
-    await overflowActionButton?.click()
-    const exportItem = await pageHeader.getOverFlowMenuItem('Create')
-
-    await exportItem?.selectItem()
-
-    expect(component.onCreate).toHaveBeenCalled()
-
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.createBookmark())
-  })
-
-  it('should call back and sort action on click', async () => {
-    jest.spyOn(store, 'dispatch')
-    jest.spyOn(component, 'onBack')
-    jest.spyOn(component, 'onSortDialog')
-
-    const mockResults = [
-      { id: '1', scope: 'PRIVATE', imagePath: '' },
-      { id: '2', scope: 'PRIVATE', imagePath: '' },
-      { id: '3', scope: 'PRIVATE', imagePath: '' },
-      { id: '1', scope: 'PUBLIC', imagePath: '' },
-      { id: '2', scope: 'PUBLIC', imagePath: '' },
-      { id: '3', scope: 'PUBLIC', imagePath: '' }
-    ] as RowListGridData[]
-
-    const mockViewModel: BookmarkConfigureViewModel = {
-      columns: [],
-      results: mockResults,
-      bookmarkFilter: '',
-      scopeQuickFilter: 'PRIVATE',
-      loading: false,
-      exceptionKey: null
-    }
-
-    const prepareSpy = jest.spyOn(component as any, 'preparePageActions')
-    component.quickFilterValue = BookmarkScope.Private
-
-    store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
-    store.refreshState()
-    fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-    expect(prepareSpy).toHaveBeenCalledWith(true, 'PRIVATE')
-
-    const pageHeader = await bookmarkSearch.getHeader()
-    const menuButton = await pageHeader.getInlineActionButtons()
-    await menuButton[0].click()
-
-    expect(component.onBack).toHaveBeenCalled()
-    await menuButton[1].click()
-    expect(component.onSortDialog).toHaveBeenCalled()
-
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.openSortingDialog())
-  })
-
-  it('should trigger item actions on click', async () => {
-    jest.spyOn(store, 'dispatch')
-    jest.spyOn(component, 'onDetail')
-    jest.spyOn(component, 'onCopy')
-    jest.spyOn(component, 'onDelete')
-    jest.spyOn(component, 'onToggleDisable')
-
-    const bookmarks = [
-      { id: '1', scope: 'PRIVATE', imagePath: '', disabled: false },
-      { id: '2', scope: 'PRIVATE', imagePath: '', disabled: false },
-      { id: '3', scope: 'PRIVATE', imagePath: '', disabled: false },
-      { id: '4', scope: 'PUBLIC', imagePath: '', disabled: false },
-      { id: '5', scope: 'PUBLIC', imagePath: '', disabled: false },
-      { id: '6', scope: 'PUBLIC', imagePath: '', disabled: false }
-    ] as RowListGridData[]
-
-    const mockViewModel: BookmarkConfigureViewModel = {
-      columns: [],
-      results: bookmarks,
-      bookmarkFilter: '',
-      scopeQuickFilter: 'PRIVATE',
-      loading: false,
-      exceptionKey: null
-    }
-    component.quickFilterValue = BookmarkScope.Private
-
-    store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
-    store.refreshState()
-    fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-
-    // Render all @defer blocks to make row cell content visible
-    const deferBlocks = await fixture.getDeferBlocks()
-    await Promise.all(deferBlocks.map((b) => b.render(DeferBlockState.Complete)))
-    fixture.detectChanges()
-    await fixture.whenStable()
-
-    // Important: the action buttons are native <p-button id=""><button> elements
-    const copyButton = fixture.debugElement.query(By.css('#bm_configure_table_row_1_action_copy button')).nativeElement
-    const deleteButton = fixture.debugElement.query(
-      By.css('#bm_configure_table_row_1_action_delete button')
-    ).nativeElement
-    const editButton = fixture.debugElement.query(By.css('#bm_configure_table_row_1_action_edit button')).nativeElement
-    const toggleButton = fixture.debugElement.query(
-      By.css('#bm_configure_table_row_1_action_toggle button')
-    ).nativeElement
-
-    expect(copyButton).toBeTruthy()
-    expect(deleteButton).toBeTruthy()
-    expect(editButton).toBeTruthy()
-    expect(toggleButton).toBeTruthy()
-
-    toggleButton.click()
-    fixture.detectChanges()
-    expect(component.onToggleDisable).toHaveBeenCalled()
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.toggleBookmark({ id: '1' }))
-
-    editButton.click()
-    fixture.detectChanges()
-    expect(component.onDetail).toHaveBeenCalled()
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.viewOrEditBookmark({ id: '1' }))
-
-    copyButton.click()
-    fixture.detectChanges()
-    expect(component.onCopy).toHaveBeenCalled()
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.copyBookmark({ id: '1' }))
-
-    deleteButton.click()
-    fixture.detectChanges()
-    expect(component.onDelete).toHaveBeenCalled()
-    expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.openDeleteDialog({ id: '1' }))
-  })
-
-  it('should trigger table actions on click', async () => {
-    jest.spyOn(store, 'dispatch')
-    jest.spyOn(component, 'onQuickFilterChange')
-    jest.spyOn(component, 'onFilterChange')
-
-    const mockResults = [
-      {
-        id: '1',
-        scope: 'PRIVATE',
-        imagePath: '',
-        appId: 'abc',
-        productName: 'p1',
-        query: { abc: 'abc' },
-        fragment: 'abc',
-        endpointName: 'abc',
-        endpointParameters: ''
-      },
-      {
-        id: '2',
-        scope: 'PRIVATE',
-        imagePath: '',
-        query: { abc: 'abc' },
-        fragment: 'abc'
-      },
-      {
-        id: '3',
-        scope: 'PRIVATE',
-        imagePath: '',
-        appId: 'abc',
-        productName: 'p1',
-        endpointName: 'abc',
-        endpointParameters: ''
-      },
-      { id: '4', scope: 'PUBLIC', imagePath: '' },
-      { id: '5', scope: 'PUBLIC', imagePath: '' },
-      { id: '6', scope: 'PUBLIC', imagePath: '' }
-    ] as RowListGridData[]
-
-    const mockViewModel: BookmarkConfigureViewModel = {
-      columns: [],
-      results: mockResults,
-      bookmarkFilter: '',
-      scopeQuickFilter: 'PRIVATE',
-      loading: false,
-      exceptionKey: null
-    }
-
-    const prepareSpy = jest.spyOn(component as any, 'preparePageActions')
-    component.quickFilterValue = BookmarkScope.Private
-
-    store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
-    store.refreshState()
-    fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-    expect(prepareSpy).toHaveBeenCalledWith(true, 'PRIVATE')
-
-    await fixture.whenStable()
-
-    const quickFilterButton: HTMLSpanElement = fixture.nativeElement.querySelector(
-      '#bm_configure_table_quick_filter_PUBLIC'
-    )
-
-    expect(quickFilterButton).toBeTruthy()
-
-    quickFilterButton.click()
-    fixture.detectChanges()
-
-    expect(component.onQuickFilterChange).toHaveBeenCalled()
-
-    expect(store.dispatch).toHaveBeenCalledWith(
-      BookmarkConfigureActions.scopeQuickFilterChanged({ scopeQuickFilter: 'PUBLIC' })
-    )
-  })
-
-  it('should filter columns based on activeIds', () => {
-    const activeIds = ['displayName', 'url']
-
-    component.onColumnsChange(activeIds)
-
-    expect(component.filteredColumns).toEqual([
-      {
-        field: 'displayName',
-        header: 'DISPLAY_NAME',
-        active: true,
-        translationPrefix: 'BOOKMARK',
-        limit: true,
-        sort: true
-      },
-      {
-        field: 'url',
-        header: 'URL_SEARCH',
-        active: true,
-        translationPrefix: 'BOOKMARK',
-        limit: false,
-        sort: true
+      const mockViewModel: BookmarkConfigureViewModel = {
+        columns: [],
+        results: mockResults,
+        bookmarkFilter: '',
+        scopeQuickFilter: 'PRIVATE',
+        loading: false,
+        exceptionKey: null
       }
-    ])
+
+      const prepareSpy = jest.spyOn(component as any, 'preparePageActions').mockReturnValue(['mockAction'])
+
+      store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
+      store.refreshState()
+
+      component.quickFilterValue = BookmarkScope.Private
+      expect(prepareSpy).toHaveBeenCalledWith(false, 'PRIVATE')
+      expect(component.pageActions).toEqual(['mockAction'])
+    })
+  })
+
+  describe('preparePageActions', () => {
+    it('should create page actions', async () => {
+      const actions = component['preparePageActions'](false, BookmarkScope.Public)
+
+      expect(actions).toHaveLength(5)
+      expect(actions[0].id).toBe('bm_configure_action_back')
+      expect(actions[1].id).toBe('bm_configure_action_sort')
+      expect(actions[2].id).toBe('bm_configure_action_export')
+      expect(actions[3].id).toBe('bm_configure_action_import')
+      expect(actions[4].id).toBe('bm_configure_action_create')
+    })
+
+    it('should go back', async () => {
+      jest.spyOn(component, 'onBack')
+      const actions = component['preparePageActions'](false, BookmarkScope.Private)
+
+      expect(actions[0].id).toBe('bm_configure_action_back')
+      const action = actions[0]
+      action?.actionCallback?.()
+
+      expect(component.onBack).toHaveBeenCalled()
+    })
+
+    it('should sort items', async () => {
+      jest.spyOn(store, 'dispatch')
+      jest.spyOn(component, 'onSortDialog')
+      const actions = component['preparePageActions'](false, BookmarkScope.Private)
+
+      expect(actions[1].id).toBe('bm_configure_action_sort')
+      const action = actions[1]
+      action?.actionCallback?.()
+
+      expect(component.onSortDialog).toHaveBeenCalled()
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.openSortingDialog())
+    })
+
+    it('should export items', async () => {
+      jest.spyOn(store, 'dispatch')
+      jest.spyOn(component, 'onExport')
+      const actions = component['preparePageActions'](false, BookmarkScope.Private)
+
+      expect(actions[2].id).toBe('bm_configure_action_export')
+      const action = actions[2]
+      action?.actionCallback?.()
+
+      expect(component.onExport).toHaveBeenCalled()
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.exportBookmarks())
+    })
+
+    it('should import items', async () => {
+      jest.spyOn(store, 'dispatch')
+      jest.spyOn(component, 'onImport')
+      const actions = component['preparePageActions'](false, BookmarkScope.Private)
+
+      expect(actions[3].id).toBe('bm_configure_action_import')
+      const action = actions[3]
+      action?.actionCallback?.()
+
+      expect(component.onImport).toHaveBeenCalled()
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.importBookmarks())
+    })
+
+    it('should create action for create', async () => {
+      jest.spyOn(store, 'dispatch')
+      jest.spyOn(component, 'onCreate')
+      const actions = component['preparePageActions'](false, BookmarkScope.Private)
+
+      expect(actions[4].id).toBe('bm_configure_action_create')
+      const action = actions[4]
+      action?.actionCallback?.()
+
+      expect(component.onCreate).toHaveBeenCalled()
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.createBookmark())
+    })
+  })
+
+  describe('row actions', () => {
+    const bm = { scope: BookmarkScope.Private, position: 0, workspaceName: 'ws', displayName: 'B' } as Bookmark
+
+    it('should toggle enable/disable', () => {
+      jest.spyOn(store, 'dispatch')
+      component.onToggleDisable(bm)
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.toggleBookmark({ id: bm.id }))
+    })
+
+    it('should call detail dialog', () => {
+      jest.spyOn(store, 'dispatch')
+      component.onDetail(bm)
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.viewOrEditBookmark({ id: bm.id }))
+    })
+
+    it('should copy', () => {
+      jest.spyOn(store, 'dispatch')
+      component.onCopy(bm)
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.copyBookmark({ id: bm.id }))
+    })
+
+    it('should delete', () => {
+      jest.spyOn(store, 'dispatch')
+      component.onDelete(bm)
+      expect(store.dispatch).toHaveBeenCalledWith(BookmarkConfigureActions.openDeleteDialog({ id: bm.id }))
+    })
+  })
+
+  describe('column filter', () => {
+    it('should trigger table actions on click', async () => {
+      jest.spyOn(store, 'dispatch')
+      jest.spyOn(component, 'onQuickFilterChange')
+      jest.spyOn(component, 'onFilterChange')
+
+      const mockResults = [
+        {
+          id: '1',
+          scope: 'PRIVATE',
+          imagePath: '',
+          appId: 'abc',
+          productName: 'p1',
+          query: { abc: 'abc' },
+          fragment: 'abc',
+          endpointName: 'abc',
+          endpointParameters: ''
+        },
+        {
+          id: '2',
+          scope: 'PRIVATE',
+          imagePath: '',
+          query: { abc: 'abc' },
+          fragment: 'abc'
+        },
+        {
+          id: '3',
+          scope: 'PRIVATE',
+          imagePath: '',
+          appId: 'abc',
+          productName: 'p1',
+          endpointName: 'abc',
+          endpointParameters: ''
+        },
+        { id: '4', scope: 'PUBLIC', imagePath: '' },
+        { id: '5', scope: 'PUBLIC', imagePath: '' },
+        { id: '6', scope: 'PUBLIC', imagePath: '' }
+      ] as RowListGridData[]
+
+      const mockViewModel: BookmarkConfigureViewModel = {
+        columns: [],
+        results: mockResults,
+        bookmarkFilter: '',
+        scopeQuickFilter: 'PRIVATE',
+        loading: false,
+        exceptionKey: null
+      }
+
+      const prepareSpy = jest.spyOn(component as any, 'preparePageActions')
+      component.quickFilterValue = BookmarkScope.Private
+
+      store.overrideSelector(selectBookmarkConfigureViewModel, mockViewModel)
+      store.refreshState()
+      fixture.detectChanges()
+      expect(prepareSpy).toHaveBeenCalledWith(true, 'PRIVATE')
+
+      await fixture.whenStable()
+
+      const quickFilterButton: HTMLSpanElement = fixture.nativeElement.querySelector(
+        '#bm_configure_table_quick_filter_PUBLIC'
+      )
+
+      expect(quickFilterButton).toBeTruthy()
+
+      quickFilterButton.click()
+      fixture.detectChanges()
+
+      expect(component.onQuickFilterChange).toHaveBeenCalled()
+
+      expect(store.dispatch).toHaveBeenCalledWith(
+        BookmarkConfigureActions.scopeQuickFilterChanged({ scopeQuickFilter: 'PUBLIC' })
+      )
+    })
+
+    it('should filter columns based on activeIds', () => {
+      const activeIds = ['displayName', 'url']
+
+      component.onColumnsChange(activeIds)
+
+      expect(component.filteredColumns).toEqual([
+        {
+          field: 'displayName',
+          header: 'DISPLAY_NAME',
+          active: true,
+          translationPrefix: 'BOOKMARK',
+          limit: true,
+          sort: true
+        },
+        {
+          field: 'url',
+          header: 'URL_SEARCH',
+          active: true,
+          translationPrefix: 'BOOKMARK',
+          limit: false,
+          sort: true
+        }
+      ])
+    })
   })
 
   describe('onFilterChange', () => {
@@ -532,9 +383,7 @@ describe('BookmarkConfigureComponent', () => {
       expect(component.globalFilterValue).toBe('hello')
       expect(applySpy).toHaveBeenCalled()
     })
-  })
 
-  describe('onClearGlobalFilter', () => {
     it('should reset globalFilterValue to empty string and apply name filter', () => {
       component.globalFilterValue = 'something'
       const applySpy = jest.spyOn(component as any, 'applyNameFilter')
@@ -705,8 +554,6 @@ describe('BookmarkConfigureComponent - no permission testcase', () => {
   let component: BookmarkConfigureComponent
   let fixture: ComponentFixture<BookmarkConfigureComponent>
   let store: MockStore<Store>
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let bookmarkSearch: BookmarkConfigureHarness
   const mockActivatedRoute = {}
   const baseBookmarkConfigureViewModel: BookmarkConfigureViewModel = {
     columns: [],
@@ -726,15 +573,13 @@ describe('BookmarkConfigureComponent - no permission testcase', () => {
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en'),
-        NoopAnimationsModule
+        }).withDefaultLanguage('en')
       ],
       providers: [
         DialogService,
         UserService,
         WorkspaceService,
         { provide: PermissionService, useValue: { hasPermission: () => of(true) } },
-        AppStateService,
         provideAppStateServiceMock(),
         provideHttpClientTesting(),
         provideHttpClient(),
@@ -758,9 +603,7 @@ describe('BookmarkConfigureComponent - no permission testcase', () => {
     fixture = TestBed.createComponent(BookmarkConfigureComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    await fixture.whenStable()
-    fixture.detectChanges()
-    bookmarkSearch = await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarkConfigureHarness)
+    await TestbedHarnessEnvironment.harnessForFixture(fixture, BookmarkConfigureHarness)
   })
 
   it('should create the component', () => {
