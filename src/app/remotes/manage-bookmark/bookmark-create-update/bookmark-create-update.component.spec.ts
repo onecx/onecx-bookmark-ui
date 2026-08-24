@@ -1,15 +1,17 @@
 import { ComponentFixture, TestBed, fakeAsync, flush, tick } from '@angular/core/testing'
-import { BookmarkCreateUpdateComponent } from './bookmark-create-update.component'
-import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms'
-import { UserService } from '@onecx/angular-integration-interface'
-import { BookmarkScope } from 'src/app/shared/generated'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
-import { BreadcrumbService } from '@onecx/angular-accelerator'
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TranslateService } from '@ngx-translate/core'
+
+import { BreadcrumbService } from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { UserService } from '@onecx/angular-integration-interface'
+
+import { BookmarkScope } from 'src/app/shared/generated'
+import { BookmarkCreateUpdateComponent } from './bookmark-create-update.component'
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -35,8 +37,6 @@ describe('BookmarkCreateUpdateComponent', () => {
       declarations: [],
       imports: [
         AngularAcceleratorModule,
-        FormsModule,
-        ReactiveFormsModule,
         LetDirective,
         TranslateTestingModule.withTranslations({
           de: require('./src/assets/i18n/de.json'),
@@ -51,6 +51,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     }).compileComponents()
     userService = TestBed.inject(UserService)
     userService.hasPermission = () => Promise.resolve(true)
+
     fixture = TestBed.createComponent(BookmarkCreateUpdateComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -60,7 +61,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should disable form if no permission', fakeAsync(() => {
+  it('should disable form if no permission', async () => {
     component.vm = {
       initialBookmark: { displayName: 'Test', scope: BookmarkScope.Private, id: 'a', position: 0, workspaceName: 'w1' },
       permissions: [],
@@ -68,9 +69,9 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
-    tick()
+    await Promise.resolve()
     expect(component.formGroup.disabled).toBe(true)
-  }))
+  })
 
   it('should enable form if permission exists', fakeAsync(() => {
     component.vm = {
@@ -84,7 +85,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     expect(component.formGroup.enabled).toBe(true)
   }))
 
-  it('should disable form if bookmark is public', fakeAsync(() => {
+  it('should disable form if bookmark is public', async () => {
     component.vm = {
       initialBookmark: { displayName: 'Test', scope: BookmarkScope.Public, id: 'a', position: 0, workspaceName: 'w1' },
       permissions: ['BOOKMARK#CREATE'],
@@ -92,9 +93,9 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
-    tick()
+    await Promise.resolve()
     expect(component.formGroup.disabled).toBe(true)
-  }))
+  })
 
   it('should emit dialog result on button click', () => {
     component.vm = {
@@ -113,21 +114,19 @@ describe('BookmarkCreateUpdateComponent', () => {
     expect(component.dialogResult?.displayName).toBe('New Name')
   })
 
-  it('should emit primaryButtonEnabled based on form validity', fakeAsync(() => {
+  it('should emit primaryButtonEnabled based on form validity', async () => {
     const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
     component.vm = {
       initialBookmark: undefined,
       permissions: ['BOOKMARK#CREATE'],
       mode: 'CREATE'
     }
-    fixture.detectChanges()
     component.ngOnChanges()
-    tick()
+    await Promise.resolve()
     component.formGroup.setValue({ displayName: 'Valid Name' })
-    tick()
+    fixture.detectChanges()
     expect(emitSpy).toHaveBeenCalledWith(true)
-    flush()
-  }))
+  })
 
   it('should call userService.hasPermission if permissions not set', () => {
     jest.spyOn(userService, 'hasPermission')

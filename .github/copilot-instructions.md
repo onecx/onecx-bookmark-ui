@@ -1,7 +1,7 @@
 ## Project overview
 
 Angular 19 micro-frontend with **standalone components**, **OnPush change detection** and **signal-first** state management.
-Testing framework: **Karma + Jasmine** — do NOT replace with Jest and do NOT add Jest dependencies.
+Testing framework: **Jest** — do NOT replace with Karma + Jasmine and do NOT add Karma + Jasmine dependencies.
 
 ---
 
@@ -23,6 +23,12 @@ Third-party (primeng/*, ngx-translate/*, file-saver, …)
 OneCX (@onecx/*)
 Local (src/app/*)
 ```
+
+### Module Imports
+- Between the sections, add a blank line.
+- Do not suggest legacy NgModules.
+- Avoid adding redundant template imports in spec files since standalone components self-contain their template dependencies.
+- If there are multiple imports from the same module, combine them into a single import statement and order them alphabetically.
 
 ---
 
@@ -89,7 +95,7 @@ public readonly headers = computed(() => {
 
 ---
 
-## Testing (Karma / Jasmine)
+## Testing (Jest)
 
 - **100% coverage** (statements, branches, functions, lines) for all new or changed code.
 - Use `TestBed.createComponent()` — no shallow rendering, no `NO_ERRORS_SCHEMA`.
@@ -101,5 +107,5 @@ public readonly headers = computed(() => {
 - Test **one behaviour per `it()` block** — do not combine unrelated assertions.
 - Name tests: `should <behaviour> when <condition>`.
 - Verify that a method or signal exists in the source before writing a test for it.
-- Mock services with `jasmine.createSpyObj()` or `{ provide: X, useValue: mockObj }`.
+- Mock services with `jest.fn()` or `{ provide: X, useValue: mockObj }`.
 
