@@ -1,4 +1,4 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { Renderer2 } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -83,7 +83,6 @@ describe('OneCXManageBookmarkComponent', () => {
     portalDialogServiceMock = { openDialog: jest.fn().mockReturnValue(of(undefined)) }
 
     await TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
@@ -204,6 +203,121 @@ describe('OneCXManageBookmarkComponent', () => {
       component['handleBookmarkLoadError']()
 
       expect(component.bookmarkLoadingError).toBe(true)
+    })
+  })
+
+  describe('document click handling', () => {
+    it('ngAfterViewInit should close coordinator when click outside and dialog is open', () => {
+      initializeComponent()
+
+      const renderer = fixture.componentRef.injector.get(Renderer2)
+      let savedCb: ((event: Event) => void) | undefined
+      const removeFn = jest.fn()
+
+      jest.spyOn(renderer, 'listen').mockImplementation((_: any, __: any, cb: any) => {
+        savedCb = cb
+        return removeFn
+      })
+
+      ;(component as any).bookmarkDialogCoordinatorService = {
+        isOpen: jest.fn().mockReturnValue(true),
+        close: jest.fn(),
+        open: jest.fn(),
+        register: jest.fn()
+      }
+
+      ;(component as any).bookmarkHost = { nativeElement: { contains: () => false } }
+
+      component.ngAfterViewInit()
+
+      const el = document.createElement('div')
+      const evt = { target: el } as unknown as Event
+      savedCb?.(evt)
+
+      expect((component as any).bookmarkDialogCoordinatorService.close).toHaveBeenCalledWith('manage')
+    })
+
+    it('closeActivePortalDialog should call close on dialog refs', () => {
+      initializeComponent()
+      const mockClose = jest.fn()
+      const keyObj = { close: mockClose }
+      const map = new Map<any, any>([[keyObj, 'value']])
+      ;(component as any).portalDialogService = { dialogService: { dialogComponentRefMap: map } }
+
+      ;(component as any).closeActivePortalDialog()
+
+      expect(mockClose).toHaveBeenCalled()
+    })
+
+    it('ngAfterViewInit should not close when target is not a Node', () => {
+      initializeComponent()
+
+      const renderer = fixture.componentRef.injector.get(Renderer2)
+      let savedCb: ((event: Event) => void) | undefined
+      jest.spyOn(renderer, 'listen').mockImplementation((_: any, __: any, cb: any) => {
+        savedCb = cb
+        return jest.fn()
+      })
+
+      ;(component as any).bookmarkDialogCoordinatorService = {
+        isOpen: jest.fn().mockReturnValue(true),
+        close: jest.fn(),
+        open: jest.fn(),
+        register: jest.fn()
+      }
+      ;(component as any).bookmarkHost = undefined
+
+      component.ngAfterViewInit()
+
+      const evt = { target: {} } as unknown as Event
+      savedCb?.(evt)
+
+      expect((component as any).bookmarkDialogCoordinatorService.close).not.toHaveBeenCalled()
+    })
+
+    it('ngAfterViewInit should not close when clicked inside dialog', () => {
+      initializeComponent()
+
+      const renderer = fixture.componentRef.injector.get(Renderer2)
+      let savedCb: ((event: Event) => void) | undefined
+      jest.spyOn(renderer, 'listen').mockImplementation((_: any, __: any, cb: any) => {
+        savedCb = cb
+        return jest.fn()
+      })
+
+      const closeSpy = jest.fn()
+      ;(component as any).bookmarkDialogCoordinatorService = {
+        isOpen: jest.fn().mockReturnValue(true),
+        close: closeSpy,
+        open: jest.fn(),
+        register: jest.fn()
+      }
+      ;(component as any).bookmarkHost = { nativeElement: { contains: () => false } }
+
+      component.ngAfterViewInit()
+
+      const el = document.createElement('div')
+      ;(el as any).closest = () => ({})
+      const evt = { target: el } as unknown as Event
+      savedCb?.(evt)
+
+      expect(closeSpy).not.toHaveBeenCalled()
+    })
+
+    it('onOpenBookmarkDialog should close and return when coordinator is already open', () => {
+      initializeComponent()
+      const closeSpy = jest.fn()
+      ;(component as any).bookmarkDialogCoordinatorService = {
+        isOpen: jest.fn().mockReturnValue(true),
+        close: closeSpy,
+        open: jest.fn(),
+        register: jest.fn()
+      }
+
+      component.onOpenBookmarkDialog()
+
+      expect(closeSpy).toHaveBeenCalledWith('manage')
+      expect(portalDialogServiceMock.openDialog).not.toHaveBeenCalled()
     })
   })
 
