@@ -1,4 +1,14 @@
-import { Component, DestroyRef, inject, Input } from '@angular/core'
+import {
+  AfterViewInit,
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  Input,
+  OnDestroy,
+  Renderer2,
+  ViewChild
+} from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -48,6 +58,7 @@ import {
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { Bookmark, CreateBookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
+import { BookmarkDialogCoordinatorService } from 'src/app/shared/utils/bookmark-dialog-coordinator.service'
 import { extractPathAfter, mapPathSegmentsToPathParameters } from 'src/app/shared/utils/path.utils'
 import { findPageBookmark, getEndpointForPath, isPageBookmarkable } from 'src/app/shared/utils/bookmark.utils'
 import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
@@ -82,7 +93,9 @@ export function slotInitializer(slotService: SlotService) {
   templateUrl: './manage-bookmark.component.html',
   styleUrl: './manage-bookmark.component.scss'
 })
-export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
+export class OneCXManageBookmarkComponent
+  implements ocxRemoteComponent, ocxRemoteWebcomponent, AfterViewInit, OnDestroy
+{
   private readonly remoteComponentConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
   private readonly appConfigService = inject(AppConfigService)
   private readonly appStateService = inject(AppStateService)
@@ -95,6 +108,9 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
 
   permissions: string[] = []
   bookmarkLoadingError = false
+  @ViewChild('bookmarkHost')
+  private readonly bookmarkHost!: ElementRef<HTMLElement>
+  removeDocumentClickListener: (() => void) | undefined
   bookmarks$ = new BehaviorSubject<Bookmark[] | undefined>(undefined)
   isBookmarkable$: Observable<boolean>
   isBookmarked$: Observable<boolean>
@@ -110,7 +126,14 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     this.ocxInitRemoteComponent(config)
   }
 
-  constructor() {
+  constructor(
+    private readonly renderer: Renderer2,
+    private readonly bookmarkDialogCoordinatorService: BookmarkDialogCoordinatorService
+  ) {
+    this.bookmarkDialogCoordinatorService.register('manage', () => {
+      this.closeActivePortalDialog()
+    })
+
     this.userService.lang$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((lang) => this.translateService.use(lang))
@@ -156,6 +179,39 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     )
   }
 
+  ngAfterViewInit(): void {
+    this.removeDocumentClickListener = this.renderer.listen('body', 'click', (event: Event) => {
+      const target = event.target
+      const hostElement = this.bookmarkHost?.nativeElement
+
+      if (!(target instanceof Node) || !hostElement) {
+        return
+      }
+
+      const clickedInsideHost = hostElement.contains(target)
+      const clickedInsideDialog = target instanceof Element && !!target.closest('[role="dialog"], .p-dialog')
+
+      if (clickedInsideHost || clickedInsideDialog || !this.bookmarkDialogCoordinatorService.isOpen('manage')) {
+        return
+      }
+
+      this.bookmarkDialogCoordinatorService.close('manage')
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.removeDocumentClickListener?.()
+  }
+
+  private closeActivePortalDialog(): void {
+    const dialogService = (this.portalDialogService as any).dialogService
+    if (dialogService?.dialogComponentRefMap) {
+      dialogService.dialogComponentRefMap.forEach((_: unknown, dialogRef: { close: () => void }) => {
+        dialogRef?.close?.()
+      })
+    }
+  }
+
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {
     this.remoteComponentConfig.next(config)
     this.permissions = config.permissions
@@ -168,6 +224,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
   }
 
   onOpenBookmarkDialog(): void {
+    if (this.bookmarkDialogCoordinatorService.isOpen('manage')) {
+      this.bookmarkDialogCoordinatorService.close('manage')
+      return
+    }
+
+    this.bookmarkDialogCoordinatorService.open('manage')
+
     combineLatest([this.isBookmarkable$, this.isBookmarked$, this.currentBookmark$, this.commonObs$])
       .pipe(
         first(),
@@ -194,11 +257,11 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
         }),
         mergeMap(({ dialogState, isBookmarkable, isBookmarked, currentMfe, currentPage, endpointForCurrentPage }) => {
           if (!isBookmarkable || !dialogState) {
-            return of(undefined)
+            return of([])
           }
           if (!isBookmarked) {
             if (dialogState.button === 'secondary') {
-              return of(undefined)
+              return of([])
             }
             const newBookmark = dialogState.result as CreateBookmark
             return this.createBookmark(newBookmark, endpointForCurrentPage, currentMfe, currentPage)
@@ -220,8 +283,13 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
         filter((result) => result !== undefined),
         first()
       )
-      .subscribe((result) => {
-        this.bookmarks$.next(result)
+      .subscribe({
+        next: () => {
+          this.bookmarkDialogCoordinatorService.close('manage')
+        },
+        error: () => {
+          this.bookmarkDialogCoordinatorService.close('manage')
+        }
       })
   }
 
@@ -277,10 +345,14 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     return {
       position: 'top-right',
       style: { top: '4rem' },
-      modal: false,
+      modal: true,
       draggable: true,
       resizable: true,
-      width: isBookmarkable ? '400px' : undefined
+      width: isBookmarkable ? '400px' : undefined,
+      closeOnEscape: true,
+      showHeader: true,
+      showXButton: true,
+      keepInViewport: true
     } as PortalDialogConfig
   }
 

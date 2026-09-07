@@ -1,5 +1,5 @@
 @if (!bookmarkLoadingError) {
-  <div *ocxIfPermission="'BOOKMARK#CREATE'; permissions: permissions" class="layout-topbar-item">
+  <div #bookmarkHost *ocxIfPermission="'BOOKMARK#CREATE'; permissions: permissions" class="layout-topbar-item">
     @let isBookmarked = isBookmarked$ | async;
     @let icon = isBookmarked ? 'pi pi-star-fill' : 'pi pi-star';
     @if (bookmarks$.getValue() && isBookmarked !== undefined) {
