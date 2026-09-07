@@ -56,7 +56,7 @@ export class BookmarkConfigureEffects {
   }
 
   private buildExceptionKey(status: string): string {
-    return 'EXCEPTIONS.HTTP_STATUS_' + status + '.' + this.context
+    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(Number(status)) + '.' + this.context
   }
 
   private sortByPosition(a: Bookmark, b: Bookmark): number {
