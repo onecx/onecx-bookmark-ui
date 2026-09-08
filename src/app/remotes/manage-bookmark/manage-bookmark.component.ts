@@ -275,9 +275,10 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
 
   private getBookmarkDialogConfig(isBookmarkable: boolean): PortalDialogConfig {
     return {
+      closable: true,
       position: 'top-right',
       style: { top: '4rem' },
-      modal: false,
+      modal: true,
       draggable: true,
       resizable: true,
       width: isBookmarkable ? '400px' : undefined
