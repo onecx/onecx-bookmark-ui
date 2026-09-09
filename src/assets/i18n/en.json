@@ -154,6 +154,7 @@
     "APP_ID": "App",
     "ENDPOINT": "Endpoint Name",
     "ENDPOINT_PARAMETER": "Parameter",
+    "LOGO": "Logo",
     "QUERY": "Query",
     "FRAGMENT": "Fragment",
     "ENABLED": "Activated (visible)",
@@ -193,7 +194,8 @@
       "TYPE_URL": "Static URL to target maybe also outside of the Workspace. Loaded in separate TAB",
       "TYPE_PRODUCT": "URL to endpoint of an Application within the current Workspace",
       "URL": "Complete URL to be used 1:1",
-      "URL_SEARCH": "Final URL which is used as target link"
+      "URL_SEARCH": "Final URL which is used as target link",
+      "LOGO": "Upload Logo file"
     }
   },
   "BOOKMARK_DETAIL": {

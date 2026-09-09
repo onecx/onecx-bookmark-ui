@@ -159,7 +159,7 @@ describe('OneCXBookmarkListComponent', () => {
       component.ocxInitRemoteComponent(remoteComponentConfig)
 
       const privateBookmarks = component.privateBookmarks$.getValue()
-      expect(privateBookmarks.length).toBe(2)
+      expect(privateBookmarks).toHaveLength(2)
       expect(privateBookmarks[0].displayName).toBe('Private B1')
       expect(privateBookmarks[1].displayName).toBe('Private B2')
     })
@@ -170,7 +170,7 @@ describe('OneCXBookmarkListComponent', () => {
       component.ocxInitRemoteComponent(remoteComponentConfig)
 
       const publicBookmarks = component.publicBookmarks$.getValue()
-      expect(publicBookmarks.length).toBe(1)
+      expect(publicBookmarks).toHaveLength(1)
       expect(publicBookmarks[0].displayName).toBe('Public B1')
     })
 
