@@ -7,6 +7,7 @@ import { catchError, filter, from, map, mergeMap, of, switchMap, take, tap } fro
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
 import { Bookmark, BookmarkScope, BookmarksInternalAPIService, BookmarkSearchCriteria } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils/utils'
 
 import { BookmarkOverviewActions, ActionErrorType } from './bookmark-overview.actions'
 
@@ -22,8 +23,8 @@ export class BookmarkOverviewEffects {
 
   private context = 'BOOKMARK'
 
-  private buildExceptionKey(status: string): string {
-    return 'EXCEPTIONS.HTTP_STATUS_' + status + '.' + this.context
+  private buildExceptionKey(status: number): string {
+    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(status) + '.' + this.context
   }
 
   private sortByPosition(a: Bookmark, b: Bookmark): number {
