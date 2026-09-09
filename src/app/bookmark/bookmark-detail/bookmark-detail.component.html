@@ -122,7 +122,7 @@
             accept="image/*"
             (change)="onFileUpload($event, vm.initialBookmark)"
           />
-          <label class="hidden" for="th_detail_basic_upload_logo_input" aria-hidden="true">
+          <label class="hidden" for="bm_detail_form_field_logo" aria-hidden="true">
             exists only for Sonar report
           </label>
           @if (vm.initialBookmark && fetchingLogoUrl && !onBookmarkImageLoadError) {
