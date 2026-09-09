@@ -55,8 +55,8 @@ export class BookmarkConfigureEffects {
     return lang === 'de' ? 'dd.MM.yyyy HH:mm:ss' : 'M/d/yy, hh:mm:ss a'
   }
 
-  private buildExceptionKey(status: string): string {
-    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(Number(status)) + '.' + this.context
+  private buildExceptionKey(status: number): string {
+    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(status) + '.' + this.context
   }
 
   private sortByPosition(a: Bookmark, b: Bookmark): number {
@@ -322,7 +322,7 @@ export class BookmarkConfigureEffects {
       }),
       switchMap((data) => {
         if (!data.bookmark?.id)
-          return of(BookmarkConfigureActions.editBookmarkFailed({ status: '', errorText: 'Missing Bookmark' }))
+          return of(BookmarkConfigureActions.editBookmarkFailed({ status: 0, errorText: 'Missing Bookmark' }))
         // execute
         return this.bookmarksService
           .updateBookmark({

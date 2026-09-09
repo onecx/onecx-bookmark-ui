@@ -23,8 +23,8 @@ export class BookmarkOverviewEffects {
 
   private context = 'BOOKMARK'
 
-  private buildExceptionKey(status: string): string {
-    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(Number(status)) + '.' + this.context
+  private buildExceptionKey(status: number): string {
+    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(status) + '.' + this.context
   }
 
   private sortByPosition(a: Bookmark, b: Bookmark): number {

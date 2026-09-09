@@ -138,15 +138,15 @@ describe('BookmarkOverviewEffects', () => {
 
     it('should dispatch bookmarkSearchFailed on error', (done) => {
       bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(
-        throwError(() => ({ status: '500', message: 'Internal server error' }))
+        throwError(() => ({ status: 500, message: 'Internal server error' }))
       )
 
       actions$.next(BookmarkOverviewActions.search())
 
       effects.search$.subscribe((action) => {
         expect(action.type).toBe(BookmarkOverviewActions.bookmarkSearchFailed.type)
-        expect((action as any).status).toBe('500')
-        expect((action as any).exceptionKey).toContain('500')
+        expect((action as any).status).toBe(500)
+        expect((action as any).exceptionKey).toBe('EXCEPTIONS.HTTP_STATUS_500.BOOKMARKS')
         done()
       })
     })
@@ -187,7 +187,7 @@ describe('BookmarkOverviewEffects', () => {
   describe('displayError$', () => {
     it('should call messageService.error when bookmarkSearchFailed is dispatched', () => {
       actions$.next(
-        BookmarkOverviewActions.bookmarkSearchFailed({ status: '404', errorText: 'Not found', exceptionKey: 'EX_KEY' })
+        BookmarkOverviewActions.bookmarkSearchFailed({ status: 404, errorText: 'Not found', exceptionKey: 'EX_KEY' })
       )
 
       effects.displayError$.subscribe()

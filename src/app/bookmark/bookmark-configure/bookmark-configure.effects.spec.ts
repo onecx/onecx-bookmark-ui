@@ -208,14 +208,14 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should dispatch bookmarkSearchFailed on error', (done) => {
       bookmarksServiceMock.searchBookmarksByCriteria.mockReturnValue(
-        throwError(() => ({ status: '500', message: 'Server error' }))
+        throwError(() => ({ status: 500, message: 'Server error' }))
       )
 
       actions$.next(BookmarkConfigureActions.search())
 
       effects.search$.subscribe((action) => {
         expect(action.type).toBe(BookmarkConfigureActions.bookmarkSearchFailed.type)
-        expect((action as any).status).toBe('500')
+        expect((action as any).status).toBe(500)
         expect((action as any).exceptionKey).toContain('500')
         done()
       })
@@ -377,7 +377,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch exportBookmarksFailed on api error', (done) => {
-      eximServiceMock.exportBookmarks.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+      eximServiceMock.exportBookmarks.mockReturnValue(throwError(() => ({ status: 500, message: 'Server Error' })))
 
       actions$.next(BookmarkConfigureActions.exportBookmarks())
 
@@ -507,7 +507,7 @@ describe('BookmarkConfigureEffects', () => {
           }
         }) as any
       )
-      eximServiceMock.importBookmarks.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+      eximServiceMock.importBookmarks.mockReturnValue(throwError(() => ({ status: 500, message: 'Server Error' })))
 
       actions$.next(BookmarkConfigureActions.importBookmarks())
 
@@ -562,7 +562,9 @@ describe('BookmarkConfigureEffects', () => {
       const sortedBookmarks = [{ id: 'bm-1', position: 1, displayName: 'B1', modificationCount: 0 }]
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: sortedBookmarks }) as any)
-      bookmarksServiceMock.updateBookmarksOrder.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+      bookmarksServiceMock.updateBookmarksOrder.mockReturnValue(
+        throwError(() => ({ status: 500, message: 'Server Error' }))
+      )
 
       actions$.next(BookmarkConfigureActions.openSortingDialog())
 
@@ -598,7 +600,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch editBookmarkFailed on api error', (done) => {
-      bookmarksServiceMock.updateBookmark.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+      bookmarksServiceMock.updateBookmark.mockReturnValue(throwError(() => ({ status: 500, message: 'Server Error' })))
 
       actions$.next(BookmarkConfigureActions.toggleBookmark({ id: 'bm-1' }))
 
@@ -696,7 +698,7 @@ describe('BookmarkConfigureEffects', () => {
       permissionsSubject.next(['BOOKMARK#EDIT'])
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bm1 } }) as any)
-      bookmarksServiceMock.updateBookmark.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+      bookmarksServiceMock.updateBookmark.mockReturnValue(throwError(() => ({ status: 500, message: 'Server Error' })))
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-1' }))
 
@@ -781,7 +783,9 @@ describe('BookmarkConfigureEffects', () => {
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { displayName: 'New', scope: BookmarkScope.Private } }) as any
       )
-      bookmarksServiceMock.createNewBookmark.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+      bookmarksServiceMock.createNewBookmark.mockReturnValue(
+        throwError(() => ({ status: 500, message: 'Server Error' }))
+      )
 
       actions$.next(BookmarkConfigureActions.createBookmark())
 
@@ -837,7 +841,9 @@ describe('BookmarkConfigureEffects', () => {
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { displayName: 'Copy', scope: BookmarkScope.Private } }) as any
       )
-      bookmarksServiceMock.createNewBookmark.mockReturnValue(throwError(() => ({ status: '500', message: 'Error' })))
+      bookmarksServiceMock.createNewBookmark.mockReturnValue(
+        throwError(() => ({ status: 500, message: 'Server Error' }))
+      )
 
       actions$.next(BookmarkConfigureActions.copyBookmark({ id: 'bm-1' }))
 
@@ -891,9 +897,7 @@ describe('BookmarkConfigureEffects', () => {
     it('should dispatch deleteBookmarkFailed on api error', (done) => {
       // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
-      bookmarksServiceMock.deleteBookmarkById.mockReturnValue(
-        throwError(() => ({ status: '404', message: 'Not found' }))
-      )
+      bookmarksServiceMock.deleteBookmarkById.mockReturnValue(throwError(() => ({ status: 404, message: 'Not found' })))
 
       actions$.next(BookmarkConfigureActions.openDeleteDialog({ id: 'bm-1' }))
 
@@ -911,7 +915,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should call messageService.error when exportBookmarksFailed is dispatched', () => {
-      actions$.next(BookmarkConfigureActions.exportBookmarksFailed({ status: '500', errorText: 'Error' }))
+      actions$.next(BookmarkConfigureActions.exportBookmarksFailed({ status: 500, errorText: 'Error' }))
 
       effects.displayError$.subscribe()
 
@@ -921,7 +925,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should call messageService.error when importBookmarksFailed is dispatched', () => {
-      actions$.next(BookmarkConfigureActions.importBookmarksFailed({ status: '500', errorText: 'Error' }))
+      actions$.next(BookmarkConfigureActions.importBookmarksFailed({ status: 500, errorText: 'Error' }))
 
       effects.displayError$.subscribe()
 
@@ -931,7 +935,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should call messageService.error when sortBookmarksFailed is dispatched', () => {
-      actions$.next(BookmarkConfigureActions.sortBookmarksFailed({ status: '500', errorText: 'Error' }))
+      actions$.next(BookmarkConfigureActions.sortBookmarksFailed({ status: 500, errorText: 'Error' }))
 
       effects.displayError$.subscribe()
 
@@ -941,7 +945,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should call messageService.error when createBookmarkFailed is dispatched', () => {
-      actions$.next(BookmarkConfigureActions.createBookmarkFailed({ status: '500', errorText: 'Error' }))
+      actions$.next(BookmarkConfigureActions.createBookmarkFailed({ status: 500, errorText: 'Error' }))
 
       effects.displayError$.subscribe()
 
@@ -951,7 +955,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should call messageService.error when editBookmarkFailed is dispatched', () => {
-      actions$.next(BookmarkConfigureActions.editBookmarkFailed({ status: '500', errorText: 'Error' }))
+      actions$.next(BookmarkConfigureActions.editBookmarkFailed({ status: 500, errorText: 'Error' }))
 
       effects.displayError$.subscribe()
 
@@ -961,7 +965,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should call messageService.error when deleteBookmarkFailed is dispatched', () => {
-      actions$.next(BookmarkConfigureActions.deleteBookmarkFailed({ status: '500', errorText: 'Error' }))
+      actions$.next(BookmarkConfigureActions.deleteBookmarkFailed({ status: 500, errorText: 'Error' }))
 
       effects.displayError$.subscribe()
 
@@ -971,7 +975,7 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should use buildExceptionKey as detailKey when status is present', () => {
-      actions$.next(BookmarkConfigureActions.deleteBookmarkFailed({ status: '403', errorText: 'Forbidden' }))
+      actions$.next(BookmarkConfigureActions.deleteBookmarkFailed({ status: 403, errorText: 'Forbidden' }))
 
       effects.displayError$.subscribe()
 

@@ -2,7 +2,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store'
 
 import { Bookmark } from 'src/app/shared/generated'
 
-export type ActionErrorType = { status?: string | null; errorText?: string | null; exceptionKey?: string | null }
+export type ActionErrorType = { status?: number | null; errorText?: string | null; exceptionKey?: string | null }
 
 export const BookmarkConfigureActions = createActionGroup({
   source: 'BookmarkConfigure',
