@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog.component'
@@ -10,7 +9,6 @@ describe('PageNotBookmarkableDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
         PageNotBookmarkableDialogComponent,
         TranslateTestingModule.withTranslations({

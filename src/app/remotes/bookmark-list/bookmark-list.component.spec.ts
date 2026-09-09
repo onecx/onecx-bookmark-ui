@@ -1,10 +1,10 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { BehaviorSubject, ReplaySubject, of } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { BehaviorSubject, ReplaySubject, of } from 'rxjs'
+
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 import { AppConfigService, UserService } from '@onecx/angular-integration-interface'
@@ -12,6 +12,7 @@ import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-u
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
 import { BookmarkUtilService } from 'src/app/shared/utils/bookmarkUtil.service'
+
 import { OneCXBookmarkListComponent, slotInitializer } from './bookmark-list.component'
 
 Object.defineProperty(window, 'matchMedia', {
@@ -60,7 +61,6 @@ describe('OneCXBookmarkListComponent', () => {
     userServiceMock = { lang$: new BehaviorSubject<string>('en') }
 
     await TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({

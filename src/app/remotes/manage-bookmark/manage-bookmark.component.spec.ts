@@ -1,4 +1,3 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -83,7 +82,6 @@ describe('OneCXManageBookmarkComponent', () => {
     portalDialogServiceMock = { openDialog: jest.fn().mockReturnValue(of(undefined)) }
 
     await TestBed.configureTestingModule({
-      schemas: [NO_ERRORS_SCHEMA],
       imports: [
         AngularAcceleratorModule,
         TranslateTestingModule.withTranslations({
