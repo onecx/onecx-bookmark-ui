@@ -5,7 +5,7 @@ import { routes } from './bookmark.routes'
 
 describe('bookmark routes', () => {
   it('should define exactly 2 routes', () => {
-    expect(routes.length).toBe(2)
+    expect(routes).toHaveLength(2)
   })
 
   describe('root route', () => {

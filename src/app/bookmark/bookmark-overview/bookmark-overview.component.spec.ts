@@ -157,7 +157,7 @@ describe('BookmarkOverviewComponent', () => {
   describe('prepareDockItems', () => {
     it('should emit dock items with configure action', (done) => {
       component.dockItems$.subscribe((items) => {
-        expect(items.length).toBe(1)
+        expect(items).toHaveLength(1)
         expect(items[0].routerLink).toBe('configure')
         done()
       })

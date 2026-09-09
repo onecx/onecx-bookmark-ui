@@ -100,8 +100,12 @@ export function matchesEndpointPathPattern(applicationPath: string, endpointPath
     return true
   }
   // Remove trailing slashes from both paths
-  applicationPath = applicationPath.replace(/\/+$/, '')
-  endpointPath = endpointPath.replace(/\/+$/, '')
+  while (applicationPath.endsWith('/')) {
+    applicationPath = applicationPath.slice(0, -1)
+  }
+  while (endpointPath.endsWith('/')) {
+    endpointPath = endpointPath.slice(0, -1)
+  }
 
   // Convert endpointPath to a regex pattern
   const regexPattern = endpointPath
@@ -112,13 +116,13 @@ export function matchesEndpointPathPattern(applicationPath: string, endpointPath
         return '([^/]+)'
       } else {
         // Escape special regex characters in normal segments
-        return segment.replaceAll(/[-/\\^$*+?.()|[\]{}]/g, '\\$&')
+        return segment.replaceAll(/[-/\\^$*+?.()|[\]{}]/g, String.raw`\$&`)
       }
     })
-    .join('\\/')
+    .join(String.raw`\/`)
 
   // Add start and end anchors, and make the trailing slash optional
-  const fullRegexPattern = `^${regexPattern}\\/?$`
+  const fullRegexPattern = String.raw`^${regexPattern}\/?$`
 
   // Create a RegExp object and test the applicationPath
   const regex = new RegExp(fullRegexPattern)
