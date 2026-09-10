@@ -68,7 +68,8 @@ export class BookmarkListComponent {
   }
 
   // UI Events => clicking on bookmarks
-  public onBookmarkClick(bookmark: Bookmark): void {
+  public onBookmarkClick(event: Event, bookmark: Bookmark): void {
+    event.preventDefault()
     const urlObservable$ = this.getUrl(bookmark)
     if (!urlObservable$) {
       console.warn('Bookmark without valid source parameter', bookmark)

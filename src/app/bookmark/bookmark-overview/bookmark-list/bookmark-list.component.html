@@ -80,7 +80,7 @@
               tabindex="0"
               [id]="'bm_overview_data_' + bookmark.scope + '_' + i + '_no_url'"
               [ngClass]="anchorMainClasses"
-              (click)="onBookmarkClick(bookmark)"
+              (click)="onBookmarkClick($event, bookmark)"
             >
               <p-card
                 tabindex="0"

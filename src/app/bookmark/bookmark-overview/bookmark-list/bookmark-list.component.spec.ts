@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
-import { RouterModule } from '@angular/router'
+import { Router, RouterModule } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -11,17 +11,18 @@ import { WorkspaceService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { BookmarkListComponent } from './bookmark-list.component'
-import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
+import { Bookmark, BookmarkScope, Target } from 'src/app/shared/generated'
 import { Product } from '../bookmark-overview.component'
 
 const bookmark: Bookmark = {
   id: 'bm-1',
   displayName: 'My Bookmark',
-  scope: BookmarkScope.Private,
   position: 0,
   workspaceName: 'ws',
   productName: 'product-a',
-  appId: 'app-a'
+  appId: 'app-a',
+  scope: BookmarkScope.Private,
+  target: Target.Self
 }
 
 const products: Product[] = [
@@ -32,6 +33,8 @@ const products: Product[] = [
 describe('BookmarkListComponent', () => {
   let component: BookmarkListComponent
   let fixture: ComponentFixture<BookmarkListComponent>
+  let router: Router
+  let mockEvent: any
   let workspaceServiceMock: jest.Mocked<Pick<WorkspaceService, 'getUrl'>>
 
   beforeEach(async () => {
@@ -53,9 +56,21 @@ describe('BookmarkListComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        {
+          provide: Router,
+          useValue: {
+            navigate: jest.fn(),
+            createUrlTree: jest.fn(() => ({})), // Gibt direkt ein leeres Objekt zurück
+            serializeUrl: jest.fn(() => '/mock-url?q=1')
+          }
+        },
         { provide: WorkspaceService, useValue: workspaceServiceMock }
       ]
     }).compileComponents()
+    router = TestBed.inject(Router)
+    mockEvent = {
+      preventDefault: jest.fn()
+    }
 
     fixture = TestBed.createComponent(BookmarkListComponent)
     component = fixture.componentInstance
@@ -144,6 +159,59 @@ describe('BookmarkListComponent', () => {
     it('should return undefined when products is undefined', () => {
       component.products = undefined
       expect(component.getProductByName('product-a')).toBeUndefined()
+    })
+  })
+
+  describe('onBookmarkClick', () => {
+    it('should call event.preventDefault() immediately', () => {
+      jest.spyOn(component, 'getUrl').mockReturnValue(of('/some-url'))
+
+      component.onBookmarkClick(mockEvent, bookmark)
+
+      expect(mockEvent.preventDefault).toHaveBeenCalled()
+    })
+
+    it('should navigate internally when target is not _blank', () => {
+      const mockBookmark = { ...bookmark, query: { param: 'val' } }
+      jest.spyOn(component, 'getUrl').mockReturnValue(of('/my-target-url'))
+
+      component.onBookmarkClick(mockEvent, mockBookmark)
+
+      expect(router.navigate).toHaveBeenCalledWith(['/my-target-url'], {
+        queryParams: mockBookmark.query,
+        fragment: mockBookmark.fragment
+      })
+    })
+
+    it('should open a new window when target is _blank', () => {
+      const mockBookmark = {
+        ...bookmark,
+        query: { param: 'val' },
+        target: Target.Blank
+      }
+      jest.spyOn(component, 'getUrl').mockReturnValue(of('/my-target-url'))
+      const windowOpenSpy = jest.spyOn(window, 'open').mockImplementation(() => null)
+
+      component.onBookmarkClick(mockEvent, mockBookmark)
+
+      expect(router.createUrlTree).toHaveBeenCalledWith(['/my-target-url'], {
+        queryParams: mockBookmark.query,
+        fragment: mockBookmark.fragment
+      })
+      expect(router.serializeUrl).toHaveBeenCalled()
+      expect(windowOpenSpy).toHaveBeenCalledWith('/mock-url?q=1', '_blank')
+
+      windowOpenSpy.mockRestore()
+    })
+
+    it('should not navigate or crash if getUrl returns undefined', () => {
+      const mockBookmark = { ...bookmark, query: {}, fragment: '' }
+      jest.spyOn(component, 'getUrl').mockReturnValue(undefined as any)
+
+      component.onBookmarkClick(mockEvent, mockBookmark)
+
+      expect(mockEvent.preventDefault).toHaveBeenCalled()
+      expect(router.navigate).not.toHaveBeenCalled()
     })
   })
 })
