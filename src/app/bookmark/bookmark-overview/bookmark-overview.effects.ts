@@ -21,10 +21,10 @@ export class BookmarkOverviewEffects {
   private readonly messageService = inject(PortalMessageService)
   private readonly bookmarksService = inject(BookmarksInternalAPIService)
 
-  private context = 'BOOKMARK'
+  private context = '.BOOKMARKS'
 
   private buildExceptionKey(status: number): string {
-    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(status) + '.' + this.context
+    return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(status) + this.context
   }
 
   private sortByPosition(a: Bookmark, b: Bookmark): number {
@@ -48,7 +48,6 @@ export class BookmarkOverviewEffects {
    * Bookmark Search in context of current workspace
    */
   private performSearch(workspaceName: string) {
-    this.context = 'BOOKMARKS'
     return from(this.user.hasPermission('BOOKMARK#ADMIN_EDIT')).pipe(
       mergeMap((isAdmin) => {
         let criteria: BookmarkSearchCriteria = { workspaceName: workspaceName }
@@ -65,7 +64,7 @@ export class BookmarkOverviewEffects {
             return of(
               BookmarkOverviewActions.bookmarkSearchFailed({
                 status: error.status,
-                errorText: error.message,
+                errorText: error.statusText,
                 exceptionKey: this.buildExceptionKey(error.status)
               })
             )

@@ -16,7 +16,8 @@ export const bookmarkOverviewReducer = createReducer(
     (state: BookmarkOverviewState, { results }): BookmarkOverviewState => ({
       ...state,
       results,
-      loading: false
+      loading: false,
+      exceptionKey: null
     })
   ),
   on(
