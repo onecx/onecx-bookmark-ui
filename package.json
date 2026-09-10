@@ -105,6 +105,8 @@
     "@nx/workspace": "20.5.0",
     "@openapitools/openapi-generator-cli": "^2.18.4",
     "@schematics/angular": "^19.2.25",
+    "@swc-node/register": "^1.12.1",
+    "@swc/core": "^1.16.2",
     "@types/file-saver": "^2.0.7",
     "@types/jest": "29.5.13",
     "@types/node": "22.14.0",

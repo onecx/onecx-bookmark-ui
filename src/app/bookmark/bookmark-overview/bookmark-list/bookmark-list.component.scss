@@ -11,11 +11,14 @@
 
 :host ::ng-deep {
   .card-layout {
-    padding: 0.5rem;
+    padding: 0rem;
     border-radius: 4px;
     box-shadow:
-      0 2px 1px -1px #0003,
-      0 1px 1px #00000024,
-      0 1px 3px #0000001f;
+      rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.3) 0px 1px 3px 1px;
+  }
+
+  .p-card-body {
+    padding: 0rem;
   }
 }

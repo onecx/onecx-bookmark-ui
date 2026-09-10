@@ -634,6 +634,45 @@ describe('BookmarkDetailComponent', () => {
       fixture.detectChanges()
       expect(component).toBeTruthy()
     }))
+
+    it('should reset the image form field and reload the image url when a new image value is present', () => {
+      const prepareImageUrlSpy = jest.spyOn(component as any, 'prepareImageUrl')
+      const bookmark = {
+        displayName: 'b1',
+        workspaceName: 'w1',
+        scope: BookmarkScope.Public,
+        url: 'abc',
+        id: '1',
+        position: 0
+      }
+      component.formGroup.get('imageUrl')?.setValue('https://example.com/image.png')
+
+      component.onRemoveLogo(bookmark)
+
+      expect(component.formGroup.get('imageUrl')?.value).toBeNull()
+      expect(prepareImageUrlSpy).toHaveBeenCalledWith(bookmark.id)
+    })
+
+    it('should reset state and show success message when deleting image succeeds', fakeAsync(() => {
+      jest.spyOn((component as any).imageApi, 'deleteImage').mockReturnValue(of(undefined))
+      const successSpy = jest.spyOn((component as any).msgService, 'success')
+      component.fetchingLogoUrl = 'https://example.com/image.png'
+      component.onBookmarkImageLoadError = false
+
+      component.onRemoveLogo({
+        displayName: 'b1',
+        workspaceName: 'w1',
+        scope: BookmarkScope.Public,
+        url: 'abc',
+        id: '1',
+        position: 0
+      })
+      tick()
+
+      expect(component.fetchingLogoUrl).toBeUndefined()
+      expect(component.onBookmarkImageLoadError).toBe(true)
+      expect(successSpy).toHaveBeenCalledWith({ summaryKey: 'IMAGE.REMOVE_SUCCESS' })
+    }))
   })
 
   describe('file upload', () => {

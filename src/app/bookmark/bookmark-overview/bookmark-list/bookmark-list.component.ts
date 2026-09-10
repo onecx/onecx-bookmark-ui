@@ -1,8 +1,8 @@
 import { Component, inject, Input } from '@angular/core'
-import { AsyncPipe, NgTemplateOutlet } from '@angular/common'
-import { RouterModule } from '@angular/router'
+import { NgClass, NgTemplateOutlet } from '@angular/common'
+import { Router, RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { Observable, map } from 'rxjs'
+import { Observable, first, map } from 'rxjs'
 
 import { CardModule } from 'primeng/card'
 import { MessageModule } from 'primeng/message'
@@ -23,7 +23,7 @@ import { BookmarkImageComponent } from 'src/app/bookmark/bookmark-image/bookmark
   standalone: true,
   imports: [
     AngularAcceleratorModule,
-    AsyncPipe,
+    NgClass,
     NgTemplateOutlet,
     CardModule,
     MessageModule,
@@ -35,9 +35,11 @@ import { BookmarkImageComponent } from 'src/app/bookmark/bookmark-image/bookmark
     BookmarkImageComponent
   ],
   templateUrl: './bookmark-list.component.html',
-  styleUrl: './bookmark-list.component.scss'
+  styleUrls: ['./bookmark-list.component.scss']
 })
 export class BookmarkListComponent {
+  private readonly router = inject(Router)
+  //
   @Input() public bookmarks: Bookmark[] = []
   @Input() public products: Product[] | undefined
   @Input() public headerKey = ''
@@ -63,5 +65,24 @@ export class BookmarkListComponent {
 
   public getProductByName(name?: string): Product | undefined {
     return this.products?.find((p) => p.name === name)
+  }
+
+  // UI Events => clicking on bookmarks
+  public onBookmarkClick(event: Event, bookmark: Bookmark): void {
+    event.preventDefault()
+    const urlObservable$ = this.getUrl(bookmark)
+    if (!urlObservable$) {
+      console.warn('Bookmark without valid source parameter', bookmark)
+      return
+    }
+    urlObservable$?.pipe(first()).subscribe((url: string) => {
+      if (bookmark.target === '_blank') {
+        const tree = this.router.createUrlTree([url], { queryParams: bookmark.query, fragment: bookmark.fragment })
+        const serializedUrl = this.router.serializeUrl(tree)
+        window.open(serializedUrl, '_blank')
+      } else {
+        this.router.navigate([url], { queryParams: bookmark.query, fragment: bookmark.fragment })
+      }
+    })
   }
 }
