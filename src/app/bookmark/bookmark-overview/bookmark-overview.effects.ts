@@ -21,7 +21,7 @@ export class BookmarkOverviewEffects {
   private readonly messageService = inject(PortalMessageService)
   private readonly bookmarksService = inject(BookmarksInternalAPIService)
 
-  private context = '.BOOKMARKS'
+  private readonly context = '.BOOKMARKS'
 
   private buildExceptionKey(status: number): string {
     return 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(status) + this.context
