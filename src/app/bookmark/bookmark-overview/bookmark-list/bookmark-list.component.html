@@ -36,7 +36,7 @@
             }
             <!-- image wrapper to display the image in the center with a stable size -->
             <div
-              class="w-4rem sm:w-5rem md:w-6rem xl:w-8rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem flex justify-content-center align-items-center"
+              class="mt-2 w-4rem sm:w-5rem md:w-6rem xl:w-8rem h-3rem sm:h-4rem md:h-5rem xl:h-6rem flex justify-content-center align-items-center"
             >
               <app-bookmark-image
                 [bookmark]="bookmark"
@@ -54,6 +54,7 @@
         <!-- END TEMPLATE -->
 
         <!-- Define the dimension for the card -->
+        @let anchorMainClasses = ' m-0 p-1 xl:p-2 ';
         @let anchorLayoutClasses = ' relative card-layout bg-transparent hover:bg-gray-200 cursor-pointer ';
         @let cardDimensionClasses = ' w-7rem sm:w-8rem md:w-10rem xl:w-13rem h-5rem sm:h-6rem md:h-7rem xl:h-9rem ';
         @if (!bookmark.disabled) {
@@ -63,7 +64,7 @@
               [id]="'bm_overview_data_' + bookmark.scope + '_' + i + '_url_anchor'"
               [href]="bookmark.url"
               [target]="bookmark.target"
-              class="m-0 p-1 xl:p-2"
+              [ngClass]="anchorMainClasses"
             >
               <p-card
                 tabindex="0"
@@ -78,7 +79,7 @@
             <a
               tabindex="0"
               [id]="'bm_overview_data_' + bookmark.scope + '_' + i + '_no_url'"
-              class="m-0 p-1 xl:p-2"
+              [ngClass]="anchorMainClasses"
               (click)="onBookmarkClick(bookmark)"
             >
               <p-card
