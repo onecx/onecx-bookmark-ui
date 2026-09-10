@@ -390,6 +390,8 @@ export class BookmarkConfigureEffects {
             editable ? actton.cancelButton : undefined,
             {
               modal: true,
+              closable: true,
+              closeOnEscape: true,
               draggable: true,
               resizable: true,
               width: '600px',
@@ -452,9 +454,11 @@ export class BookmarkConfigureEffects {
           actton.cancelButton,
           {
             modal: true,
+            closable: true,
+            closeOnEscape: true,
             draggable: true,
             resizable: true,
-            width: '500px',
+            width: '600px',
             autoFocusButton: 'secondary'
           }
         )
@@ -516,9 +520,11 @@ export class BookmarkConfigureEffects {
           actton.cancelButton,
           {
             modal: true,
+            closable: true,
+            closeOnEscape: true,
             draggable: true,
             resizable: true,
-            width: '500px',
+            width: '600px',
             autoFocusButton: 'secondary'
           }
         )
@@ -549,7 +555,6 @@ export class BookmarkConfigureEffects {
    * DELETE
    */
   deleteBookmark$ = createEffect(() => {
-    this.context = 'BOOKMARK'
     return this.actions$.pipe(
       ofType(BookmarkConfigureActions.openDeleteDialog),
       concatLatestFrom(() => this.store.select(bookmarkSearchSelectors.selectResults)),
@@ -565,11 +570,11 @@ export class BookmarkConfigureEffects {
             actton.noButton,
             {
               modal: true,
-              width: '450px',
+              closable: true,
+              closeOnEscape: true,
               draggable: true,
               resizable: true,
-              closeOnEscape: true,
-              closeAriaLabel: 'ACTIONS.NAVIGATION.CLOSE.TOOLTIP',
+              width: '450px',
               autoFocusButton: 'secondary'
             }
           )
