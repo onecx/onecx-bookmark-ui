@@ -140,6 +140,25 @@ describe('BookmarkCreateUpdateComponent', () => {
     expect(userService.hasPermission).toHaveBeenCalledWith('BOOKMARK#CREATE')
   })
 
+  it('should log an error when permission check rejects', async () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    const hasEditPermissionSpy = jest
+      .spyOn(component as any, 'hasEditPermission')
+      .mockRejectedValue(new Error('permission failed'))
+    component.vm = {
+      initialBookmark: undefined,
+      permissions: undefined,
+      mode: 'CREATE'
+    }
+
+    component.ngOnChanges()
+    await Promise.resolve()
+
+    expect(hasEditPermissionSpy).toHaveBeenCalled()
+    expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+    consoleErrorSpy.mockRestore()
+  })
+
   it('should emit false if no permission or public bookmark', fakeAsync(() => {
     const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
     component.vm = {

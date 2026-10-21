@@ -81,7 +81,9 @@ export class BookmarkListComponent {
         const serializedUrl = this.router.serializeUrl(tree)
         window.open(serializedUrl, '_blank')
       } else {
-        this.router.navigate([url], { queryParams: bookmark.query, fragment: bookmark.fragment })
+        this.router
+          .navigate([url], { queryParams: bookmark.query, fragment: bookmark.fragment })
+          .catch((err) => console.error(err))
       }
     })
   }

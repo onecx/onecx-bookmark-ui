@@ -45,4 +45,4 @@ bootstrapRemoteComponent(OneCXManageBookmarkComponent, 'ocx-bookmark-manage-comp
       useClass: AngularAcceleratorMissingTranslationHandler
     }
   })
-])
+]).catch((err) => console.error(err))

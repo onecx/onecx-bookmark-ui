@@ -75,7 +75,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
     this.remoteComponentConfig.next(config)
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
-    this.appConfigService.init(config.baseUrl)
+    this.appConfigService.init(config.baseUrl).catch((err) => console.error(err))
     this.bookmarkApiUtils.loadBookmarks(this.handleBookmarkLoadError).subscribe((result) => {
       const bookmarks = result ?? []
       this.privateBookmarks$.next(
@@ -86,7 +86,7 @@ export class OneCXBookmarkListComponent implements ocxRemoteComponent, ocxRemote
       )
       this.loading = false
     })
-    this.slotService.init()
+    this.slotService.init().catch((err) => console.error(err))
   }
 
   private readonly handleBookmarkLoadError = () => {

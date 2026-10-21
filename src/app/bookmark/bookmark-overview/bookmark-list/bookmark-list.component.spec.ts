@@ -183,6 +183,19 @@ describe('BookmarkListComponent', () => {
       })
     })
 
+    it('should log an error when router.navigate rejects', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const mockBookmark = { ...bookmark, query: { param: 'val' } }
+      jest.spyOn(component, 'getUrl').mockReturnValue(of('/my-target-url'))
+      jest.spyOn(router, 'navigate').mockRejectedValue(new Error('navigation failed'))
+
+      component.onBookmarkClick(mockEvent, mockBookmark)
+      await Promise.resolve()
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      consoleErrorSpy.mockRestore()
+    })
+
     it('should open a new window when target is _blank', () => {
       const mockBookmark = {
         ...bookmark,

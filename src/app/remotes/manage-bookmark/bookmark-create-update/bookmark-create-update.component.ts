@@ -98,12 +98,14 @@ export class BookmarkCreateUpdateComponent
       }
     }
     this.permissionKey = 'BOOKMARK#' + this.vm.mode
-    this.hasEditPermission().then((hasPermission) => {
-      this.hasPermission = hasPermission
-      if (!this.hasPermission || this.isPublicBookmark) {
-        this.formGroup.disable()
-      }
-    })
+    this.hasEditPermission()
+      .then((hasPermission) => {
+        this.hasPermission = hasPermission
+        if (!this.hasPermission || this.isPublicBookmark) {
+          this.formGroup.disable()
+        }
+      })
+      .catch((err) => console.error(err))
 
     // align button status according to form validation
     this.formGroup.statusChanges

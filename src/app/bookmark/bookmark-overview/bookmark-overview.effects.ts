@@ -79,7 +79,7 @@ export class BookmarkOverviewEffects {
       this.actions$.pipe(
         ofType(BookmarkOverviewActions.navigate),
         tap((action) => {
-          this.router.navigate(action.path, { relativeTo: this.route })
+          this.router.navigate(action.path, { relativeTo: this.route }).catch((err) => console.error(err))
         })
       ),
     { dispatch: false }

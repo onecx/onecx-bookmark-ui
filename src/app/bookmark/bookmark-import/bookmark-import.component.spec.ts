@@ -164,6 +164,18 @@ describe('BookmarkImportComponent', () => {
 
       expect(component.importError).toBeUndefined()
     })
+
+    it('should log an error when file reading rejects', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const file = { text: jest.fn().mockRejectedValue(new Error('read failed')) } as unknown as File
+      const event = { files: [file], currentFiles: [file], originalEvent: new Event('change') } as FileSelectEvent
+
+      component.onImportFileSelect(event)
+      await Promise.resolve()
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      consoleErrorSpy.mockRestore()
+    })
   })
 
   describe('onImportClear', () => {

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, DeferBlockBehavior } from '@angular/core/tes
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { provideNoopAnimations } from '@angular/platform-browser/animations'
 import { LetDirective } from '@ngrx/component'
 import { ofType } from '@ngrx/effects'
@@ -137,6 +137,18 @@ describe('BookmarkConfigureComponent', () => {
   })
 
   describe('filter: PRIVATE', () => {
+    it('should log an error when permission resolution rejects', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const userService = TestBed.inject(UserService)
+      jest.spyOn(userService, 'hasPermission').mockRejectedValue(new Error('permission failed'))
+
+      component['resolvePermissions']()
+      await Promise.resolve()
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      consoleErrorSpy.mockRestore()
+    })
+
     it('should filter results by scope in constructor and set pageActions', () => {
       const mockResults = [
         { id: '1', scope: 'admin', imagePath: '' },
@@ -185,6 +197,17 @@ describe('BookmarkConfigureComponent', () => {
       action?.actionCallback?.()
 
       expect(component.onBack).toHaveBeenCalled()
+    })
+
+    it('should log an error when onBack navigation rejects', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      jest.spyOn(TestBed.inject(Router), 'navigate').mockRejectedValue(new Error('navigate failed'))
+
+      component.onBack()
+      await Promise.resolve()
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      consoleErrorSpy.mockRestore()
     })
 
     it('should sort items', async () => {

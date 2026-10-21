@@ -187,6 +187,20 @@ describe('BookmarkOverviewEffects', () => {
 
       expect(routerMock.navigate).toHaveBeenCalledWith(['configure'], { relativeTo: route })
     })
+
+    it('should log an error when router.navigate rejects', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const route = TestBed.inject(ActivatedRoute)
+      const navigateSpy = jest.spyOn(TestBed.inject(Router), 'navigate').mockRejectedValue(new Error('nav failed'))
+
+      effects.navigate$.subscribe()
+      actions$.next(BookmarkOverviewActions.navigate({ path: ['configure'] }))
+      await Promise.resolve()
+
+      expect(navigateSpy).toHaveBeenCalledWith(['configure'], { relativeTo: route })
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      consoleErrorSpy.mockRestore()
+    })
   })
 
   describe('displayError$', () => {
