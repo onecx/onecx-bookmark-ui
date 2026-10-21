@@ -129,8 +129,8 @@ export class BookmarkCreateUpdateComponent
 
   private async hasEditPermission(): Promise<boolean> {
     if (this.vm.permissions) {
-      return this.vm.permissions.includes(this.permissionKey)
+      return await Promise.resolve(this.vm.permissions.includes(this.permissionKey))
     }
-    return this.userService.hasPermission(this.permissionKey)
+    return await this.userService.hasPermission(this.permissionKey)
   }
 }

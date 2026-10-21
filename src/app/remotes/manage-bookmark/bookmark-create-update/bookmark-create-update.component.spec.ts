@@ -69,7 +69,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
-    await Promise.resolve()
+    await fixture.whenStable()
     expect(component.formGroup.disabled).toBe(true)
   })
 
@@ -93,7 +93,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
-    await Promise.resolve()
+    await fixture.whenStable()
     expect(component.formGroup.disabled).toBe(true)
   })
 
@@ -116,15 +116,18 @@ describe('BookmarkCreateUpdateComponent', () => {
 
   it('should emit primaryButtonEnabled based on form validity', async () => {
     const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
+    jest.spyOn(component as any, 'hasEditPermission').mockResolvedValue(true)
     component.vm = {
       initialBookmark: undefined,
       permissions: ['BOOKMARK#CREATE'],
       mode: 'CREATE'
     }
+
     component.ngOnChanges()
     await Promise.resolve()
     component.formGroup.setValue({ displayName: 'Valid Name' })
     fixture.detectChanges()
+
     expect(emitSpy).toHaveBeenCalledWith(true)
   })
 
