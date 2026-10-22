@@ -69,7 +69,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
-    await Promise.resolve()
+    await fixture.whenStable()
     expect(component.formGroup.disabled).toBe(true)
   })
 
@@ -93,7 +93,7 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     fixture.detectChanges()
     component.ngOnChanges()
-    await Promise.resolve()
+    await fixture.whenStable()
     expect(component.formGroup.disabled).toBe(true)
   })
 
@@ -116,15 +116,18 @@ describe('BookmarkCreateUpdateComponent', () => {
 
   it('should emit primaryButtonEnabled based on form validity', async () => {
     const emitSpy = jest.spyOn(component.primaryButtonEnabled, 'emit')
+    jest.spyOn(component as any, 'hasEditPermission').mockResolvedValue(true)
     component.vm = {
       initialBookmark: undefined,
       permissions: ['BOOKMARK#CREATE'],
       mode: 'CREATE'
     }
+
     component.ngOnChanges()
     await Promise.resolve()
     component.formGroup.setValue({ displayName: 'Valid Name' })
     fixture.detectChanges()
+
     expect(emitSpy).toHaveBeenCalledWith(true)
   })
 
@@ -138,6 +141,25 @@ describe('BookmarkCreateUpdateComponent', () => {
     }
     component.ngOnChanges()
     expect(userService.hasPermission).toHaveBeenCalledWith('BOOKMARK#CREATE')
+  })
+
+  it('should log an error when permission check rejects', async () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+    const hasEditPermissionSpy = jest
+      .spyOn(component as any, 'hasEditPermission')
+      .mockRejectedValue(new Error('permission failed'))
+    component.vm = {
+      initialBookmark: undefined,
+      permissions: undefined,
+      mode: 'CREATE'
+    }
+
+    component.ngOnChanges()
+    await Promise.resolve()
+
+    expect(hasEditPermissionSpy).toHaveBeenCalled()
+    expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+    consoleErrorSpy.mockRestore()
   })
 
   it('should emit false if no permission or public bookmark', fakeAsync(() => {

@@ -63,4 +63,4 @@ bootstrapRemoteComponent(OneCXBookmarkListComponent, 'ocx-bookmark-list-componen
       useClass: AngularAcceleratorMissingTranslationHandler
     }
   })
-])
+]).catch((err) => console.error(err))

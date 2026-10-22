@@ -160,11 +160,11 @@ export class OneCXManageBookmarkComponent implements ocxRemoteComponent, ocxRemo
     this.remoteComponentConfig.next(config)
     this.permissions = config.permissions
     this.bookmarkApiUtils.overwriteBaseURL(config.baseUrl)
-    this.appConfigService.init(config.baseUrl)
+    this.appConfigService.init(config.baseUrl).catch((err) => console.error(err))
     this.bookmarkApiUtils.loadBookmarksForApp(this.commonObs$, this.handleBookmarkLoadError).subscribe((result) => {
       this.bookmarks$.next(result)
     })
-    this.slotService.init()
+    this.slotService.init().catch((err) => console.error(err))
   }
 
   onOpenBookmarkDialog(): void {

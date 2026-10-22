@@ -44,6 +44,7 @@ describe('OneCXManageBookmarkComponent', () => {
     >
   >
   let appConfigServiceMock: jest.Mocked<Pick<AppConfigService, 'init'>>
+  let slotServiceMock: jest.Mocked<Pick<SlotService, 'init'>>
   let appStateServiceMock: {
     currentWorkspace$: BehaviorSubject<any>
     currentMfe$: BehaviorSubject<any>
@@ -72,7 +73,8 @@ describe('OneCXManageBookmarkComponent', () => {
       editBookmark: jest.fn().mockReturnValue(of(undefined)),
       deleteBookmarkById: jest.fn().mockReturnValue(of(undefined))
     }
-    appConfigServiceMock = { init: jest.fn().mockReturnValue(of(undefined)) }
+    appConfigServiceMock = { init: jest.fn().mockResolvedValue(undefined) }
+    slotServiceMock = { init: jest.fn().mockResolvedValue(undefined) }
     appStateServiceMock = {
       currentWorkspace$: new BehaviorSubject(currentWorkspace),
       currentMfe$: new BehaviorSubject(currentMfe),
@@ -104,7 +106,7 @@ describe('OneCXManageBookmarkComponent', () => {
             { provide: AppConfigService, useValue: appConfigServiceMock },
             { provide: PortalDialogService, useValue: portalDialogServiceMock },
             { provide: PortalMessageService, useValue: { success: jest.fn(), error: jest.fn() } },
-            { provide: SLOT_SERVICE, useValue: { init: jest.fn().mockReturnValue(Promise.resolve()) } }
+            { provide: SLOT_SERVICE, useValue: slotServiceMock }
           ]
         }
       })
@@ -184,6 +186,31 @@ describe('OneCXManageBookmarkComponent', () => {
       component.ocxInitRemoteComponent(remoteComponentConfig)
 
       expect(appConfigServiceMock.init).toHaveBeenCalledWith('http://test-base-url')
+    })
+
+    it('should log an error when appConfigService.init rejects', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      appConfigServiceMock.init.mockRejectedValue(new Error('config init failed'))
+      initializeComponent()
+
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+      await Promise.resolve()
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      consoleErrorSpy.mockRestore()
+    })
+
+    it('should log an error when slotService.init rejects', async () => {
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined)
+      const injectedSlotService = TestBed.inject(SLOT_SERVICE) as unknown as { init: jest.Mock<Promise<void>, []> }
+      injectedSlotService.init = jest.fn().mockRejectedValue(new Error('slot init failed'))
+      initializeComponent()
+
+      component.ocxInitRemoteComponent(remoteComponentConfig)
+      await Promise.resolve()
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(expect.any(Error))
+      consoleErrorSpy.mockRestore()
     })
 
     it('should update bookmarks$ with the result of loadBookmarksForApp', () => {

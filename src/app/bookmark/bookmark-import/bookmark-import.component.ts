@@ -93,23 +93,26 @@ export class BookmarkImportComponent
 
   public onImportFileSelect(event: FileSelectEvent): void {
     this.importError = undefined
-    event.files[0].text().then((text) => {
-      try {
-        this.snapshot = JSON.parse(text)
-        this.checkImportReady()
-      } catch (err) {
-        console.error('Import parse error', err)
-        this.importError = {
-          name: 'Parse error',
-          ok: false,
-          status: 400,
-          statusText: 'Parser error',
-          message: '',
-          error: { errorCode: 'PARSER', detail: err },
-          exceptionKey: 'ACTIONS.IMPORT.ERROR.PARSER'
+    event.files[0]
+      .text()
+      .then((text) => {
+        try {
+          this.snapshot = JSON.parse(text)
+          this.checkImportReady()
+        } catch (err) {
+          console.error('Import parse error', err)
+          this.importError = {
+            name: 'Parse error',
+            ok: false,
+            status: 400,
+            statusText: 'Parser error',
+            message: '',
+            error: { errorCode: 'PARSER', detail: err },
+            exceptionKey: 'ACTIONS.IMPORT.ERROR.PARSER'
+          }
         }
-      }
-    })
+      })
+      .catch((err) => console.error(err))
   }
   public onImportClear(): void {
     this.importError = undefined

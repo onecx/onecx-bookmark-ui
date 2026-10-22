@@ -136,14 +136,16 @@ export class BookmarkConfigureComponent implements OnInit {
       this.user.hasPermission('BOOKMARK#ADMIN_EDIT'),
       this.user.hasPermission('BOOKMARK#DELETE'),
       this.user.hasPermission('BOOKMARK#ADMIN_DELETE')
-    ]).then(([permEdit, permAdminEdit, permDelete, permAdminDelete]) => {
-      this.permEdit = permEdit
-      this.permAdminEdit = permAdminEdit
-      this.permDelete = permDelete
-      this.permAdminDelete = permAdminDelete
-      this.editable = permEdit || permAdminEdit
-      this.refreshInteractiveRows()
-    })
+    ])
+      .then(([permEdit, permAdminEdit, permDelete, permAdminDelete]) => {
+        this.permEdit = permEdit
+        this.permAdminEdit = permAdminEdit
+        this.permDelete = permDelete
+        this.permAdminDelete = permAdminDelete
+        this.editable = permEdit || permAdminEdit
+        this.refreshInteractiveRows()
+      })
+      .catch((err) => console.error(err))
   }
 
   /**
@@ -216,7 +218,7 @@ export class BookmarkConfigureComponent implements OnInit {
    * UI Events
    */
   public onBack(): void {
-    this.router.navigate(['../'], { relativeTo: this.route })
+    this.router.navigate(['../'], { relativeTo: this.route }).catch((err) => console.error(err))
   }
   public onSearch(): void {
     this.store.dispatch(BookmarkConfigureActions.search())
