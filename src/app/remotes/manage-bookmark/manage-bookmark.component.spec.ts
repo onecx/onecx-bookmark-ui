@@ -393,7 +393,6 @@ describe('OneCXManageBookmarkComponent', () => {
 
   describe('onOpenBookmarkDialog', () => {
     it('should open a dialog when called', () => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of(undefined) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([]))
       initializeComponent()
@@ -401,13 +400,11 @@ describe('OneCXManageBookmarkComponent', () => {
 
       component.onOpenBookmarkDialog()
 
-      // eslint-disable-next-line deprecation/deprecation
       expect(portalDialogServiceMock.openDialog).toHaveBeenCalled()
     })
 
     it('should do nothing when page is not bookmarkable and dialog returns null', () => {
       appStateServiceMock.currentPage$.next({ path: '/unrelated' })
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of(null) as any)
       initializeComponent()
       component.ocxInitRemoteComponent(remoteComponentConfig)
@@ -419,7 +416,6 @@ describe('OneCXManageBookmarkComponent', () => {
 
     it('should do nothing when page is not bookmarkable and primary button is clicked', () => {
       appStateServiceMock.currentPage$.next({ path: '/unrelated' })
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
       initializeComponent()
       component.ocxInitRemoteComponent(remoteComponentConfig)
@@ -431,7 +427,6 @@ describe('OneCXManageBookmarkComponent', () => {
 
     it('should cancel create when secondary button clicked and page is bookmarkable but not bookmarked', () => {
       appStateServiceMock.currentPage$.next({ path: '/app' })
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
       initializeComponent()
       component.ocxInitRemoteComponent(remoteComponentConfig)
@@ -444,7 +439,6 @@ describe('OneCXManageBookmarkComponent', () => {
     it('should reload bookmarks after a successful create dialog result', () => {
       const bookmark = { id: '1', displayName: 'B1', workspaceName: 'ws', scope: BookmarkScope.Private, position: 0 }
       appStateServiceMock.currentPage$.next({ path: '/app' })
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
       bookmarkApiUtilsMock.createNewBookmark.mockReturnValue(of(bookmark) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
@@ -464,7 +458,6 @@ describe('OneCXManageBookmarkComponent', () => {
       })
       appStateServiceMock.currentPage$.next({ path: '/app/detail/123' })
       const bookmark = { id: '1', displayName: 'B1', workspaceName: 'ws', scope: BookmarkScope.Private, position: 0 }
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
       bookmarkApiUtilsMock.createNewBookmark.mockReturnValue(of(bookmark) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
@@ -490,7 +483,6 @@ describe('OneCXManageBookmarkComponent', () => {
         modificationCount: 1
       }
       appStateServiceMock.currentPage$.next({ path: '/app' })
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
       bookmarkApiUtilsMock.editBookmark.mockReturnValue(of(undefined) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
@@ -518,7 +510,6 @@ describe('OneCXManageBookmarkComponent', () => {
         modificationCount: undefined
       }
       appStateServiceMock.currentPage$.next({ path: '/app' })
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bookmark }) as any)
       bookmarkApiUtilsMock.editBookmark.mockReturnValue(of(undefined) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([bookmark]))
@@ -545,7 +536,6 @@ describe('OneCXManageBookmarkComponent', () => {
         appId: 'app'
       }
       appStateServiceMock.currentPage$.next({ path: '/app' })
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: bookmark }) as any)
       bookmarkApiUtilsMock.deleteBookmarkById.mockReturnValue(of(undefined) as any)
       bookmarkApiUtilsMock.loadBookmarksForApp.mockReturnValue(of([]))
