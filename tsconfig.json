@@ -12,7 +12,9 @@
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noPropertyAccessFromIndexSignature": true,
-    "paths": { "src/*": ["./src/*"] },
+    "paths": {
+      "src/*": ["./src/*"]
+    },
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,

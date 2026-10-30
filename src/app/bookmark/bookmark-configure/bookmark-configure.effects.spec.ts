@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
@@ -330,7 +329,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should open export dialog for admin users and cancel on secondary', (done) => {
       permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.exportBookmarks())
@@ -343,7 +341,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should dispatch exportBookmarksFailed when scopes are empty', (done) => {
       permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { workspaceName: 'test-ws', scopes: [] } }) as any
       )
@@ -358,7 +355,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should export bookmarks and dispatch success for admin selecting scopes', (done) => {
       permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({
           button: 'primary',
@@ -390,7 +386,6 @@ describe('BookmarkConfigureEffects', () => {
 
   describe('importBookmarks$', () => {
     it('should cancel import when dialog is dismissed', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.importBookmarks())
@@ -402,7 +397,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch importBookmarksFailed when snapshot is missing', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({
           button: 'primary',
@@ -419,7 +413,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch importBookmarksFailed when result is null', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: null }) as any)
 
       actions$.next(BookmarkConfigureActions.importBookmarks())
@@ -431,7 +424,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should import bookmarks and dispatch success', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({
           button: 'primary',
@@ -456,13 +448,11 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should pass de date format when user language is de', (done) => {
       userServiceMock.lang$.next('de')
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.importBookmarks())
 
       effects.importBookmarks$.subscribe(() => {
-        // eslint-disable-next-line deprecation/deprecation
         expect(portalDialogServiceMock.openDialog).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining({ inputs: expect.objectContaining({ dateFormat: 'dd.MM.yyyy HH:mm:ss' }) }),
@@ -476,13 +466,11 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should pass en date format when user language is en', (done) => {
       userServiceMock.lang$.next('en')
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.importBookmarks())
 
       effects.importBookmarks$.subscribe(() => {
-        // eslint-disable-next-line deprecation/deprecation
         expect(portalDialogServiceMock.openDialog).toHaveBeenCalledWith(
           expect.anything(),
           expect.objectContaining({ inputs: expect.objectContaining({ dateFormat: 'M/d/yy, hh:mm:ss a' }) }),
@@ -495,7 +483,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch importBookmarksFailed on api error', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({
           button: 'primary',
@@ -520,7 +507,6 @@ describe('BookmarkConfigureEffects', () => {
 
   describe('openSortingDialog$', () => {
     it('should cancel when dialog is dismissed', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.openSortingDialog())
@@ -532,7 +518,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch sortBookmarksFailed when result is empty', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: [] }) as any)
 
       actions$.next(BookmarkConfigureActions.openSortingDialog())
@@ -545,7 +530,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should update bookmarks order and dispatch success', (done) => {
       const sortedBookmarks = [{ id: 'bm-1', position: 1, displayName: 'B1', modificationCount: 0 }]
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: sortedBookmarks }) as any)
       bookmarksServiceMock.updateBookmarksOrder.mockReturnValue(of(undefined) as any)
 
@@ -560,7 +544,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should dispatch sortBookmarksFailed on api error', (done) => {
       const sortedBookmarks = [{ id: 'bm-1', position: 1, displayName: 'B1', modificationCount: 0 }]
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: sortedBookmarks }) as any)
       bookmarksServiceMock.updateBookmarksOrder.mockReturnValue(
         throwError(() => ({ status: 500, message: 'Server Error' }))
@@ -615,7 +598,6 @@ describe('BookmarkConfigureEffects', () => {
     it('should open dialog in view mode when bookmark not found (canEdit returns false)', (done) => {
       permissionsSubject.next([])
       // secondary + canEdit(undefined)=false → does not cancel → result undefined → throws
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'non-existent' }))
@@ -628,7 +610,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should cancel when secondary button clicked and bookmark is editable', (done) => {
       permissionsSubject.next(['BOOKMARK#EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: bm1 }) as any)
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-1' }))
@@ -641,7 +622,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should cancel when primary button clicked and bookmark is not editable (view mode)', (done) => {
       permissionsSubject.next([])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: bm1 }) as any)
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-1' }))
@@ -654,7 +634,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should cancel when primary clicked with all permissions but bookmark not found', (done) => {
       permissionsSubject.next(['BOOKMARK#EDIT', 'BOOKMARK#ADMIN_EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'non-existent' }))
@@ -668,7 +647,6 @@ describe('BookmarkConfigureEffects', () => {
     it('should dispatch editBookmarkFailed when result is missing', (done) => {
       // secondary + canEdit=false → does NOT cancel via secondary path, then throws on missing result
       permissionsSubject.next([])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-1' }))
@@ -681,7 +659,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should update bookmark and dispatch editBookmarkSucceeded', (done) => {
       permissionsSubject.next(['BOOKMARK#EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bm1 } }) as any)
       bookmarksServiceMock.updateBookmark.mockReturnValue(of(undefined) as any)
 
@@ -696,7 +673,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should dispatch editBookmarkFailed on api error', (done) => {
       permissionsSubject.next(['BOOKMARK#EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bm1 } }) as any)
       bookmarksServiceMock.updateBookmark.mockReturnValue(throwError(() => ({ status: 500, message: 'Server Error' })))
 
@@ -710,7 +686,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should cancel when secondary button clicked and public bookmark is editable by admin', (done) => {
       permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: bmPublic }) as any)
 
       actions$.next(BookmarkConfigureActions.viewOrEditBookmark({ id: 'bm-pub' }))
@@ -723,7 +698,6 @@ describe('BookmarkConfigureEffects', () => {
 
     it('should update public bookmark and dispatch editBookmarkSucceeded when admin edits', (done) => {
       permissionsSubject.next(['BOOKMARK#ADMIN_EDIT'])
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: { ...bmPublic } }) as any)
       bookmarksServiceMock.updateBookmark.mockReturnValue(of(undefined) as any)
 
@@ -739,7 +713,6 @@ describe('BookmarkConfigureEffects', () => {
 
   describe('createBookmark$', () => {
     it('should cancel when dialog is dismissed', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.createBookmark())
@@ -751,7 +724,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch createBookmarkFailed when result is missing', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.createBookmark())
@@ -763,7 +735,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should create bookmark and dispatch createBookmarkSucceeded', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { displayName: 'New', scope: BookmarkScope.Private } }) as any
       )
@@ -779,7 +750,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch createBookmarkFailed on api error', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { displayName: 'New', scope: BookmarkScope.Private } }) as any
       )
@@ -798,7 +768,6 @@ describe('BookmarkConfigureEffects', () => {
 
   describe('copyBookmark$', () => {
     it('should cancel when dialog is dismissed', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.copyBookmark({ id: 'bm-1' }))
@@ -810,7 +779,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch createBookmarkFailed when result is missing', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.copyBookmark({ id: 'bm-1' }))
@@ -822,7 +790,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should create a copy and dispatch createBookmarkSucceeded', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { displayName: 'Copy', scope: BookmarkScope.Private } }) as any
       )
@@ -837,7 +804,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch createBookmarkFailed on api error', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(
         of({ button: 'primary', result: { displayName: 'Copy', scope: BookmarkScope.Private } }) as any
       )
@@ -856,7 +822,6 @@ describe('BookmarkConfigureEffects', () => {
 
   describe('deleteBookmark$', () => {
     it('should cancel when dialog is dismissed', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'secondary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.openDeleteDialog({ id: 'bm-1' }))
@@ -868,7 +833,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch deleteBookmarkFailed when item to delete not found', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
 
       actions$.next(BookmarkConfigureActions.openDeleteDialog({ id: 'non-existent' }))
@@ -880,7 +844,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should delete bookmark and dispatch deleteBookmarkSucceeded', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
       bookmarksServiceMock.deleteBookmarkById.mockReturnValue(of(undefined) as any)
 
@@ -895,7 +858,6 @@ describe('BookmarkConfigureEffects', () => {
     })
 
     it('should dispatch deleteBookmarkFailed on api error', (done) => {
-      // eslint-disable-next-line deprecation/deprecation
       portalDialogServiceMock.openDialog.mockReturnValue(of({ button: 'primary', result: undefined }) as any)
       bookmarksServiceMock.deleteBookmarkById.mockReturnValue(throwError(() => ({ status: 404, message: 'Not found' })))
 

@@ -9,7 +9,7 @@
     &.p-floatlabel-over {
       &:has(.p-filled) label,
       &:has(.p-focus) label {
-        top: -5px !important;
+        top: -5px;
         background-color: white;
         padding: 0 0.5rem;
       }
@@ -60,7 +60,7 @@
 @mixin compact-dropdown-list-items {
   :host ::ng-deep {
     .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
-      padding: 0.4rem 1rem !important;
+      padding: 0.4rem 1rem;
     }
   }
 }
@@ -110,14 +110,14 @@
       border-bottom-right-radius: 0;
     }
     .input-field-correction .p-inputtext {
-      padding-top: 1rem !important;
-      padding-bottom: 0.5rem !important;
+      padding-top: 1rem;
+      padding-bottom: 0.5rem;
     }
     .pseudo-button:hover {
-      background: var(--button-hover-bg) !important;
+      background: var(--button-hover-bg);
       cursor: pointer;
       * {
-        background: var(--button-hover-bg) !important;
+        background: var(--button-hover-bg);
       }
     }
   }
@@ -143,7 +143,7 @@
     .card-badge-left {
       display: inline-block;
       position: absolute;
-      padding: 4px !important;
+      padding: 4px;
       &.badge-1 {
         top: 3px;
       }
@@ -265,7 +265,7 @@
       }
       &.p-inputtext:hover,
       &.p-dropdown:hover {
-        border-color: rgb(0 0 0 / 30%) !important;
+        border-color: rgb(0 0 0 / 30%);
       }
     }
   }
@@ -277,7 +277,7 @@
     .p-fileupload {
       .p-fileupload-buttonbar,
       .p-fileupload-content {
-        background-color: var(--surface-100) !important;
+        background-color: var(--surface-100);
       }
       .p-fileupload-content {
         padding: 0.5rem;
@@ -368,7 +368,7 @@
   :host ::ng-deep {
     .filter-selectbutton {
       .p-selectbutton .p-button {
-        opacity: 0.9 !important;
+        opacity: 0.9;
         border: var(--toggle-button-border);
         &.p-highlight {
           background: var(--toggle-button-active-bg);
@@ -409,9 +409,9 @@
 @mixin correct-ocx-interactive-data-view {
   :host ::ng-deep {
     ocx-interactive-data-view > div {
-      padding: 0 0 0.2rem 0 !important;
+      padding: 0 0 0.2rem 0;
       &.surface-border {
-        border-bottom: var(--table-header-border) !important;
+        border-bottom: var(--table-header-border);
       }
     }
   }
@@ -494,7 +494,7 @@
       button[icon='pi pi-angle-double-right'],
       button:nth-child(2),
       button:nth-child(4) {
-        display: none !important;
+        display: none;
       }
     }
   }
@@ -506,7 +506,7 @@
 @mixin dialog-modal-dialog-content {
   :host ::ng-deep {
     .p-dialog .p-dialog-content {
-      border-radius: unset !important;
+      border-radius: unset;
     }
   }
 }
@@ -514,14 +514,14 @@
   :host ::ng-deep {
     @media (max-width: 991px) {
       .p-dialog.disable-max-height-preset.p-dialog {
-        max-height: unset !important;
-        height: unset !important;
+        max-height: unset;
+        height: unset;
       }
     }
     @media (max-width: 576px) {
       .p-dialog.disable-max-height-preset.p-dialog {
-        max-height: inherit !important;
-        height: inherit !important;
+        max-height: inherit;
+        height: inherit;
       }
     }
   }
@@ -566,13 +566,13 @@
     td button.p-button {
       &.p-button-icon-only {
         padding: 0.5rem;
-        width: unset !important;
+        width: unset;
       }
       &.p-button-rounded {
-        height: unset !important;
+        height: unset;
       }
       &:disabled {
-        opacity: 0.38 !important;
+        opacity: 0.38;
       }
     }
   }
@@ -591,22 +591,22 @@
     /* responsive table result view */
     @media screen and (min-width: 576px) {
       .sm\:table-cell {
-        display: table-cell !important;
+        display: table-cell;
       }
     }
     @media screen and (min-width: 768px) {
       .md\:table-cell {
-        display: table-cell !important;
+        display: table-cell;
       }
     }
     @media screen and (min-width: 992px) {
       .lg\:table-cell {
-        display: table-cell !important;
+        display: table-cell;
       }
     }
     @media screen and (min-width: 1200px) {
       .xl\:table-cell {
-        display: table-cell !important;
+        display: table-cell;
       }
     }
   }
@@ -616,16 +616,16 @@
   :host ::ng-deep {
     @media screen and (min-width: 768px) {
       .md\:h-2-5rem {
-        height: 2.5rem !important;
+        height: 2.5rem;
       }
       .md\:h-3-5rem {
-        height: 3.5rem !important;
+        height: 3.5rem;
       }
     }
     @media screen and (min-width: 576px) {
       .card-badge-right {
         &.sm\:badge-2-2 {
-          top: 33px !important;
+          top: 33px;
         }
       }
     }
@@ -638,13 +638,13 @@
   :host ::ng-deep {
     @media screen and (min-width: 768px) {
       .sm\:w-5x {
-        width: 40% !important; // org: 41.6667%
+        width: 40%; // org: 41.6667%
       }
       .sm\:w-6x {
-        width: 48% !important; // org: 50%
+        width: 48%; // org: 50%
       }
       .sm\:w-7x {
-        width: 56% !important; // org: 58.3333%
+        width: 56%; // org: 58.3333%
       }
     }
   }
