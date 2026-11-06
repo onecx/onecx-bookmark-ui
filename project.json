@@ -34,7 +34,7 @@
         ],
         "scripts": ["node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"],
         "customWebpackConfig": {
-          "path": "webpack.config.js"
+          "path": "webpack.config.ts"
         }
       },
       "configurations": {
@@ -59,7 +59,7 @@
             }
           ],
           "customWebpackConfig": {
-            "path": "webpack.prod.config.js"
+            "path": "webpack.config.ts"
           }
         },
         "development": {

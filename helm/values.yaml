@@ -9,6 +9,9 @@ app:
     # Microfrontend
     microfrontend:
       enabled: true
+      entrySuffix: "mf-manifest.json"
+      spec:
+        shareScope: 'default'
       specs:
         main:
           exposedModule: ./OneCXBookmarkModule
