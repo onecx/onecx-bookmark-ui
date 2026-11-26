@@ -579,7 +579,7 @@ export class BookmarkConfigureEffects {
             }
           )
           .pipe(
-            map((state): [DialogState<unknown>, Bookmark | undefined] => {
+            map((state): [DialogState<unknown> | null, Bookmark | undefined] => {
               return [state, itemToDelete]
             })
           )

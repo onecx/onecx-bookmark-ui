@@ -1,11 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { FormsModule } from '@angular/forms'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { CheckboxModule } from 'primeng/checkbox'
 
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 
 import { BookmarkExportComponent } from './bookmark-export.component'
 import { EximBookmarkScope } from 'src/app/shared/generated'
@@ -16,17 +13,15 @@ describe('BookmarkExportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkExportComponent,
-        FormsModule,
-        CheckboxModule,
-        AngularAcceleratorModule,
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkExportComponent],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+        }),
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     }).compileComponents()
 
     fixture = TestBed.createComponent(BookmarkExportComponent)

@@ -37,3 +37,6 @@ typings
 # System Files
 .DS_Store
 Thumbs.db
+
+.claude/worktrees
+.claude/settings.local.json

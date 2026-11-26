@@ -1,26 +1,22 @@
 import { importProvidersFrom, inject, provideAppInitializer } from '@angular/core'
 import { provideRouter } from '@angular/router'
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { TranslateLoader, MissingTranslationHandler } from '@ngx-translate/core'
 import { ReplaySubject } from 'rxjs'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
+import { provideMissingTranslationHandler, provideTranslateLoader, provideTranslateService } from '@ngx-translate/core'
 import { bootstrapRemoteComponent } from '@onecx/angular-webcomponents'
-import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
-import {
-  AngularAcceleratorModule,
-  AngularAcceleratorMissingTranslationHandler,
-  providePortalDialogService
-} from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
 import { UserService } from '@onecx/angular-integration-interface'
 import {
+  MultiLanguageMissingTranslationHandler,
+  OnecxTranslateLoader,
   REMOTE_COMPONENT_CONFIG,
   RemoteComponentConfig,
-  createTranslateLoader,
-  provideThemeConfig,
   provideTranslationPathFromMeta
 } from '@onecx/angular-utils'
+import { provideThemeConfig } from '@onecx/angular-utils/theme/primeng'
 
 import { environment } from 'src/environments/environment'
 import { OneCXBookmarkListComponent } from './bookmark-list.component'
@@ -51,16 +47,9 @@ bootstrapRemoteComponent(OneCXBookmarkListComponent, 'ocx-bookmark-list-componen
   ]),
   provideThemeConfig(),
   provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
-  provideTranslateServiceForRoot({
-    isolate: true,
-    loader: {
-      provide: TranslateLoader,
-      useFactory: createTranslateLoader,
-      deps: [HttpClient]
-    },
-    missingTranslationHandler: {
-      provide: MissingTranslationHandler,
-      useClass: AngularAcceleratorMissingTranslationHandler
-    }
+  provideTranslateService({
+    defaultLanguage: 'en',
+    loader: provideTranslateLoader(OnecxTranslateLoader),
+    missingTranslationHandler: provideMissingTranslationHandler(MultiLanguageMissingTranslationHandler)
   })
 ]).catch((err) => console.error(err))

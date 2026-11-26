@@ -2,12 +2,9 @@
   <div class="p-3 border-round-top font-medium text-lg bg-gray-50">{{ 'REMOTES.BOOKMARK_LIST.TITLE' | translate }}</div>
 
   @if (bookmarkLoadingError) {
-    <p-message
-      severity="error"
-      icon="pi pi-times-circle"
-      styleClass="m-4"
-      [text]="'REMOTES.BOOKMARK_LIST.LOADING_ERROR' | translate"
-    />
+    <p-message severity="error" icon="pi pi-times-circle" styleClass="m-4">
+      {{ 'REMOTES.BOOKMARK_LIST.LOADING_ERROR' | translate }}
+    </p-message>
   } @else if (loading) {
     <div class="m-3 min-h-xrem">
       <p-skeleton height="2rem"></p-skeleton>
@@ -44,12 +41,9 @@
         @if (privateBookmarks && privateBookmarks.length > 0) {
           <app-bookmark-links [bookmarks]="privateBookmarks"></app-bookmark-links>
         } @else if (permissions.includes('BOOKMARK#CREATE')) {
-          <p-message
-            severity="info"
-            icon="pi pi-star"
-            styleClass="m-4"
-            [text]="'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate"
-          />
+          <p-message severity="info" icon="pi pi-star" styleClass="m-4">
+            {{ 'REMOTES.BOOKMARK_LIST.NO_PRIVATE_BOOKMARKS.TODO' | translate }}
+          </p-message>
         }
       </p-tabpanel>
 
@@ -57,12 +51,9 @@
         @if (publicBookmarks && publicBookmarks.length > 0) {
           <app-bookmark-links [bookmarks]="publicBookmarks"></app-bookmark-links>
         } @else {
-          <p-message
-            severity="info"
-            icon="pi pi-info-circle"
-            styleClass="m-4"
-            [text]="'REMOTES.BOOKMARK_LIST.NO_PUBLIC_BOOKMARKS.STATE' | translate"
-          />
+          <p-message severity="info" icon="pi pi-info-circle" styleClass="m-4">
+            {{ 'REMOTES.BOOKMARK_LIST.NO_PUBLIC_BOOKMARKS.STATE' | translate }}
+          </p-message>
         }
       </p-tabpanel>
     </p-tabs>

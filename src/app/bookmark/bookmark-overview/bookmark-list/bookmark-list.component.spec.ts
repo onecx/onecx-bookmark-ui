@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
-import { Router, RouterModule } from '@angular/router'
+import { Router } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TranslateTestingModule } from 'ngx-translate-testing'
+import { provideNoopAnimations } from '@angular/platform-browser/animations'
 import { of } from 'rxjs'
 
 import { WorkspaceService } from '@onecx/angular-integration-interface'
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 
 import { BookmarkListComponent } from './bookmark-list.component'
 import { Bookmark, BookmarkScope, Target } from 'src/app/shared/generated'
@@ -42,17 +41,13 @@ describe('BookmarkListComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkListComponent,
-        NoopAnimationsModule,
-        RouterModule.forRoot([]),
-        AngularAcceleratorModule,
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkListComponent],
+      providers: [
+        provideNoopAnimations(),
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [
+        }),
         provideHttpClient(),
         provideHttpClientTesting(),
         {

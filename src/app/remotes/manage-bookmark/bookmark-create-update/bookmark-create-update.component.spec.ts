@@ -3,11 +3,11 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { Validators } from '@angular/forms'
 import { ActivatedRoute } from '@angular/router'
 import { LetDirective } from '@ngrx/component'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TranslateService } from '@ngx-translate/core'
 
 import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 import { UserService } from '@onecx/angular-integration-interface'
 
 import { BookmarkScope } from 'src/app/shared/generated'
@@ -35,15 +35,12 @@ describe('BookmarkCreateUpdateComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [
-        AngularAcceleratorModule,
-        LetDirective,
-        TranslateTestingModule.withTranslations({
+      imports: [AngularAcceleratorModule, LetDirective],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [
+        }),
         BreadcrumbService,
         provideHttpClientTesting(),
         { provide: ActivatedRoute, useValue: mockActivatedRoute }

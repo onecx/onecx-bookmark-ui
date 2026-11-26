@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TranslateTestingModule } from 'ngx-translate-testing'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 
 import { BookmarkDeleteComponent } from './bookmark-delete.component'
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -13,15 +13,15 @@ describe('BookmarkDeleteComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkDeleteComponent,
-        AngularAcceleratorModule,
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkDeleteComponent, AngularAcceleratorModule],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+        }),
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     }).compileComponents()
 
     fixture = TestBed.createComponent(BookmarkDeleteComponent)

@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { TranslateTestingModule } from 'ngx-translate-testing'
+import { provideNoopAnimations } from '@angular/platform-browser/animations'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 
 import { PageNotBookmarkableDialogComponent } from './page-not-bookmarkable-dialog.component'
 
@@ -9,12 +10,13 @@ describe('PageNotBookmarkableDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        PageNotBookmarkableDialogComponent,
-        TranslateTestingModule.withTranslations({
+      imports: [PageNotBookmarkableDialogComponent],
+      providers: [
+        provideNoopAnimations(),
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
+        })
       ]
     }).compileComponents()
 

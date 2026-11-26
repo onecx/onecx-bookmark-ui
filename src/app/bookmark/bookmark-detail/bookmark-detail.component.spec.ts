@@ -5,12 +5,12 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { ActivatedRoute } from '@angular/router'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { provideMockStore } from '@ngrx/store/testing'
 import { of, throwError } from 'rxjs'
 
 import { BreadcrumbService } from '@onecx/angular-accelerator'
 import { AppStateService, UserService } from '@onecx/angular-integration-interface'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 import { provideAlwaysGrantPermissionChecker } from '@onecx/angular-utils'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 
@@ -65,17 +65,12 @@ describe('BookmarkDetailComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkDetailComponent,
-        FormsModule,
-        ReactiveFormsModule,
-        NoopAnimationsModule,
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkDetailComponent, FormsModule, ReactiveFormsModule, NoopAnimationsModule],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [
+        }),
         BreadcrumbService,
         UserService,
         provideAlwaysGrantPermissionChecker(),

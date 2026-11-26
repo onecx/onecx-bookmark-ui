@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { SimpleChange, SimpleChanges } from '@angular/core'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { AppStateService } from '@onecx/angular-integration-interface'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -60,14 +60,17 @@ describe('BookmarkImageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkImageComponent,
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkImageComponent],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [provideHttpClient(), provideHttpClientTesting(), AppStateService, provideAppStateServiceMock()]
+        }),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        AppStateService,
+        provideAppStateServiceMock()
+      ]
     }).compileComponents()
 
     appStateMock = TestBed.inject(AppStateServiceMock)

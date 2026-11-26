@@ -3,8 +3,8 @@ import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { BehaviorSubject, of, ReplaySubject } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PortalDialogService, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 import {
   AppConfigService,
@@ -84,16 +84,14 @@ describe('OneCXManageBookmarkComponent', () => {
     portalDialogServiceMock = { openDialog: jest.fn().mockReturnValue(of(undefined)) }
 
     await TestBed.configureTestingModule({
-      imports: [
-        AngularAcceleratorModule,
-        TranslateTestingModule.withTranslations({
-          de: require('./src/assets/i18n/de.json'),
-          en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
+      imports: [AngularAcceleratorModule],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        ...provideTranslateTestingService({
+          de: require('./src/assets/i18n/de.json'),
+          en: require('./src/assets/i18n/en.json')
+        }),
         { provide: UserService, useValue: userServiceMock },
         { provide: AppStateService, useValue: appStateServiceMock }
       ]

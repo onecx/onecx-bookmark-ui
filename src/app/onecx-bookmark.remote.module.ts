@@ -1,18 +1,23 @@
 import { DoBootstrap, Injector, NgModule, isDevMode, inject, provideAppInitializer } from '@angular/core'
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule, Router } from '@angular/router'
-import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { Actions, EffectsModule, EffectSources, EffectsRunner } from '@ngrx/effects'
 import { StoreRouterConnectingModule } from '@ngrx/router-store'
 import { StoreModule } from '@ngrx/store'
 import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createTranslateLoader, provideTranslationPathFromMeta, providePermissionService } from '@onecx/angular-utils'
+import { provideMissingTranslationHandler, provideTranslateLoader, provideTranslateService } from '@ngx-translate/core'
+import {
+  MultiLanguageMissingTranslationHandler,
+  OnecxTranslateLoader,
+  provideTranslationPathFromMeta,
+  providePermissionService
+} from '@onecx/angular-utils'
 import { createAppEntrypoint, initializeRouter } from '@onecx/angular-webcomponents'
 import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
-import { AngularAcceleratorModule, AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { Configuration } from './shared/generated'
 import { LabelResolver } from './shared/utils/label.resolver'
@@ -34,14 +39,6 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
     BrowserAnimationsModule,
     AngularAcceleratorModule,
     RouterModule.forRoot(routes),
-    TranslateModule.forRoot({
-      isolate: true,
-      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useClass: AngularAcceleratorMissingTranslationHandler
-      }
-    }),
     StoreModule.forRoot(reducers, { metaReducers }),
     EffectsModule.forRoot(effectProvidersForWorkaround),
     StoreRouterConnectingModule.forRoot(),
@@ -61,6 +58,11 @@ effectProvidersForWorkaround.forEach((p) => (p.ɵprov.providedIn = null))
       return initializerFn()
     }),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
+    provideTranslateService({
+      defaultLanguage: 'en',
+      loader: provideTranslateLoader(OnecxTranslateLoader),
+      missingTranslationHandler: provideMissingTranslationHandler(MultiLanguageMissingTranslationHandler)
+    }),
     providePermissionService(),
     provideHttpClient(withInterceptorsFromDi())
   ]

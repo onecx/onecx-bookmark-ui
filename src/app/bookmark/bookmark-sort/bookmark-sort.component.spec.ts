@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TranslateTestingModule } from 'ngx-translate-testing'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 
 import { Bookmark, BookmarkScope, UpdateBookmark } from 'src/app/shared/generated'
 import { BookmarkSortComponent } from './bookmark-sort.component'
@@ -21,14 +21,15 @@ describe('BookmarkSortComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkSortComponent,
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkSortComponent],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [provideHttpClient(), provideHttpClientTesting()]
+        }),
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     }).compileComponents()
 
     fixture = TestBed.createComponent(BookmarkSortComponent)

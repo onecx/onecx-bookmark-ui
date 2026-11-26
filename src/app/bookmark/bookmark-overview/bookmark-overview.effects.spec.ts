@@ -3,10 +3,10 @@ import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { ActivatedRoute, Router, RouterModule } from '@angular/router'
 import { ReplaySubject, throwError, of } from 'rxjs'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { provideMockActions } from '@ngrx/effects/testing'
 
 import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
@@ -30,15 +30,12 @@ describe('BookmarkOverviewEffects', () => {
     routerMock = { navigate: jest.fn() }
 
     await TestBed.configureTestingModule({
-      imports: [
-        RouterModule.forRoot([]),
-        AngularAcceleratorModule,
-        TranslateTestingModule.withTranslations({
+      imports: [RouterModule.forRoot([]), AngularAcceleratorModule],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [
+        }),
         provideHttpClient(),
         provideHttpClientTesting(),
         BookmarkOverviewEffects,

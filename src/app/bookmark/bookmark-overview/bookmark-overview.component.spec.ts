@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { provideRouter } from '@angular/router'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { Store, StoreModule } from '@ngrx/store'
 import { ofType } from '@ngrx/effects'
 import { of } from 'rxjs'
+import { provideTranslateTestingService } from '@onecx/angular-testing'
 
 import { UserService } from '@onecx/angular-integration-interface'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
@@ -42,15 +42,12 @@ describe('BookmarkOverviewComponent', () => {
     }
 
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkOverviewComponent,
-        StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkOverviewComponent, StoreModule.forRoot({})],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [
+        }),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideAppStateServiceMock(),

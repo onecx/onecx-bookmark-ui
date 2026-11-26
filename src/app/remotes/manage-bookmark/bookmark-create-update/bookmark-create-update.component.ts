@@ -4,7 +4,6 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { provideErrorTailorConfig, errorTailorImports } from '@ngneat/error-tailor'
 import { map } from 'rxjs'
 
-import { MessagesModule } from 'primeng/messages'
 import { InputTextModule } from 'primeng/inputtext'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { TooltipModule } from 'primeng/tooltip'
@@ -18,15 +17,7 @@ import { BookmarkCreateUpdateViewModel } from './bookmark-create-update.viewmode
 
 @Component({
   selector: 'app-bookmark-create-update',
-  imports: [
-    errorTailorImports,
-    FloatLabelModule,
-    InputTextModule,
-    MessagesModule,
-    ReactiveFormsModule,
-    TooltipModule,
-    TranslateModule
-  ],
+  imports: [errorTailorImports, FloatLabelModule, InputTextModule, ReactiveFormsModule, TooltipModule, TranslateModule],
   templateUrl: './bookmark-create-update.component.html',
   styleUrl: './bookmark-create-update.component.scss',
   providers: [

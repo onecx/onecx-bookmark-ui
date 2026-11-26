@@ -1,7 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core'
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { TranslateLoader, TranslateModule, MissingTranslationHandler } from '@ngx-translate/core'
 
 import { LetDirective } from '@ngrx/component'
 import { EffectsModule } from '@ngrx/effects'
@@ -11,13 +10,15 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
 import {
-  createTranslateLoader,
+  MultiLanguageMissingTranslationHandler,
+  OnecxTranslateLoader,
   provideTranslationPathFromMeta,
-  provideThemeConfig,
   providePermissionService
 } from '@onecx/angular-utils'
+import { provideMissingTranslationHandler, provideTranslateLoader, provideTranslateService } from '@ngx-translate/core'
+import { provideThemeConfig } from '@onecx/angular-utils/theme/primeng'
 import { APP_CONFIG, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
-import { AngularAcceleratorMissingTranslationHandler, providePortalDialogService } from '@onecx/angular-accelerator'
+import { providePortalDialogService } from '@onecx/angular-accelerator'
 import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
 
 import { Configuration } from './shared/generated'
@@ -45,14 +46,6 @@ import { metaReducers, reducers } from './app.reducers'
       autoPause: true,
       trace: false,
       traceLimit: 75
-    }),
-    TranslateModule.forRoot({
-      isolate: true,
-      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
-      missingTranslationHandler: {
-        provide: MissingTranslationHandler,
-        useClass: AngularAcceleratorMissingTranslationHandler
-      }
     })
   ],
   providers: [
@@ -67,7 +60,12 @@ import { metaReducers, reducers } from './app.reducers'
     },
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideHttpClient(withInterceptorsFromDi()),
-    providePortalDialogService()
+    providePortalDialogService(),
+    provideTranslateService({
+      defaultLanguage: 'en',
+      loader: provideTranslateLoader(OnecxTranslateLoader),
+      missingTranslationHandler: provideMissingTranslationHandler(MultiLanguageMissingTranslationHandler)
+    })
   ]
 })
 export class AppModule {}

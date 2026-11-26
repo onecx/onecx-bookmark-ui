@@ -9,7 +9,6 @@ import { ofType } from '@ngrx/effects'
 import { Store, StoreModule } from '@ngrx/store'
 import { MockStore, provideMockStore } from '@ngrx/store/testing'
 import { TranslateService } from '@ngx-translate/core'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
 
 import { DialogService } from 'primeng/dynamicdialog'
@@ -17,7 +16,7 @@ import { DialogService } from 'primeng/dynamicdialog'
 import { UserService, WorkspaceService } from '@onecx/angular-integration-interface'
 import { DataSortDirection, Filter, RowListGridData, Sort } from '@onecx/angular-accelerator'
 import { PermissionService } from '@onecx/angular-utils'
-import { ensureIntersectionObserverMockExists } from '@onecx/angular-testing'
+import { ensureIntersectionObserverMockExists, provideTranslateTestingService } from '@onecx/angular-testing'
 import { AppStateServiceMock, provideAppStateServiceMock } from '@onecx/angular-integration-interface/mocks'
 
 import { Bookmark, BookmarkScope } from 'src/app/shared/generated'
@@ -62,15 +61,12 @@ describe('BookmarkConfigureComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       deferBlockBehavior: DeferBlockBehavior.Manual,
-      imports: [
-        BookmarkConfigureComponent,
-        StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkConfigureComponent, StoreModule.forRoot({})],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [
+        }),
         provideHttpClient(),
         provideHttpClientTesting(),
         provideNoopAnimations(),
@@ -589,16 +585,12 @@ describe('BookmarkConfigureComponent - no permission testcase', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        BookmarkConfigureComponent,
-        LetDirective,
-        StoreModule.forRoot({}),
-        TranslateTestingModule.withTranslations({
+      imports: [BookmarkConfigureComponent, LetDirective, StoreModule.forRoot({})],
+      providers: [
+        ...provideTranslateTestingService({
           de: require('./src/assets/i18n/de.json'),
           en: require('./src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      providers: [
+        }),
         DialogService,
         UserService,
         WorkspaceService,

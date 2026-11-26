@@ -20,19 +20,13 @@
         Workspace: {{ workspace?.displayName }}
       </div>
       @if (vm?.loading) {
-        <p-message
-          id="bm_overview_message_loading"
-          severity="info"
-          styleClass="mt-4"
-          [text]="'ACTIONS.LOADING' | translate"
-        ></p-message>
+        <p-message id="bm_overview_message_loading" severity="info" styleClass="mt-4">
+          {{ 'ACTIONS.LOADING' | translate }}
+        </p-message>
       } @else if (vm?.exceptionKey) {
-        <p-message
-          id="bm_overview_message_error"
-          severity="error"
-          styleClass="mt-4"
-          [text]="vm?.exceptionKey! | translate"
-        ></p-message>
+        <p-message id="bm_overview_message_error" severity="error" styleClass="mt-4">
+          {{ vm?.exceptionKey! | translate }}
+        </p-message>
       }
     </div>
     <!-- dock is absolute positioned -->

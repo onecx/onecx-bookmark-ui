@@ -1,10 +1,22 @@
 // setup-jest.ts
 import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone'
+import { BroadcastChannelMock } from '@onecx/accelerator'
 
 const globalObj = globalThis as any
 const options = globalObj.ngJest?.testEnvironmentOptions || {}
 
 setupZoneTestEnv(options as any)
+
+Object.defineProperty(globalThis, 'BroadcastChannel', {
+  value: BroadcastChannelMock,
+  writable: true,
+  configurable: true
+})
+
+afterEach(() => {
+  BroadcastChannelMock.listeners = {}
+  BroadcastChannelMock.asyncCalls = false
+})
 
 if (globalObj.ngJest) {
   delete globalObj.ngJest
@@ -42,10 +54,16 @@ Object.defineProperty(HTMLElement.prototype, 'ariaLabel', {
 
 globalThis.matchMedia =
   globalThis.matchMedia ||
-  function () {
+  function (query: string) {
     return {
+      matches: false,
+      media: query,
+      onchange: null,
       addListener: () => {},
-      removeListener: () => {}
+      removeListener: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => true
     }
   }
 

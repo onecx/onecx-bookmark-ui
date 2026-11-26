@@ -39,12 +39,9 @@
           [cancelLabel]="'ACTIONS.CANCEL' | translate"
         />
         @if (importError?.exceptionKey) {
-          <p-message
-            id="bm_import_error_message_general"
-            class="w-full"
-            severity="error"
-            [text]="importError ? (importError.exceptionKey | translate) : ''"
-          ></p-message>
+          <p-message id="bm_import_error_message_general" class="w-full" severity="error">
+            {{ importError ? (importError.exceptionKey | translate) : '' }}
+          </p-message>
         }
 
         @if (snapshot !== undefined) {
